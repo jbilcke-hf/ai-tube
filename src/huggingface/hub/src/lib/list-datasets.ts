@@ -20,7 +20,7 @@ export interface DatasetEntry {
 export async function* listDatasets(params?: {
 	search?: {
 		owner?: string;
-	};
+	} | string;
 	credentials?: Credentials;
 	hubUrl?: string;
 	/**
@@ -32,7 +32,10 @@ export async function* listDatasets(params?: {
 	const search = new URLSearchParams([
 		...Object.entries({
 			limit: "500",
-			...(params?.search?.owner ? { author: params.search.owner } : undefined),
+			...(
+				typeof params?.search === "string" ? { search: params?.search }
+				: params?.search?.owner ? { author: params.search.owner }
+				: undefined),
 		}),
 		...EXPAND_KEYS.map((val) => ["expand", val] satisfies [string, string]),
 	]).toString();

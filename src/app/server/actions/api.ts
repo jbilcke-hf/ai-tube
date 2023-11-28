@@ -8,28 +8,17 @@ const adminUsername = `${process.env.ADMIN_HUGGING_FACE_USERNAME || ""}`
 
 const adminCredentials: Credentials = { accessToken: adminApiKey }
 
-export async function getChannels({
-  apiKey,
-  owner,
-}: { // the user wants to browse their own private or public channels
-  apiKey: string
-  owner: undefined
-} | { // the user wants to browse someone's else public channels
-  apiKey: undefined
-  owner: string
-} | { // the user wants to browse all public channels
-  apiKey: undefined
-  owner: undefined
-} = { // by default we perform a gloval search using admin credentials
-  apiKey: undefined,
-  owner: undefined
-}): Promise<ChannelInfo[]> {
+export async function getChannels(options: {
+  apiKey?: string
+  owner?: string
+} = {}): Promise<ChannelInfo[]> {
 
   let credentials: Credentials = adminCredentials
+  let owner = options?.owner
 
-  if (apiKey) {
+  if (options?.apiKey) {
     try {
-      credentials = { accessToken: apiKey }
+      credentials = { accessToken: options.apiKey }
       const { name: username } = await whoAmI({ credentials })
       if (!username) {
         throw new Error(`couldn't get the username`)
@@ -48,7 +37,7 @@ export async function getChannels({
 
   let search = owner
     ? { owner } // search channels of a specific user
-    : { search: prefix } // global search (note: might be costly?)
+    : prefix // global search (note: might be costly?)
 
   console.log("search:", search)
 
@@ -62,7 +51,7 @@ export async function getChannels({
       ? chunks
       : [name, name]
 
-    console.log(`found a candidate dataset "${datasetName}" owned by @${datasetUsername}`)
+    // console.log(`found a candidate dataset "${datasetName}" owned by @${datasetUsername}`)
 
     if (!datasetName.startsWith(prefix)) {
       continue
@@ -70,7 +59,7 @@ export async function getChannels({
 
     const slug = datasetName.replaceAll(prefix, "")
     
-    console.log(`the dataset is a valid channel: "${slug}"`)
+    console.log(`found an AI Tube channel: "${slug}"`)
 
     // TODO parse the README to get the proper label
     const label = slug.replaceAll("-", " ")

@@ -33,10 +33,11 @@ export function ChannelPublicView() {
         channelId: "",
         channel: {
           id: "",
+          slug: "",
           label: "Hugging Face",
-          thumbnailUrl: "",
-          systemPrompt: "",
-          hfDatasetId: ""
+          thumbnail: "",
+          prompt: "",
+          likes: 0,
         }
       }
     ]

@@ -1,54 +1,39 @@
-import { useEffect } from "react"
+import { useEffect, useState, useTransition } from "react"
 
 import { useStore } from "@/app/state/useStore"
 import { cn } from "@/lib/utils"
-import { FullVideoInfo } from "@/types"
-import { VideoList } from "@/app/interface/video-list"
+import { getChannels } from "@/app/server/actions/api"
+import { ChannelList } from "@/app/interface/channel-list"
 
 export function ChannelsPublicView() {
-  const displayMode = useStore(s => s.displayMode)
-  const setDisplayMode = useStore(s => s.setDisplayMode)
-  const currentChannel = useStore(s => s.currentChannel)
-  const setCurrentChannel = useStore(s => s.setCurrentChannel)
-  const currentCategory = useStore(s => s.currentCategory)
-  const setCurrentCategory = useStore(s => s.setCurrentCategory)
-  const currentVideos = useStore(s => s.currentVideos)
-  const setCurrentVideos = useStore(s => s.setCurrentVideos)
-  const currentVideo = useStore(s => s.currentVideo)
-  const setCurrentVideo = useStore(s => s.setCurrentVideo)
+  const [_isPending, startTransition] = useTransition()
+
+  const currentChannels = useStore(s => s.currentChannels)
+  const setCurrentChannels = useStore(s => s.setCurrentChannels)
+  const [isLoaded, setLoaded] = useState(false)
 
   useEffect(() => {
-
-    // we use fake data for now
-    // this will be pulled from the Hugging Face API
-    const newVideos: FullVideoInfo[] = [
-      {
-        id: "42",
-        label: "Test Julian",
-        thumbnailUrl: "",
-        assetUrl: "",
-        numberOfViews: 0,
-        createdAt: "2023-11-27",
-        categories: [],
-        channelId: "",
-        channel: {
-          id: "",
-          label: "Hugging Face",
-          thumbnailUrl: "",
-          systemPrompt: "",
-          hfDatasetId: ""
+    if (!isLoaded) {
+      startTransition(async () => {
+        try {
+          const channels = await getChannels()
+          setCurrentChannels(channels)
+        } catch (err) {
+          console.error("failed to load the public channels", err)
+          setCurrentChannels([])
+        } finally {
+          setLoaded(true)
         }
-      }
-    ]
-    setCurrentVideos(newVideos)
-  }, [currentCategory])
+      })
+    }
+  }, [isLoaded])
 
   return (
     <div className={cn(
       `flex flex-col`
     )}>
-      <VideoList
-        videos={currentVideos}
+      <ChannelList
+        channels={currentChannels}
       />
     </div>
   )

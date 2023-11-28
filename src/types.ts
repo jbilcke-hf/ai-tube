@@ -220,3 +220,7 @@ export type InterfaceView =
   | "channel_admin" // for a user to admin their channels
   | "channel_public" // public view of a channel
   | "video_public" // public view of a video
+
+  export type Settings = {
+    huggingfaceApiKey: string
+  }

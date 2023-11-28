@@ -17,11 +17,12 @@ export function Main() {
   return (
     <div className={cn(
       `flex flex-row h-screen w-screen inset-0 overflow-hidden`,
+      `dark`
     )}>
       <LeftMenu />
       <div className={cn(
         `flex flex-col`,
-        `w-[calc(100vh-56px)]`
+        `w-[calc(100vh-96px)]`
       )}>
         <TopMenu />
         {view === "home" && <HomeView />}
