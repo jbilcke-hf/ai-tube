@@ -27,6 +27,7 @@ export async function downloadFile(params: {
 	 * Custom fetch function to use instead of the default one, for example to use a proxy or edit headers.
 	 */
 	fetch?: typeof fetch;
+	requestInit?: RequestInit;
 }): Promise<Response | null> {
 	checkCredentials(params.credentials);
 	const repoId = toRepoId(params.repo);
@@ -47,6 +48,7 @@ export async function downloadFile(params: {
 				  }
 				: {}),
 		},
+		...params.requestInit,
 	});
 
 	if (resp.status === 404 && resp.headers.get("X-Error-Code") === "EntryNotFound") {

@@ -5,11 +5,12 @@ import { TopMenu } from "./interface/top-menu"
 import { LeftMenu } from "./interface/left-menu"
 import { useStore } from "./state/useStore"
 import { HomeView } from "./views/home-view"
-import { ChannelsPublicView } from "./views/channels-public-view"
-import { ChannelsAdminView } from "./views/channels-admin-view"
-import { ChannelPublicView } from "./views/channel-public-view"
-import { ChannelAdminView } from "./views/channel-admin-view"
-import { VideoPublicView } from "./views/video-public-view"
+import { PublicChannelsView } from "./views/public-channels-view"
+import { UserChannelsView } from "./views/user-channels-view"
+import { PublicChannelView } from "./views/public-channel-view"
+import { UserChannelView } from "./views/user-channel-view"
+import { PublicVideoView } from "./views/public-video-view"
+import { UserAccountView } from "./views/user-account-view"
 
 export function Main() {
   const view = useStore(s => s.view)
@@ -22,15 +23,21 @@ export function Main() {
       <LeftMenu />
       <div className={cn(
         `flex flex-col`,
-        `w-[calc(100vh-96px)]`
+        `w-[calc(100vh-96px)]`,
+        `px-2`
       )}>
         <TopMenu />
-        {view === "home" && <HomeView />}
-        {view === "channels_admin" && <ChannelsAdminView />}
-        {view === "channels_public" && <ChannelsPublicView />}
-        {view === "channel_public" && <ChannelPublicView />}
-        {view === "channel_admin" && <ChannelAdminView />}
-        {view === "video_public" && <VideoPublicView />}
+        <div className="pt-4">
+          {view === "home" && <HomeView />}
+          {view === "public_video" && <PublicVideoView />}
+          {view === "public_channels" && <PublicChannelsView />}
+          {view === "public_channel" && <PublicChannelView />}
+          {view === "user_channels" && <UserChannelsView />}
+          {/*view === "user_videos" && <UserVideosView />*/}
+          {view === "user_channel" && <UserChannelView />}
+          {view === "user_account" && <UserAccountView />}
+
+        </div>
       </div>
     </div>
   )

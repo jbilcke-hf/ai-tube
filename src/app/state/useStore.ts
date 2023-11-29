@@ -2,8 +2,7 @@
 
 import { create } from "zustand"
 
-import { VideoCategory } from "./categories"
-import { ChannelInfo, FullVideoInfo, InterfaceDisplayMode, InterfaceView } from "@/types"
+import { ChannelInfo, VideoInfo, InterfaceDisplayMode, InterfaceView } from "@/types"
 
 export const useStore = create<{
   displayMode: InterfaceDisplayMode
@@ -18,14 +17,17 @@ export const useStore = create<{
   currentChannels: ChannelInfo[]
   setCurrentChannels: (currentChannels?: ChannelInfo[]) => void
 
-  currentCategory?: VideoCategory
-  setCurrentCategory: (currentCategory?: VideoCategory) => void
+  currentTag?: string
+  setCurrentTag: (currentTag?: string) => void
 
-  currentVideos: FullVideoInfo[]
-  setCurrentVideos: (currentVideos: FullVideoInfo[]) => void
+  currentVideos: VideoInfo[]
+  setCurrentVideos: (currentVideos: VideoInfo[]) => void
 
-  currentVideo?: FullVideoInfo
-  setCurrentVideo: (currentVideo?: FullVideoInfo) => void
+  currentVideo?: VideoInfo
+  setCurrentVideo: (currentVideo?: VideoInfo) => void
+
+  // currentPrompts: VideoInfo[]
+  // setCurrentPrompts: (currentPrompts: VideoInfo[]) => void
 }>((set, get) => ({
   displayMode: "desktop",
   setDisplayMode: (displayMode: InterfaceDisplayMode) => {
@@ -50,18 +52,18 @@ export const useStore = create<{
     set({ currentChannels: Array.isArray(currentChannels) ? currentChannels : [] })
   },
 
-  currentCategory: undefined,
-  setCurrentCategory: (currentCategory?: VideoCategory) => {
-    set({ currentCategory })
+  currentTag: undefined,
+  setCurrentTag: (currentTag?: string) => {
+    set({ currentTag })
   },
 
   currentVideos: [],
-  setCurrentVideos: (currentVideos: FullVideoInfo[] = []) => {
+  setCurrentVideos: (currentVideos: VideoInfo[] = []) => {
     set({
       currentVideos: Array.isArray(currentVideos) ? currentVideos : [] 
     })
   },
 
   currentVideo: undefined,
-  setCurrentVideo: (currentVideo?: FullVideoInfo) => { set({ currentVideo }) },
+  setCurrentVideo: (currentVideo?: VideoInfo) => { set({ currentVideo }) },
 }))

@@ -26,6 +26,10 @@ export async function fileDownloadInfo(params: {
 	 */
 	fetch?: typeof fetch;
 	/**
+	 * Custom fetch parameters
+	 */
+	requestInit?: RequestInit;
+	/**
 	 * To get the raw pointer file behind a LFS file
 	 */
 	raw?: boolean;
@@ -54,6 +58,7 @@ export async function fileDownloadInfo(params: {
 					Range: "bytes=0-0",
 			  }
 			: {},
+		...params.requestInit,
 	});
 
 	if (resp.status === 404 && resp.headers.get("X-Error-Code") === "EntryNotFound") {

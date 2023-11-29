@@ -1,4 +1,4 @@
-import { isFrontend } from "../../../shared";
+import { isFrontend } from "../../../shared/index";
 import { eventToGenerator } from "./eventToGenerator";
 import { hexFromBytes } from "./hexFromBytes";
 

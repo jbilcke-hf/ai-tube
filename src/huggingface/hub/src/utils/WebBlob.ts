@@ -14,6 +14,7 @@ interface WebBlobCreateOptions {
 	 * Custom fetch function to use instead of the default one, for example to use a proxy or edit headers.
 	 */
 	fetch?: typeof fetch;
+	requestInit?: RequestInit;
 }
 
 export class WebBlob extends Blob {

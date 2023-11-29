@@ -1,11 +1,11 @@
 import { cn } from "@/lib/utils"
-import { FullVideoInfo } from "@/types"
+import { VideoInfo } from "@/types"
 
 export function VideoCard({
   video,
   className = "",
 }: {
-  video: FullVideoInfo
+  video: VideoInfo
   className?: string
  }) {
 

@@ -1,4 +1,4 @@
-export * from "./lib";
+export * from "./lib/index";
 // Typescript 5 will add 'export type *'
 export type {
 	AccessToken,

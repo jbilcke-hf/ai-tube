@@ -64,6 +64,7 @@ async function parseSingleFile(
 		 * Custom fetch function to use instead of the default one, for example to use a proxy or edit headers.
 		 */
 		fetch?: typeof fetch;
+		requestInit?: RequestInit;
 	}
 ): Promise<SafetensorsFileHeader> {
 	const firstResp = await downloadFile({
@@ -114,6 +115,7 @@ async function parseShardedIndex(
 		 * Custom fetch function to use instead of the default one, for example to use a proxy or edit headers.
 		 */
 		fetch?: typeof fetch;
+		requestInit?: RequestInit;
 	}
 ): Promise<{ index: SafetensorsIndexJson; headers: SafetensorsShardedHeaders }> {
 	const indexResp = await downloadFile({
@@ -161,6 +163,7 @@ export async function parseSafetensorsMetadata(params: {
 	 * Custom fetch function to use instead of the default one, for example to use a proxy or edit headers.
 	 */
 	fetch?: typeof fetch;
+	requestInit?: RequestInit;
 }): Promise<SetRequired<SafetensorsParseFromRepo, "parameterCount">>;
 export async function parseSafetensorsMetadata(params: {
 	/** Only models are supported */
@@ -178,6 +181,7 @@ export async function parseSafetensorsMetadata(params: {
 	 * Custom fetch function to use instead of the default one, for example to use a proxy or edit headers.
 	 */
 	fetch?: typeof fetch;
+	requestInit?: RequestInit;
 }): Promise<SafetensorsParseFromRepo>;
 export async function parseSafetensorsMetadata(params: {
 	repo: RepoDesignation;
@@ -189,6 +193,7 @@ export async function parseSafetensorsMetadata(params: {
 	 * Custom fetch function to use instead of the default one, for example to use a proxy or edit headers.
 	 */
 	fetch?: typeof fetch;
+	requestInit?: RequestInit;
 }): Promise<SafetensorsParseFromRepo> {
 	checkCredentials(params.credentials);
 	const repoId = toRepoId(params.repo);

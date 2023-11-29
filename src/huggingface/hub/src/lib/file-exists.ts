@@ -14,6 +14,7 @@ export async function fileExists(params: {
 	 * Custom fetch function to use instead of the default one, for example to use a proxy or edit headers.
 	 */
 	fetch?: typeof fetch;
+	requestInit?: RequestInit;
 }): Promise<boolean> {
 	checkCredentials(params.credentials);
 	const repoId = toRepoId(params.repo);
@@ -26,6 +27,7 @@ export async function fileExists(params: {
 	const resp = await (params.fetch ?? fetch)(url, {
 		method: "HEAD",
 		headers: params.credentials ? { Authorization: `Bearer ${params.credentials.accessToken}` } : {},
+		...params.requestInit,
 	});
 
 	if (resp.status === 404) {

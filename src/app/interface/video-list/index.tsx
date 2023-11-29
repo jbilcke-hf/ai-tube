@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils"
-import { FullVideoInfo } from "@/types"
+import { VideoInfo } from "@/types"
 
 import { VideoCard } from "../video-card"
 
@@ -8,7 +8,7 @@ export function VideoList({
   layout = "flex",
   className = "",
 }: {
-  videos: FullVideoInfo[]
+  videos: VideoInfo[]
 
   /**
    * Layout mode

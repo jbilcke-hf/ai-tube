@@ -2,7 +2,7 @@ import { HUB_URL } from "../consts";
 import { createApiError } from "../error";
 import type { ApiCreateRepoPayload } from "../types/api/api-create-repo";
 import type { Credentials, RepoDesignation, SpaceSdk } from "../types/public";
-import { base64FromBytes } from "../../../shared";
+import { base64FromBytes } from "../../../shared/index";
 import { checkCredentials } from "../utils/checkCredentials";
 import { toRepoId } from "../utils/toRepoId";
 
@@ -22,6 +22,7 @@ export async function createRepo(params: {
 	 * Custom fetch function to use instead of the default one, for example to use a proxy or edit headers.
 	 */
 	fetch?: typeof fetch;
+	requestInit?: RequestInit;
 }): Promise<{ repoUrl: string }> {
 	checkCredentials(params.credentials);
 	const repoId = toRepoId(params.repo);
@@ -64,6 +65,7 @@ export async function createRepo(params: {
 			Authorization: `Bearer ${params.credentials.accessToken}`,
 			"Content-Type": "application/json",
 		},
+		...params.requestInit,
 	});
 
 	if (!res.ok) {

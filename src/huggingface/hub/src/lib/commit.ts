@@ -1,4 +1,4 @@
-import { isFrontend, base64FromBytes } from "../../../shared";
+import { isFrontend, base64FromBytes } from "../../../shared/index";
 import { HUB_URL } from "../consts";
 import { HubApiError, createApiError, InvalidApiResponseFormatError } from "../error";
 import type {
@@ -80,6 +80,7 @@ export interface CommitParams {
 	 * Custom fetch function to use instead of the default one, for example to use a proxy or edit headers.
 	 */
 	fetch?: typeof fetch;
+	requestInit?: RequestInit;
 	abortSignal?: AbortSignal;
 }
 
@@ -193,6 +194,7 @@ export async function* commitIter(params: CommitParams): AsyncGenerator<CommitPr
 					},
 					body: JSON.stringify(payload),
 					signal: abortSignal,
+					...params.requestInit,
 				}
 			);
 
@@ -268,6 +270,7 @@ export async function* commitIter(params: CommitParams): AsyncGenerator<CommitPr
 					},
 					body: JSON.stringify(payload),
 					signal: abortSignal,
+					...params.requestInit,
 				}
 			);
 
@@ -360,6 +363,7 @@ export async function* commitIter(params: CommitParams): AsyncGenerator<CommitPr
 												progressCallback,
 											},
 										} as any),
+										...params.requestInit,
 									});
 
 									if (!res.ok) {
@@ -392,6 +396,7 @@ export async function* commitIter(params: CommitParams): AsyncGenerator<CommitPr
 									"Content-Type": "application/vnd.git-lfs+json",
 								},
 								signal: abortSignal,
+								...params.requestInit,
 							});
 
 							if (!res.ok) {
@@ -430,6 +435,7 @@ export async function* commitIter(params: CommitParams): AsyncGenerator<CommitPr
 											}),
 									},
 								} as any),
+								...params.requestInit,
 							});
 
 							if (!res.ok) {
@@ -519,6 +525,7 @@ export async function* commitIter(params: CommitParams): AsyncGenerator<CommitPr
 								},
 							},
 						} as any),
+						...params.requestInit,
 					}
 				)
 					.then(async (res) => {

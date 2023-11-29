@@ -3,9 +3,11 @@ import { ChannelInfo } from "@/types"
 
 export function ChannelCard({
   channel,
+  onClick,
   className = "",
 }: {
   channel: ChannelInfo
+  onClick?: (channel: ChannelInfo) => void
   className?: string
  }) {
 
@@ -13,10 +15,19 @@ export function ChannelCard({
   <div
     className={cn(
       `flex flex-col`,
-      `w-[300px] h-[400px]`,
-      `bg-line-900`,
+      `items-center justify-center`,
+      `w-[300px] h-[200px]`,
+      `rounded-lg`,
+      `bg-neutral-800 hover:bg-neutral-500/80`,
+      `cursor-pointer`,
       className,
-    )}>
+    )}
+    onClick={() => {
+      if (onClick) {
+        onClick(channel)
+      }
+    }}
+    >
       <div
         className={cn(
           `rounded-lg overflow-hidden`
@@ -24,10 +35,12 @@ export function ChannelCard({
       >
         <img src="" />
       </div>
-      <div className={cn(
 
+      <div className={cn(
+        `text-center`
       )}>
         <h3>{channel.label}</h3>
+        <p>{channel.likes} likes</p>
       </div>
     </div>
   )

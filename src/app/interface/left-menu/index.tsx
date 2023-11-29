@@ -1,6 +1,8 @@
 import { GrChannel } from "react-icons/gr"
 import { MdVideoLibrary } from "react-icons/md"
 import { RiHome8Line } from "react-icons/ri"
+import { PiRobot } from "react-icons/pi"
+import { CgProfile } from "react-icons/cg"
 
 import { useStore } from "@/app/state/useStore"
 import { cn } from "@/lib/utils"
@@ -11,35 +13,54 @@ export function LeftMenu() {
   const setView = useStore(s => s.setView)
   return (
     <div className={cn(
-      `flex flex-col items-center`,
-      `justify-items-stretch`,
+      `flex flex-col`,
       `w-24 px-1 pt-4`,
      // `bg-orange-500`,
     )}>
-      <MenuItem
-        icon={<RiHome8Line className="h-6 w-6" />}
-        selected={view === "home"}
-        onClick={() => setView("home")}
-        >
-        Home
-      </MenuItem>
-      <MenuItem
-        icon={<GrChannel className="h-5 w-5" />}
-        selected={view === "channels_public"}
-        onClick={() => setView("channels_public")}
-        >
-        Channels
-      </MenuItem>
-      <MenuItem
-        icon={<MdVideoLibrary className="h-6 w-6" />}
-        selected={
-          view === "channels_admin" ||
-          view === "channel_admin"
-        }
-        onClick={() => setView("channels_admin")}
-        >
-        My Content
-      </MenuItem>
+      <div className={cn(
+        `flex flex-col w-full`,
+      )}>
+        <MenuItem
+          icon={<RiHome8Line className="h-6 w-6" />}
+          selected={view === "home"}
+          onClick={() => setView("home")}
+          >
+          Discover
+        </MenuItem>
+        <MenuItem
+          icon={<GrChannel className="h-5 w-5" />}
+          selected={view === "public_channels"}
+          onClick={() => setView("public_channels")}
+          >
+          Channels
+        </MenuItem>
+      </div>
+      <div className={cn(
+        `flex flex-col w-full`,
+      )}>
+        {/*<MenuItem
+          icon={<MdVideoLibrary className="h-6 w-6" />}
+          selected={view === "user_videos"}
+          onClick={() => setView("user_videos")}
+          >
+          My Videos
+        </MenuItem>
+      */}
+        <MenuItem
+          icon={<PiRobot className="h-6 w-6" />}
+          selected={view === "user_channels"}
+          onClick={() => setView("user_channels")}
+          >
+          My Robots
+        </MenuItem>
+        <MenuItem
+          icon={<CgProfile className="h-6 w-6" />}
+          selected={view === "user_account"}
+          onClick={() => setView("user_account")}
+          >
+          Account
+        </MenuItem>
+      </div>
     </div>
     )
 }

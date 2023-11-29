@@ -74,6 +74,7 @@ export async function whoAmI(params: {
 	 * Custom fetch function to use instead of the default one, for example to use a proxy or edit headers.
 	 */
 	fetch?: typeof fetch;
+	requestInit?: RequestInit;
 }): Promise<WhoAmI & { auth: AuthInfo }> {
 	checkCredentials(params.credentials);
 
@@ -81,6 +82,7 @@ export async function whoAmI(params: {
 		headers: {
 			Authorization: `Bearer ${params.credentials.accessToken}`,
 		},
+		...params.requestInit,
 	});
 
 	if (!res.ok) {

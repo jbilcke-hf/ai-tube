@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils"
 import { getChannels } from "@/app/server/actions/api"
 import { ChannelList } from "@/app/interface/channel-list"
 
-export function ChannelsPublicView() {
+export function PublicChannelsView() {
   const [_isPending, startTransition] = useTransition()
 
   const currentChannels = useStore(s => s.currentChannels)

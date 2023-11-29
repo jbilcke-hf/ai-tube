@@ -1,4 +1,3 @@
-import { VideoCategory } from "./app/state/categories"
 
 export type ProjectionMode = 'cartesian' | 'spherical'
 
@@ -181,31 +180,164 @@ export type VideoOptions = {
 export type ChannelInfo = {
   /**
    * We actually use the dataset ID for the channel ID.
+   * 
    */
   id: string
 
   /**
    * The name used in the URL for the channel
+   * 
+   * eg: my-time-travel-journeys
    */
   slug: string
+
+  /**
+   * username slug of the Hugging Face dataset
+   * 
+   * eg: jbilcke-hf
+   */
+  datasetUser: string
+
+  /**
+   * dataset slug of the Hugging Face dataset
+   * 
+   * eg: ai-tube-my-time-travel-journeys
+   */
+  datasetName: string
+
   label: string
+
+  description: string
+
   thumbnail: string
+
+  /**
+   * The system prompt
+   */
   prompt: string
+
   likes: number
+
+  tags: string[]
+
+  updatedAt: string
+}
+
+export type VideoStatus =
+  | "submitted" // the prompt has been submitted, but is not added to the index queue yet
+  | "queued" // the prompt has been added to the index queue, but is not processed yet. Once queued it cannot be modified.
+  | "generating" // the video is being generated
+  | "published" // success!
+  | "error" // video failed to generate
+
+/**
+ * A video request, made by a user or robot on a channel
+ */
+export type VideoRequest = {
+  /**
+   * UUID (v4)
+   */
+  id: string
+
+  /**
+   * Human readable title for the video
+   */
+  label: string
+
+  /**
+   * Human readable description for the video
+   */
+  description: string
+
+  /**
+   * Video prompt
+   */
+  prompt: string
+
+  /**
+   * URL to the video thumbnail
+   */
+  thumbnailUrl: string
+
+  /**
+   * When was the video updated
+   */
+  updatedAt: string
+
+  /**
+   * Arbotrary string tags to label the content
+   */
+  tags: string[]
+
+  /**
+   * ID of the channel
+   */
+  channel: ChannelInfo
 }
 
 export type VideoInfo = {
+  /**
+   * UUID (v4)
+   */
   id: string
-  label: string
-  thumbnailUrl: string
-  assetUrl: string
-  numberOfViews: number
-  createdAt: string
-  categories: VideoCategory[]
-  channelId: string
-}
 
-export type FullVideoInfo = VideoInfo & {
+  /**
+   * Status of the video
+   */
+  status: VideoStatus
+
+  /**
+   * Human readable title for the video
+   */
+  label: string
+
+  /**
+   * Human readable description for the video
+   */
+  description: string
+
+  /**
+   * Video prompt
+   */
+  prompt: string
+
+  /**
+   * URL to the video thumbnail
+   */
+  thumbnailUrl: string
+
+  /**
+   * URL to the binary file
+   */
+  assetUrl: string
+
+  /**
+   * Counter for the number of views
+   * 
+   * Note: should be managed by the index to prevent cheating
+   */
+  numberOfViews: number
+
+  /**
+   * Counter for the number of likes
+   * 
+   * Note: should be managed by the index to prevent cheating
+   */
+  numberOfLikes: number
+
+  /**
+   * When was the video updated
+   */
+  updatedAt: string
+
+  /**
+   * Arbotrary string tags to label the content
+   */
+  tags: string[]
+
+  /**
+   * The channel
+   */
   channel: ChannelInfo
 }
 
@@ -215,12 +347,49 @@ export type InterfaceDisplayMode =
 
 export type InterfaceView =
   | "home"
-  | "channels_admin"
-  | "channels_public"
-  | "channel_admin" // for a user to admin their channels
-  | "channel_public" // public view of a channel
-  | "video_public" // public view of a video
+  | "user_channels"
+  | "user_channel" // for a user to admin their channels
+  | "user_videos"
+  | "user_video"
+  | "user_account"
+  | "public_channels"
+  | "public_channel" // public view of a channel
+  | "public_video" // public view of a video
 
-  export type Settings = {
-    huggingfaceApiKey: string
+export type Settings = {
+  huggingfaceApiKey: string
+}
+
+export type ParsedDatasetReadme = {
+  license: string
+  pretty_name: string
+  tags: string[]
+  description: string
+  prompt: string
+}
+
+export type ParsedMetadataAndContent = {
+  metadata: {
+    license: string,
+    pretty_name: string,
+    tags: string[]
   }
+  content: string
+}
+
+export type ParsedDatasetPrompt = {
+  title: string
+  description: string
+  prompt: string
+}
+
+
+export type UpdateQueueRequest = {
+  channel?: ChannelInfo
+  apiKey: string
+}
+
+export type UpdateQueueResponse = {
+  error?: string
+  nbUpdated: number
+}

@@ -12,6 +12,7 @@ export async function deleteRepo(params: {
 	 * Custom fetch function to use instead of the default one, for example to use a proxy or edit headers.
 	 */
 	fetch?: typeof fetch;
+	requestInit?: RequestInit;
 }): Promise<void> {
 	checkCredentials(params.credentials);
 	const repoId = toRepoId(params.repo);
@@ -28,6 +29,7 @@ export async function deleteRepo(params: {
 			Authorization: `Bearer ${params.credentials.accessToken}`,
 			"Content-Type": "application/json",
 		},
+		...params.requestInit,
 	});
 
 	if (!res.ok) {

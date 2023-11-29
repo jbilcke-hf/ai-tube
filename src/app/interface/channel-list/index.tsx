@@ -5,10 +5,13 @@ import { ChannelCard } from "../channel-card"
 
 export function ChannelList({
   channels,
+  onSelect,
   layout = "flex",
   className = "",
 }: {
   channels: ChannelInfo[]
+
+  onSelect?: (channel: ChannelInfo) => void
 
   /**
    * Layout mode
@@ -35,6 +38,7 @@ export function ChannelList({
       <ChannelCard
         key={channel.id}
         channel={channel}
+        onClick={onSelect}
         className=""
       />
     ))}

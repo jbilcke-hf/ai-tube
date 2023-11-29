@@ -57,6 +57,7 @@ export async function* listFiles(params: {
 	 * Custom fetch function to use instead of the default one, for example to use a proxy or edit headers.
 	 */
 	fetch?: typeof fetch;
+	requestInit?: RequestInit;
 }): AsyncGenerator<ListFileEntry> {
 	checkCredentials(params.credentials);
 	const repoId = toRepoId(params.repo);
@@ -70,6 +71,7 @@ export async function* listFiles(params: {
 				accept: "application/json",
 				...(params.credentials ? { Authorization: `Bearer ${params.credentials.accessToken}` } : undefined),
 			},
+			...params.requestInit,
 		});
 
 		if (!res.ok) {

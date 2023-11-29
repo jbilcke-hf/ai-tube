@@ -2,7 +2,7 @@ import { useEffect } from "react"
 
 import { useStore } from "@/app/state/useStore"
 import { cn } from "@/lib/utils"
-import { FullVideoInfo } from "@/types"
+import { VideoInfo } from "@/types"
 
 export function HomeView() {
   const displayMode = useStore(s => s.displayMode)
@@ -20,7 +20,7 @@ export function HomeView() {
 
     // we use fake data for now
     // this will be pulled from the Hugging Face API
-    const newCategoryVideos: FullVideoInfo[] = [
+    const newCategoryVideos: VideoInfo[] = [
       {
         id: "42",
         label: "Test Julian",
