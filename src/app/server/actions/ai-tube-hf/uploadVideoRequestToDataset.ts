@@ -96,7 +96,7 @@ ${prompt}
     id: videoId,
     status: "submitted",
     label: title,
-    description,,
+    description,
     prompt,
     thumbnailUrl: "", // will be generated in async
     assetUrl: "", // will be generated in async

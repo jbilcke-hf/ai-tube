@@ -4,13 +4,14 @@ import { useStore } from "@/app/state/useStore"
 import { cn } from "@/lib/utils"
 import { VideoInfo } from "@/types"
 import { VideoList } from "@/app/interface/video-list"
-import { submitVideoRequest, getChannelVideos } from "@/app/server/actions/api"
+
 import { useLocalStorage } from "usehooks-ts"
 import { localStorageKeys } from "@/app/state/locaStorageKeys"
 import { defaultSettings } from "@/app/state/defaultSettings"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
+import { submitVideoRequest } from "@/app/server/actions/submitVideoRequest"
 
 export function UserChannelView() {
   const [_isPending, startTransition] = useTransition()
@@ -34,11 +35,13 @@ export function UserChannelView() {
     }
 
     startTransition(async () => {
+      /*
       const videos = await getChannelVideos({
         channel: currentChannel,
         apiKey: huggingfaceApiKey,
       })
       console.log("videos:", videos)
+      */
     })
 
     setCurrentVideos([])
@@ -61,7 +64,9 @@ export function UserChannelView() {
           channel: currentChannel,
           apiKey: huggingfaceApiKey,
           title: titleDraft,
-          prompt: promptDraft
+          description: "",
+          prompt: promptDraft,
+          tags: [],
         })
 
         // in case of success we update the frontend immediately
@@ -71,11 +76,13 @@ export function UserChannelView() {
         setTitleDraft("")
 
         // also renew the cache on Next's side
+        /*
         await getChannelVideos({
           channel: currentChannel,
           apiKey: huggingfaceApiKey,
           renewCache: true,
         })
+        */
       } catch (err) {
         console.error(err)
       } finally {

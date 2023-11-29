@@ -16,7 +16,7 @@ export function PublicVideoView() {
 
   useEffect(() => {
 
-  }, [currentCategory])
+  }, [currentTag])
 
   return (
     <div className={cn(

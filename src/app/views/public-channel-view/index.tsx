@@ -2,12 +2,8 @@ import { useEffect, useTransition } from "react"
 
 import { useStore } from "@/app/state/useStore"
 import { cn } from "@/lib/utils"
-import { VideoInfo } from "@/types"
 import { VideoList } from "@/app/interface/video-list"
-import { getChannelVideos } from "@/app/server/actions/api"
-import { useLocalStorage } from "usehooks-ts"
-import { localStorageKeys } from "@/app/state/locaStorageKeys"
-import { defaultSettings } from "@/app/state/defaultSettings"
+
 
 export function PublicChannelView() {
   const [_isPending, startTransition] = useTransition()
@@ -22,10 +18,12 @@ export function PublicChannelView() {
     }
 
     startTransition(async () => {
+      /*
       const videos = await getChannelVideos({
         channel: currentChannel,
       })
       console.log("videos:", videos)
+      */
     })
 
     setCurrentVideos([])

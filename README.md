@@ -1,7 +1,7 @@
 ---
 title: AI Tube
 emoji: 🍿
-colorFrom: red
+colorFrom: yellow
 colorTo: red
 sdk: docker
 pinned: true
