@@ -1,10 +1,17 @@
-import { useEffect } from "react"
+"use client"
+
+import { useEffect, useTransition } from "react"
 
 import { useStore } from "@/app/state/useStore"
 import { cn } from "@/lib/utils"
 import { VideoInfo } from "@/types"
+import { getVideos } from "@/app/server/actions/ai-tube-hf/getVideos"
+import { VideoList } from "@/app/interface/video-list"
 
 export function HomeView() {
+  const [_isPending, startTransition] = useTransition()
+
+  const setView = useStore(s => s.setView)
   const displayMode = useStore(s => s.displayMode)
   const setDisplayMode = useStore(s => s.setDisplayMode)
   const currentChannel = useStore(s => s.currentChannel)
@@ -17,38 +24,30 @@ export function HomeView() {
   const setCurrentVideo = useStore(s => s.setCurrentVideo)
 
   useEffect(() => {
+    startTransition(async () => {
+      const videos = await getVideos({
+        sortBy: "date",
+        maxVideos: 25
+      })
 
-    // we use fake data for now
-    // this will be pulled from the Hugging Face API
-    const newCategoryVideos: VideoInfo[] = []
-    setCurrentVideos(newCategoryVideos)
+      setCurrentVideos(videos)
+    })
   }, [currentTag])
+
+  const handleSelect = (video: VideoInfo) => {
+    setCurrentVideo(video)
+    setView("public_video")
+  }
 
   return (
     <div className={cn(
-      `grid grid-cols-4`
+     //  `grid grid-cols-4`
     )}>
-      {currentVideos.map((video) => (
-        <div
-          key={video.id}
-          className={cn(
-            `flex flex-col`,
-            `w-[300px] h-[400px]`
-          )}>
-            <div
-              className={cn(
-
-              )}
-            >
-              <img src="" />
-            </div>
-            <div className={cn(
-
-            )}>
-              <h3>{video.label}</h3>
-            </div>
-          </div>
-      ))}
+      <VideoList
+        videos={currentVideos}
+        layout="grid"
+        onSelect={handleSelect}
+      />
     </div>
   )
 }

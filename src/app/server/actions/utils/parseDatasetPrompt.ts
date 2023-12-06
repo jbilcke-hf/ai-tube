@@ -3,17 +3,19 @@ import { ParsedDatasetPrompt } from "@/types"
 
 export function parseDatasetPrompt(markdown: string = ""): ParsedDatasetPrompt {
   try {
-    const { title, description, prompt } = parseMarkdown(markdown)
+    const { title, description, tags, prompt } = parseMarkdown(markdown)
 
     return {
       title: typeof title === "string" && title ? title : "",
       description: typeof description === "string" && description ? description : "",
+      tags: tags && typeof tags === "string" ? tags.split("-").map(x => x.trim()).filter(x => x) : [], 
       prompt: typeof prompt === "string" && prompt ? prompt : "",
     }
   } catch (err) {
     return {
       title: "",
       description:  "",
+      tags: [],
       prompt:  "",
     }
   }
@@ -24,9 +26,14 @@ export function parseDatasetPrompt(markdown: string = ""): ParsedDatasetPrompt {
  * @param markdown A Markdown string containing Description and Prompt sections
  * @returns A JSON object with { "description": "...", "prompt": "..." }
  */
-function parseMarkdown(markdown: string): ParsedDatasetPrompt {
+function parseMarkdown(markdown: string): {
+  title: string
+  description: string
+  tags: string
+  prompt: string
+} {
   // Regular expression to find markdown sections based on the provided structure
-  const sectionRegex = /^## (.+?)\n\n([\s\S]+?)(?=\n## |$)/gm;
+  const sectionRegex = /^#+ (.+?)\n+([\s\S]+?)(?=\n+? |$)/gm;
 
   let match;
   const sections: { [key: string]: string } = {};
@@ -41,7 +48,7 @@ function parseMarkdown(markdown: string): ParsedDatasetPrompt {
   const result = {
     title: sections['title'] || '',
     description: sections['description'] || '',
-    // categories: sections['categories'] || '',
+    tags: sections['tags'] || '',
     prompt: sections['prompt'] || '',
   };
 

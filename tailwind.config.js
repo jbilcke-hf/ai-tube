@@ -17,8 +17,8 @@ module.exports = {
       },
     },
     extend: {
-      fontFamily: {
-        actionman: ['var(--font-action-man)'],
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
       },
       fontSize: {
         "7xs": "5px",
@@ -27,7 +27,7 @@ module.exports = {
         "5xs": "8px",
         "4xs": "9px",
         "3xs": "10px",
-        "2xs": "11px"
+        "2xs": "11px",
       },
       keyframes: {
         "accordion-down": {

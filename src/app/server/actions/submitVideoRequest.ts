@@ -33,15 +33,6 @@ export async function submitVideoRequest({
     tags
   })
 
-  try {
-    await updateQueue({ apiKey, channel })
-    
-    return {
-      ...videoInfo,
-      status: "queued"
-    }
-  } catch (err) {
-    console.error(`failed to update the queue, but this can be done later :)`)
-    return videoInfo
-  }
+
+  return videoInfo
 }

@@ -7,14 +7,20 @@ import { CgProfile } from "react-icons/cg"
 import { useStore } from "@/app/state/useStore"
 import { cn } from "@/lib/utils"
 import { MenuItem } from "./menu-item"
+import { showBetaFeatures } from "@/app/config"
+
 
 export function LeftMenu() {
   const view = useStore(s => s.view)
   const setView = useStore(s => s.setView)
+  const menuMode = useStore(s => s.menuMode)
+  const setMenuMode = useStore(s => s.setMenuMode)
+
   return (
     <div className={cn(
       `flex flex-col`,
       `w-24 px-1 pt-4`,
+      `justify-between`
      // `bg-orange-500`,
     )}>
       <div className={cn(
@@ -27,16 +33,17 @@ export function LeftMenu() {
           >
           Discover
         </MenuItem>
-        <MenuItem
+        {showBetaFeatures && <MenuItem
           icon={<GrChannel className="h-5 w-5" />}
           selected={view === "public_channels"}
           onClick={() => setView("public_channels")}
           >
           Channels
-        </MenuItem>
+        </MenuItem>}
       </div>
       <div className={cn(
         `flex flex-col w-full`,
+       
       )}>
         {/*<MenuItem
           icon={<MdVideoLibrary className="h-6 w-6" />}
@@ -46,20 +53,13 @@ export function LeftMenu() {
           My Videos
         </MenuItem>
       */}
-        <MenuItem
-          icon={<PiRobot className="h-6 w-6" />}
+        {showBetaFeatures && <MenuItem
+          icon={<CgProfile className="h-6 w-6" />}
           selected={view === "user_channels"}
           onClick={() => setView("user_channels")}
           >
-          My Robots
-        </MenuItem>
-        <MenuItem
-          icon={<CgProfile className="h-6 w-6" />}
-          selected={view === "user_account"}
-          onClick={() => setView("user_account")}
-          >
           Account
-        </MenuItem>
+        </MenuItem>}
       </div>
     </div>
     )

@@ -1,7 +1,7 @@
 "use client"
 
 import { cn } from "@/lib/utils"
-import { TopMenu } from "./interface/top-menu"
+import { TopHeader } from "./interface/top-header"
 import { LeftMenu } from "./interface/left-menu"
 import { useStore } from "./state/useStore"
 import { HomeView } from "./views/home-view"
@@ -14,7 +14,7 @@ import { UserAccountView } from "./views/user-account-view"
 
 export function Main() {
   const view = useStore(s => s.view)
-
+  const headerMode = useStore(s => s.headerMode)
   return (
     <div className={cn(
       `flex flex-row h-screen w-screen inset-0 overflow-hidden`,
@@ -23,11 +23,16 @@ export function Main() {
       <LeftMenu />
       <div className={cn(
         `flex flex-col`,
-        `w-[calc(100vh-96px)]`,
+        `w-[calc(100vw-96px)]`,
         `px-2`
       )}>
-        <TopMenu />
-        <div className="pt-4">
+        <TopHeader />
+        <div className={cn(
+          `w-full overflow-x-hidden overflow-y-scroll`,
+          headerMode === "normal"
+            ? `h-[calc(100vh-112px)]`
+            : `h-[calc(100vh-48px)]`
+        )}>
           {view === "home" && <HomeView />}
           {view === "public_video" && <PublicVideoView />}
           {view === "public_channels" && <PublicChannelsView />}

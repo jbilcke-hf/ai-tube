@@ -18,7 +18,7 @@ export function UserAccountView() {
     <div className={cn(
       `flex flex-col space-y-4`
     )}>
-      <div className="flex flex-col space-y-2">
+      <div className="flex flex-col space-y-2 max-w-4xl">
         <div className="flex flex-row space-x-2 items-center">
           <label className="flex w-64">Hugging Face token:</label>
           <Input
@@ -37,7 +37,7 @@ export function UserAccountView() {
       </div>
       {huggingfaceApiKey
         ? <p>You are ready to go!</p>
-        : <p>Please setup your accountabove  to get started</p>}
+        : <p>Please setup your account (see above) to get started</p>}
     </div>
   )
 }

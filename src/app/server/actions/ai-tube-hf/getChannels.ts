@@ -9,6 +9,7 @@ import { adminCredentials } from "../config"
 export async function getChannels(options: {
   apiKey?: string
   owner?: string
+  renewCache?: boolean
 } = {}): Promise<ChannelInfo[]> {
 
   let credentials: Credentials = adminCredentials
@@ -37,11 +38,14 @@ export async function getChannels(options: {
     ? { owner } // search channels of a specific user
     : prefix // global search (note: might be costly?)
 
-  // console.log("search:", search)
+  console.log("search:", search)
 
   for await (const { id, name, likes, updatedAt } of listDatasets({
     search,
-    credentials
+    credentials,
+    requestInit: options?.renewCache
+    ? { cache: "no-cache" }
+    : undefined
   })) {
 
     // TODO: need to handle better cases where the username is missing
@@ -83,25 +87,24 @@ export async function getChannels(options: {
       })
       const readme = await response?.text()
 
-      const ParsedDatasetReadme = parseDatasetReadme(readme)
+      const parsedDatasetReadme = parseDatasetReadme(readme)
       
-      // console.log("ParsedDatasetReadme: ", ParsedDatasetReadme)
+      // console.log("parsedDatasetReadme: ", parsedDatasetReadme)
 
-  
-      prompt = ParsedDatasetReadme.prompt
-      label = ParsedDatasetReadme.pretty_name
-      description = ParsedDatasetReadme.description
+      prompt = parsedDatasetReadme.prompt
+      label = parsedDatasetReadme.pretty_name
+      description = parsedDatasetReadme.description
 
       const prefix = "ai-tube:"
 
-      tags = ParsedDatasetReadme.tags
+      tags = parsedDatasetReadme.tags
         .filter(tag => tag.startsWith(prefix)) // remove any tag not belonging to us
         .map(tag => tag.replaceAll(prefix, "").trim()) // remove the prefix
         .filter(tag => tag) // remove empty tags
       
       
     } catch (err) {
-      console.log("failed to read the readme:", err)
+      // console.log("failed to read the readme:", err)
     }
 
     const channel: ChannelInfo = {

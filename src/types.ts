@@ -275,6 +275,7 @@ export type VideoRequest = {
   channel: ChannelInfo
 }
 
+
 export type VideoInfo = {
   /**
    * UUID (v4)
@@ -345,6 +346,16 @@ export type InterfaceDisplayMode =
   | "desktop"
   | "tv"
 
+export type InterfaceHeaderMode =
+  | "normal"
+  | "compact"
+
+export type InterfaceMenuMode =
+  | "slider_hidden"
+  | "slider_text"
+  | "normal_icon"
+  | "normal_text"
+
 export type InterfaceView =
   | "home"
   | "user_channels"
@@ -380,6 +391,7 @@ export type ParsedMetadataAndContent = {
 export type ParsedDatasetPrompt = {
   title: string
   description: string
+  tags: string[]
   prompt: string
 }
 

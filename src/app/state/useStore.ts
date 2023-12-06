@@ -2,11 +2,17 @@
 
 import { create } from "zustand"
 
-import { ChannelInfo, VideoInfo, InterfaceDisplayMode, InterfaceView } from "@/types"
+import { ChannelInfo, VideoInfo, InterfaceDisplayMode, InterfaceView, InterfaceMenuMode, InterfaceHeaderMode } from "@/types"
 
 export const useStore = create<{
   displayMode: InterfaceDisplayMode
   setDisplayMode: (displayMode: InterfaceDisplayMode) => void
+
+  headerMode: InterfaceHeaderMode
+  setHeaderMode: (headerMode: InterfaceHeaderMode) => void
+
+  menuMode: InterfaceMenuMode
+  setMenuMode: (menuMode: InterfaceMenuMode) => void
 
   view: InterfaceView
   setView: (view?: InterfaceView) => void
@@ -38,6 +44,16 @@ export const useStore = create<{
   setView: (view?: InterfaceView) => {
     // TODO: download videos for this new channel
     set({ view: view || "home" })
+  },
+
+  headerMode: "normal",
+  setHeaderMode: (headerMode: InterfaceHeaderMode) => {
+    set({ headerMode })
+  },
+
+  menuMode: "normal_icon",
+  setMenuMode: (menuMode: InterfaceMenuMode) => {
+    set({ menuMode })
   },
 
   currentChannel: undefined,

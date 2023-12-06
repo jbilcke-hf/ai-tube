@@ -1,3 +1,5 @@
+"use client"
+
 import { useEffect, useState, useTransition } from "react"
 
 import { useStore } from "@/app/state/useStore"
@@ -29,9 +31,7 @@ export function PublicChannelsView() {
   }, [isLoaded])
 
   return (
-    <div className={cn(
-      `flex flex-col`
-    )}>
+    <div className={cn(`flex flex-col`)}>
       <ChannelList
         channels={currentChannels}
       />

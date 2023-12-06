@@ -48,6 +48,7 @@ export async function* listDatasets(params?: {
 				accept: "application/json",
 				...(params?.credentials ? { Authorization: `Bearer ${params.credentials.accessToken}` } : undefined),
 			},
+			...params?.requestInit,
 		});
 
 		if (!res.ok) {

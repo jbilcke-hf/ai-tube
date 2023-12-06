@@ -7,6 +7,7 @@ export function VideoList({
   videos,
   layout = "flex",
   className = "",
+  onSelect,
 }: {
   videos: VideoInfo[]
 
@@ -20,13 +21,15 @@ export function VideoList({
   layout?: "grid" | "flex"
 
   className?: string
+
+  onSelect?: (video: VideoInfo) => void
 }) {
   
   return (
     <div
       className={cn(
         layout === "grid"
-          ? `grid grid-cols-4 gap-4`
+          ? `grid grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4`
           : `flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4`,
         className,
       )}
@@ -35,7 +38,8 @@ export function VideoList({
       <VideoCard
         key={video.id}
         video={video}
-        className=""
+        className="w-full"
+        onSelect={onSelect}
       />
     ))}
     </div>

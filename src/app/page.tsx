@@ -5,12 +5,14 @@ import Head from "next/head"
 import Script from "next/script"
 
 import { cn } from "@/lib/utils"
+import { useStore } from "@/app/state/useStore"
 
 import { Main } from "./main"
 
 // https://nextjs.org/docs/pages/building-your-application/optimizing/fonts 
 
 export default function Page() {
+  const view = useStore(s => s.view)
   const [isLoaded, setLoaded] = useState(false)
   useEffect(() => { setLoaded(true) }, [])
   return (
@@ -23,7 +25,9 @@ export default function Page() {
       <main className={cn(
         `light text-neutral-100`,
         // `bg-gradient-to-r from-green-500 to-yellow-400`,
-        `bg-gradient-to-r from-neutral-950 to-neutral-950`,
+        view === "public_video"
+          ? `bg-gradient-radial from-neutral-900 to-neutral-950`
+          : `bg-neutral-950` // bg-gradient-to-br from-neutral-950 via-neutral-950 to-neutral-950`
         )}>
         {isLoaded && <Main />}
         {/*

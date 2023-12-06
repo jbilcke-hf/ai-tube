@@ -16,9 +16,10 @@ export function ChannelCard({
     className={cn(
       `flex flex-col`,
       `items-center justify-center`,
-      `w-[300px] h-[200px]`,
+      `w-52 h-52`,
       `rounded-lg`,
-      `bg-neutral-800 hover:bg-neutral-500/80`,
+      `bg-neutral-900 hover:bg-neutral-700/80`,
+      `text-neutral-100/80 hover:text-neutral-100/100`,
       `cursor-pointer`,
       className,
     )}
@@ -37,10 +38,25 @@ export function ChannelCard({
       </div>
 
       <div className={cn(
-        `text-center`
+        `flex flex-col`,
+         `items-center justify-center text-center`,
+         `space-y-2`
       )}>
-        <h3>{channel.label}</h3>
-        <p>{channel.likes} likes</p>
+        <div className="text-center text-lg">{channel.label}</div>
+        {/*<div className="text-center text-sm font-semibold">
+          by <a href={
+            `https://huggingface.co/${channel.datasetUser}`
+          } target="_blank">@{channel.datasetUser}</a>
+        </div>
+        */}
+        <div className="text-center text-sm font-semibold">
+          @{channel.datasetUser}
+        </div>
+        <div className="flex flex-row items-center justify-center">
+          <div className="text-center text-sm">{0} videos</div>
+          <div className="px-1">-</div>
+          <div className="text-center text-sm">{channel.likes} likes</div>
+        </div>
       </div>
     </div>
   )

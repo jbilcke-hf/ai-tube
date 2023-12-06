@@ -7,8 +7,6 @@ export function parseDatasetReadme(markdown: string = ""): ParsedDatasetReadme {
   try {
     const { metadata, content } = metadataParser(markdown) as ParsedMetadataAndContent
 
-    // console.log("DEBUG README:", { metadata, content })
-    
     const { description, prompt } = parseMarkdown(content)
 
     return {
