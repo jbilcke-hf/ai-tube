@@ -33,13 +33,13 @@ export function LeftMenu() {
           >
           Discover
         </MenuItem>
-        {showBetaFeatures && <MenuItem
+        <MenuItem
           icon={<GrChannel className="h-5 w-5" />}
           selected={view === "public_channels"}
           onClick={() => setView("public_channels")}
           >
           Channels
-        </MenuItem>}
+        </MenuItem>
       </div>
       <div className={cn(
         `flex flex-col w-full`,

@@ -69,6 +69,7 @@ export function UserChannelsView() {
       <div className="flex flex-col space-y-4">
         <h2 className="text-3xl font-bold">Your custom channels:</h2>
         {currentChannels?.length ? <ChannelList
+          layout="grid"
           channels={currentChannels}
           onSelect={(channel) => {
             setCurrentChannel(channel)

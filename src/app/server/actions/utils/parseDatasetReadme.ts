@@ -5,14 +5,22 @@ import { ParsedDatasetReadme, ParsedMetadataAndContent } from "@/types"
 
 export function parseDatasetReadme(markdown: string = ""): ParsedDatasetReadme {
   try {
+    markdown = markdown.trim()
+
     const { metadata, content } = metadataParser(markdown) as ParsedMetadataAndContent
 
-    const { description, prompt } = parseMarkdown(content)
+    // console.log("DEBUG README:", { metadata, content })
+    
+    const { model, thumbnail, voice, description, prompt, tags } = parseMarkdown(content)
 
     return {
       license: typeof metadata?.license === "string" ? metadata.license : "",
       pretty_name: typeof metadata?.pretty_name === "string" ? metadata.pretty_name : "",
-      tags: Array.isArray(metadata?.tags) ? metadata.tags : [],
+      hf_tags: Array.isArray(metadata?.tags) ? metadata.tags : [],
+      tags: tags && typeof tags === "string" ? tags.split("-").map(x => x.trim()).filter(x => x) : [], 
+      model,
+      thumbnail,
+      voice,
       description,
       prompt,
     }
@@ -20,7 +28,11 @@ export function parseDatasetReadme(markdown: string = ""): ParsedDatasetReadme {
     return {
       license: "",
       pretty_name: "",
-      tags: [], // Hugging Face tags
+      hf_tags: [], // Hugging Face tags
+      tags: [],
+      model: "",
+      thumbnail: "",
+      voice: "",
       description: "",
       prompt: "",
     }
@@ -33,28 +45,31 @@ export function parseDatasetReadme(markdown: string = ""): ParsedDatasetReadme {
  * @returns A JSON object with { "description": "...", "prompt": "..." }
  */
 function parseMarkdown(markdown: string): {
+  model: string
+  thumbnail: string
+  voice: string
   description: string
   prompt: string
-  // categories: string
+  tags: string
 } {
-  // Regular expression to find markdown sections based on the provided structure
-  const sectionRegex = /^## (.+?)\n\n([\s\S]+?)(?=\n## |$)/gm;
+  // console.log("markdown:", markdown)
+  // Improved regular expression to find markdown sections and accommodate multi-line content.
+  const sectionRegex = /^#+\s+(?<key>.+?)\n\n?(?<content>[^#]+)/gm;
 
-  let match;
   const sections: { [key: string]: string } = {};
 
-  // Iterate over each section match to populate the sections object
+  let match;
   while ((match = sectionRegex.exec(markdown))) {
-    const [, key, value] = match;
-    sections[key.toLowerCase()] = value.trim();
+    const { key, content } = match.groups as { key: string; content: string };
+    sections[key.trim().toLowerCase()] = content.trim();
   }
 
-  // Create the resulting JSON object with "description" and "prompt" keys
-  const result = {
-    description: sections['description'] || '',
-    // categories: sections['categories'] || '',
-    prompt: sections['prompt'] || '',
+  return {
+    description: sections["description"] || "",
+    model: sections["model"] || "",
+    thumbnail: sections["thumbnail"] || "",
+    voice: sections["voice"] || "",
+    prompt: sections["prompt"] || "",
+    tags: sections["tags"] || "",
   };
-
-  return result;
 }

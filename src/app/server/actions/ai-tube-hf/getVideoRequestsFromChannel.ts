@@ -71,22 +71,28 @@ export async function getVideoRequestsFromChannel({
           continue
         }
 
-        const { title, description, tags, prompt } = parseDatasetPrompt(rawMarkdown)
+        const { title, description, tags, prompt, thumbnail } = parseDatasetPrompt(rawMarkdown)
 
         if (!title || !description || !prompt) {
           // console.log("dataset prompt is incomplete or unparseable")
           continue
         }
         // console.log("prompt parsed markdown:", { title, description, tags })
+        let thumbnailUrl =
+          thumbnail.startsWith("http")
+            ? thumbnail
+            : (thumbnail.endsWith(".jpg") || thumbnail.endsWith(".jpeg"))
+            ? `https://huggingface.co/${repo}/resolve/main/${thumbnail}`
+            : ""
 
         const video: VideoRequest = {
           id,
           label: title,
           description,
           prompt,
-          thumbnailUrl: "",
+          thumbnailUrl,
     
-          updatedAt: file.lastCommit?.date || "",
+          updatedAt: file.lastCommit?.date || new Date().toISOString(),
           tags, // read them from the file?
           channel,
         }

@@ -33,6 +33,7 @@ export function PublicChannelsView() {
   return (
     <div className={cn(`flex flex-col`)}>
       <ChannelList
+        layout="grid"
         channels={currentChannels}
       />
     </div>

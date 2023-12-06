@@ -53,6 +53,8 @@ module.exports = {
         20: '5rem', // 80px
         21: '5.25rem', // 84px
         22: '5.5rem', // 88px
+        22: '5.5rem', // 88px
+        26: '6.5rem', // 104px
       },
       width: {
         17: '4.25rem', // 68px
@@ -61,6 +63,7 @@ module.exports = {
         20: '5rem', // 80px
         21: '5.25rem', // 84px
         22: '5.5rem', // 88px
+        26: '6.5rem', // 104px
       }
     },
   },

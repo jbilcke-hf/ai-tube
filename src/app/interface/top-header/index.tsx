@@ -86,11 +86,7 @@ export function TopHeader() {
               </div>
             </div>
             <div className="font-semibold">
-              {view === "user_channels"
-                ? "My account"
-              : view === "public_channels"
-                ? "AI Channels"
-              : "AiTube" }
+              AiTube
             </div>
           </div>
         </div>
@@ -98,8 +94,9 @@ export function TopHeader() {
            `transition-all duration-200 ease-in-out`,
            `flex flex-col items-center justify-center`,
            `px-4 py-2 w-max-64`,
+           `text-neutral-400 text-sm italic`
         )}>
-          {/*[ Search bar goes here ]*/}
+        Ai Tube is a platform where all videos are generated using AI, for research and experimentation purposes.
         </div>
         <div className={cn()}>
           &nbsp; {/* more buttons? unused for now */}

@@ -3,13 +3,14 @@ import { ParsedDatasetPrompt } from "@/types"
 
 export function parseDatasetPrompt(markdown: string = ""): ParsedDatasetPrompt {
   try {
-    const { title, description, tags, prompt } = parseMarkdown(markdown)
+    const { title, description, tags, prompt, thumbnail } = parseMarkdown(markdown)
 
     return {
       title: typeof title === "string" && title ? title : "",
       description: typeof description === "string" && description ? description : "",
       tags: tags && typeof tags === "string" ? tags.split("-").map(x => x.trim()).filter(x => x) : [], 
       prompt: typeof prompt === "string" && prompt ? prompt : "",
+      thumbnail: typeof thumbnail === "string" && thumbnail ? thumbnail : "",
     }
   } catch (err) {
     return {
@@ -17,6 +18,7 @@ export function parseDatasetPrompt(markdown: string = ""): ParsedDatasetPrompt {
       description:  "",
       tags: [],
       prompt:  "",
+      thumbnail: "",
     }
   }
 }
@@ -31,26 +33,26 @@ function parseMarkdown(markdown: string): {
   description: string
   tags: string
   prompt: string
+  thumbnail: string
 } {
-  // Regular expression to find markdown sections based on the provided structure
-  const sectionRegex = /^#+ (.+?)\n+([\s\S]+?)(?=\n+? |$)/gm;
+  markdown = markdown.trim()
 
-  let match;
+  // Improved regular expression to find markdown sections and accommodate multi-line content.
+  const sectionRegex = /^#+\s+(?<key>.+?)\n\n?(?<content>[^#]+)/gm;
+
   const sections: { [key: string]: string } = {};
 
-  // Iterate over each section match to populate the sections object
+  let match;
   while ((match = sectionRegex.exec(markdown))) {
-    const [, key, value] = match;
-    sections[key.toLowerCase()] = value.trim();
+    const { key, content } = match.groups as { key: string; content: string };
+    sections[key.trim().toLowerCase()] = content.trim();
   }
 
-  // Create the resulting JSON object with "description" and "prompt" keys
-  const result = {
-    title: sections['title'] || '',
-    description: sections['description'] || '',
-    tags: sections['tags'] || '',
-    prompt: sections['prompt'] || '',
+  return {
+    title: sections["title"] || "",
+    description: sections["description"] || "",
+    tags: sections["tags"] || "",
+    prompt: sections["prompt"] || "",
+    thumbnail: sections["thumbnail"] || "",
   };
-
-  return result;
 }

@@ -11,7 +11,7 @@ export async function getChannels(options: {
   owner?: string
   renewCache?: boolean
 } = {}): Promise<ChannelInfo[]> {
-
+  // console.log("getChannels")
   let credentials: Credentials = adminCredentials
   let owner = options?.owner
 
@@ -38,13 +38,12 @@ export async function getChannels(options: {
     ? { owner } // search channels of a specific user
     : prefix // global search (note: might be costly?)
 
-  console.log("search:", search)
-
+ 
   for await (const { id, name, likes, updatedAt } of listDatasets({
     search,
     credentials,
     requestInit: options?.renewCache
-    ? { cache: "no-cache" }
+    ? { cache: "no-store" }
     : undefined
   })) {
 
@@ -56,7 +55,8 @@ export async function getChannels(options: {
       : [name, name]
 
     // console.log(`found a candidate dataset "${datasetName}" owned by @${datasetUser}`)
-
+    
+    // ignore channels which don't start with ai-tube
     if (!datasetName.startsWith(prefix)) {
       continue
     }
@@ -73,9 +73,10 @@ export async function getChannels(options: {
     // TODO parse the README to get the proper label
     let label = slug.replaceAll("-", " ")
 
-    const thumbnail = ""
+    let thumbnail = ""
     let prompt = ""
     let description = ""
+    let voice = ""
     let tags: string[] = []
 
     // console.log(`going to read datasets/${name}`)
@@ -94,14 +95,20 @@ export async function getChannels(options: {
       prompt = parsedDatasetReadme.prompt
       label = parsedDatasetReadme.pretty_name
       description = parsedDatasetReadme.description
+      thumbnail = parsedDatasetReadme.thumbnail || "thumbnail.jpg"
 
-      const prefix = "ai-tube:"
+      thumbnail =
+        thumbnail.startsWith("http")
+          ? thumbnail
+          : (thumbnail.endsWith(".jpg") || thumbnail.endsWith(".jpeg"))
+          ? `https://huggingface.co/datasets/${name}/resolve/main/${thumbnail}`
+          : ""
+
+      voice = parsedDatasetReadme.voice
 
       tags = parsedDatasetReadme.tags
-        .filter(tag => tag.startsWith(prefix)) // remove any tag not belonging to us
-        .map(tag => tag.replaceAll(prefix, "").trim()) // remove the prefix
+        .map(tag => tag.trim()) // clean them up
         .filter(tag => tag) // remove empty tags
-      
       
     } catch (err) {
       // console.log("failed to read the readme:", err)

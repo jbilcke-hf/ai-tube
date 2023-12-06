@@ -374,7 +374,11 @@ export type Settings = {
 export type ParsedDatasetReadme = {
   license: string
   pretty_name: string
+  model: string
+  thumbnail: string
+  voice: string
   tags: string[]
+  hf_tags: string[]
   description: string
   prompt: string
 }
@@ -393,6 +397,7 @@ export type ParsedDatasetPrompt = {
   description: string
   tags: string[]
   prompt: string
+  thumbnail: string
 }
 
 
