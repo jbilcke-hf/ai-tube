@@ -29,7 +29,7 @@ export function ChannelList({
     <div
       className={cn(
         layout === "grid"
-          ? `grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4`
+          ? `grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7`
           : `flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4`,
         className,
       )}

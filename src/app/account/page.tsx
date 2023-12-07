@@ -1,6 +1,6 @@
 
 import { Main } from "../main"
 
-export default async function ChannelsPage() {
+export default async function AccountPage() {
   return (<Main />)
 }

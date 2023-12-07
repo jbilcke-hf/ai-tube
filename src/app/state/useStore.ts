@@ -61,9 +61,10 @@ export const useStore = create<{
     const routes: Record<string, InterfaceView> = {
       "/": "home",
       "/watch": "public_video",
-      "/channels": "public_channels"
+      "/channels": "public_channels",
+      "/account": "user_account"
     }
-    console.log("setPathname: ", pathname)
+
     set({ view: routes[pathname] || "not_found" })
   },
 

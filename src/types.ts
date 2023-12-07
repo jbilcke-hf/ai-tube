@@ -427,6 +427,7 @@ export type AppQueryProps = {
   params: { id: string }
   searchParams: {
     v?: string | string[],
+    c?: string | string[],
     [key: string]: string | string[] | undefined
   }
 }

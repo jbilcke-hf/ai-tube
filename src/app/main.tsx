@@ -54,6 +54,8 @@ export function Main({
   }, [videoId])
 
 
+  // this is critical: it sync the current route (coming from server-side)
+  // with the zustand state manager
   useEffect(() => {
     setPathname(pathname)
   }, [pathname])

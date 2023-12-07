@@ -1,5 +1,9 @@
+import { useState } from "react"
+
 import { cn } from "@/lib/utils"
 import { ChannelInfo } from "@/types"
+
+const defaultChannelThumbnail = "/huggingface-avatar.jpeg"
 
 export function ChannelCard({
   channel,
@@ -10,6 +14,17 @@ export function ChannelCard({
   onClick?: (channel: ChannelInfo) => void
   className?: string
  }) {
+  const [channelThumbnail, setChannelThumbnail] = useState(channel.thumbnail)
+
+  const handleBadChannelThumbnail = () => {
+    try {
+      if (channelThumbnail !== defaultChannelThumbnail) {
+        setChannelThumbnail(defaultChannelThumbnail)
+      }
+    } catch (err) {
+      
+    }
+  }
 
   return (
   <div
@@ -37,7 +52,10 @@ export function ChannelCard({
           `w-26 h-26`
         )}
       >
-        <img src={channel.thumbnail} />
+        <img
+          src={channelThumbnail}
+          onError={handleBadChannelThumbnail}
+        />
       </div>
 
       <div className={cn(

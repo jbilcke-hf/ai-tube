@@ -35,8 +35,6 @@ export function LeftMenu() {
           <MenuItem
             icon={<RiHome8Line className="h-6 w-6" />}
             selected={view === "home"}
-            // </Link>onClick={() => setView("home")}
-            // onClick={() => setCurrentVideo(undefiend)}
             >
             Discover
           </MenuItem>
@@ -45,7 +43,6 @@ export function LeftMenu() {
           <MenuItem
             icon={<GrChannel className="h-5 w-5" />}
             selected={view === "public_channels"}
-            // onClick={() => setView("public_channels")}
             >
             Channels
           </MenuItem>
@@ -63,13 +60,14 @@ export function LeftMenu() {
           My Videos
         </MenuItem>
       */}
-        {showBetaFeatures && <MenuItem
-          icon={<CgProfile className="h-6 w-6" />}
-          selected={view === "user_channels"}
-          onClick={() => setView("user_channels")}
-          >
-          Account
-        </MenuItem>}
+        <Link href="/account">
+          <MenuItem
+            icon={<CgProfile className="h-6 w-6" />}
+            selected={view === "user_channels"}
+            >
+            Account
+          </MenuItem>
+        </Link>
       </div>
     </div>
     )
