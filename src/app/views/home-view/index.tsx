@@ -44,7 +44,7 @@ export function HomeView() {
 
   return (
     <div className={cn(
-     //  `grid grid-cols-4`
+     `pr-4`
     )}>
       <VideoList
         videos={currentVideos}

@@ -109,7 +109,7 @@ export function TopHeader() {
            `px-4 py-2 w-max-64`,
            `text-neutral-400 text-sm italic`
         )}>
-        Ai Tube is a platform where all videos are generated using AI, for research and experimentation purposes.
+        All the videos are generated using AI for research purposes. Some models might produce factually incorrect or biased outputs.
         </div>
         <div className={cn()}>
           &nbsp; {/* more buttons? unused for now */}
