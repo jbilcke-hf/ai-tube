@@ -7,6 +7,8 @@ import { formatDuration } from "@/lib/formatDuration"
 import { formatTimeAgo } from "@/lib/formatTimeAgo"
 import Link from "next/link"
 
+const defaultChannelThumbnail = "/huggingface-avatar.jpeg"
+
 export function VideoCard({
   video,
   className = "",
@@ -18,6 +20,8 @@ export function VideoCard({
  }) {
   const ref = useRef<HTMLVideoElement>(null)
   const [duration, setDuration] = useState(0)
+
+  const [channelThumbnail, setChannelThumbnail] = useState(video.channel.thumbnail)
 
   const handlePointerEnter = () => {
     // ref.current?.load()
@@ -35,6 +39,16 @@ export function VideoCard({
 
   const handleClick = () => {
     onSelect?.(video)
+  }
+
+  const handleBadChannelThumbnail = () => {
+    try {
+      if (channelThumbnail !== defaultChannelThumbnail) {
+        setChannelThumbnail(defaultChannelThumbnail)
+      }
+    } catch (err) {
+      
+    }
   }
 
   return (
@@ -92,7 +106,8 @@ export function VideoCard({
           <div className="flex flex-col">
             <div className="flex w-9 rounded-full overflow-hidden">
               <img
-                src="huggingface-avatar.jpeg"
+                src={channelThumbnail}
+                onError={handleBadChannelThumbnail}
               />
             </div>
           </div>

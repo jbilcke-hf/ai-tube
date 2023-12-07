@@ -1,6 +1,4 @@
-import { useEffect, useState, useTransition } from "react"
-import Head from "next/head"
-import Script from "next/script"
+
 import { Metadata, ResolvingMetadata } from "next"
 
 import { AppQueryProps } from "@/types"
@@ -27,7 +25,7 @@ export async function generateMetadata(
 
     return {
       title: `${video.label} - AI Tube`,
-      metadataBase: new URL('https://huggingface.co/spaces/jbilcke-hf/ai-tube'),
+      metadataBase,
       openGraph: {
         type: "website",
         // url: "https://example.com",

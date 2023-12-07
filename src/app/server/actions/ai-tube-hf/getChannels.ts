@@ -1,10 +1,10 @@
 "use server"
 
-import { Credentials, downloadFile, listDatasets, whoAmI } from "@/huggingface/hub/src"
-import { parseDatasetReadme } from "@/app/server/actions/utils/parseDatasetReadme"
+import { Credentials, listDatasets, whoAmI } from "@/huggingface/hub/src"
 import { ChannelInfo } from "@/types"
 
 import { adminCredentials } from "../config"
+import { getChannel } from "./getChannel"
 
 export async function getChannels(options: {
   apiKey?: string
@@ -50,7 +50,7 @@ export async function getChannels(options: {
     // TODO: need to handle better cases where the username is missing
 
     const chunks = name.split("/")
-    const [datasetUser, datasetName] = chunks.length === 2
+    const [_datasetUser, datasetName] = chunks.length === 2
       ? chunks
       : [name, name]
 
@@ -66,67 +66,10 @@ export async function getChannels(options: {
       continue
     }
 
-    const slug = datasetName.replaceAll(prefix, "")
-    
-    // console.log(`found an AI Tube channel: "${slug}"`)
-
-    // TODO parse the README to get the proper label
-    let label = slug.replaceAll("-", " ")
-
-    let thumbnail = ""
-    let prompt = ""
-    let description = ""
-    let voice = ""
-    let tags: string[] = []
-
-    // console.log(`going to read datasets/${name}`)
-    try {
-      const response = await downloadFile({
-        repo: `datasets/${name}`,
-        path: "README.md",
-        credentials
-      })
-      const readme = await response?.text()
-
-      const parsedDatasetReadme = parseDatasetReadme(readme)
-      
-      // console.log("parsedDatasetReadme: ", parsedDatasetReadme)
-
-      prompt = parsedDatasetReadme.prompt
-      label = parsedDatasetReadme.pretty_name
-      description = parsedDatasetReadme.description
-      thumbnail = parsedDatasetReadme.thumbnail || "thumbnail.jpg"
-
-      thumbnail =
-        thumbnail.startsWith("http")
-          ? thumbnail
-          : (thumbnail.endsWith(".jpg") || thumbnail.endsWith(".jpeg"))
-          ? `https://huggingface.co/datasets/${name}/resolve/main/${thumbnail}`
-          : ""
-
-      voice = parsedDatasetReadme.voice
-
-      tags = parsedDatasetReadme.tags
-        .map(tag => tag.trim()) // clean them up
-        .filter(tag => tag) // remove empty tags
-      
-    } catch (err) {
-      // console.log("failed to read the readme:", err)
-    }
-
-    const channel: ChannelInfo = {
-      id,
-      datasetUser,
-      datasetName,
-      slug,
-      label,
-      description,
-      thumbnail,
-      prompt,
-      likes,
-      tags,
-      updatedAt: updatedAt.toISOString()
-    }
+    const channel = await getChannel({
+      ...options,
+      id, name, likes, updatedAt
+    })
 
     channels.push(channel)
   }
