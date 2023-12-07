@@ -8,6 +8,7 @@ import { useStore } from "@/app/state/useStore"
 import { cn } from "@/lib/utils"
 import { MenuItem } from "./menu-item"
 import { showBetaFeatures } from "@/app/config"
+import Link from "next/link"
 
 
 export function LeftMenu() {
@@ -26,20 +27,24 @@ export function LeftMenu() {
       <div className={cn(
         `flex flex-col w-full`,
       )}>
-        <MenuItem
-          icon={<RiHome8Line className="h-6 w-6" />}
-          selected={view === "home"}
-          onClick={() => setView("home")}
-          >
-          Discover
-        </MenuItem>
-        <MenuItem
-          icon={<GrChannel className="h-5 w-5" />}
-          selected={view === "public_channels"}
-          onClick={() => setView("public_channels")}
-          >
-          Channels
-        </MenuItem>
+        <Link href="/">
+          <MenuItem
+            icon={<RiHome8Line className="h-6 w-6" />}
+            selected={view === "home"}
+            // </Link>onClick={() => setView("home")}
+            >
+            Discover
+          </MenuItem>
+        </Link>
+        <Link href="/channels">
+          <MenuItem
+            icon={<GrChannel className="h-5 w-5" />}
+            selected={view === "public_channels"}
+            // onClick={() => setView("public_channels")}
+            >
+            Channels
+          </MenuItem>
+        </Link>
       </div>
       <div className={cn(
         `flex flex-col w-full`,

@@ -5,7 +5,7 @@ import { useLocalStorage } from "usehooks-ts"
 
 import { cn } from "@/lib/utils"
 import { Input } from "@/components/ui/input"
-import { localStorageKeys } from "@/app/state/locaStorageKeys"
+import { localStorageKeys } from "@/app/state/localStorageKeys"
 import { defaultSettings } from "@/app/state/defaultSettings"
 
 export function UserAccountView() {

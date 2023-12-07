@@ -1,3 +1,5 @@
+import { useEffect, useTransition } from 'react'
+
 import { Pathway_Gothic_One } from 'next/font/google'
 import { PiPopcornBold } from "react-icons/pi"
 
@@ -11,9 +13,10 @@ const pathway = Pathway_Gothic_One({
 import { videoCategoriesWithLabels } from "@/app/state/categories"
 import { useStore } from "@/app/state/useStore"
 import { cn } from "@/lib/utils"
-import { useEffect } from 'react'
+import { getTags } from '@/app/server/actions/ai-tube-hf/getTags'
 
 export function TopHeader() {
+  const [_pending, startTransition] = useTransition()
   const view = useStore(s => s.view)
   const setView = useStore(s => s.setView)
   const displayMode = useStore(s => s.displayMode)
@@ -32,6 +35,9 @@ export function TopHeader() {
   const currentVideos = useStore(s => s.currentVideos)
   const currentVideo = useStore(s => s.currentVideo)
 
+  const currentTags = useStore(s => s.currentTags)
+  const setCurrentTags = useStore(s => s.setCurrentTags)
+
   const isNormalSize = headerMode === "normal"
 
 
@@ -44,6 +50,13 @@ export function TopHeader() {
       setMenuMode("normal_icon")
     }
   }, [view])
+
+  useEffect(() => {
+    startTransition(async () => {
+      const tags = await getTags()
+      setCurrentTags(tags)
+    })
+  }, [])
   
   return (
     <div className={cn(
@@ -109,27 +122,27 @@ export function TopHeader() {
         `text-[13px] font-semibold`,
         `mb-4`
       )}>
-        {Object.entries(videoCategoriesWithLabels)
-          .map(([ key, label ]) => (
+        {currentTags.slice(0, 9).map(tag => (
           <div
-            key={key}
+            key={tag}
             className={cn(
               `flex flex-col items-center justify-center`,
               `rounded-lg px-3 py-1 h-8`,
               `cursor-pointer`,
               `transition-all duration-200 ease-in-out`,
-              currentTag === key
+              currentTag === tag
                 ? `bg-neutral-100 text-neutral-800`
                 : `bg-neutral-800 text-neutral-50/90 hover:bg-neutral-700 hover:text-neutral-50/90`,
               // `text-clip`
             )}
             onClick={() => {
-              setCurrentTag(key)
+              setCurrentTag(currentTag === tag ? undefined : tag)
             }}
           >
             <span className={cn(
-              `text-center`
-            )}>{label}</span>
+              `text-center`,
+              `capitalize`,
+            )}>{tag}</span>
           </div>
         ))}
       </div> : null}

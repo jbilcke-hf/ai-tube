@@ -6,13 +6,11 @@ import { RiCheckboxCircleFill } from "react-icons/ri"
 import { useStore } from "@/app/state/useStore"
 import { cn } from "@/lib/utils"
 import { VideoPlayer } from "@/app/interface/video-player"
+import { VideoInfo } from "@/types"
 
 
 export function PublicVideoView() {
-  const displayMode = useStore(s => s.displayMode)
   const video = useStore(s => s.currentVideo)
-  const setMenuMode = useStore(s => s.setMenuMode)
-  const setHeaderMode = useStore(s => s.setHeaderMode)
 
   if (!video) { return null }
   
@@ -36,7 +34,7 @@ export function PublicVideoView() {
           `text-xl text-zinc-100 font-medium mb-0 line-clamp-2`,
           `mb-2`
         )}>
-          {video?.label}
+          {video.label}
         </div>
         
         {/** VIDEO TOOLBAR - HORIZONTAL */}

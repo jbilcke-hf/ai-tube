@@ -366,6 +366,7 @@ export type InterfaceView =
   | "public_channels"
   | "public_channel" // public view of a channel
   | "public_video" // public view of a video
+  | "not_found"
 
 export type Settings = {
   huggingfaceApiKey: string

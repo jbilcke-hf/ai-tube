@@ -7,7 +7,7 @@ import { useStore } from "@/app/state/useStore"
 import { cn } from "@/lib/utils"
 import { getChannels } from "@/app/server/actions/ai-tube-hf/getChannels"
 import { ChannelList } from "@/app/interface/channel-list"
-import { localStorageKeys } from "@/app/state/locaStorageKeys"
+import { localStorageKeys } from "@/app/state/localStorageKeys"
 import { defaultSettings } from "@/app/state/defaultSettings"
 import { Input } from "@/components/ui/input"
 

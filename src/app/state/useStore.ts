@@ -17,6 +17,8 @@ export const useStore = create<{
   view: InterfaceView
   setView: (view?: InterfaceView) => void
 
+  setPathname: (patname: string) => void
+
   currentChannel?: ChannelInfo
   setCurrentChannel: (currentChannel?: ChannelInfo) => void
 
@@ -25,6 +27,9 @@ export const useStore = create<{
 
   currentTag?: string
   setCurrentTag: (currentTag?: string) => void
+
+  currentTags: string[]
+  setCurrentTags: (currentTags?: string[]) => void
 
   currentVideos: VideoInfo[]
   setCurrentVideos: (currentVideos: VideoInfo[]) => void
@@ -44,6 +49,16 @@ export const useStore = create<{
   setView: (view?: InterfaceView) => {
     // TODO: download videos for this new channel
     set({ view: view || "home" })
+  },
+
+  setPathname: (pathname: string) => {
+    const routes: Record<string, InterfaceView> = {
+      "/": "home",
+      "/watch": "public_video",
+      "/channels": "public_channels"
+    }
+    console.log("setPathname: ", pathname)
+    set({ view: routes[pathname] || "not_found" })
   },
 
   headerMode: "normal",
@@ -71,6 +86,11 @@ export const useStore = create<{
   currentTag: undefined,
   setCurrentTag: (currentTag?: string) => {
     set({ currentTag })
+  },
+
+  currentTags: [],
+  setCurrentTags: (currentTags?: string[]) => {
+    set({ currentTags })
   },
 
   currentVideos: [],

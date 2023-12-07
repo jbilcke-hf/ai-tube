@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils"
 import { VideoInfo } from "@/types"
 
 import { useLocalStorage } from "usehooks-ts"
-import { localStorageKeys } from "@/app/state/locaStorageKeys"
+import { localStorageKeys } from "@/app/state/localStorageKeys"
 import { defaultSettings } from "@/app/state/defaultSettings"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
