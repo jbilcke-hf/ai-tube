@@ -411,3 +411,12 @@ export type UpdateQueueResponse = {
   error?: string
   nbUpdated: number
 }
+
+
+export type AppQueryProps = {
+  params: { id: string }
+  searchParams: {
+    v?: string | string[],
+    [key: string]: string | string[] | undefined
+  }
+}

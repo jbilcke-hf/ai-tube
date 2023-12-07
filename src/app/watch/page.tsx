@@ -3,22 +3,15 @@ import Head from "next/head"
 import Script from "next/script"
 import { Metadata, ResolvingMetadata } from "next"
 
+import { AppQueryProps } from "@/types"
 
 import { Main } from "../main"
-
 import { getVideo } from "../server/actions/ai-tube-hf/getVideo"
 
-type Props = {
-  params: { id: string }
-  searchParams: {
-    v?: string | string[],
-    [key: string]: string | string[] | undefined
-  }
-}
 
 // https://nextjs.org/docs/pages/building-your-application/optimizing/fonts 
 export async function generateMetadata(
-  { params, searchParams: { v: videoId } }: Props,
+  { params, searchParams: { v: videoId } }: AppQueryProps,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   // read route params
@@ -26,7 +19,7 @@ export async function generateMetadata(
   const metadataBase = new URL('https://huggingface.co/spaces/jbilcke-hf/ai-tube')
 
   try {
-    const video = await getVideo(videoId)
+    const video = await getVideo({ videoId, neverThrow: true })
 
     if (!video) {
       throw new Error("Video not found")
@@ -69,15 +62,9 @@ export async function generateMetadata(
 }
 
 
-export default async function WatchPage({ searchParams: { v: videoId } }: Props) {
-  // const [_pending, startTransition] = useTransition()
-  // const setView = useStore(s => s.setView)
-  // const setCurrentVideo = useStore(s => s.setCurrentVideo)
-  const id = `${videoId || ""}`
-
-  const video = await getVideo(videoId)
-
-  // console.log("got video:", video.id)
+export default async function WatchPage({ searchParams: { v: videoId } }: AppQueryProps) {
+  const video = await getVideo({ videoId, neverThrow: true })
+  // console.log("WatchPage: --> " + video?.id)
   return (
     <Main video={video} />
    )

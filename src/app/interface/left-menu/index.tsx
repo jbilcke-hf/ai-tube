@@ -16,6 +16,7 @@ export function LeftMenu() {
   const setView = useStore(s => s.setView)
   const menuMode = useStore(s => s.menuMode)
   const setMenuMode = useStore(s => s.setMenuMode)
+  const setCurrentVideo = useStore(s => s.setCurrentVideo)
 
   return (
     <div className={cn(
@@ -27,11 +28,15 @@ export function LeftMenu() {
       <div className={cn(
         `flex flex-col w-full`,
       )}>
-        <Link href="/">
+        <Link href={{
+            pathname: '/',
+            query: { v: undefined },
+          }}>
           <MenuItem
             icon={<RiHome8Line className="h-6 w-6" />}
             selected={view === "home"}
             // </Link>onClick={() => setView("home")}
+            // onClick={() => setCurrentVideo(undefiend)}
             >
             Discover
           </MenuItem>

@@ -31,6 +31,12 @@ export const useStore = create<{
   currentTags: string[]
   setCurrentTags: (currentTags?: string[]) => void
 
+  currentModels: string[]
+  setCurrentModels: (currentModels?: string[]) => void
+
+  currentModel?: string
+  setCurrentModel: (currentModel?: string) => void
+
   currentVideos: VideoInfo[]
   setCurrentVideos: (currentVideos: VideoInfo[]) => void
 
@@ -91,6 +97,16 @@ export const useStore = create<{
   currentTags: [],
   setCurrentTags: (currentTags?: string[]) => {
     set({ currentTags })
+  },
+
+  currentModels: [],
+  setCurrentModels: (currentModels?: string[]) => {
+    set({ currentModels })
+  },
+
+  currentModel: undefined,
+  setCurrentModel: (currentModel?: string) => {
+    set({ currentModel })
   },
 
   currentVideos: [],

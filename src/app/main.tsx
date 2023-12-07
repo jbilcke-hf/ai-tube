@@ -11,7 +11,7 @@ import { UserAccountView } from "./views/user-account-view"
 import { NotFoundView } from "./views/not-found-view"
 import { VideoInfo } from "@/types"
 import { useEffect } from "react"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { TubeLayout } from "./interface/tube-layout"
 
 // this is where we transition from the server-side space
@@ -29,16 +29,29 @@ export function Main({
  video?: VideoInfo
 }) {
   const pathname = usePathname()
+  const router = useRouter()
 
   const setCurrentVideo = useStore(s => s.setCurrentVideo)
   const setView = useStore(s => s.setView)
   const setPathname = useStore(s => s.setPathname)
 
+  const videoId = `${video?.id || ""}`
+  // console.log("Main video= "+ videoId)
+
   useEffect(() => {
-    if (video?.id) {
-      setCurrentVideo(video)
+    // note: it is important to ALWAYS set the current video to videoId
+    // even if it's undefined
+    setCurrentVideo(video)
+
+    if (videoId) {
+      // this is a hack for hugging face:
+      // we allow the ?v=<id> param on the root of the domain
+      if (pathname !== "/watch") {
+        // console.log("we are on huggingface apparently!")
+        router.replace(`/watch?v=${videoId}`)
+      }
     }
-  }, [video?.id])
+  }, [videoId])
 
 
   useEffect(() => {

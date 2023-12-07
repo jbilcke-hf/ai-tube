@@ -12,8 +12,28 @@ import { VideoInfo } from "@/types"
 export function PublicVideoView() {
   const video = useStore(s => s.currentVideo)
 
+  const videoId = `${video?.id || ""}`
+
+  // we inject the current videoId in the URL, if it's not already present
+  // this is a hack for Hugging Face iframes
+  useEffect(() => {
+    const queryString = new URL(location.href).search
+    const searchParams = new URLSearchParams(queryString)
+    if (videoId) {
+      if (searchParams.get("v") !== videoId) {
+        console.log(`current videoId "${videoId}" isn't set in the URL query params.. TODO we should set it`)
+        
+        // searchParams.set("v", videoId)
+        // location.search = searchParams.toString()
+      }
+    } else {
+      // searchParams.delete("v")
+      // location.search = searchParams.toString()
+    }
+  }, [videoId])
+
   if (!video) { return null }
-  
+
   return (
     <div className={cn(
       `w-full`,
