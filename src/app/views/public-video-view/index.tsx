@@ -1,7 +1,10 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { RiCheckboxCircleFill } from "react-icons/ri"
+import { PiShareFatLight } from "react-icons/pi"
+import CopyToClipboard from "react-copy-to-clipboard"
+import { LuCopyCheck } from "react-icons/lu"
 
 import { useStore } from "@/app/state/useStore"
 import { cn } from "@/lib/utils"
@@ -13,6 +16,8 @@ export function PublicVideoView() {
   const video = useStore(s => s.publicVideo)
 
   const videoId = `${video?.id || ""}`
+
+  const [copied, setCopied] = useState<boolean>(false)
 
   // we inject the current videoId in the URL, if it's not already present
   // this is a hack for Hugging Face iframes
@@ -32,6 +37,13 @@ export function PublicVideoView() {
     }
   }, [videoId])
 
+  useEffect(() => {
+    if (copied) {
+      setTimeout(() => {
+        setCopied(false)
+      }, 2000)
+    }
+  }, [copied])
   if (!video) { return null }
 
   return (
@@ -60,42 +72,95 @@ export function PublicVideoView() {
         {/** VIDEO TOOLBAR - HORIZONTAL */}
         <div className={cn(
           `flex flex-row`,
-          `items-center`
+          `items-center`,
+          `justify-between`,
+          `mb-4`
         )}>
-          {/** CHANNEL LOGO - VERTICAL */}
+          {/** LEFT PART FO THE TOOLBARR */}
           <div className={cn(
-            `flex flex-col`,
-            `mr-3`
+            `flex flex-row`,
+            `items-center`
           )}>
-            <div className="flex w-10 rounded-full overflow-hidden">
-              <img
-                src="huggingface-avatar.jpeg"
-              />
+            {/** CHANNEL LOGO - VERTICAL */}
+            <div className={cn(
+              `flex flex-col`,
+              `mr-3`
+            )}>
+              <div className="flex w-10 rounded-full overflow-hidden">
+                <img
+                  src="huggingface-avatar.jpeg"
+                />
+              </div>
+            </div>
+
+            {/** CHANNEL INFO - VERTICAL */}
+            <div className={cn(
+              `flex flex-col`
+              )}>
+              <div className={cn(
+                `flex flex-row items-center`,
+                `text-zinc-100 text-base font-medium space-x-1`,
+                )}>
+                <div>{video.channel.label}</div>
+                <div className="text-sm text-neutral-400"><RiCheckboxCircleFill className="" /></div>
+              </div>
+              <div className={cn(
+                `flex flex-row items-center`,
+                `text-neutral-400 text-xs font-normal space-x-1`,
+                )}>
+                <div>0 followers</div>
+                <div></div>
+              </div>
             </div>
           </div>
 
-          {/** CHANNEL INFO - VERTICAL */}
+          {/** RIGHT PART FO THE TOOLBAR */}
           <div className={cn(
-            `flex flex-col`
+            `flex flex-row`,
+            `items-center`,
+            `space-x-2`
+          )}>
+            {/* SHARE */}
+            <div className={cn(
+              `flex flex-row`,
+              `items-center`
             )}>
-            <div className={cn(
-              `flex flex-row items-center`,
-              `text-zinc-100 text-base font-medium space-x-1`,
-              )}>
-              <div>{video.channel.label}</div>
-              <div className="text-sm text-neutral-400"><RiCheckboxCircleFill className="" /></div>
-            </div>
-            <div className={cn(
-              `flex flex-row items-center`,
-              `text-neutral-400 text-xs font-normal space-x-1`,
-              )}>
-              <div>0 followers</div>
-              <div></div>
+              <CopyToClipboard
+                text={`https://huggingface.co/spaces/jbilcke-hf/ai-tube?v=${video.id}`}
+                onCopy={() => setCopied(true)}>
+                <div className={cn(
+                  `flex flex-row space-x-2 pl-3 pr-4 h-9`,
+                  `items-center justify-center text-center`,
+                  `rounded-2xl`,
+                  `cursor-pointer`,
+                  `bg-neutral-700/50 hover:bg-neutral-700/90 text-zinc-100`
+                )}>
+                  <div className="flex items-center justify-center pt-0.5">
+                    {
+                      copied ? <LuCopyCheck className="w-4 h-4" />
+                      : <PiShareFatLight className="w-5 h-5" />
+                    }
+                  </div>
+                  <div className="text-sm font-medium">
+                    {
+                      copied ? "Link copied!" : "Share video"
+                    }</div>
+                </div>
+              </CopyToClipboard>
             </div>
           </div>
 
         </div>
 
+        {/** VIDEO DESCRIPTION - VERTICAL */}
+        <div className={cn(
+          `flex flex-col p-3`,
+          `rounded-xl`,
+          `bg-neutral-700/50`,
+          `text-sm`
+        )}>
+          <p>{video.description}</p>
+        </div>
       </div>
       <div className={cn(
         `sm:w-56 md:w-96`,
