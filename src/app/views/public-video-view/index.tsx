@@ -5,11 +5,13 @@ import { RiCheckboxCircleFill } from "react-icons/ri"
 import { PiShareFatLight } from "react-icons/pi"
 import CopyToClipboard from "react-copy-to-clipboard"
 import { LuCopyCheck } from "react-icons/lu"
+import { LuScrollText } from "react-icons/lu"
 
 import { useStore } from "@/app/state/useStore"
 import { cn } from "@/lib/utils"
 import { VideoPlayer } from "@/app/interface/video-player"
 import { VideoInfo } from "@/types"
+import { ActionButton } from "@/app/interface/action-button"
 
 
 export function PublicVideoView() {
@@ -133,21 +135,37 @@ export function PublicVideoView() {
                   `items-center justify-center text-center`,
                   `rounded-2xl`,
                   `cursor-pointer`,
+                  `text-sm font-medium`,
                   `bg-neutral-700/50 hover:bg-neutral-700/90 text-zinc-100`
                 )}>
-                  <div className="flex items-center justify-center pt-0.5">
+                  <div className="flex items-center justify-center">
                     {
                       copied ? <LuCopyCheck className="w-4 h-4" />
                       : <PiShareFatLight className="w-5 h-5" />
                     }
                   </div>
-                  <div className="text-sm font-medium">
+                  <div>
                     {
                       copied ? "Link copied!" : "Share video"
                     }</div>
                 </div>
               </CopyToClipboard>
             </div>
+
+            <ActionButton
+              href={
+                `https://huggingface.co/datasets/${
+                  video.channel.datasetUser
+                }/${
+                  video.channel.datasetName
+                }/raw/main/prompt_${
+                  video.id
+                }.md`
+              }
+            >
+              <LuScrollText />
+              <span>See prompt</span>
+            </ActionButton>
           </div>
 
         </div>
