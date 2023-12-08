@@ -3,7 +3,6 @@
 import { useStore } from "./state/useStore"
 import { HomeView } from "./views/home-view"
 import { PublicChannelsView } from "./views/public-channels-view"
-import { UserChannelsView } from "./views/user-channels-view"
 import { PublicChannelView } from "./views/public-channel-view"
 import { UserChannelView } from "./views/user-channel-view"
 import { PublicVideoView } from "./views/public-video-view"
@@ -69,7 +68,6 @@ export function Main({
       {view === "public_video" && <PublicVideoView />}
       {view === "public_channels" && <PublicChannelsView />}
       {view === "public_channel" && <PublicChannelView />}
-      {view === "user_channels" && <UserChannelsView />}
       {/*view === "user_videos" && <UserVideosView />*/}
       {view === "user_channel" && <UserChannelView />}
       {view === "user_account" && <UserAccountView />}

@@ -38,7 +38,7 @@ export async function getChannels(options: {
     ? { owner } // search channels of a specific user
     : prefix // global search (note: might be costly?)
 
- 
+  console.log("search:", search)
   for await (const { id, name, likes, updatedAt } of listDatasets({
     search,
     credentials,

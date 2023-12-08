@@ -28,7 +28,10 @@ export function UserAccountView() {
     if (!isLoaded) {
       startTransition(async () => {
         try {
-          const channels = await getChannels({ apiKey: huggingfaceApiKey })
+          const channels = await getChannels({
+            apiKey: huggingfaceApiKey,
+            renewCache: true,
+          })
           setCurrentChannels(channels)
         } catch (err) {
           console.error("failed to load the channel for the current user:", err)
