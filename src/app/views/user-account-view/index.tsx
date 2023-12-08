@@ -1,30 +1,50 @@
 "use client"
 
-import { useTransition } from "react"
+import { useEffect, useState, useTransition } from "react"
 import { useLocalStorage } from "usehooks-ts"
 
+import { useStore } from "@/app/state/useStore"
 import { cn } from "@/lib/utils"
-import { Input } from "@/components/ui/input"
+import { getChannels } from "@/app/server/actions/ai-tube-hf/getChannels"
+import { ChannelList } from "@/app/interface/channel-list"
 import { localStorageKeys } from "@/app/state/localStorageKeys"
 import { defaultSettings } from "@/app/state/defaultSettings"
+import { Input } from "@/components/ui/input"
 
 export function UserAccountView() {
+  const [_isPending, startTransition] = useTransition()
   const [huggingfaceApiKey, setHuggingfaceApiKey] = useLocalStorage<string>(
     localStorageKeys.huggingfaceApiKey,
     defaultSettings.huggingfaceApiKey
   )
+  const setView = useStore(s => s.setView)
+  const setCurrentChannel = useStore(s => s.setCurrentChannel)
+
+  const currentChannels = useStore(s => s.currentChannels)
+  const setCurrentChannels = useStore(s => s.setCurrentChannels)
+  const [isLoaded, setLoaded] = useState(false)
+
+  useEffect(() => {
+    if (!isLoaded) {
+      startTransition(async () => {
+        try {
+          const channels = await getChannels({ apiKey: huggingfaceApiKey })
+          setCurrentChannels(channels)
+        } catch (err) {
+          console.error("failed to load the channel for the current user:", err)
+          setCurrentChannels([])
+        } finally {
+          setLoaded(true)
+        }
+      })
+    }
+  }, [isLoaded, huggingfaceApiKey])
 
   return (
-    <div className={cn(
-      `flex flex-col space-y-4`
-    )}>
-      {/*
-      <div className="flex flex-col space-y-2 max-w-4xl">
-        <p>Do you want your model to be featured?</p>
-        <p>If it's free and open-source, tell me about it, I might be able to add it!</p>
-      </div>
-      */}
-      <div className="flex flex-col space-y-2 max-w-4xl">
+    <div className={cn(`flex flex-col space-y-4`)}>
+      <h2 className="text-3xl font-bold">Want your own channels? Setup your account!</h2>
+        
+      <div className="flex flex-col space-y-4 max-w-2xl">
         <div className="flex flex-row space-x-2 items-center">
           <label className="flex w-64">Hugging Face token:</label>
           <Input
@@ -40,13 +60,23 @@ export function UserAccountView() {
         <p className="text-neutral-100/70">
           Note: your Hugging Face token must be a <span className="font-bold font-mono text-yellow-300">WRITE</span> access token.
         </p>
+        {huggingfaceApiKey
+        ? <p className="">Nice, looks like you are ready to go!</p>
+        : <p>Please setup your account (see above) to get started</p>}
       </div>
-      {huggingfaceApiKey
-        ? <><p>You are ready to go for the beta!</p>
-          <p>Please contact HF user <span className="text-xs font-mono bg-neutral-600 rounded-lg py-1 px-1.5">@jbilcke-hf</span> to learn how to create your own channel!</p></>
-        : <><p>This project is in beta, you will be invited to contact HF user <span className="text-xs font-mono bg-neutral-600 rounded-lg py-1 px-1.5">@jbilcke-hf</span> to get started.</p>
-          <p>But you can already setup your account (see above) to get started.</p></>}
-      
+
+      {huggingfaceApiKey ? 
+      <div className="flex flex-col space-y-4">
+        <h2 className="text-3xl font-bold">Your custom channels:</h2>
+        {currentChannels?.length ? <ChannelList
+          layout="grid"
+          channels={currentChannels}
+          onSelect={(channel) => {
+            setCurrentChannel(channel)
+            setView("user_channel")
+          }}
+        /> : <p>Ask <span className="font-mono">@jbilcke-hf</span> for help to create a channel!</p>}
+      </div> : null}
     </div>
   )
 }
