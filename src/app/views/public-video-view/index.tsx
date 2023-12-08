@@ -10,7 +10,7 @@ import { VideoInfo } from "@/types"
 
 
 export function PublicVideoView() {
-  const video = useStore(s => s.currentVideo)
+  const video = useStore(s => s.publicVideo)
 
   const videoId = `${video?.id || ""}`
 

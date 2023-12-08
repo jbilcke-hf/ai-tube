@@ -18,10 +18,10 @@ export function UserAccountView() {
     defaultSettings.huggingfaceApiKey
   )
   const setView = useStore(s => s.setView)
-  const setCurrentChannel = useStore(s => s.setCurrentChannel)
+  const setUserChannel = useStore(s => s.setUserChannel)
 
-  const currentChannels = useStore(s => s.currentChannels)
-  const setCurrentChannels = useStore(s => s.setCurrentChannels)
+  const userChannels = useStore(s => s.userChannels)
+  const setUserChannels = useStore(s => s.setUserChannels)
   const [isLoaded, setLoaded] = useState(false)
 
   useEffect(() => {
@@ -32,10 +32,10 @@ export function UserAccountView() {
             apiKey: huggingfaceApiKey,
             renewCache: true,
           })
-          setCurrentChannels(channels)
+          setUserChannels(channels)
         } catch (err) {
           console.error("failed to load the channel for the current user:", err)
-          setCurrentChannels([])
+          setUserChannels([])
         } finally {
           setLoaded(true)
         }
@@ -71,11 +71,11 @@ export function UserAccountView() {
       {huggingfaceApiKey ? 
       <div className="flex flex-col space-y-4">
         <h2 className="text-3xl font-bold">Your custom channels:</h2>
-        {currentChannels?.length ? <ChannelList
+        {userChannels?.length ? <ChannelList
           layout="grid"
-          channels={currentChannels}
-          onSelect={(channel) => {
-            setCurrentChannel(channel)
+          channels={userChannels}
+          onSelect={(userChannel) => {
+            setUserChannel(userChannel)
             setView("user_channel")
           }}
         /> : <p>Ask <span className="font-mono">@jbilcke-hf</span> for help to create a channel!</p>}

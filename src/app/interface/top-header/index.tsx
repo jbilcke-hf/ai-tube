@@ -10,7 +10,6 @@ const pathway = Pathway_Gothic_One({
   display: "swap"
 })
 
-import { videoCategoriesWithLabels } from "@/app/state/categories"
 import { useStore } from "@/app/state/useStore"
 import { cn } from "@/lib/utils"
 import { getTags } from '@/app/server/actions/ai-tube-hf/getTags'
@@ -27,13 +26,8 @@ export function TopHeader() {
 
   const setMenuMode = useStore(s => s.setMenuMode)
 
-
-  const currentChannel = useStore(s => s.currentChannel)
-  const setCurrentChannel = useStore(s => s.setCurrentChannel)
   const currentTag = useStore(s => s.currentTag)
   const setCurrentTag = useStore(s => s.setCurrentTag)
-  const currentVideos = useStore(s => s.currentVideos)
-  const currentVideo = useStore(s => s.currentVideo)
 
   const currentTags = useStore(s => s.currentTags)
   const setCurrentTags = useStore(s => s.setCurrentTags)

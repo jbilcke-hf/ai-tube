@@ -13,10 +13,6 @@ import Link from "next/link"
 
 export function LeftMenu() {
   const view = useStore(s => s.view)
-  const setView = useStore(s => s.setView)
-  const menuMode = useStore(s => s.menuMode)
-  const setMenuMode = useStore(s => s.setMenuMode)
-  const setCurrentVideo = useStore(s => s.setCurrentVideo)
 
   return (
     <div className={cn(
@@ -63,7 +59,7 @@ export function LeftMenu() {
         <Link href="/account">
           <MenuItem
             icon={<CgProfile className="h-6 w-6" />}
-            selected={view === "user_channels"}
+            selected={view === "user_account" || view === "user_channel"}
             >
             Account
           </MenuItem>

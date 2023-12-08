@@ -10,8 +10,8 @@ import { ChannelList } from "@/app/interface/channel-list"
 export function PublicChannelsView() {
   const [_isPending, startTransition] = useTransition()
 
-  const currentChannels = useStore(s => s.currentChannels)
-  const setCurrentChannels = useStore(s => s.setCurrentChannels)
+  const publicChannels = useStore(s => s.publicChannels)
+  const setPublicChannels = useStore(s => s.setPublicChannels)
   const [isLoaded, setLoaded] = useState(false)
 
   useEffect(() => {
@@ -19,10 +19,10 @@ export function PublicChannelsView() {
       startTransition(async () => {
         try {
           const channels = await getChannels()
-          setCurrentChannels(channels)
+          setPublicChannels(channels)
         } catch (err) {
           console.error("failed to load the public channels", err)
-          setCurrentChannels([])
+          setPublicChannels([])
         } finally {
           setLoaded(true)
         }
@@ -34,7 +34,7 @@ export function PublicChannelsView() {
     <div className={cn(`flex flex-col`)}>
       <ChannelList
         layout="grid"
-        channels={currentChannels}
+        channels={publicChannels}
       />
     </div>
   )

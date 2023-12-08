@@ -19,11 +19,17 @@ export const useStore = create<{
 
   setPathname: (patname: string) => void
 
-  currentChannel?: ChannelInfo
-  setCurrentChannel: (currentChannel?: ChannelInfo) => void
+  publicChannel?: ChannelInfo
+  setPublicChannel: (setPublicChannel?: ChannelInfo) => void
 
-  currentChannels: ChannelInfo[]
-  setCurrentChannels: (currentChannels?: ChannelInfo[]) => void
+  publicChannels: ChannelInfo[]
+  setPublicChannels: (publicChannels?: ChannelInfo[]) => void
+
+  userChannel?: ChannelInfo
+  setUserChannel: (userChannel?: ChannelInfo) => void
+
+  userChannels: ChannelInfo[]
+  setUserChannels: (userChannels?: ChannelInfo[]) => void
 
   currentTag?: string
   setCurrentTag: (currentTag?: string) => void
@@ -37,11 +43,17 @@ export const useStore = create<{
   currentModel?: string
   setCurrentModel: (currentModel?: string) => void
 
-  currentVideos: VideoInfo[]
-  setCurrentVideos: (currentVideos: VideoInfo[]) => void
+  publicVideo?: VideoInfo
+  setPublicVideo: (publicVideo?: VideoInfo) => void
 
-  currentVideo?: VideoInfo
-  setCurrentVideo: (currentVideo?: VideoInfo) => void
+  publicVideos: VideoInfo[]
+  setPublicVideos: (userVideos: VideoInfo[]) => void
+
+  userVideo?: VideoInfo
+  setUserVideo: (userVideo?: VideoInfo) => void
+
+  userVideos: VideoInfo[]
+  setUserVideos: (userVideos: VideoInfo[]) => void
 
   // currentPrompts: VideoInfo[]
   // setCurrentPrompts: (currentPrompts: VideoInfo[]) => void
@@ -62,7 +74,9 @@ export const useStore = create<{
       "/": "home",
       "/watch": "public_video",
       "/channels": "public_channels",
-      "/account": "user_account"
+      "/channel": "public_channel",
+      "/account": "user_account",
+      "/account/channel": "user_channel",
     }
 
     set({ view: routes[pathname] || "not_found" })
@@ -78,16 +92,28 @@ export const useStore = create<{
     set({ menuMode })
   },
 
-  currentChannel: undefined,
-  setCurrentChannel: (currentChannel?: ChannelInfo) => {
+  publicChannel: undefined,
+  setPublicChannel: (publicChannel?: ChannelInfo) => {
     // TODO: download videos for this new channel
-    set({ currentChannel })
+    set({ publicChannel })
   },
 
-  currentChannels: [],
-  setCurrentChannels: (currentChannels: ChannelInfo[] = []) => {
+  publicChannels: [],
+  setPublicChannels: (publicChannels: ChannelInfo[] = []) => {
     // TODO: download videos for this new channel
-    set({ currentChannels: Array.isArray(currentChannels) ? currentChannels : [] })
+    set({ publicChannels: Array.isArray(publicChannels) ? publicChannels : [] })
+  },
+
+  userChannel: undefined,
+  setUserChannel: (userChannel?: ChannelInfo) => {
+    // TODO: download videos for this new channel
+    set({ userChannel })
+  },
+
+  userChannels: [],
+  setUserChannels: (userChannels: ChannelInfo[] = []) => {
+    // TODO: download videos for this new channel
+    set({ userChannels: Array.isArray(userChannels) ? userChannels : [] })
   },
 
   currentTag: undefined,
@@ -110,13 +136,25 @@ export const useStore = create<{
     set({ currentModel })
   },
 
-  currentVideos: [],
-  setCurrentVideos: (currentVideos: VideoInfo[] = []) => {
+  publicVideo: undefined,
+  setPublicVideo: (publicVideo?: VideoInfo) => {
+    set({ publicVideo })
+  },
+
+  publicVideos: [],
+  setPublicVideos: (publicVideos: VideoInfo[] = []) => {
     set({
-      currentVideos: Array.isArray(currentVideos) ? currentVideos : [] 
+      publicVideos: Array.isArray(publicVideos) ? publicVideos : [] 
     })
   },
 
-  currentVideo: undefined,
-  setCurrentVideo: (currentVideo?: VideoInfo) => { set({ currentVideo }) },
+  userVideo: undefined,
+  setUserVideo: (userVideo?: VideoInfo) => { set({ userVideo }) },
+
+  userVideos: [],
+  setUserVideos: (userVideos: VideoInfo[] = []) => {
+    set({
+      userVideos: Array.isArray(userVideos) ? userVideos : [] 
+    })
+  },
 }))

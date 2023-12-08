@@ -5,38 +5,38 @@ import { useEffect, useTransition } from "react"
 import { useStore } from "@/app/state/useStore"
 import { cn } from "@/lib/utils"
 import { VideoList } from "@/app/interface/video-list"
+import { getChannelVideos } from "@/app/server/actions/ai-tube-hf/getChannelVideos"
 
 
 export function PublicChannelView() {
   const [_isPending, startTransition] = useTransition()
-  const currentChannel = useStore(s => s.currentChannel)
-  const currentVideos = useStore(s => s.currentVideos)
-  const setCurrentVideos = useStore(s => s.setCurrentVideos)
-  const setCurrentVideo = useStore(s => s.setCurrentVideo)
+  const publicChannel = useStore(s => s.publicChannel)
+  const publicVideos = useStore(s => s.publicVideos)
+  const setPublicVideos = useStore(s => s.setPublicVideos)
 
   useEffect(() => {
-    if (!currentChannel) {
+    if (!publicChannel) {
       return
     }
 
     startTransition(async () => {
-      /*
       const videos = await getChannelVideos({
-        channel: currentChannel,
+        channel: publicChannel,
+        status: "published",
       })
-      console.log("videos:", videos)
-      */
+      setPublicVideos(videos)
     })
 
-    setCurrentVideos([])
-  }, [currentChannel, currentChannel?.id])
+    setPublicVideos([])
+  }, [publicChannel, publicChannel?.id])
 
   return (
     <div className={cn(
       `flex flex-col`
     )}>
       <VideoList
-        videos={currentVideos}
+        layout="grid"
+        videos={publicVideos}
       />
     </div>
   )

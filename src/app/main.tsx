@@ -8,7 +8,7 @@ import { UserChannelView } from "./views/user-channel-view"
 import { PublicVideoView } from "./views/public-video-view"
 import { UserAccountView } from "./views/user-account-view"
 import { NotFoundView } from "./views/not-found-view"
-import { VideoInfo } from "@/types"
+import { ChannelInfo, VideoInfo } from "@/types"
 import { useEffect } from "react"
 import { usePathname, useRouter } from "next/navigation"
 import { TubeLayout } from "./interface/tube-layout"
@@ -22,15 +22,17 @@ import { TubeLayout } from "./interface/tube-layout"
 // one benefit of doing this is that we will able to add some animations/transitions
 // more easily
 export function Main({
-  video
+  video,
+  channel,
 }: {
  // server side params
  video?: VideoInfo
+ channel?: ChannelInfo
 }) {
   const pathname = usePathname()
   const router = useRouter()
 
-  const setCurrentVideo = useStore(s => s.setCurrentVideo)
+  const setPublicVideo = useStore(s => s.setPublicVideo)
   const setView = useStore(s => s.setView)
   const setPathname = useStore(s => s.setPathname)
 
@@ -40,7 +42,7 @@ export function Main({
   useEffect(() => {
     // note: it is important to ALWAYS set the current video to videoId
     // even if it's undefined
-    setCurrentVideo(video)
+    setPublicVideo(video)
 
     if (videoId) {
       // this is a hack for hugging face:

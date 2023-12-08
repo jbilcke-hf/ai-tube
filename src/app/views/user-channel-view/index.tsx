@@ -13,8 +13,8 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { submitVideoRequest } from "@/app/server/actions/submitVideoRequest"
-import { getVideoRequestsFromChannel } from "@/app/server/actions/ai-tube-hf/getVideoRequestsFromChannel"
 import { PendingVideoList } from "@/app/interface/pending-video-list"
+import { getChannelVideos } from "@/app/server/actions/ai-tube-hf/getChannelVideos"
 
 export function UserChannelView() {
   const [_isPending, startTransition] = useTransition()
@@ -32,49 +32,35 @@ export function UserChannelView() {
 
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const currentChannel = useStore(s => s.currentChannel)
-  const currentVideos = useStore(s => s.currentVideos)
-  const setCurrentVideos = useStore(s => s.setCurrentVideos)
-  const setCurrentVideo = useStore(s => s.setCurrentVideo)
+  const userChannel = useStore(s => s.userChannel)
+  const userChannels = useStore(s => s.userChannels)
+  const userVideos = useStore(s => s.userVideos)
+  const setUserChannel = useStore(s => s.setUserChannel)
+  const setUserChannels = useStore(s => s.setUserChannels)
+  const setUserVideos = useStore(s => s.setUserVideos)
 
-  console.log("CURRENT VIDEOS:", currentVideos)
+
   useEffect(() => {
-    if (!currentChannel) {
+    if (!userChannel) {
       return
     }
 
     startTransition(async () => {
 
-      const videoRequests = await getVideoRequestsFromChannel({
-        channel: currentChannel,
-        apiKey: huggingfaceApiKey,
-        renewCache: true
+      const videos = await getChannelVideos({
+        channel: userChannel,
+        // status: undefined, // we want *all* status
       })
-
-      const videos: VideoInfo[] = Object.values(videoRequests).map(videoRequest => ({
-        id: videoRequest.id,
-        status: "submitted",
-        label: videoRequest.label,
-        description: videoRequest.description,
-        prompt: videoRequest.prompt,
-        thumbnailUrl: videoRequest.thumbnailUrl,
-        assetUrl: "",
-        numberOfViews: 0,
-        numberOfLikes: 0,
-        updatedAt: videoRequest.updatedAt,
-        tags: videoRequest.tags,
-        channel: currentChannel
-      }))
 
       console.log("setCurrentVideos:", videos)
 
-      setCurrentVideos(videos)
+      setUserVideos(videos)
     })
 
-  }, [huggingfaceApiKey, currentChannel, currentChannel?.id])
+  }, [huggingfaceApiKey, userChannel, userChannel?.id])
 
   const handleSubmit = () => {
-    if (!currentChannel) {
+    if (!userChannel) {
       return
     }
     if (!titleDraft || !promptDraft) {
@@ -87,7 +73,7 @@ export function UserChannelView() {
     startTransition(async () => {
       try {
         const newVideo = await submitVideoRequest({
-          channel: currentChannel,
+          channel: userChannel,
           apiKey: huggingfaceApiKey,
           title: titleDraft,
           description: descriptionDraft,
@@ -97,7 +83,7 @@ export function UserChannelView() {
 
         // in case of success we update the frontend immediately
         // with our draft video
-        setCurrentVideos([newVideo, ...currentVideos])
+        setUserVideos([newVideo, ...userVideos])
         setPromptDraft("")
         setDescriptionDraft("")
         setTagsDraft("")
@@ -223,7 +209,7 @@ export function UserChannelView() {
       <h2 className="text-3xl font-bold">Current video prompts:</h2>
 
       <PendingVideoList
-        videos={currentVideos}
+        videos={userVideos}
         onDelete={handleDelete}
       />
     </div>

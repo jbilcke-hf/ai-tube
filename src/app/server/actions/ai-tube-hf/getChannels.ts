@@ -4,9 +4,10 @@ import { Credentials, listDatasets, whoAmI } from "@/huggingface/hub/src"
 import { ChannelInfo } from "@/types"
 
 import { adminCredentials } from "../config"
-import { getChannel } from "./getChannel"
+import { parseChannel } from "./parseChannel"
 
 export async function getChannels(options: {
+  channelId?: string
   apiKey?: string
   owner?: string
   renewCache?: boolean
@@ -38,7 +39,8 @@ export async function getChannels(options: {
     ? { owner } // search channels of a specific user
     : prefix // global search (note: might be costly?)
 
-  console.log("search:", search)
+  // console.log("search:", search)
+  
   for await (const { id, name, likes, updatedAt } of listDatasets({
     search,
     credentials,
@@ -46,6 +48,9 @@ export async function getChannels(options: {
     ? { cache: "no-store" }
     : undefined
   })) {
+    if (options.channelId && options.channelId !== id) {
+      continue
+    }
 
     // TODO: need to handle better cases where the username is missing
 
@@ -66,12 +71,16 @@ export async function getChannels(options: {
       continue
     }
 
-    const channel = await getChannel({
+    const channel = await parseChannel({
       ...options,
       id, name, likes, updatedAt
     })
 
     channels.push(channel)
+
+    if (options.channelId && options.channelId === id) {
+      break
+    }
   }
 
   return channels
