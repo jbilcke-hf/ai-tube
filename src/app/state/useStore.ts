@@ -55,6 +55,9 @@ export const useStore = create<{
   userVideos: VideoInfo[]
   setUserVideos: (userVideos: VideoInfo[]) => void
 
+  recommendedVideos: VideoInfo[]
+  setRecommendedVideos: (recommendedVideos: VideoInfo[]) => void
+
   // currentPrompts: VideoInfo[]
   // setCurrentPrompts: (currentPrompts: VideoInfo[]) => void
 }>((set, get) => ({
@@ -155,6 +158,13 @@ export const useStore = create<{
   setUserVideos: (userVideos: VideoInfo[] = []) => {
     set({
       userVideos: Array.isArray(userVideos) ? userVideos : [] 
+    })
+  },
+
+  recommendedVideos: [],
+  setRecommendedVideos: (recommendedVideos: VideoInfo[]) => {
+    set({
+      recommendedVideos: Array.isArray(recommendedVideos) ? recommendedVideos : [] 
     })
   },
 }))

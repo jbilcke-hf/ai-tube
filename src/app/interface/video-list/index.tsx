@@ -5,7 +5,7 @@ import { VideoCard } from "../video-card"
 
 export function VideoList({
   videos,
-  layout = "flex",
+  layout = "grid",
   className = "",
   onSelect,
 }: {
@@ -18,7 +18,7 @@ export function VideoList({
    * - based on the device type (eg. a smart TV)
    * - a design choice for a particular page
    */
-  layout?: "grid" | "flex"
+  layout?: "grid" | "horizontal" | "vertical"
 
   className?: string
 
@@ -30,6 +30,8 @@ export function VideoList({
       className={cn(
         layout === "grid"
           ? `grid grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4`
+        : layout === "vertical"
+          ? `grid grid-cols-1 gap-2`
           : `flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4`,
         className,
       )}
@@ -39,6 +41,7 @@ export function VideoList({
         key={video.id}
         video={video}
         className="w-full"
+        layout={layout === "vertical" ? "compact" : "normal"}
         onSelect={onSelect}
       />
     ))}

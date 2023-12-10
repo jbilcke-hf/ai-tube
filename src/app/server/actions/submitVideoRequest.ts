@@ -1,9 +1,8 @@
 "use server"
 
-import { ChannelInfo, VideoInfo } from "@/types"
+import { ChannelInfo, VideoGenerationModel, VideoInfo } from "@/types"
 
 import { uploadVideoRequestToDataset } from "./ai-tube-hf/uploadVideoRequestToDataset"
-import { updateQueue } from "./ai-tube-robot/updateQueue"
 
 export async function submitVideoRequest({
   channel,
@@ -11,6 +10,11 @@ export async function submitVideoRequest({
   title,
   description,
   prompt,
+  model,
+  lora,
+  style,
+  voice,
+  music,
   tags,
 }: {
   channel: ChannelInfo
@@ -18,6 +22,11 @@ export async function submitVideoRequest({
   title: string
   description: string
   prompt: string
+  model: VideoGenerationModel
+  lora: string
+  style: string
+  voice: string
+  music: string
   tags: string[]
 }): Promise<VideoInfo> {
   if (!apiKey) {
@@ -30,6 +39,11 @@ export async function submitVideoRequest({
     title,
     description,
     prompt,
+    model,
+    lora,
+    style,
+    voice,
+    music,
     tags
   })
 

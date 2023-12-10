@@ -6,6 +6,7 @@ import { listFiles } from "@/huggingface/hub/src"
 import { parsePromptFileName } from "../utils/parsePromptFileName"
 import { downloadFileAsText } from "./downloadFileAsText"
 import { parseDatasetPrompt } from "../utils/parseDatasetPrompt"
+import { parseVideoModelName } from "../utils/parseVideoModelName"
 
 /**
  * Return all the videos requests created by a user on their channel
@@ -71,7 +72,7 @@ export async function getVideoRequestsFromChannel({
           continue
         }
 
-        const { title, description, tags, prompt, thumbnail } = parseDatasetPrompt(rawMarkdown)
+        const { title, description, tags, prompt, thumbnail, model, lora, style, music, voice } = parseDatasetPrompt(rawMarkdown, channel)
 
         if (!title || !description || !prompt) {
           // console.log("dataset prompt is incomplete or unparseable")
@@ -85,15 +86,20 @@ export async function getVideoRequestsFromChannel({
             ? `https://huggingface.co/${repo}/resolve/main/${thumbnail}`
             : ""
 
+        
         const video: VideoRequest = {
           id,
           label: title,
           description,
           prompt,
           thumbnailUrl,
-    
+          model,
+          lora,
+          style,
+          voice,
+          music,
           updatedAt: file.lastCommit?.date || new Date().toISOString(),
-          tags, // read them from the file?
+          tags: Array.isArray(tags) && tags.length ? tags : channel.tags,
           channel,
         }
 

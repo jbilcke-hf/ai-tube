@@ -2,7 +2,7 @@
 
 import { Credentials, downloadFile, whoAmI } from "@/huggingface/hub/src"
 import { parseDatasetReadme } from "@/app/server/actions/utils/parseDatasetReadme"
-import { ChannelInfo } from "@/types"
+import { ChannelInfo, VideoGenerationModel } from "@/types"
 
 import { adminCredentials } from "../config"
 
@@ -62,13 +62,14 @@ export async function parseChannel(options: {
   // TODO parse the README to get the proper label
   let label = slug.replaceAll("-", " ")
 
-  let model = ""
+  let model: VideoGenerationModel = "HotshotXL"
   let lora = ""
   let style = ""
   let thumbnail = ""
   let prompt = ""
   let description = ""
   let voice = ""
+  let music = ""
   let tags: string[] = []
 
   // console.log(`going to read datasets/${name}`)
@@ -88,10 +89,11 @@ export async function parseChannel(options: {
     label = parsedDatasetReadme.pretty_name
     description = parsedDatasetReadme.description
     thumbnail = parsedDatasetReadme.thumbnail || "thumbnail.jpg"
-    model = parsedDatasetReadme.model || ""
+    model = parsedDatasetReadme.model
     lora = parsedDatasetReadme.lora || ""
     style = parsedDatasetReadme.style || ""
     voice = parsedDatasetReadme.voice || ""
+    music = parsedDatasetReadme.music || ""
 
     thumbnail =
       thumbnail.startsWith("http")
@@ -119,6 +121,7 @@ export async function parseChannel(options: {
     lora,
     style,
     voice,
+    music,
     thumbnail,
     prompt,
     likes: options.likes,

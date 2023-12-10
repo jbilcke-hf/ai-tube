@@ -12,16 +12,20 @@ const defaultChannelThumbnail = "/huggingface-avatar.jpeg"
 export function VideoCard({
   video,
   className = "",
+  layout = "normal",
   onSelect,
 }: {
   video: VideoInfo
   className?: string
+  layout?: "normal" | "compact"
   onSelect?: (video: VideoInfo) => void
  }) {
   const ref = useRef<HTMLVideoElement>(null)
   const [duration, setDuration] = useState(0)
 
   const [channelThumbnail, setChannelThumbnail] = useState(video.channel.thumbnail)
+
+  const isCompact = layout === "compact"
 
   const handlePointerEnter = () => {
     // ref.current?.load()
@@ -55,10 +59,9 @@ export function VideoCard({
   <Link href={`/watch?v=${video.id}`}>
     <div
       className={cn(
-        `w-full`,
-        `flex flex-col`,
+        `w-full flex`,
+        isCompact ? `flex-row h-24 py-1 space-x-2` : `flex-col space-y-3`,
         `bg-line-900`,
-        `space-y-3`,
         `cursor-pointer`,
         className,
       )}
@@ -66,16 +69,20 @@ export function VideoCard({
       onPointerLeave={handlePointerLeave}
       // onClick={handleClick}
       >
+        {/* VIDEO BLOCK */}
         <div
           className={cn(
-            `flex flex-col aspect-video items-center justify-center`,
+            `flex flex-col items-center justify-center`,
             `rounded-xl overflow-hidden`,
+            isCompact ? `w-42 h-[94px]` : `aspect-video`
           )}
         >
           <video
             ref={ref}
             src={video.assetUrl}
-            className="w-full"
+            className={cn(
+              `w-full`
+              )}
             onLoadedMetadata={handleLoad}
             muted
           />
@@ -100,29 +107,41 @@ export function VideoCard({
               </div>
           </div>
         </div>
+
+        {/* TEXT BLOCK */}
         <div className={cn(
-          `flex flex-row space-x-4`,
+          `flex flex-row`,
+          isCompact ? `w-51` : `space-x-4`,
         )}>
-          <div className="flex flex-col">
+          {isCompact ? null : <div className="flex flex-col">
             <div className="flex w-9 rounded-full overflow-hidden">
               <img
                 src={channelThumbnail}
                 onError={handleBadChannelThumbnail}
               />
             </div>
-          </div>
-          <div className="flex flex-col flex-grow">
-            <h3 className="text-zinc-100 text-base font-medium mb-0 line-clamp-2">{video.label}</h3>
+          </div>}
+          <div className={cn(
+            `flex flex-col`,
+            isCompact ?  `` : `flex-grow`
+          )}>
+            <h3 className={cn(
+              `text-zinc-100 font-medium mb-0 line-clamp-2`,
+              isCompact ? `text-sm mb-1.5` : `text-base`
+            )}>{video.label}</h3>
             <div className={cn(
               `flex flex-row items-center`,
-              `text-neutral-400 text-sm font-normal space-x-1`,
+              `text-neutral-400 font-normal space-x-1`,
+              isCompact ? `text-xs` : `text-sm`
               )}>
               <div>{video.channel.label}</div>
               <div><RiCheckboxCircleFill className="" /></div>
             </div>
+            
             <div className={cn(
               `flex flex-row`,
-              `text-neutral-400 text-sm font-normal`,
+              `text-neutral-400 font-normal`,
+              isCompact ? `text-xs` : `text-sm`,
               `space-x-1`
             )}>
             <div>0 views</div>

@@ -21,7 +21,7 @@ export function HomeView() {
     startTransition(async () => {
       const videos = await getVideos({
         sortBy: "date",
-        tag: currentTag,
+        mandatoryTags: currentTag ? [currentTag] : [],
         maxVideos: 25
       })
 
@@ -40,7 +40,6 @@ export function HomeView() {
     )}>
       <VideoList
         videos={publicVideos}
-        layout="grid"
         onSelect={handleSelect}
       />
     </div>

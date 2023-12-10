@@ -3,7 +3,7 @@
 import { Blob } from "buffer"
 
 import { Credentials, uploadFile, whoAmI } from "@/huggingface/hub/src"
-import { ChannelInfo, VideoInfo, VideoRequest } from "@/types"
+import { ChannelInfo, VideoGenerationModel, VideoInfo, VideoRequest } from "@/types"
 import { formatPromptFileName } from "../utils/formatPromptFileName"
 
 /**
@@ -16,6 +16,11 @@ export async function uploadVideoRequestToDataset({
   title,
   description,
   prompt,
+  model,
+  lora,
+  style,
+  voice,
+  music,
   tags,
 }: {
   channel: ChannelInfo
@@ -23,6 +28,11 @@ export async function uploadVideoRequestToDataset({
   title: string
   description: string
   prompt: string
+  model: VideoGenerationModel
+  lora: string
+  style: string
+  voice: string
+  music: string
   tags: string[]
 }): Promise<{
   videoRequest: VideoRequest
@@ -44,10 +54,32 @@ export async function uploadVideoRequestToDataset({
   // Convert string to a Buffer
   const blob = new Blob([`
 # Title
+
 ${title}
 
 # Description
+
 ${description}
+
+# Model
+
+${model}
+
+# LoRA
+
+${lora}
+
+# Style
+
+${style}
+
+# Voice
+
+${voice}
+
+# Music
+
+${music}
 
 # Tags
 
@@ -75,6 +107,11 @@ ${prompt}
     label: title,
     description,
     prompt,
+    model,
+    style,
+    lora,
+    voice,
+    music,
     thumbnailUrl: channel.thumbnail,
     updatedAt: new Date().toISOString(),
     tags,
@@ -87,6 +124,11 @@ ${prompt}
     label: title,
     description,
     prompt,
+    model,
+    style,
+    lora,
+    voice,
+    music,
     thumbnailUrl: channel.thumbnail, // will be generated in async
     assetUrl: "", // will be generated in async
     numberOfViews: 0,

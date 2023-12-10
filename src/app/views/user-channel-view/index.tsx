@@ -4,7 +4,7 @@ import { useEffect, useState, useTransition } from "react"
 
 import { useStore } from "@/app/state/useStore"
 import { cn } from "@/lib/utils"
-import { VideoInfo } from "@/types"
+import { VideoGenerationModel, VideoInfo } from "@/types"
 
 import { useLocalStorage } from "usehooks-ts"
 import { localStorageKeys } from "@/app/state/localStorageKeys"
@@ -15,6 +15,8 @@ import { Button } from "@/components/ui/button"
 import { submitVideoRequest } from "@/app/server/actions/submitVideoRequest"
 import { PendingVideoList } from "@/app/interface/pending-video-list"
 import { getChannelVideos } from "@/app/server/actions/ai-tube-hf/getChannelVideos"
+import { parseVideoModelName } from "@/app/server/actions/utils/parseVideoModelName"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 export function UserChannelView() {
   const [_isPending, startTransition] = useTransition()
@@ -22,15 +24,26 @@ export function UserChannelView() {
     localStorageKeys.huggingfaceApiKey,
     defaultSettings.huggingfaceApiKey
   )
+
+  const defaultVideoModel = "SVD"
+  const defaultVoice = "Julian"
+  
+
   const [titleDraft, setTitleDraft] = useState("")
   const [descriptionDraft, setDescriptionDraft] = useState("")
   const [tagsDraft, setTagsDraft] = useState("")
   const [promptDraft, setPromptDraft] = useState("")
-  
+  const [modelDraft, setModelDraft] = useState<VideoGenerationModel>(defaultVideoModel)
+  const [loraDraft, setLoraDraft] = useState("")
+  const [styleDraft, setStyleDraft] = useState("")
+  const [voiceDraft, setVoiceDraft] = useState(defaultVoice)
+  const [musicDraft, setMusicDraft] = useState("")
+
   // we do not include the tags in the list of required fields
   const missingFields = !titleDraft || !descriptionDraft || !promptDraft
 
   const [isSubmitting, setIsSubmitting] = useState(false)
+
 
   const userChannel = useStore(s => s.userChannel)
   const userChannels = useStore(s => s.userChannels)
@@ -78,6 +91,11 @@ export function UserChannelView() {
           title: titleDraft,
           description: descriptionDraft,
           prompt: promptDraft,
+          model: modelDraft,
+          lora: loraDraft,
+          style: styleDraft,
+          voice: voiceDraft,
+          music: musicDraft,
           tags: tagsDraft.trim().split(",").map(x => x.trim()).filter(x => x),
         })
 
@@ -88,6 +106,12 @@ export function UserChannelView() {
         setDescriptionDraft("")
         setTagsDraft("")
         setTitleDraft("")
+        setModelDraft(defaultVideoModel)
+        setVoiceDraft(defaultVoice)
+        setMusicDraft("")
+        setLoraDraft("")
+        setStyleDraft("")
+
         // also renew the cache on Next's side
         /*
         await getChannelVideos({
@@ -174,6 +198,26 @@ export function UserChannelView() {
           </div>
         </div>
 
+        <div className="flex flex-row space-x-2 items-start">
+          <label className="flex w-24 pt-1">Video model:</label>
+          <div className="flex flex-col space-y-2 flex-grow">
+            <Select
+              onValueChange={(value: string) => {
+                setModelDraft(parseVideoModelName(value, defaultVideoModel))
+              }}
+              defaultValue={defaultVideoModel}>
+              <SelectTrigger className="">
+                <SelectValue placeholder="Video model" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="SVD">SVD</SelectItem>
+                <SelectItem value="HotshotXL">HotshotXL</SelectItem>
+                <SelectItem value="LaVie">LaVie</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+        
         <div className="flex flex-row space-x-2 items-start">
           <label className="flex w-24 pt-1">Tags (optional):</label>
           <div className="flex flex-col space-y-2 flex-grow">

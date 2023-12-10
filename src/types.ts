@@ -211,13 +211,15 @@ export type ChannelInfo = {
 
   thumbnail: string
 
-  model: string
+  model: VideoGenerationModel
 
   lora: string
   
   style: string
 
   voice: string
+
+  music: string
 
   /**
    * The system prompt
@@ -276,6 +278,31 @@ export type VideoRequest = {
    * Arbotrary string tags to label the content
    */
   tags: string[]
+
+  /**
+   * Model name
+   */
+  model: VideoGenerationModel
+
+  /**
+   * LoRA name
+   */
+  lora: string
+
+  /**
+   * style name
+   */
+  style: string
+
+  /**
+   * Music prompt
+   */
+  music: string
+
+  /**
+   * Voice prompt
+   */
+  voice: string
 
   /**
    * ID of the channel
@@ -345,10 +372,40 @@ export type VideoInfo = {
   tags: string[]
 
   /**
+   * Model name
+   */
+  model: VideoGenerationModel
+
+  /**
+   * LoRA name
+   */
+  lora: string
+
+  /**
+   * style name
+   */
+  style: string
+
+  /**
+   * Music prompt
+   */
+  music: string
+
+  /**
+   * Voice prompt
+   */
+  voice: string
+
+  /**
    * The channel
    */
   channel: ChannelInfo
 }
+
+export type VideoGenerationModel =
+  | "HotshotXL"
+  | "SVD"
+  | "LaVie"
 
 export type InterfaceDisplayMode =
   | "desktop"
@@ -383,11 +440,12 @@ export type Settings = {
 export type ParsedDatasetReadme = {
   license: string
   pretty_name: string
-  model: string
+  model: VideoGenerationModel
   lora: string
   style: string
   thumbnail: string
   voice: string
+  music: string
   tags: string[]
   hf_tags: string[]
   description: string
@@ -406,11 +464,15 @@ export type ParsedMetadataAndContent = {
 export type ParsedDatasetPrompt = {
   title: string
   description: string
-  tags: string[]
   prompt: string
+  tags: string[]
+  model: VideoGenerationModel
+  lora: string
+  style: string
   thumbnail: string
+  voice: string
+  music: string
 }
-
 
 export type UpdateQueueRequest = {
   channel?: ChannelInfo

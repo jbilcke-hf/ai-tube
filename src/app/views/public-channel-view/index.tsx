@@ -35,7 +35,6 @@ export function PublicChannelView() {
       `flex flex-col`
     )}>
       <VideoList
-        layout="grid"
         videos={publicVideos}
       />
     </div>

@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils"
 import { VideoPlayer } from "@/app/interface/video-player"
 import { VideoInfo } from "@/types"
 import { ActionButton } from "@/app/interface/action-button"
+import { RecommendedVideos } from "@/app/interface/recommended-videos"
 
 
 export function PublicVideoView() {
@@ -65,10 +66,14 @@ export function PublicVideoView() {
 
         {/** VIDEO TITLE - HORIZONTAL */}
         <div className={cn(
+          `flex flew-row space-x-1`,
           `text-xl text-zinc-100 font-medium mb-0 line-clamp-2`,
           `mb-2`
         )}>
-          {video.label}
+          <div>{video.label}</div>
+          <div className={cn(``)}>
+            {video.model || "HotshotXL"}
+          </div>
         </div>
         
         {/** VIDEO TOOLBAR - HORIZONTAL */}
@@ -181,11 +186,11 @@ export function PublicVideoView() {
         </div>
       </div>
       <div className={cn(
-        `sm:w-56 md:w-96`,
+        `sm:w-56 md:w-[450px]`,
         `hidden sm:flex flex-col`,
-        `px-4`
+        `pl-5 pr-8`,
       )}>
-        {/*[ TO BE CONTINUED ]*/}
+       <RecommendedVideos video={video} />
       </div>
     </div>
   )
