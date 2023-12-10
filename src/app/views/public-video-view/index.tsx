@@ -6,6 +6,7 @@ import { PiShareFatLight } from "react-icons/pi"
 import CopyToClipboard from "react-copy-to-clipboard"
 import { LuCopyCheck } from "react-icons/lu"
 import { LuScrollText } from "react-icons/lu"
+import { BiCameraMovie } from "react-icons/bi"
 
 import { useStore } from "@/app/state/useStore"
 import { cn } from "@/lib/utils"
@@ -66,14 +67,23 @@ export function PublicVideoView() {
 
         {/** VIDEO TITLE - HORIZONTAL */}
         <div className={cn(
-          `flex flew-row space-x-1`,
+          `flex flew-row space-x-2`,
           `text-xl text-zinc-100 font-medium mb-0 line-clamp-2`,
           `mb-2`
         )}>
-          <div>{video.label}</div>
-          <div className={cn(``)}>
-            {video.model || "HotshotXL"}
+          <div className="">{video.label}</div>
+          {/*
+          <div className={cn(
+            `flex flex-row`, // `inline-block`,
+            `bg-neutral-700 text-neutral-300 rounded-lg`,
+            // `items-center justify-center`,
+            `text-center`,
+            `px-1.5 py-0.5`,
+            `text-xs`
+            )}>
+            AI Video Model: {video.model || "HotshotXL"}
           </div>
+          */}
         </div>
         
         {/** VIDEO TOOLBAR - HORIZONTAL */}
@@ -156,6 +166,19 @@ export function PublicVideoView() {
                 </div>
               </CopyToClipboard>
             </div>
+
+            <ActionButton
+              href={
+                video.model === "LaVie"
+                ? "https://huggingface.co/vdo/LaVie"
+                : video.model === "SVD"
+                ? "https://huggingface.co/stabilityai/stable-video-diffusion-img2vid"
+                : "https://huggingface.co/hotshotco/Hotshot-XL"
+              }
+            >
+              <BiCameraMovie />
+              <span>Made with {video.model}</span>
+            </ActionButton>
 
             <ActionButton
               href={
