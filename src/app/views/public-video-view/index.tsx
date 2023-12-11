@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import dynamic from "next/dynamic"
 import { RiCheckboxCircleFill } from "react-icons/ri"
 import { PiShareFatLight } from "react-icons/pi"
 import CopyToClipboard from "react-copy-to-clipboard"
@@ -14,7 +15,12 @@ import { VideoPlayer } from "@/app/interface/video-player"
 import { VideoInfo } from "@/types"
 import { ActionButton } from "@/app/interface/action-button"
 import { RecommendedVideos } from "@/app/interface/recommended-videos"
+import { isCertifiedUser } from "@/app/certification"
 
+const DefaultAvatar = dynamic(() => import("../../interface/default-avatar"), {
+  loading: () => null,
+})
+ 
 
 export function PublicVideoView() {
   const video = useStore(s => s.publicVideo)
@@ -22,6 +28,8 @@ export function PublicVideoView() {
   const videoId = `${video?.id || ""}`
 
   const [copied, setCopied] = useState<boolean>(false)
+
+  const [channelThumbnail, setChannelThumbnail] = useState(`${video?.channel.thumbnail || ""}`)
 
   // we inject the current videoId in the URL, if it's not already present
   // this is a hack for Hugging Face iframes
@@ -48,6 +56,18 @@ export function PublicVideoView() {
       }, 2000)
     }
   }, [copied])
+
+
+  const handleBadChannelThumbnail = () => {
+    try {
+      if (channelThumbnail) {
+        setChannelThumbnail("")
+      }
+    } catch (err) {
+      
+    }
+  }
+
   if (!video) { return null }
 
   return (
@@ -104,9 +124,22 @@ export function PublicVideoView() {
               `mr-3`
             )}>
               <div className="flex w-10 rounded-full overflow-hidden">
-                <img
-                  src="huggingface-avatar.jpeg"
-                />
+              {
+                channelThumbnail ? <div className="flex flex-col">
+                  <div className="flex w-9 rounded-full overflow-hidden">
+                    <img
+                      src={channelThumbnail}
+                      onError={handleBadChannelThumbnail}
+                    />
+                  </div>
+                </div>
+                : <DefaultAvatar
+                  username={video.channel.datasetUser}
+                  bgColor="#fde047"
+                  textColor="#1c1917"
+                  width={36}
+                  roundShape
+                />}
               </div>
             </div>
 
@@ -119,7 +152,7 @@ export function PublicVideoView() {
                 `text-zinc-100 text-base font-medium space-x-1`,
                 )}>
                 <div>{video.channel.label}</div>
-                <div className="text-sm text-neutral-400"><RiCheckboxCircleFill className="" /></div>
+                {isCertifiedUser(video.channel.datasetUser) ? <div className="text-sm text-neutral-400"><RiCheckboxCircleFill className="" /></div> : null}
               </div>
               <div className={cn(
                 `flex flex-row items-center`,

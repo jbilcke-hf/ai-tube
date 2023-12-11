@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils"
 import { VideoInfo } from "@/types"
 import { formatDuration } from "@/lib/formatDuration"
 import { formatTimeAgo } from "@/lib/formatTimeAgo"
+import { isCertifiedUser } from "@/app/certification"
 
 const DefaultAvatar = dynamic(() => import("../default-avatar"), {
   loading: () => null,
@@ -150,7 +151,7 @@ export function VideoCard({
               isCompact ? `text-xs` : `text-sm`
               )}>
               <div>{video.channel.label}</div>
-              <div><RiCheckboxCircleFill className="" /></div>
+              {isCertifiedUser(video.channel.datasetUser) ? <div><RiCheckboxCircleFill className="" /></div> : null}
             </div>
             
             <div className={cn(

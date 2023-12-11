@@ -1,10 +1,15 @@
 import { useState } from "react"
+import dynamic from "next/dynamic"
 
 import { cn } from "@/lib/utils"
 import { ChannelInfo } from "@/types"
+import { isCertifiedUser } from "@/app/certification"
+import { RiCheckboxCircleFill } from "react-icons/ri"
 
-const defaultChannelThumbnail = "/huggingface-avatar.jpeg"
-
+const DefaultAvatar = dynamic(() => import("../default-avatar"), {
+  loading: () => null,
+})
+ 
 export function ChannelCard({
   channel,
   onClick,
@@ -18,8 +23,8 @@ export function ChannelCard({
 
   const handleBadChannelThumbnail = () => {
     try {
-      if (channelThumbnail !== defaultChannelThumbnail) {
-        setChannelThumbnail(defaultChannelThumbnail)
+      if (channelThumbnail) {
+        setChannelThumbnail("")
       }
     } catch (err) {
       
@@ -52,10 +57,18 @@ export function ChannelCard({
           `w-26 h-26`
         )}
       >
-        <img
-          src={channelThumbnail}
-          onError={handleBadChannelThumbnail}
-        />
+        {channelThumbnail ? 
+          <img
+            src={channelThumbnail}
+            onError={handleBadChannelThumbnail}
+          />
+        : <DefaultAvatar
+          username={channel.datasetUser}
+          bgColor="#fde047"
+          textColor="#1c1917"
+          width={104}
+          roundShape
+        />}
       </div>
 
       <div className={cn(
@@ -70,8 +83,9 @@ export function ChannelCard({
           } target="_blank">@{channel.datasetUser}</a>
         </div>
         */}
-        <div className="text-center text-xs font-medium">
-          @{channel.datasetUser}
+        <div className="flex flex-row items-center space-x-0.5">
+          <div className="flex flex-row items-center text-center text-xs font-medium">@{channel.datasetUser}</div>
+          {isCertifiedUser(channel.datasetUser) ? <div className="text-xs text-neutral-400"><RiCheckboxCircleFill className="" /></div> : null}
         </div>
         <div className="flex flex-row items-center justify-center text-neutral-400">
           <div className="text-center text-xs">{0} videos</div>
