@@ -36,7 +36,7 @@ export function HomeView() {
 
   return (
     <div className={cn(
-     `pr-4`
+     `sm:pr-4`
     )}>
       <VideoList
         videos={publicVideos}

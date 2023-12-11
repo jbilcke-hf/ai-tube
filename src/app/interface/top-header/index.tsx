@@ -66,16 +66,17 @@ export function TopHeader() {
       )}>
         <div className={cn(
           `flex flex-col items-start justify-center`,
-          `w-64`,
+          `w-full sm:w-64`,
         )}>
           <div className={cn(
             `flex flex-row items-center justify-start`,
             `transition-all duration-200 ease-in-out`,
             `cursor-pointer`,
              "pt-2 text-3xl space-x-1",
+             "scale-80 ml-1 mb-2",
               pathway.className,
               isNormalSize
-              ? "scale-125 ml-4 mb-4" : "scale-100 mb-2"
+              ? "sm:scale-125 sm:ml-4 sm:mb-4" : "sm:scale-100 sm:mb-2"
             )}
             onClick={() => {
               setView("home")
@@ -115,7 +116,7 @@ export function TopHeader() {
       {
       isNormalSize ? 
       <div className={cn(
-        `flex flex-row space-x-3`,
+        `hidden sm:flex flex-row space-x-3`,
         `text-[13px] font-semibold`,
         `mb-4`
       )}>
