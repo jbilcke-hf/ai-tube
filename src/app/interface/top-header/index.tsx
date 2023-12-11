@@ -98,10 +98,13 @@ export function TopHeader() {
           </div>
         </div>
         <div className={cn(
-           `transition-all duration-200 ease-in-out`,
-           `flex flex-col items-center justify-center`,
-           `px-4 py-2 w-max-64`,
-           `text-neutral-400 text-sm italic`
+          // TODO: show the disclaimer on mobile too, maybe with a modal or something
+          `hidden sm:flex`,
+          `flex-col`,
+          `items-center justify-center`,
+          `transition-all duration-200 ease-in-out`,
+          `px-4 py-2 w-max-64`,
+          `text-neutral-400 text-2xs sm:text-xs lg:text-sm italic`
         )}>
         All the videos are generated using AI, for research purposes only. Some models might produce factually incorrect or biased outputs.
         </div>

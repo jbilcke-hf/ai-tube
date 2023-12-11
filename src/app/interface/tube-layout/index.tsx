@@ -5,7 +5,9 @@ import { cn } from "@/lib/utils"
 import { useStore } from "@/app/state/useStore"
 
 import { LeftMenu } from "../left-menu"
+import { MobileBottomMenu } from "../mobile-bottom-menu"
 import { TopHeader } from "../top-header"
+
 
 export function TubeLayout({ children }: { children?: ReactNode }) {
   const headerMode = useStore(s => s.headerMode)
@@ -21,7 +23,7 @@ export function TubeLayout({ children }: { children?: ReactNode }) {
       <LeftMenu />
       <div className={cn(
         `flex flex-col`,
-        `w-[calc(100vw-96px)]`,
+        `w-full sm:w-[calc(100vw-96px)]`,
         `px-2`
       )}>
         <TopHeader />
@@ -33,6 +35,7 @@ export function TubeLayout({ children }: { children?: ReactNode }) {
           )}>
           {children}
         </main>
+        <MobileBottomMenu />
       </div>
     </div>
   )

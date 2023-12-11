@@ -17,6 +17,7 @@ import { PendingVideoList } from "@/app/interface/pending-video-list"
 import { getChannelVideos } from "@/app/server/actions/ai-tube-hf/getChannelVideos"
 import { parseVideoModelName } from "@/app/server/actions/utils/parseVideoModelName"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { defaultVideoModel, defaultVoice } from "@/app/config"
 
 export function UserChannelView() {
   const [_isPending, startTransition] = useTransition()
@@ -24,11 +25,7 @@ export function UserChannelView() {
     localStorageKeys.huggingfaceApiKey,
     defaultSettings.huggingfaceApiKey
   )
-
-  const defaultVideoModel = "SVD"
-  const defaultVoice = "Julian"
   
-
   const [titleDraft, setTitleDraft] = useState("")
   const [descriptionDraft, setDescriptionDraft] = useState("")
   const [tagsDraft, setTagsDraft] = useState("")

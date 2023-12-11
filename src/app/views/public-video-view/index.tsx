@@ -13,7 +13,7 @@ import { useStore } from "@/app/state/useStore"
 import { cn } from "@/lib/utils"
 import { VideoPlayer } from "@/app/interface/video-player"
 import { VideoInfo } from "@/types"
-import { ActionButton } from "@/app/interface/action-button"
+import { ActionButton, actionButtonClassName } from "@/app/interface/action-button"
 import { RecommendedVideos } from "@/app/interface/recommended-videos"
 import { isCertifiedUser } from "@/app/certification"
 
@@ -78,6 +78,8 @@ export function PublicVideoView() {
       <div className={cn(
         `flex-grow`,
         `flex flex-col`,
+        `transition-all duration-200 ease-in-out`,
+        `px-2 sm:px-0`
       )}>
         {/** VIDEO PLAYER - HORIZONTAL */}
         <VideoPlayer
@@ -88,8 +90,9 @@ export function PublicVideoView() {
         {/** VIDEO TITLE - HORIZONTAL */}
         <div className={cn(
           `flex flew-row space-x-2`,
-          `text-xl text-zinc-100 font-medium mb-0 line-clamp-2`,
-          `mb-2`
+          `transition-all duration-200 ease-in-out`,
+          `text-lg lg:text-xl text-zinc-100 font-medium mb-0 line-clamp-2`,
+          `mb-2`,
         )}>
           <div className="">{video.label}</div>
           {/*
@@ -108,21 +111,26 @@ export function PublicVideoView() {
         
         {/** VIDEO TOOLBAR - HORIZONTAL */}
         <div className={cn(
-          `flex flex-row`,
-          `items-center`,
+          `flex flex-col space-y-3 xl:space-y-0 xl:flex-row`,
+          `transition-all duration-200 ease-in-out`,
+          `items-start xl:items-center`,
           `justify-between`,
-          `mb-4`
+          `mb-4`,
         )}>
-          {/** LEFT PART FO THE TOOLBARR */}
+          {/** LEFT PART OF THE TOOLBAR */}
           <div className={cn(
             `flex flex-row`,
             `items-center`
           )}>
             {/** CHANNEL LOGO - VERTICAL */}
-            <div className={cn(
-              `flex flex-col`,
-              `mr-3`
-            )}>
+            <a
+              className={cn(
+                `flex flex-col`,
+                `mr-3`,
+                `cursor-pointer`
+              )}
+              href={`https://huggingface.co/datasets/${video.channel.datasetUser}/${video.channel.datasetName}`}
+              target="_blank">
               <div className="flex w-10 rounded-full overflow-hidden">
               {
                 channelThumbnail ? <div className="flex flex-col">
@@ -141,15 +149,20 @@ export function PublicVideoView() {
                   roundShape
                 />}
               </div>
-            </div>
+            </a>
 
             {/** CHANNEL INFO - VERTICAL */}
-            <div className={cn(
-              `flex flex-col`
-              )}>
+            <a className={cn(
+              `flex flex-row sm:flex-col`,
+              `transition-all duration-200 ease-in-out`,
+              `cursor-pointer`,
+              )}
+              href={`https://huggingface.co/datasets/${video.channel.datasetUser}/${video.channel.datasetName}`}
+              target="_blank">
               <div className={cn(
                 `flex flex-row items-center`,
-                `text-zinc-100 text-base font-medium space-x-1`,
+                `transition-all duration-200 ease-in-out`,
+                `text-zinc-100 text-sm lg:text-base font-medium space-x-1`,
                 )}>
                 <div>{video.channel.label}</div>
                 {isCertifiedUser(video.channel.datasetUser) ? <div className="text-sm text-neutral-400"><RiCheckboxCircleFill className="" /></div> : null}
@@ -161,10 +174,12 @@ export function PublicVideoView() {
                 <div>0 followers</div>
                 <div></div>
               </div>
-            </div>
+            </a>
+
+
           </div>
 
-          {/** RIGHT PART FO THE TOOLBAR */}
+          {/** RIGHT PART OF THE TOOLBAR */}
           <div className={cn(
             `flex flex-row`,
             `items-center`,
@@ -178,14 +193,7 @@ export function PublicVideoView() {
               <CopyToClipboard
                 text={`https://huggingface.co/spaces/jbilcke-hf/ai-tube?v=${video.id}`}
                 onCopy={() => setCopied(true)}>
-                <div className={cn(
-                  `flex flex-row space-x-2 pl-3 pr-4 h-9`,
-                  `items-center justify-center text-center`,
-                  `rounded-2xl`,
-                  `cursor-pointer`,
-                  `text-sm font-medium`,
-                  `bg-neutral-700/50 hover:bg-neutral-700/90 text-zinc-100`
-                )}>
+                <div className={actionButtonClassName}>
                   <div className="flex items-center justify-center">
                     {
                       copied ? <LuCopyCheck className="w-4 h-4" />
@@ -234,17 +242,19 @@ export function PublicVideoView() {
         {/** VIDEO DESCRIPTION - VERTICAL */}
         <div className={cn(
           `flex flex-col p-3`,
+          `transition-all duration-200 ease-in-out`,
           `rounded-xl`,
           `bg-neutral-700/50`,
-          `text-sm`
+          `text-sm`,
         )}>
           <p>{video.description}</p>
         </div>
       </div>
       <div className={cn(
-        `sm:w-56 md:w-[450px]`,
+        `w-40 sm:w-56 md:w-64 lg:w-72 xl:w-[450px]`,
+        `transition-all duration-200 ease-in-out`,
         `hidden sm:flex flex-col`,
-        `pl-5 pr-8`,
+        `pl-5 pr-1 sm:pr-2 md:pr-3 lg:pr-4 xl:pr-6 2xl:pr-8`,
       )}>
        <RecommendedVideos video={video} />
       </div>

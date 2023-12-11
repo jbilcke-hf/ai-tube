@@ -1,10 +1,12 @@
 import { useState } from "react"
 import dynamic from "next/dynamic"
 
+import { RiCheckboxCircleFill } from "react-icons/ri"
+import { IoAdd } from "react-icons/io5"
+
 import { cn } from "@/lib/utils"
 import { ChannelInfo } from "@/types"
 import { isCertifiedUser } from "@/app/certification"
-import { RiCheckboxCircleFill } from "react-icons/ri"
 
 const DefaultAvatar = dynamic(() => import("../default-avatar"), {
   loading: () => null,
@@ -31,6 +33,8 @@ export function ChannelCard({
     }
   }
 
+  const isCreateButton = !channel.id
+
   return (
   <div
     className={cn(
@@ -39,8 +43,8 @@ export function ChannelCard({
       `space-y-1`,
       `w-52 h-52`,
       `rounded-lg`,
-      `hover:bg-neutral-800/30`,
-      `text-neutral-100/80 hover:text-neutral-100/100`,
+      `text-neutral-100/80`,
+      isCreateButton ? '' : `hover:bg-neutral-800/30 hover:text-neutral-100/100`,
       `cursor-pointer`,
       className,
     )}
@@ -57,8 +61,17 @@ export function ChannelCard({
           `w-26 h-26`
         )}
       >
-        {channelThumbnail ? 
-          <img
+        {isCreateButton
+        ? <div className={cn(
+          `flex flex-col justify-center items-center text-center`,
+          `w-full h-full rounded-full`,
+          `bg-neutral-700 hover:bg-neutral-600`,
+          `border-2 border-neutral-400 hover:border-neutral-300`
+          )}>
+            <IoAdd className="w-8 h-8" />
+          </div>
+        : channelThumbnail
+        ? <img
             src={channelThumbnail}
             onError={handleBadChannelThumbnail}
           />
@@ -76,22 +89,27 @@ export function ChannelCard({
          `items-center justify-center text-center`,
          `space-y-1`
       )}>
-        <div className="text-center text-base font-medium text-zinc-100">{channel.label}</div>
+        <div className={cn(
+          `text-center text-base font-medium text-zinc-100`,
+          isCreateButton ? 'mt-2' : ''
+        )}>{
+          isCreateButton ? "Create a channel" : channel.label
+        }</div>
         {/*<div className="text-center text-sm font-semibold">
           by <a href={
             `https://huggingface.co/${channel.datasetUser}`
           } target="_blank">@{channel.datasetUser}</a>
         </div>
         */}
-        <div className="flex flex-row items-center space-x-0.5">
+        {!isCreateButton && <div className="flex flex-row items-center space-x-0.5">
           <div className="flex flex-row items-center text-center text-xs font-medium">@{channel.datasetUser}</div>
           {isCertifiedUser(channel.datasetUser) ? <div className="text-xs text-neutral-400"><RiCheckboxCircleFill className="" /></div> : null}
-        </div>
-        <div className="flex flex-row items-center justify-center text-neutral-400">
+        </div>}
+        {!isCreateButton && <div className="flex flex-row items-center justify-center text-neutral-400">
           <div className="text-center text-xs">{0} videos</div>
           <div className="px-1">-</div>
           <div className="text-center text-xs">{channel.likes} likes</div>
-        </div>
+        </div>}
       </div>
     </div>
   )

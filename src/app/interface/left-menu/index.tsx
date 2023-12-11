@@ -1,3 +1,5 @@
+import Link from "next/link"
+
 import { GrChannel } from "react-icons/gr"
 import { MdVideoLibrary } from "react-icons/md"
 import { RiHome8Line } from "react-icons/ri"
@@ -6,17 +8,17 @@ import { CgProfile } from "react-icons/cg"
 
 import { useStore } from "@/app/state/useStore"
 import { cn } from "@/lib/utils"
-import { MenuItem } from "./menu-item"
 import { showBetaFeatures } from "@/app/config"
-import Link from "next/link"
 
+import { MenuItem } from "./menu-item"
 
 export function LeftMenu() {
   const view = useStore(s => s.view)
 
   return (
     <div className={cn(
-      `flex flex-col`,
+      `hidden sm:flex`,
+       `flex-col`,
       `w-24 px-1 pt-4`,
       `justify-between`
      // `bg-orange-500`,

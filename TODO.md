@@ -1,6 +1,6 @@
 
-Allow browsing some loras
 
-Funny use cases to try:
-- Hugging Face
-- Zelda 64 (will be a bit more tricky since it uses some custom Replicate stuff)
+## Video quality improvements
+
+- Add a "style prompt" to do it like the AI Comic Factory
+- Make it easier to pick a LoRA

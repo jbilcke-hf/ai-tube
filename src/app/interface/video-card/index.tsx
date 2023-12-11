@@ -118,7 +118,7 @@ export function VideoCard({
         {/* TEXT BLOCK */}
         <div className={cn(
           `flex flex-row`,
-          isCompact ? `w-51` : `space-x-4`,
+          isCompact ? `w-40 lg:w-44 xl:w-51` : `space-x-4`,
         )}>
           {
           isCompact ? null
@@ -143,12 +143,12 @@ export function VideoCard({
           )}>
             <h3 className={cn(
               `text-zinc-100 font-medium mb-0 line-clamp-2`,
-              isCompact ? `text-sm mb-1.5` : `text-base`
+              isCompact ? `text-2xs md:text-xs lg:text-sm mb-1.5` : `text-base`
             )}>{video.label}</h3>
             <div className={cn(
               `flex flex-row items-center`,
               `text-neutral-400 font-normal space-x-1`,
-              isCompact ? `text-xs` : `text-sm`
+              isCompact ? `text-3xs md:text-2xs lg:text-xs` : `text-sm`
               )}>
               <div>{video.channel.label}</div>
               {isCertifiedUser(video.channel.datasetUser) ? <div><RiCheckboxCircleFill className="" /></div> : null}
@@ -157,7 +157,7 @@ export function VideoCard({
             <div className={cn(
               `flex flex-row`,
               `text-neutral-400 font-normal`,
-              isCompact ? `text-xs` : `text-sm`,
+              isCompact ? `text-2xs lg:text-xs` : `text-sm`,
               `space-x-1`
             )}>
             <div>0 views</div>

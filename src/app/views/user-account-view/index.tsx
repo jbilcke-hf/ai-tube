@@ -10,6 +10,7 @@ import { ChannelList } from "@/app/interface/channel-list"
 import { localStorageKeys } from "@/app/state/localStorageKeys"
 import { defaultSettings } from "@/app/state/defaultSettings"
 import { Input } from "@/components/ui/input"
+import { ChannelInfo } from "@/types"
 
 export function UserAccountView() {
   const [_isPending, startTransition] = useTransition()
@@ -73,13 +74,22 @@ export function UserAccountView() {
         <h2 className="text-3xl font-bold">Your custom channels:</h2>
         {userChannels?.length ? <ChannelList
           layout="grid"
-          channels={userChannels}
+          channels={[
+            // add a fake button to the list, at the beginning
+            // { id: "" } as ChannelInfo,
+
+            ...userChannels
+          ]}
           onSelect={(userChannel) => {
-            setUserChannel(userChannel)
+            if (userChannel.id) {
+              setUserChannel(userChannel)
+            }
             setView("user_channel")
           }}
-        /> : <p>Ask <span className="font-mono">@jbilcke-hf</span> for help to create a channel!</p>}
+        />
+        : isLoaded ? <p>You don&apos;t seem to have any channel yet. See @flngr on X to learn more about how to do this!</p> : <p>Loading channels..</p>}
       </div> : null}
+
     </div>
   )
 }

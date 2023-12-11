@@ -22,7 +22,7 @@ export function MenuItem({
       `items-center justify-center justify-items-stretch`,
       // `bg-green-500`,
       `cursor-pointer`,
-      `w-full h-21`,
+      `w-20 h-18 sm:w-full sm:h-21`, 
       `p-1`,
       `group`
     )}
