@@ -1,13 +1,19 @@
+"use client"
+
 import { useRef, useState } from "react"
+import dynamic from "next/dynamic"
+import Link from "next/link"
 import { RiCheckboxCircleFill } from "react-icons/ri"
 
 import { cn } from "@/lib/utils"
 import { VideoInfo } from "@/types"
 import { formatDuration } from "@/lib/formatDuration"
 import { formatTimeAgo } from "@/lib/formatTimeAgo"
-import Link from "next/link"
 
-const defaultChannelThumbnail = "/huggingface-avatar.jpeg"
+const DefaultAvatar = dynamic(() => import("../default-avatar"), {
+  loading: () => null,
+})
+ 
 
 export function VideoCard({
   video,
@@ -47,8 +53,8 @@ export function VideoCard({
 
   const handleBadChannelThumbnail = () => {
     try {
-      if (channelThumbnail !== defaultChannelThumbnail) {
-        setChannelThumbnail(defaultChannelThumbnail)
+      if (channelThumbnail) {
+        setChannelThumbnail("")
       }
     } catch (err) {
       
@@ -113,14 +119,23 @@ export function VideoCard({
           `flex flex-row`,
           isCompact ? `w-51` : `space-x-4`,
         )}>
-          {isCompact ? null : <div className="flex flex-col">
+          {
+          isCompact ? null
+          : channelThumbnail ? <div className="flex flex-col">
             <div className="flex w-9 rounded-full overflow-hidden">
               <img
                 src={channelThumbnail}
                 onError={handleBadChannelThumbnail}
               />
             </div>
-          </div>}
+          </div>
+          : <DefaultAvatar
+            username={video.channel.datasetUser}
+            bgColor="#fde047"
+            textColor="#1c1917"
+            width={36}
+            roundShape
+          />}
           <div className={cn(
             `flex flex-col`,
             isCompact ?  `` : `flex-grow`
