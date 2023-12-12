@@ -4,7 +4,7 @@ import { ChannelInfo, VideoInfo, VideoStatus } from "@/types"
 
 import { getVideoRequestsFromChannel  } from "./getVideoRequestsFromChannel"
 import { adminApiKey } from "../config"
-import { getIndex } from "./getIndex"
+import { getVideoIndex } from "./getVideoIndex"
 
 // return 
 export async function getChannelVideos({
@@ -25,8 +25,8 @@ export async function getChannelVideos({
 
   // TODO: use a database instead
   // normally 
-  const queued = await getIndex({ status: "queued" })
-  const published = await getIndex({ status: "published" })
+  const queued = await getVideoIndex({ status: "queued" })
+  const published = await getVideoIndex({ status: "published" })
 
   return videos.map(v => {
    let video: VideoInfo = {

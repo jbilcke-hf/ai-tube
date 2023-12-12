@@ -1,6 +1,6 @@
 "use server"
 
-import { getIndex } from "./getIndex"
+import { getVideoIndex } from "./getVideoIndex"
 
 export async function getTags({
   renewCache = true,
@@ -13,7 +13,7 @@ export async function getTags({
   neverThrow: true,
 }): Promise<string[]> {
   try {
-    const published = Object.values(await getIndex({
+    const published = Object.values(await getVideoIndex({
       status: "published",
       renewCache,
     }))

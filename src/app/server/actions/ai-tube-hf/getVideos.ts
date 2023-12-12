@@ -2,7 +2,7 @@
 
 import { VideoInfo } from "@/types"
 
-import { getIndex } from "./getIndex"
+import { getVideoIndex } from "./getVideoIndex"
 
 const HARD_LIMIT = 100
 
@@ -31,7 +31,7 @@ export async function getVideos({
 }): Promise<VideoInfo[]> {
   // the index is gonna grow more and more,
   // but in the future we will use some DB eg. Prisma or sqlite
-  const published = await getIndex({
+  const published = await getVideoIndex({
     status: "published",
     renewCache: true
   })

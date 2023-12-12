@@ -2,7 +2,7 @@ import { VideoInfo, VideoStatus } from "@/types"
 
 import { adminUsername } from "../config"
 
-export async function getIndex({
+export async function getVideoIndex({
   status,
   renewCache = true,
   neverThrow = true,
@@ -22,8 +22,8 @@ export async function getIndex({
     const jsonResponse = await response?.json()
 
     if (
-      typeof jsonResponse === "undefined" &&
-      typeof jsonResponse !== "object" &&
+      typeof jsonResponse === "undefined" ||
+      typeof jsonResponse !== "object" ||
       Array.isArray(jsonResponse) ||
       jsonResponse === null) {
       throw new Error("index is not an object, admin repair needed")

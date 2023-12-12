@@ -7,8 +7,8 @@ import { getChannels } from "./getChannels"
 
 export async function getChannel(options: {
   channelId?: string | string[] | null
-  apiKey?: string
-  owner?: string
+  // apiKey?: string // deprecated, we only work on public content
+  // owner?: string // deprecated, we only work on public content
   renewCache?: boolean
   neverThrow?: boolean
 } = {}): Promise<ChannelInfo | undefined> {
@@ -20,8 +20,8 @@ export async function getChannel(options: {
 
     const channels = await getChannels({
       channelId: id,
-      apiKey: options?.apiKey,
-      owner: options?.owner,
+      // apiKey: options?.apiKey, // deprecated, we only work on public content
+      // owner: options?.owner, // deprecated, we only work on public content
       renewCache: options.renewCache,
     })
 

@@ -2,7 +2,7 @@
 
 import { VideoInfo } from "@/types"
 
-import { getIndex } from "./getIndex"
+import { getVideoIndex } from "./getVideoIndex"
 
 export async function getVideo({
   videoId,
@@ -17,7 +17,7 @@ export async function getVideo({
     if (!id) {
       throw new Error(`cannot get the video, invalid id: "${id}"`)
     }
-    const published = await getIndex({ status: "published" })
+    const published = await getVideoIndex({ status: "published" })
 
     const video = published[id] || undefined
 

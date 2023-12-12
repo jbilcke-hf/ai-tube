@@ -5,12 +5,12 @@ import { useLocalStorage } from "usehooks-ts"
 
 import { useStore } from "@/app/state/useStore"
 import { cn } from "@/lib/utils"
-import { getChannels } from "@/app/server/actions/ai-tube-hf/getChannels"
 import { ChannelList } from "@/app/interface/channel-list"
 import { localStorageKeys } from "@/app/state/localStorageKeys"
 import { defaultSettings } from "@/app/state/defaultSettings"
 import { Input } from "@/components/ui/input"
-import { ChannelInfo } from "@/types"
+
+import { getPrivateChannels } from "@/app/server/actions/ai-tube-hf/getPrivateChannels"
 
 export function UserAccountView() {
   const [_isPending, startTransition] = useTransition()
@@ -29,7 +29,7 @@ export function UserAccountView() {
     if (!isLoaded) {
       startTransition(async () => {
         try {
-          const channels = await getChannels({
+          const channels = await getPrivateChannels({
             apiKey: huggingfaceApiKey,
             renewCache: true,
           })
