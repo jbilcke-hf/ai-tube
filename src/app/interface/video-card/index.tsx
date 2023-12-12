@@ -105,6 +105,7 @@ export function VideoCard({
               src={videoThumbnail}
               className={cn(
                 `absolute`,
+                `rounded-lg`,
                 videoThumbnailReady ? `opacity-100`: 'opacity-0',
                 `hover:opacity-0 w-full h-full top-0 z-30`,
                 //`pointer-events-none`,
