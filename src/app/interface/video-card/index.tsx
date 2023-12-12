@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import dynamic from "next/dynamic"
 import Link from "next/link"
 import { RiCheckboxCircleFill } from "react-icons/ri"
@@ -22,11 +22,13 @@ export function VideoCard({
   className = "",
   layout = "normal",
   onSelect,
+  index
 }: {
   video: VideoInfo
   className?: string
   layout?: "normal" | "compact"
   onSelect?: (video: VideoInfo) => void
+  index: number
  }) {
   const ref = useRef<HTMLVideoElement>(null)
   const [duration, setDuration] = useState(0)
@@ -36,6 +38,7 @@ export function VideoCard({
     `https://huggingface.co/datasets/jbilcke-hf/ai-tube-index/resolve/main/videos/${video.id}.webp`
   )
   const [videoThumbnailReady, setVideoThumbnailReady] = useState(false)
+  const [shouldLoadVideo, setShouldLoadVideo] = useState(false)
 
   const isCompact = layout === "compact"
 
@@ -67,6 +70,12 @@ export function VideoCard({
     }
   }
 
+  useEffect(() => {
+    setTimeout(() => {
+      setShouldLoadVideo(true)
+    }, index * 500)
+  }, [index])
+
   return (
   <Link href={`/watch?v=${video.id}`}>
     <div
@@ -89,28 +98,37 @@ export function VideoCard({
             isCompact ? `w-42 h-[94px]` : `aspect-video`
           )}
         >
-          <div className="relative w-full">
-            <video
+          <div className={cn(
+            `relative w-full`,
+            isCompact ? `w-42 h-[94px]` : `aspect-video`
+          )}>
+            {videoThumbnailReady && shouldLoadVideo ? <video
               ref={ref}
               src={video.assetUrl}
               className={cn(
                 `w-full h-full`,
+                `aspect-video`,
                 duration > 0 ? `opacity-100`: 'opacity-0',
                 `transition-all duration-500`,
                 )}
               onLoadedMetadata={handleLoad}
               muted
-            />
+            /> : null}
             <img
               src={videoThumbnail}
               className={cn(
                 `absolute`,
-                `rounded-lg`,
+                `aspect-video`,
+               // `aspect-video object-cover`,
+                `rounded-lg overflow-hidden`,
                 videoThumbnailReady ? `opacity-100`: 'opacity-0',
                 `hover:opacity-0 w-full h-full top-0 z-30`,
                 //`pointer-events-none`,
-                `transition-all duration-500 hover:delay-200 ease-in-out`,
+                `transition-all duration-500 hover:delay-300 ease-in-out`,
               )}
+              onMouseEnter={() => {
+                setShouldLoadVideo(true)
+              }}
               onLoad={() => {
                 setVideoThumbnailReady(true)
               }}
@@ -122,7 +140,8 @@ export function VideoCard({
           </div>
 
           <div className={cn(
-            ``,
+            // `aspect-video`,
+            `z-40`,
             `w-full flex flex-row items-end justify-end`
             )}>
               <div className={cn(

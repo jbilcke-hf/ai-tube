@@ -36,13 +36,14 @@ export function VideoList({
         className,
       )}
     >
-    {videos.map((video) => (
+    {videos.map((video, i) => (
       <VideoCard
         key={video.id}
         video={video}
         className="w-full"
         layout={layout === "vertical" ? "compact" : "normal"}
         onSelect={onSelect}
+        index={i}
       />
     ))}
     </div>
