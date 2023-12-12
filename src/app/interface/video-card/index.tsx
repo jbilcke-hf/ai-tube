@@ -10,6 +10,7 @@ import { VideoInfo } from "@/types"
 import { formatDuration } from "@/lib/formatDuration"
 import { formatTimeAgo } from "@/lib/formatTimeAgo"
 import { isCertifiedUser } from "@/app/certification"
+import { transparentImage } from "@/lib/transparentImage"
 
 const DefaultAvatar = dynamic(() => import("../default-avatar"), {
   loading: () => null,
@@ -31,6 +32,10 @@ export function VideoCard({
   const [duration, setDuration] = useState(0)
 
   const [channelThumbnail, setChannelThumbnail] = useState(video.channel.thumbnail)
+  const [videoThumbnail, setVideoThumbnail] = useState(
+    `https://huggingface.co/datasets/jbilcke-hf/ai-tube-index/resolve/main/videos/${video.id}.webp`
+  )
+  const [videoThumbnailReady, setVideoThumbnailReady] = useState(false)
 
   const isCompact = layout === "compact"
 
@@ -84,15 +89,36 @@ export function VideoCard({
             isCompact ? `w-42 h-[94px]` : `aspect-video`
           )}
         >
-          <video
-            ref={ref}
-            src={video.assetUrl}
-            className={cn(
-              `w-full`
+          <div className="relative w-full">
+            <video
+              ref={ref}
+              src={video.assetUrl}
+              className={cn(
+                `w-full h-full`,
+                duration > 0 ? `opacity-100`: 'opacity-0',
+                `transition-all duration-500`,
+                )}
+              onLoadedMetadata={handleLoad}
+              muted
+            />
+            <img
+              src={videoThumbnail}
+              className={cn(
+                `absolute`,
+                videoThumbnailReady ? `opacity-100`: 'opacity-0',
+                `hover:opacity-0 w-full h-full top-0 z-30`,
+                //`pointer-events-none`,
+                `transition-all duration-500 hover:delay-200 ease-in-out`,
               )}
-            onLoadedMetadata={handleLoad}
-            muted
-          />
+              onLoad={() => {
+                setVideoThumbnailReady(true)
+              }}
+              onError={() => {
+                setVideoThumbnail(transparentImage)
+                setVideoThumbnailReady(false)
+              }}
+            />
+          </div>
 
           <div className={cn(
             ``,
