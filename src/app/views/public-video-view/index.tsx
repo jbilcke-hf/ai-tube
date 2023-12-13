@@ -21,7 +21,6 @@ const DefaultAvatar = dynamic(() => import("../../interface/default-avatar"), {
   loading: () => null,
 })
  
-
 export function PublicVideoView() {
   const video = useStore(s => s.publicVideo)
 

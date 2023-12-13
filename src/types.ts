@@ -431,6 +431,7 @@ export type InterfaceView =
   | "public_channels"
   | "public_channel" // public view of a channel
   | "public_video" // public view of a video
+  | "public_music_videos" // public music videos - it's a special category, because music is *cool*
   | "not_found"
 
 export type Settings = {
