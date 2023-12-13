@@ -102,18 +102,25 @@ export function VideoCard({
             `relative w-full`,
             isCompact ? `w-42 h-[94px]` : `aspect-video`
           )}>
-            {videoThumbnailReady && shouldLoadVideo ? <video
-              ref={ref}
-              src={video.assetUrl}
-              className={cn(
-                `w-full h-full`,
-                `aspect-video`,
-                duration > 0 ? `opacity-100`: 'opacity-0',
-                `transition-all duration-500`,
-                )}
-              onLoadedMetadata={handleLoad}
-              muted
-            /> : null}
+            {videoThumbnailReady && shouldLoadVideo
+              ? <video
+                // mute the video
+                muted
+
+                // prevent iOS from attempting to open the video in full screen, which is annoying
+                playsInline
+
+                ref={ref}
+                src={video.assetUrl}
+                className={cn(
+                  `w-full h-full`,
+                  `aspect-video`,
+                  duration > 0 ? `opacity-100`: 'opacity-0',
+                  `transition-all duration-500`,
+                  )}
+                onLoadedMetadata={handleLoad}
+
+              /> : null}
             <img
               src={videoThumbnail}
               className={cn(
