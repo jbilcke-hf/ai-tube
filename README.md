@@ -44,7 +44,7 @@ This delay will be reduced in the future.
 AI Tube is about generating videos in the background, slowly.
 
 It's the whole concept: to generate multi-minutes videos, with lot of stuff like audio, speech etc
-(if you are only interested in generate a 2 to 4 sec silent video, I suggest you use RunwayML or Pika Labs).
+(if you are only interested in generate a 2 to 4 sec silent video, I suggest you use ComfyUI, Automatic1111 stable-diffusion-webui, or RunwayML or Pika Labs if your prefer commercial services).
 
 Moreover, currently there are only a few servers available:
 
