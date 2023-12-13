@@ -55,12 +55,13 @@ Moreover, currently there are only a few servers available:
 - hotshot xl: 1 server
 - musicgen: 1 server
 
-Which is why some time there is a longue queue of videos waiting to be generated, one after one.
-If this project gains traction, it might get more ressources in the future.
+Which is why sometimes there is a longue queue of videos waiting to be generated, one after one.
 
-### I don't hear music in my videos
+If this project become popular or a billionaire comes in and say "hey hugging face let's discuss" then we can expect more ressources will be allocated. 
 
-Could be two reasons, either you are missing a "# Music" paragraph block in your Channel and/or Video, or there just was a network or computing issue when your video was generated.
+### I don't hear any music in my videos
+
+Could be two reasons, either you are missing a "# Music" paragraph block in your Channel config file or Video config file, or there just was a network/computing issue when your video was generated.
 
 This is all new technology based on research tools, so sometimes they can crash, be out of memory etc.. and not always restart automatically. I'm a team of one and I don't have the ressources to look into it right now, but I understand it can be a pain.
 

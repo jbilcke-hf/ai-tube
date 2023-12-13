@@ -32,7 +32,9 @@ export async function generateMetadata(
         title: video.label || "", // put the video title here
         description: video.description || "", // put the vide description here
         siteName: "AI Tube",
-  
+        images: [
+          `https://huggingface.co/datasets/jbilcke-hf/ai-tube-index/resolve/main/videos/${video.id}.webp`
+        ],
         videos: [
           {
             "url": video.assetUrl
