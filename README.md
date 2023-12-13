@@ -25,9 +25,11 @@ and during this time the other videos will wait patiently.
 ### My video failed to generate! Is it lost?
 
 That's the beauty of the dataset system: as long as you keep your video in your dataset,
-and is not published yet (is not visible on the AI Tube home page), then for the AI Tube Robot it will still be marked as "TODO".
+and it is not published yet (is not visible on the AI Tube home page), then for the AI Tube Robot it will still be marked as "TODO".
 
-So.. you have nothing to do! Things should repair themselves automatically at some point,
+So.. you normally have nothing to do (unless your video config or channel config is really damaged or invalid).
+
+Things should repair themselves automatically at some point,
 although it can take a couple of days if the issue is more complex than it looks
 (eg. a server is down, there is a bug somewhere, disk is full etc)
 
