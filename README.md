@@ -18,8 +18,9 @@ There will be a UI to edit them in the future
 
 ### How often videos are generated?
 
-There is a script (call AI Tube Robot) which check the Hugging Face platform every 5 minutes for new content.
-However, once it starts generating a video, it will be kept busy for an hour or so (sometimes more),
+There is a script (called the AI Tube Robot - code is also available, see my profile) which checks the Hugging Face platform every 5 minutes for new content.
+
+However, once it starts generating a video, the bot will be kept busy for an hour or so (sometimes more),
 and during this time the other videos will wait patiently.
 
 ### My video failed to generate! Is it lost?
