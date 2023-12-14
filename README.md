@@ -57,13 +57,13 @@ Moreover, currently there are only a few servers available:
 
 Which is why sometimes there is a longue queue of videos waiting to be generated, one after one.
 
-If this project become popular or a billionaire comes in and say "hey hugging face let's discuss" then we can expect more ressources will be allocated. 
+If this project become popular or a billionaire comes in and say "hey hugging face let's discuss" then we can expect more resources will be allocated. 
 
 ### I don't hear any music in my videos
 
 Could be two reasons, either you are missing a "# Music" paragraph block in your Channel config file or Video config file, or there just was a network/computing issue when your video was generated.
 
-This is all new technology based on research tools, so sometimes they can crash, be out of memory etc.. and not always restart automatically. I'm a team of one and I don't have the ressources to look into it right now, but I understand it can be a pain.
+This is all new technology based on research tools, so sometimes they can crash, be out of memory etc.. and not always restart automatically. I'm a team of one and I don't have the resources to look into it right now, but I understand it can be a pain.
 
 ### There are large gaps of silence between speech / commentary / dialogue
 
@@ -73,3 +73,21 @@ This is a bug, it will be fixed in the future but I haven't had the opportunity 
 
 AI Tube is designed to be a unique community and platform, not a downloadable tool or app.
 Maybe one day there will be an offline version (similar to how my latent browser project worked), but for the moment the focus is on developing it as a community rather than a tool that can be cloned, rebranded, wrapped into ads by someone else etc.
+
+### My video has been generated, but I don't see it anymore
+
+- There might have been a technical constraint which made it necessary to remove your video form the index (if this is the reason, then it will be re-generated).
+- Your content may have been flagged (see the guidelines: https://huggingface.co/content-guidelines)
+
+### My content is not illegal and meet HF guidelines, so why don't I see it?
+
+In order to guarantee a high-level of quality on the platform, the most engaging content will be shown in priority, while low-quality content will be hidden. 
+
+The methods to apply this curation will evolve through time (manual, volumetric, algorithmic, AI-based etc).
+
+Here are some tips to ensure the highest level of featuring for your content:
+
+- Create a thumbnail for your channel
+- Use engaging or interesting names and titles
+- Avoid typos (make sure you finish sentences etc)
+- Be original: if you copy someone else's prompt (eg. you only replaced a few words) and your content is burried, try instead to be creative and come up with your own ideas
