@@ -23,10 +23,12 @@ import { TubeLayout } from "./interface/tube-layout"
 // more easily
 export function Main({
   video,
+  publicVideos,
   channel,
 }: {
  // server side params
  video?: VideoInfo
+ publicVideos?: VideoInfo[]
  channel?: ChannelInfo
 }) {
   const pathname = usePathname()
@@ -35,9 +37,20 @@ export function Main({
   const setPublicVideo = useStore(s => s.setPublicVideo)
   const setView = useStore(s => s.setView)
   const setPathname = useStore(s => s.setPathname)
+  const setPublicChannel = useStore(s => s.setPublicChannel)
+  const setPublicVideos = useStore(s => s.setPublicVideos)
 
   const videoId = `${video?.id || ""}`
   // console.log("Main video= "+ videoId)
+
+  const publicVideoIds = (publicVideos || []).map(v => v.id || "").filter(x => x)
+
+  useEffect(() => {
+    if (!publicVideos?.length) { return }
+    // note: it is important to ALWAYS set the current video to videoId
+    // even if it's undefined
+    setPublicVideos(publicVideos)
+  }, publicVideoIds)
 
   useEffect(() => {
     // note: it is important to ALWAYS set the current video to videoId
@@ -53,6 +66,24 @@ export function Main({
       }
     }
   }, [videoId])
+
+  const channelId = `${channel?.id || ""}`
+  // console.log("Main video= "+ videoId)
+
+  useEffect(() => {
+    // note: it is important to ALWAYS set the current video to videoId
+    // even if it's undefined
+    setPublicChannel(channel)
+
+    if (channelId) {
+      // this is a hack for hugging face:
+      // we allow the ?v=<id> param on the root of the domain
+      if (pathname !== "/channel") {
+        // console.log("we are on huggingface apparently!")
+        router.replace(`/channel?v=${channelId}`)
+      }
+    }
+  }, [channelId])
 
 
   // this is critical: it sync the current route (coming from server-side)

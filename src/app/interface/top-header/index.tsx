@@ -36,7 +36,7 @@ export function TopHeader() {
 
 
   useEffect(() => {
-    if (view === "public_video") {
+    if (view === "public_video" ||  view === "public_channel") {
       setHeaderMode("compact")
       setMenuMode("slider_hidden")
     } else {

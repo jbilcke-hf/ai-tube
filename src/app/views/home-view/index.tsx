@@ -8,6 +8,7 @@ import { VideoInfo } from "@/types"
 import { getVideos } from "@/app/server/actions/ai-tube-hf/getVideos"
 import { VideoList } from "@/app/interface/video-list"
 import { getTags } from "@/app/server/actions/ai-tube-hf/getTags"
+import { extendVideosWithStats } from "@/app/server/actions/ai-tube-hf/extendVideosWithStats"
 
 export function HomeView() {
   const [_isPending, startTransition] = useTransition()
@@ -24,6 +25,9 @@ export function HomeView() {
         mandatoryTags: currentTag ? [currentTag] : [],
         maxVideos: 25
       })
+
+      // due to some caching on the first function.. we update with fresh data!
+      // const updatedVideos = await extendVideosWithStats(videos)
 
       setPublicVideos(videos)
     })

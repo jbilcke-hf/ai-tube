@@ -26,11 +26,11 @@ export async function getNumberOfViewsForVideos(videoIds: string[]): Promise<Rec
       stats[videoId] = 0
     }
 
-
     const values = await redis.mget<number[]>(...ids)
 
     values.forEach((nbViews, i) => {
-      const videoId = ids[i]
+      const redisId = `${ids[i] || ""}`
+      const videoId = redisId.replace(":stats:views", "").replace("videos:", "")
       stats[videoId] = nbViews || 0
     })
 

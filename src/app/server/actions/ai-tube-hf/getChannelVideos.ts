@@ -12,12 +12,14 @@ export async function getChannelVideos({
   channel,
   status,
 }: {
-  channel: ChannelInfo
+  channel?: ChannelInfo
 
   // filter videos by status
   status?: VideoStatus
 }): Promise<VideoInfo[]> {
 
+  if (!channel) { return [] }
+  
   const videos = await getVideoRequestsFromChannel({
     channel,
     apiKey: adminApiKey,

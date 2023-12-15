@@ -32,6 +32,7 @@ export function PublicVideoView() {
   const [copied, setCopied] = useState<boolean>(false)
 
   const [channelThumbnail, setChannelThumbnail] = useState(`${video?.channel.thumbnail || ""}`)
+  const setPublicVideo = useStore(s => s.setPublicVideo)
 
   // we inject the current videoId in the URL, if it's not already present
   // this is a hack for Hugging Face iframes
@@ -71,15 +72,19 @@ export function PublicVideoView() {
   }
 
   useEffect(() => {
-    if (!videoId) {
-      return
-    }
-
     startTransition(async () => {
-      await watchVideo(videoId)
+      if (!video || !video.id) {
+        return
+      }
+      const numberOfViews = await watchVideo(videoId)
+
+      setPublicVideo({
+        ...video,
+        numberOfViews
+      })
     })
 
-  }, [videoId])
+  }, [video?.id])
 
   if (!video) { return null }
 
