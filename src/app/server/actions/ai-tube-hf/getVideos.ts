@@ -3,6 +3,7 @@
 import { VideoInfo } from "@/types"
 
 import { getVideoIndex } from "./getVideoIndex"
+import { extendVideosWithStats } from "./extendVideosWithStats"
 
 const HARD_LIMIT = 100
 
@@ -90,5 +91,11 @@ export async function getVideos({
   
 
   // we enforce the max limit of HARD_LIMIT (eg. 100)
-  return videosMatchingFilters.slice(0, Math.min(HARD_LIMIT, maxVideos))
+  const cappedVideos = videosMatchingFilters.slice(0, Math.min(HARD_LIMIT, maxVideos))
+
+
+  // finally, we ask Redis for the freshest stats
+  const videosWithStats = await extendVideosWithStats(cappedVideos)
+
+  return videosWithStats
 }

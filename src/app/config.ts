@@ -5,3 +5,7 @@ export const showBetaFeatures = `${
 
 export const defaultVideoModel = "SVD"
 export const defaultVoice = "Julian"
+
+export const developerMode = `${
+  process.env.NEXT_PUBLIC_DEVELOPER_MODE || ""
+}`.trim().toLowerCase() === "true"

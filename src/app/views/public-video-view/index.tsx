@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useTransition } from "react"
 import dynamic from "next/dynamic"
 import { RiCheckboxCircleFill } from "react-icons/ri"
 import { PiShareFatLight } from "react-icons/pi"
@@ -16,12 +16,15 @@ import { VideoInfo } from "@/types"
 import { ActionButton, actionButtonClassName } from "@/app/interface/action-button"
 import { RecommendedVideos } from "@/app/interface/recommended-videos"
 import { isCertifiedUser } from "@/app/certification"
+import { watchVideo } from "@/app/server/actions/stats"
+import { formatTimeAgo } from "@/lib/formatTimeAgo"
 
 const DefaultAvatar = dynamic(() => import("../../interface/default-avatar"), {
   loading: () => null,
 })
  
 export function PublicVideoView() {
+  const [_pending, startTransition] = useTransition()
   const video = useStore(s => s.publicVideo)
 
   const videoId = `${video?.id || ""}`
@@ -66,6 +69,17 @@ export function PublicVideoView() {
       
     }
   }
+
+  useEffect(() => {
+    if (!videoId) {
+      return
+    }
+
+    startTransition(async () => {
+      await watchVideo(videoId)
+    })
+
+  }, [videoId])
 
   if (!video) { return null }
 
@@ -244,8 +258,12 @@ export function PublicVideoView() {
           `transition-all duration-200 ease-in-out`,
           `rounded-xl`,
           `bg-neutral-700/50`,
-          `text-sm`,
+          `text-sm text-zinc-100`,
         )}>
+          <div className="flex flex-row space-x-2 font-medium mb-1">
+            <div>{video.numberOfViews} views</div>
+            <div>{formatTimeAgo(video.updatedAt).replace("about ", "")}</div>
+          </div>
           <p>{video.description}</p>
         </div>
       </div>

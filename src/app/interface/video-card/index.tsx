@@ -213,7 +213,7 @@ export function VideoCard({
               isCompact ? `text-2xs lg:text-xs` : `text-sm`,
               `space-x-1`
             )}>
-            <div>0 views</div>
+            <div>{video.numberOfViews} views</div>
             <div className="font-semibold scale-125">·</div>
             <div>{formatTimeAgo(video.updatedAt)}</div>
             </div>

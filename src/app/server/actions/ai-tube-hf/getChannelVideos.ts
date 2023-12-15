@@ -5,6 +5,7 @@ import { ChannelInfo, VideoInfo, VideoStatus } from "@/types"
 import { getVideoRequestsFromChannel  } from "./getVideoRequestsFromChannel"
 import { adminApiKey } from "../config"
 import { getVideoIndex } from "./getVideoIndex"
+import { extendVideosWithStats } from "./extendVideosWithStats"
 
 // return 
 export async function getChannelVideos({
@@ -28,7 +29,7 @@ export async function getChannelVideos({
   const queued = await getVideoIndex({ status: "queued" })
   const published = await getVideoIndex({ status: "published" })
 
-  return videos.map(v => {
+  const validVideos = videos.map(v => {
    let video: VideoInfo = {
       id: v.id,
       status: "submitted",
@@ -57,10 +58,16 @@ export async function getChannelVideos({
 
     return video
   }).filter(video => {
+    // if no filter is requested, we always return the video
     if (!status || typeof status === "undefined") {
       return true
     }
 
     return video.status === status
   })
+
+  // ask Redis for the freshest stats
+  const results = await extendVideosWithStats(validVideos)
+
+  return results
 }

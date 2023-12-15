@@ -3,6 +3,7 @@
 import { VideoInfo } from "@/types"
 
 import { getVideoIndex } from "./getVideoIndex"
+import { getNumberOfViewsForVideo } from "../stats"
 
 export async function getVideo({
   videoId,
@@ -24,6 +25,8 @@ export async function getVideo({
     if (!video) {
       throw new Error(`cannot get the video, nothing found for id "${id}"`)
     }
+
+    video.numberOfViews = await getNumberOfViewsForVideo(video.id)
 
     return video
   } catch (err) {
