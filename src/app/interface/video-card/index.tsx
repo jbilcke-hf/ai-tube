@@ -11,11 +11,7 @@ import { formatDuration } from "@/lib/formatDuration"
 import { formatTimeAgo } from "@/lib/formatTimeAgo"
 import { isCertifiedUser } from "@/app/certification"
 import { transparentImage } from "@/lib/transparentImage"
-
-const DefaultAvatar = dynamic(() => import("../default-avatar"), {
-  loading: () => null,
-})
- 
+import { DefaultAvatar } from "../default-avatar"
 
 export function VideoCard({
   video,
@@ -184,12 +180,12 @@ export function VideoCard({
             </div>
           </div>
           : <DefaultAvatar
-            username={video.channel.datasetUser}
-            bgColor="#fde047"
-            textColor="#1c1917"
-            width={36}
-            roundShape
-          />}
+              username={video.channel.datasetUser}
+              bgColor="#fde047"
+              textColor="#1c1917"
+              width={36}
+              roundShape
+            />}
           <div className={cn(
             `flex flex-col`,
             isCompact ?  `` : `flex-grow`

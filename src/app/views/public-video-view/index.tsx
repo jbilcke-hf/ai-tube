@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useState, useTransition } from "react"
-import dynamic from "next/dynamic"
 import { RiCheckboxCircleFill } from "react-icons/ri"
 import { PiShareFatLight } from "react-icons/pi"
 import CopyToClipboard from "react-copy-to-clipboard"
@@ -18,10 +17,7 @@ import { RecommendedVideos } from "@/app/interface/recommended-videos"
 import { isCertifiedUser } from "@/app/certification"
 import { watchVideo } from "@/app/server/actions/stats"
 import { formatTimeAgo } from "@/lib/formatTimeAgo"
-
-const DefaultAvatar = dynamic(() => import("../../interface/default-avatar"), {
-  loading: () => null,
-})
+import { DefaultAvatar } from "@/app/interface/default-avatar"
  
 export function PublicVideoView() {
   const [_pending, startTransition] = useTransition()
@@ -160,12 +156,12 @@ export function PublicVideoView() {
                   </div>
                 </div>
                 : <DefaultAvatar
-                  username={video.channel.datasetUser}
-                  bgColor="#fde047"
-                  textColor="#1c1917"
-                  width={36}
-                  roundShape
-                />}
+                    username={video.channel.datasetUser}
+                    bgColor="#fde047"
+                    textColor="#1c1917"
+                    width={36}
+                    roundShape
+                  />}
               </div>
             </a>
 

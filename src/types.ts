@@ -441,6 +441,48 @@ export type VideoInfo = {
   orientation: VideoOrientation
 }
 
+export type PublicUserInfo = {
+  id: string
+
+  type: "normal" | "admin"
+
+  userName: string
+
+  firstName: string
+
+  lastName: string
+
+  thumbnail: string
+
+  channels: ChannelInfo[]
+}
+
+export type PrivateUserInfo = PublicUserInfo & {
+
+  // the Hugging Face API token is confidential!
+  hfApiToken: string
+}
+
+export type VideoComment = {
+  id: string
+  
+  user: PublicUserInfo
+
+  // if the video comment is in response to another comment,
+  // then "inReplyTo" will contain the other video comment id
+  inReplyTo?: string
+
+  createdAt: string
+  updatedAt: string
+  message: string
+
+  // how many likes did the comment receive
+  nbLikes: number
+
+  // if the comment was appreciated by the video owner
+  appreciated: number
+}
+
 export type VideoGenerationModel =
   | "HotshotXL"
   | "SVD"
@@ -472,6 +514,7 @@ export type InterfaceView =
   | "public_video" // public view of a video
   | "public_music_videos" // public music videos - it's a special category, because music is *cool*
   | "not_found"
+
 
 export type Settings = {
   huggingfaceApiKey: string

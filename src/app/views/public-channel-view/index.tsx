@@ -1,16 +1,12 @@
 "use client"
 
 import { useEffect, useState, useTransition } from "react"
-import dynamic from "next/dynamic"
 
 import { useStore } from "@/app/state/useStore"
 import { cn } from "@/lib/utils"
 import { VideoList } from "@/app/interface/video-list"
 import { getChannelVideos } from "@/app/server/actions/ai-tube-hf/getChannelVideos"
-
-const DefaultAvatar = dynamic(() => import("../../interface/default-avatar"), {
-  loading: () => null,
-})
+import { DefaultAvatar } from "@/app/interface/default-avatar"
 
 export function PublicChannelView() {
   const [_isPending, startTransition] = useTransition()
@@ -66,12 +62,12 @@ export function PublicChannelView() {
             className="w-full h-full overflow-hidden object-cover"
           />
         : <DefaultAvatar
-          username={publicChannel.datasetUser}
-          bgColor="#fde047"
-          textColor="#1c1917"
-          width={160}
-          roundShape
-        />}
+            username={publicChannel.datasetUser}
+            bgColor="#fde047"
+            textColor="#1c1917"
+            width={160}
+            roundShape
+          />}
       </div>
 
       {/* CHANNEL INFO - HORIZONTAL */}
