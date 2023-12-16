@@ -441,6 +441,64 @@ export type VideoInfo = {
   orientation: VideoOrientation
 }
 
+export type CollectionInfo = {
+  /**
+   * UUID (v4)
+   */
+  id: string
+
+  /**
+   * Human readable title for the video
+   */
+  label: string
+
+  /**
+   * Human readable description for the video
+   */
+  description: string
+
+  /**
+   * URL to the video thumbnail
+   */
+  thumbnailUrl: string
+
+  /**
+   * Counter for the number of views
+   * 
+   * Note: should be managed by the index to prevent cheating
+   */
+  numberOfViews: number
+
+  /**
+   * Counter for the number of likes
+   * 
+   * Note: should be managed by the index to prevent cheating
+   */
+  numberOfLikes: number
+
+  /**
+   * When was the video updated
+   */
+  updatedAt: string
+
+  /**
+   * Arbotrary string tags to label the content
+   */
+  tags: string[]
+
+  /**
+   * The owner channel
+   */
+  channel: ChannelInfo
+
+  /**
+   * Collection duration
+   */
+  duration: number
+
+  items: Array<VideoInfo>[]
+}
+
 export type PublicUserInfo = {
   id: string
 

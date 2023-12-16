@@ -205,7 +205,7 @@ export function PublicVideoView() {
               `items-center`
             )}>
               <CopyToClipboard
-                text={`https://huggingface.co/spaces/jbilcke-hf/ai-tube?v=${video.id}`}
+                text={`https://jbilcke-hf-ai-tube.hf.space/watch?v=${video.id}`}
                 onCopy={() => setCopied(true)}>
                 <div className={actionButtonClassName}>
                   <div className="flex items-center justify-center">

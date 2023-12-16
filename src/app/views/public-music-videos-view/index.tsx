@@ -11,7 +11,6 @@ import { VideoList } from "@/app/interface/video-list"
 export function PublicMusicVideosView() {
   const [_isPending, startTransition] = useTransition()
   const setView = useStore(s => s.setView)
-  const currentTag = useStore(s => s.currentTag)
   const setPublicVideos = useStore(s => s.setPublicVideos)
   const setPublicVideo = useStore(s => s.setPublicVideo)
   const publicVideos = useStore(s => s.publicVideos)
@@ -20,17 +19,19 @@ export function PublicMusicVideosView() {
     startTransition(async () => {
       const videos = await getVideos({
         sortBy: "date",
-        mandatoryTags: currentTag ? [currentTag] : [],
+        mandatoryTags:["music"],
         maxVideos: 25
       })
 
       setPublicVideos(videos)
     })
-  }, [currentTag])
+  }, [])
 
   const handleSelect = (video: VideoInfo) => {
-    setView("public_video")
-    setPublicVideo(video)
+    //
+    // setView("public_video")
+    // setPublicVideo(video)
+    console.log("play the track in the background, but don't reload everything")
   }
 
   return (
