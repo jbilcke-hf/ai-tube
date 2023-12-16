@@ -69,7 +69,7 @@ export function VideoCard({
   useEffect(() => {
     setTimeout(() => {
       setShouldLoadVideo(true)
-    }, index * 500)
+    }, index * 1500)
   }, [index])
 
   return (
