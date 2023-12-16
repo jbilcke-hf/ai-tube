@@ -6,7 +6,7 @@ colorTo: red
 sdk: docker
 pinned: true
 app_port: 3000
-disable_embedding: true
+disable_embedding: false
 ---
 
 # 🍿 AI Tube
