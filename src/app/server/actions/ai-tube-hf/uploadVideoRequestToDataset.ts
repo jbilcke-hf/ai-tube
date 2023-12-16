@@ -3,8 +3,9 @@
 import { Blob } from "buffer"
 
 import { Credentials, uploadFile, whoAmI } from "@/huggingface/hub/src"
-import { ChannelInfo, VideoGenerationModel, VideoInfo, VideoRequest } from "@/types"
+import { ChannelInfo, VideoGenerationModel, VideoInfo, VideoOrientation, VideoRequest } from "@/types"
 import { formatPromptFileName } from "../utils/formatPromptFileName"
+import { orientationToWidthHeight } from "../utils/orientationToWidthHeight"
 
 /**
  * Save the video request to the user's own dataset
@@ -22,6 +23,8 @@ export async function uploadVideoRequestToDataset({
   voice,
   music,
   tags,
+  duration,
+  orientation,
 }: {
   channel: ChannelInfo
   apiKey: string
@@ -34,6 +37,8 @@ export async function uploadVideoRequestToDataset({
   voice: string
   music: string
   tags: string[]
+  duration: number
+  orientation: VideoOrientation
 }): Promise<{
   videoRequest: VideoRequest
   videoInfo: VideoInfo
@@ -81,6 +86,14 @@ ${voice}
 
 ${music}
 
+# Duration
+
+${duration}
+
+# Orientation
+
+${orientation}
+
 # Tags
 
 ${tags.map(tag => `- ${tag}`).join("\n")}
@@ -116,6 +129,8 @@ ${prompt}
     updatedAt: new Date().toISOString(),
     tags,
     channel,
+    duration: 0,
+    orientation,
   }
 
   const newVideo: VideoInfo = {
@@ -136,6 +151,9 @@ ${prompt}
     updatedAt: new Date().toISOString(),
     tags,
     channel,
+    duration,
+    orientation,
+    ...orientationToWidthHeight(orientation),
   }
 
   return {

@@ -231,6 +231,11 @@ export type ChannelInfo = {
   tags: string[]
 
   updatedAt: string
+
+  /**
+   * Default video orientation
+   */
+  orientation: VideoOrientation
 }
 
 export type VideoStatus =
@@ -308,8 +313,22 @@ export type VideoRequest = {
    * ID of the channel
    */
   channel: ChannelInfo
+
+  /**
+   * Video orientation
+   */
+  orientation: VideoOrientation
+
+  /**
+   * Video duration
+   */
+  duration: number
 }
 
+export type VideoOrientation =
+  | "portrait"
+  | "landscape"
+  | "square"
 
 export type VideoInfo = {
   /**
@@ -400,6 +419,26 @@ export type VideoInfo = {
    * The channel
    */
   channel: ChannelInfo
+
+  /**
+   * Video duration
+   */
+  duration: number
+
+  /**
+   * Video width (eg. 1024)
+   */
+  width: number
+
+  /**
+   * Video height (eg. 576)
+   */
+  height: number
+
+  /**
+   * General video aspect ratio
+   */
+  orientation: VideoOrientation
 }
 
 export type VideoGenerationModel =
@@ -451,6 +490,7 @@ export type ParsedDatasetReadme = {
   hf_tags: string[]
   description: string
   prompt: string
+  orientation: VideoOrientation
 }
 
 export type ParsedMetadataAndContent = {
@@ -473,6 +513,7 @@ export type ParsedDatasetPrompt = {
   thumbnail: string
   voice: string
   music: string
+  orientation: VideoOrientation
 }
 
 export type UpdateQueueRequest = {

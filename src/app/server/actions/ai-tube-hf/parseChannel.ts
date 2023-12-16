@@ -2,9 +2,10 @@
 
 import { Credentials, downloadFile, whoAmI } from "@/huggingface/hub/src"
 import { parseDatasetReadme } from "@/app/server/actions/utils/parseDatasetReadme"
-import { ChannelInfo, VideoGenerationModel } from "@/types"
+import { ChannelInfo, VideoGenerationModel, VideoOrientation } from "@/types"
 
 import { adminCredentials } from "../config"
+import { defaultVideoModel, defaultVideoOrientation } from "@/app/config"
 
 export async function parseChannel(options: {
   id: string
@@ -62,7 +63,7 @@ export async function parseChannel(options: {
   // TODO parse the README to get the proper label
   let label = slug.replaceAll("-", " ")
 
-  let model: VideoGenerationModel = "HotshotXL"
+  let model: VideoGenerationModel = defaultVideoModel
   let lora = ""
   let style = ""
   let thumbnail = ""
@@ -71,6 +72,7 @@ export async function parseChannel(options: {
   let voice = ""
   let music = ""
   let tags: string[] = []
+  let orientation: VideoOrientation = defaultVideoOrientation
 
   // console.log(`going to read datasets/${name}`)
   try {
@@ -89,11 +91,12 @@ export async function parseChannel(options: {
     label = parsedDatasetReadme.pretty_name
     description = parsedDatasetReadme.description
     thumbnail = parsedDatasetReadme.thumbnail || "thumbnail.jpg"
-    model = parsedDatasetReadme.model
+    model = parsedDatasetReadme.model || defaultVideoModel
     lora = parsedDatasetReadme.lora || ""
     style = parsedDatasetReadme.style || ""
     voice = parsedDatasetReadme.voice || ""
     music = parsedDatasetReadme.music || ""
+    orientation = parsedDatasetReadme.orientation || defaultVideoOrientation
 
     thumbnail =
       thumbnail.startsWith("http")
@@ -126,7 +129,8 @@ export async function parseChannel(options: {
     prompt,
     likes: options.likes,
     tags,
-    updatedAt: options.updatedAt.toISOString()
+    updatedAt: options.updatedAt.toISOString(),
+    orientation,
   }
 
   return channel

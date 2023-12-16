@@ -6,6 +6,7 @@ import { getVideoRequestsFromChannel  } from "./getVideoRequestsFromChannel"
 import { adminApiKey } from "../config"
 import { getVideoIndex } from "./getVideoIndex"
 import { extendVideosWithStats } from "./extendVideosWithStats"
+import { orientationToWidthHeight } from "../utils/orientationToWidthHeight"
 
 // return 
 export async function getChannelVideos({
@@ -19,7 +20,7 @@ export async function getChannelVideos({
 }): Promise<VideoInfo[]> {
 
   if (!channel) { return [] }
-  
+
   const videos = await getVideoRequestsFromChannel({
     channel,
     apiKey: adminApiKey,
@@ -50,6 +51,9 @@ export async function getChannelVideos({
       updatedAt: v.updatedAt,
       tags: v.tags,
       channel,
+      duration: v.duration || 0,
+      orientation: v.orientation,
+      ...orientationToWidthHeight(v.orientation),
     }
 
     if (queued[v.id]) {

@@ -17,7 +17,8 @@ import { PendingVideoList } from "@/app/interface/pending-video-list"
 import { getChannelVideos } from "@/app/server/actions/ai-tube-hf/getChannelVideos"
 import { parseVideoModelName } from "@/app/server/actions/utils/parseVideoModelName"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { defaultVideoModel, defaultVoice } from "@/app/config"
+import { defaultVideoModel, defaultVideoOrientation, defaultVoice } from "@/app/config"
+import { parseVideoOrientation } from "@/app/server/actions/utils/parseVideoOrientation"
 
 export function UserChannelView() {
   const [_isPending, startTransition] = useTransition()
@@ -26,18 +27,20 @@ export function UserChannelView() {
     defaultSettings.huggingfaceApiKey
   )
   
-  const [titleDraft, setTitleDraft] = useState("")
-  const [descriptionDraft, setDescriptionDraft] = useState("")
-  const [tagsDraft, setTagsDraft] = useState("")
-  const [promptDraft, setPromptDraft] = useState("")
-  const [modelDraft, setModelDraft] = useState<VideoGenerationModel>(defaultVideoModel)
-  const [loraDraft, setLoraDraft] = useState("")
-  const [styleDraft, setStyleDraft] = useState("")
-  const [voiceDraft, setVoiceDraft] = useState(defaultVoice)
-  const [musicDraft, setMusicDraft] = useState("")
+  const [title, setTitle] = useState("")
+  const [description, setDescription] = useState("")
+  const [tags, setTags] = useState("")
+  const [prompt, setPrompt] = useState("")
+  const [model, setModel] = useState<VideoGenerationModel>(defaultVideoModel)
+  const [lora, setLora] = useState("")
+  const [style, setStyle] = useState("")
+  const [voice, setVoice] = useState(defaultVoice)
+  const [music, setMusic] = useState("")
+  const [duration, setDuration] = useState(0)
+  const [orientation, setOrientation] = useState(defaultVideoOrientation)
 
   // we do not include the tags in the list of required fields
-  const missingFields = !titleDraft || !descriptionDraft || !promptDraft
+  const missingFields = !title || !description || !prompt
 
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -73,7 +76,7 @@ export function UserChannelView() {
     if (!userChannel) {
       return
     }
-    if (!titleDraft || !promptDraft) {
+    if (!title || !prompt) {
       console.log("missing title or prompt")
       return
     }
@@ -85,29 +88,31 @@ export function UserChannelView() {
         const newVideo = await submitVideoRequest({
           channel: userChannel,
           apiKey: huggingfaceApiKey,
-          title: titleDraft,
-          description: descriptionDraft,
-          prompt: promptDraft,
-          model: modelDraft,
-          lora: loraDraft,
-          style: styleDraft,
-          voice: voiceDraft,
-          music: musicDraft,
-          tags: tagsDraft.trim().split(",").map(x => x.trim()).filter(x => x),
+          title,
+          description,
+          prompt,
+          model,
+          lora,
+          style,
+          voice,
+          music,
+          tags: tags.trim().split(",").map(x => x.trim()).filter(x => x),
+          duration,
+          orientation
         })
 
         // in case of success we update the frontend immediately
-        // with our draft video
+        // with our  video
         setUserVideos([newVideo, ...userVideos])
-        setPromptDraft("")
-        setDescriptionDraft("")
-        setTagsDraft("")
-        setTitleDraft("")
-        setModelDraft(defaultVideoModel)
-        setVoiceDraft(defaultVoice)
-        setMusicDraft("")
-        setLoraDraft("")
-        setStyleDraft("")
+        setPrompt("")
+        setDescription("")
+        setTags("")
+        setTitle("")
+        setModel(defaultVideoModel)
+        setVoice(defaultVoice)
+        setMusic("")
+        setLora("")
+        setStyle("")
 
         // also renew the cache on Next's side
         /*
@@ -151,9 +156,9 @@ export function UserChannelView() {
               placeholder="Title"
               className="font-mono"
               onChange={(x) => {
-                setTitleDraft(x.target.value)
+                setTitle(x.target.value)
               }}
-              value={titleDraft}
+              value={title}
             />
           </div>
         </div>
@@ -167,9 +172,9 @@ export function UserChannelView() {
               className="font-mono"
               rows={2}
               onChange={(x) => {
-                setDescriptionDraft(x.target.value)
+                setDescription(x.target.value)
               }}
-              value={descriptionDraft}
+              value={description}
             />
             <p className="text-neutral-100/70">
               Short description (visible to humans, and used as context by the AI).
@@ -185,9 +190,9 @@ export function UserChannelView() {
               className="font-mono"
               rows={6}
               onChange={(x) => {
-                setPromptDraft(x.target.value)
+                setPrompt(x.target.value)
               }}
-              value={promptDraft}
+              value={prompt}
             />
             <p className="text-neutral-100/70">
               Describe your video content, in a synthetic way.
@@ -200,16 +205,54 @@ export function UserChannelView() {
           <div className="flex flex-col space-y-2 flex-grow">
             <Select
               onValueChange={(value: string) => {
-                setModelDraft(parseVideoModelName(value, defaultVideoModel))
+                setModel(parseVideoModelName(value, defaultVideoModel))
               }}
               defaultValue={defaultVideoModel}>
               <SelectTrigger className="">
                 <SelectValue placeholder="Video model" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="SVD">SVD</SelectItem>
+                <SelectItem value="SVD">SVD (default)</SelectItem>
                 <SelectItem value="HotshotXL">HotshotXL</SelectItem>
                 <SelectItem value="LaVie">LaVie</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
+        {/*
+
+        <div className="flex flex-row space-x-2 items-start">
+          <label className="flex w-24 pt-1">Video duration:</label>
+          <div className="flex flex-col space-y-2 flex-grow">
+            <Input
+              placeholder="Duration"
+              className="font-mono"
+              onChange={(x) => {
+                // TODO: clamp the value here + on server side
+                setDuration(parseInt(x.target.value))
+              }}
+              value={title}
+            />
+          </div>
+        </div>
+        */}
+        
+        <div className="flex flex-row space-x-2 items-start">
+          <label className="flex w-24 pt-1">Video orientation:</label>
+          <div className="flex flex-col space-y-2 flex-grow">
+            <Select
+              onValueChange={(value: string) => {
+                setOrientation(parseVideoOrientation(value, defaultVideoOrientation))
+              }}
+              defaultValue={defaultVideoOrientation}>
+              <SelectTrigger className="">
+                <SelectValue placeholder="Video orientation" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Landscape">Landscape (default)</SelectItem>
+                <SelectItem value="Portrait">Portrait</SelectItem>
+                {/* <SelectItem value="LaVie">Square</SelectItem> */}
               </SelectContent>
             </Select>
           </div>
@@ -222,9 +265,9 @@ export function UserChannelView() {
               placeholder="Tags"
               className="font-mono"
               onChange={(x) => {
-                setTagsDraft(x.target.value)
+                setTags(x.target.value)
               }}
-              value={tagsDraft}
+              value={tags}
             />
             <p className="text-neutral-100/70">
             Comma-separated tags (eg. &quot;Education, Sports&quot;)

@@ -1,9 +1,12 @@
+import { VideoGenerationModel, VideoOrientation } from "@/types"
+
 export const showBetaFeatures = `${
   process.env.NEXT_PUBLIC_SHOW_BETA_FEATURES || ""
 }`.trim().toLowerCase() === "true"
 
 
-export const defaultVideoModel = "SVD"
+export const defaultVideoModel: VideoGenerationModel = "SVD"
+export const defaultVideoOrientation: VideoOrientation = "landscape"
 export const defaultVoice = "Julian"
 
 export const developerMode = `${
