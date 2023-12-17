@@ -8,10 +8,12 @@ import { UserChannelView } from "./views/user-channel-view"
 import { PublicVideoView } from "./views/public-video-view"
 import { UserAccountView } from "./views/user-account-view"
 import { NotFoundView } from "./views/not-found-view"
-import { ChannelInfo, VideoInfo } from "@/types"
+import { ChannelInfo, InterfaceView, VideoInfo } from "@/types"
 import { useEffect } from "react"
 import { usePathname, useRouter } from "next/navigation"
 import { TubeLayout } from "./interface/tube-layout"
+import { PublicMusicVideosView } from "./views/public-music-videos-view"
+import { getCollectionKey } from "@/lib/getCollectionKey"
 
 // this is where we transition from the server-side space
 // and the client-side space
@@ -22,15 +24,24 @@ import { TubeLayout } from "./interface/tube-layout"
 // one benefit of doing this is that we will able to add some animations/transitions
 // more easily
 export function Main({
-  video,
+  // view,
+  publicVideo,
   publicVideos,
+  publicChannelVideos,
+  publicTracks,
+  publicTrack,
   channel,
 }: {
  // server side params
- video?: VideoInfo
+ // view?: InterfaceView
+ publicVideo?: VideoInfo
  publicVideos?: VideoInfo[]
+ publicChannelVideos?: VideoInfo[]
+ publicTracks?: VideoInfo[]
+ publicTrack?: VideoInfo
  channel?: ChannelInfo
 }) {
+  // this could be also a parameter of main, where we pass this manually
   const pathname = usePathname()
   const router = useRouter()
 
@@ -39,51 +50,80 @@ export function Main({
   const setPathname = useStore(s => s.setPathname)
   const setPublicChannel = useStore(s => s.setPublicChannel)
   const setPublicVideos = useStore(s => s.setPublicVideos)
-
-  const videoId = `${video?.id || ""}`
-  // console.log("Main video= "+ videoId)
-
-  const publicVideoIds = (publicVideos || []).map(v => v.id || "").filter(x => x)
+  const setPublicChannelVideos = useStore(s => s.setPublicChannelVideos)
+  const setPublicTracks = useStore(s => s.setPublicTracks)
+  const setPublicTrack = useStore(s => s.setPublicTrack)
 
   useEffect(() => {
     if (!publicVideos?.length) { return }
     // note: it is important to ALWAYS set the current video to videoId
     // even if it's undefined
     setPublicVideos(publicVideos)
-  }, publicVideoIds)
+  }, [getCollectionKey(publicVideos)])
+
+
+  useEffect(() => {
+    if (!publicChannelVideos?.length) { return }
+    // note: it is important to ALWAYS set the current video to videoId
+    // even if it's undefined
+    setPublicChannelVideos(publicChannelVideos)
+  }, [getCollectionKey(publicChannelVideos)])
+
+  useEffect(() => {
+    if (!publicTracks?.length) { return }
+    // note: it is important to ALWAYS set the current video to videoId
+    // even if it's undefined
+    setPublicTracks(publicTracks)
+  }, [getCollectionKey(publicTracks)])
+
 
   useEffect(() => {
     // note: it is important to ALWAYS set the current video to videoId
     // even if it's undefined
-    setPublicVideo(video)
+    setPublicTrack(publicTrack)
 
-    if (videoId) {
-      // this is a hack for hugging face:
-      // we allow the ?v=<id> param on the root of the domain
-      if (pathname !== "/watch") {
-        // console.log("we are on huggingface apparently!")
-        router.replace(`/watch?v=${videoId}`)
-      }
+    if (!publicTrack || !publicTrack?.id) { return }
+
+    // this is a hack for hugging face:
+    // we allow the ?v=<id> param on the root of the domain
+    if (pathname !== "/music") {
+      // console.log("we are on huggingface apparently!")
+      router.replace(`/music?m=${publicTrack.id}`)
     }
-  }, [videoId])
+  }, [publicTrack?.id])
 
-  const channelId = `${channel?.id || ""}`
-  // console.log("Main video= "+ videoId)
+  useEffect(() => {
+    // note: it is important to ALWAYS set the current video to videoId
+    // even if it's undefined
+    setPublicVideo(publicVideo)
+
+    if (!publicVideo || !publicVideo?.id) { return }
+
+    // this is a hack for hugging face:
+    // we allow the ?v=<id> param on the root of the domain
+    if (pathname !== "/watch") {
+      // console.log("we are on huggingface apparently!")
+      router.replace(`/watch?v=${publicVideo.id}`)
+    }
+    
+  }, [publicVideo?.id])
+
 
   useEffect(() => {
     // note: it is important to ALWAYS set the current video to videoId
     // even if it's undefined
     setPublicChannel(channel)
 
-    if (channelId) {
-      // this is a hack for hugging face:
-      // we allow the ?v=<id> param on the root of the domain
-      if (pathname !== "/channel") {
-        // console.log("we are on huggingface apparently!")
-        router.replace(`/channel?v=${channelId}`)
-      }
+    if (!channel || !channel?.id) { return }
+
+    // this is a hack for hugging face:
+    // we allow the ?v=<id> param on the root of the domain
+    if (pathname !== "/channel") {
+      // console.log("we are on huggingface apparently!")
+      router.replace(`/channel?v=${channel.id}`)
     }
-  }, [channelId])
+  
+  }, [channel?.id])
 
 
   // this is critical: it sync the current route (coming from server-side)
@@ -99,6 +139,7 @@ export function Main({
     <TubeLayout>
       {view === "home" && <HomeView />}
       {view === "public_video" && <PublicVideoView />}
+      {view === "public_music_videos" && <PublicMusicVideosView />}
       {view === "public_channels" && <PublicChannelsView />}
       {view === "public_channel" && <PublicChannelView />}
       {/*view === "user_videos" && <UserVideosView />*/}

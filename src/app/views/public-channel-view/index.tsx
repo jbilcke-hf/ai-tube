@@ -5,14 +5,13 @@ import { useEffect, useState, useTransition } from "react"
 import { useStore } from "@/app/state/useStore"
 import { cn } from "@/lib/utils"
 import { VideoList } from "@/app/interface/video-list"
-import { getChannelVideos } from "@/app/server/actions/ai-tube-hf/getChannelVideos"
 import { DefaultAvatar } from "@/app/interface/default-avatar"
 
 export function PublicChannelView() {
   const [_isPending, startTransition] = useTransition()
   const publicChannel = useStore(s => s.publicChannel)
-  const publicVideos = useStore(s => s.publicVideos)
-  const setPublicVideos = useStore(s => s.setPublicVideos)
+  const publicChannelVideos = useStore(s => s.publicChannelVideos)
+  const setPublicChannelVideos = useStore(s => s.setPublicChannelVideos)
 
   const [channelThumbnail, setChannelThumbnail] = useState(publicChannel?.thumbnail || "")
 
@@ -33,16 +32,23 @@ export function PublicChannelView() {
       return
     }
 
+    // we already have all the videos we need (eg. they were rendered server-side)
+    // if (publicChannelVideos.length) { return }
+
+    // setPublicChannelVideos([])
+
+    // do we really need this? normally this was computed server-side
+    /*
     startTransition(async () => {
-      const videos = await getChannelVideos({
+      const newPublicChannelVideos = await getChannelVideos({
         channel: publicChannel,
         status: "published",
       })
-      console.log("videos:", videos)
-      setPublicVideos(videos)
+      console.log("publicChannelVideos:", newPublicChannelVideos)
+      setPublicChannelVideos(newPublicChannelVideos)
     })
+    */
 
-    setPublicVideos([])
   }, [publicChannel, publicChannel?.id])
 
   if (!publicChannel) { return null }
@@ -102,7 +108,7 @@ export function PublicChannelView() {
       </div>
 
       <VideoList
-        videos={publicVideos}
+        items={publicChannelVideos}
       />
     </div>
   )

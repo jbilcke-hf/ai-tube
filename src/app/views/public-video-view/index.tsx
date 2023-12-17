@@ -11,14 +11,17 @@ import { BiCameraMovie } from "react-icons/bi"
 import { useStore } from "@/app/state/useStore"
 import { cn } from "@/lib/utils"
 import { VideoPlayer } from "@/app/interface/video-player"
-import { VideoInfo } from "@/types"
+
 import { ActionButton, actionButtonClassName } from "@/app/interface/action-button"
 import { RecommendedVideos } from "@/app/interface/recommended-videos"
 import { isCertifiedUser } from "@/app/certification"
 import { watchVideo } from "@/app/server/actions/stats"
 import { formatTimeAgo } from "@/lib/formatTimeAgo"
 import { DefaultAvatar } from "@/app/interface/default-avatar"
- 
+import { LikeButton } from "@/app/interface/like-button"
+
+import { ReportModal } from "../report-modal"
+
 export function PublicVideoView() {
   const [_pending, startTransition] = useTransition()
   const video = useStore(s => s.publicVideo)
@@ -199,6 +202,9 @@ export function PublicVideoView() {
             `items-center`,
             `space-x-2`
           )}>
+
+            <LikeButton video={video} />
+
             {/* SHARE */}
             <div className={cn(
               `flex flex-row`,
@@ -249,6 +255,9 @@ export function PublicVideoView() {
               <LuScrollText />
               <span>See prompt</span>
             </ActionButton>
+
+            <ReportModal video={video} />
+
           </div>
 
         </div>

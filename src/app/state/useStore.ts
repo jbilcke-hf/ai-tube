@@ -47,7 +47,16 @@ export const useStore = create<{
   setPublicVideo: (publicVideo?: VideoInfo) => void
 
   publicVideos: VideoInfo[]
-  setPublicVideos: (userVideos: VideoInfo[]) => void
+  setPublicVideos: (publicVideos: VideoInfo[]) => void
+
+  publicChannelVideos: VideoInfo[]
+  setPublicChannelVideos: (publicChannelVideos: VideoInfo[]) => void
+
+  publicTrack?: VideoInfo
+  setPublicTrack: (publicTrack?: VideoInfo) => void
+
+  publicTracks: VideoInfo[]
+  setPublicTracks: (publicTracks: VideoInfo[]) => void
 
   userVideo?: VideoInfo
   setUserVideo: (userVideo?: VideoInfo) => void
@@ -76,6 +85,7 @@ export const useStore = create<{
     const routes: Record<string, InterfaceView> = {
       "/": "home",
       "/watch": "public_video",
+      "/music": "public_music_videos",
       "/channels": "public_channels",
       "/channel": "public_channel",
       "/account": "user_account",
@@ -148,6 +158,26 @@ export const useStore = create<{
   setPublicVideos: (publicVideos: VideoInfo[] = []) => {
     set({
       publicVideos: Array.isArray(publicVideos) ? publicVideos : [] 
+    })
+  },
+
+
+  publicTrack: undefined,
+  setPublicTrack: (publicTrack?: VideoInfo) => {
+    set({ publicTrack })
+  },
+
+  publicTracks: [],
+  setPublicTracks: (publicTracks: VideoInfo[] = []) => {
+    set({
+      publicTracks: Array.isArray(publicTracks) ? publicTracks : [] 
+    })
+  },
+
+  publicChannelVideos: [],
+  setPublicChannelVideos: (publicChannelVideos: VideoInfo[] = []) => {
+    set({
+      publicVideos: Array.isArray(publicChannelVideos) ? publicChannelVideos : [] 
     })
   },
 

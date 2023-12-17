@@ -58,12 +58,12 @@ export async function generateMetadata(
     }
   } catch (err) {
     return {
-      title: "AI Tube - 404 Video Not Found",
+      title: "AI Tube",
       metadataBase,
       openGraph: {
         type: "website",
         // url: "https://example.com",
-        title: "AI Tube - 404 Not Found", // put the video title here
+        title: "AI Tube", // put the video title here
         description: "", // put the vide description here
         siteName: "AI Tube",
   
@@ -77,8 +77,11 @@ export async function generateMetadata(
 // we have routes but on Hugging Face we don't see them
 // so.. let's use the work around
 export default async function Page({ searchParams: { v: videoId } }: AppQueryProps) {
-  const video = await getVideo({ videoId, neverThrow: true })
+  const publicVideo = await getVideo({
+    videoId,
+    neverThrow: true
+  })
   return (
-    <Main video={video} />
+    <Main publicVideo={publicVideo} />
   )
 }

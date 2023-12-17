@@ -5,7 +5,7 @@ import { MdVideoLibrary } from "react-icons/md"
 import { RiHome8Line } from "react-icons/ri"
 import { PiRobot } from "react-icons/pi"
 import { CgProfile } from "react-icons/cg"
-import { HiOutlineMusicNote } from "react-icons/hi"
+import { MdOutlinePlayCircleOutline } from "react-icons/md";
 
 import { useStore } from "@/app/state/useStore"
 import { cn } from "@/lib/utils"
@@ -49,7 +49,7 @@ export function LeftMenu() {
         {/*
         <Link href="/music">
           <MenuItem
-            icon={<HiOutlineMusicNote className="h-5 w-5" />}
+            icon={<MdOutlinePlayCircleOutline className="h-6.5 w-6.5" />}
             selected={view === "public_music_videos"}
             >
             Music

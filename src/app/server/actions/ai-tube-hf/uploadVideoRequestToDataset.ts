@@ -148,6 +148,7 @@ ${prompt}
     assetUrl: "", // will be generated in async
     numberOfViews: 0,
     numberOfLikes: 0,
+    numberOfDislikes: 0,
     updatedAt: new Date().toISOString(),
     tags,
     channel,

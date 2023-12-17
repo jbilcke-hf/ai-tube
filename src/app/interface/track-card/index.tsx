@@ -12,7 +12,7 @@ import { isCertifiedUser } from "@/app/certification"
 import { transparentImage } from "@/lib/transparentImage"
 import { DefaultAvatar } from "../default-avatar"
 
-export function VideoCard({
+export function TrackCard({
   media,
   className = "",
   layout = "grid",
@@ -35,6 +35,7 @@ export function VideoCard({
   const [mediaThumbnailReady, setMediaThumbnailReady] = useState(false)
   const [shouldLoadMedia, setShouldLoadMedia] = useState(false)
 
+  const isTable = layout === "table"
   const isCompact = layout === "vertical"
 
   const handlePointerEnter = () => {
@@ -72,32 +73,38 @@ export function VideoCard({
   }, [index])
 
   return (
-  <Link href={`/watch?v=${media.id}`}>
+  <Link href={`/music?m=${media.id}`}>
     <div
       className={cn(
         `w-full flex`,
-        isCompact ? `flex-row h-24 py-1 space-x-2` : `flex-col space-y-3`,
+        isTable ? `flex-row h-14 space-x-2 px-2 py-2 rounded-lg` :
+        isCompact ? `flex-row h-24 py-1 space-x-2` :
+        `flex-col space-y-3`,
         `bg-line-900`,
         `cursor-pointer`,
+        index % 2 ? "bg-neutral-800/40" : "",
         className,
       )}
       onPointerEnter={handlePointerEnter}
       onPointerLeave={handlePointerLeave}
       // onClick={handleClick}
       >
-        {/* VIDEO BLOCK */}
+        {/* THUMBNAIL BLOCK */}
         <div
           className={cn(
-            `flex flex-col items-center justify-center`,
-            `rounded-xl overflow-hidden`,
-            isCompact ? `w-42 h-[94px]` : `aspect-video`
+            `flex items-center justify-center`,
+            `rounded overflow-hidden`,
+            isTable ? ` flex-col` :
+            isCompact ? ` flex-col w-42 h-42` :
+            ` flex-col aspect-square`
           )}
         >
           <div className={cn(
-            `relative w-full`,
-            isCompact ? `w-42 h-[94px]` : `aspect-video`
+            `relative`,
+            `aspect-square`,
+            isTable ? "w-full h-full" : isCompact ? `w-42 h-42` : ``
           )}>
-            {mediaThumbnailReady && shouldLoadMedia
+            {!isTable && mediaThumbnailReady && shouldLoadMedia
               ? <video
                 // mute the video
                 muted
@@ -109,7 +116,7 @@ export function VideoCard({
                 src={media.assetUrl}
                 className={cn(
                   `w-full h-full`,
-                  `aspect-video`,
+                  `aspect-square`,
                   duration > 0 ? `opacity-100`: 'opacity-0',
                   `transition-all duration-500`,
                   )}
@@ -120,8 +127,7 @@ export function VideoCard({
               src={mediaThumbnail}
               className={cn(
                 `absolute`,
-                `aspect-video`,
-               // `aspect-video object-cover`,
+                `aspect-square object-cover`,
                 `rounded-lg overflow-hidden`,
                 mediaThumbnailReady ? `opacity-100`: 'opacity-0',
                 `hover:opacity-0 w-full h-full top-0 z-30`,
@@ -141,7 +147,7 @@ export function VideoCard({
             />
           </div>
 
-          <div className={cn(
+          {isTable ? null : <div className={cn(
             // `aspect-video`,
             `z-40`,
             `w-full flex flex-row items-end justify-end`
@@ -160,7 +166,7 @@ export function VideoCard({
                 )}
                 >{formatDuration(duration)}</div>
               </div>
-          </div>
+          </div>}
         </div>
 
         {/* TEXT BLOCK */}
@@ -169,7 +175,7 @@ export function VideoCard({
           isCompact ? `w-40 lg:w-44 xl:w-51` : `space-x-4`,
         )}>
           {
-          isCompact ? null
+          isTable || isCompact ? null
           : channelThumbnail ? <div className="flex flex-col">
             <div className="flex w-9 rounded-full overflow-hidden">
               <img
@@ -187,22 +193,26 @@ export function VideoCard({
             />}
           <div className={cn(
             `flex flex-col`,
+            isTable ? `justify-center` :
             isCompact ?  `` : `flex-grow`
           )}>
             <h3 className={cn(
-              `text-zinc-100 font-medium mb-0 line-clamp-2`,
-              isCompact ? `text-2xs md:text-xs lg:text-sm mb-1.5` : `text-base`
+              `text-zinc-100 mb-0 line-clamp-2`,
+              isTable ? `font-normal text-2xs md:text-xs lg:text-sm mb-0.5` : 
+              isCompact ? `font-medium text-2xs md:text-xs lg:text-sm mb-1.5` :
+              `font-medium text-base`
             )}>{media.label}</h3>
             <div className={cn(
               `flex flex-row items-center`,
               `text-neutral-400 font-normal space-x-1`,
+              isTable ? `text-2xs md:text-xs lg:text-sm` :
               isCompact ? `text-3xs md:text-2xs lg:text-xs` : `text-sm`
               )}>
               <div>{media.channel.label}</div>
-              {isCertifiedUser(media.channel.datasetUser) ? <div><RiCheckboxCircleFill className="" /></div> : null}
+              {isCertifiedUser(media.channel.datasetUser) ? <div><RiCheckboxCircleFill className="opacity-40" /></div> : null}
             </div>
             
-            <div className={cn(
+            {isTable ? null : <div className={cn(
               `flex flex-row`,
               `text-neutral-400 font-normal`,
               isCompact ? `text-2xs lg:text-xs` : `text-sm`,
@@ -211,7 +221,7 @@ export function VideoCard({
             <div>{media.numberOfViews} views</div>
             <div className="font-semibold scale-125">·</div>
             <div>{formatTimeAgo(media.updatedAt)}</div>
-            </div>
+            </div>}
           </div>
         </div>
       </div>

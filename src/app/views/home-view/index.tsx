@@ -43,7 +43,7 @@ export function HomeView() {
      `sm:pr-4`
     )}>
       <VideoList
-        videos={publicVideos}
+        items={publicVideos}
         onSelect={handleSelect}
       />
     </div>

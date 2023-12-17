@@ -24,14 +24,16 @@ export async function generateMetadata(
     }
 
     return {
-      title: `${video.label} - AI Tube`,
+      title: `${video.label} - AiTube`,
       metadataBase,
       openGraph: {
-        type: "website",
+        // some cool stuff we could use here:
+        // 'video.tv_show' | 'video.other' | 'video.movie' | 'video.episode';
+        type: "video.other",
         // url: "https://example.com",
         title: video.label || "", // put the video title here
-        description: video.description || "", // put the vide description here
-        siteName: "AI Tube",
+        description: video.description || "", // put the video description here
+        siteName: "AiTube",
         images: [
           `https://huggingface.co/datasets/jbilcke-hf/ai-tube-index/resolve/main/videos/${video.id}.webp`
         ],
@@ -45,14 +47,14 @@ export async function generateMetadata(
     }
   } catch (err) {
     return {
-      title: "AI Tube - 404 Video Not Found",
+      title: "AiTube",
       metadataBase,
       openGraph: {
         type: "website",
         // url: "https://example.com",
-        title: "AI Tube - 404 Not Found", // put the video title here
+        title: "AiTube", // put the video title here
         description: "", // put the vide description here
-        siteName: "AI Tube",
+        siteName: "AiTube",
   
         videos: [],
         images: [],
@@ -63,9 +65,9 @@ export async function generateMetadata(
 
 
 export default async function WatchPage({ searchParams: { v: videoId } }: AppQueryProps) {
-  const video = await getVideo({ videoId, neverThrow: true })
+  const publicVideo = await getVideo({ videoId, neverThrow: true })
   // console.log("WatchPage: --> " + video?.id)
   return (
-    <Main video={video} />
+    <Main publicVideo={publicVideo} />
    )
 }

@@ -24,14 +24,14 @@ export function RecommendedVideos({
         sortBy: "random",
         niceToHaveTags: video.tags,
         ignoreVideoIds: [video.id],
-        maxVideos: 16
+        maxVideos: 16,
       }))
     })
   }, video.tags)
 
   return (
     <VideoList
-      videos={recommendedVideos}
+      items={recommendedVideos}
       layout="vertical"
     />
   )

@@ -71,16 +71,18 @@ export function TopHeader() {
           <div className={cn(
             `flex flex-row items-center justify-start`,
             `transition-all duration-200 ease-in-out`,
-            `cursor-pointer`,
+            // `cursor-pointer`,
              "pt-2 text-3xl space-x-1",
-             "scale-80 ml-1 mb-2",
+             view === "public_music_videos" ? "pl-1" : "",
               pathway.className,
               isNormalSize
               ? "sm:scale-125 sm:ml-4 sm:mb-4" : "sm:scale-100 sm:mb-2"
             )}
+            /*
             onClick={() => {
-              setView("home")
+              setView(view === "public_music_videos" ? "public_music_videos" : "home")
             }}
+            */
             >
             <div className="mr-1">
               <div className={cn(
@@ -94,7 +96,7 @@ export function TopHeader() {
               </div>
             </div>
             <div className="font-semibold">
-              AiTube
+              {view === "public_music_videos" ? "AiTube Music" : "AiTube"}
             </div>
           </div>
         </div>

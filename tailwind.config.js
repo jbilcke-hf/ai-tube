@@ -47,6 +47,8 @@ module.exports = {
         'print': { 'raw': 'print' },
       },
       height: {
+        '6.5': '1.625rem', // 26px
+        7: '1.75rem', // 28px
         17: '4.25rem', // 68px
         18: '4.5rem', // 72px
         19: '4.75rem', // 76px
@@ -57,6 +59,8 @@ module.exports = {
         26: '6.5rem', // 104px
       },
       width: {
+        '6.5': '1.625rem', // 26px
+        7: '1.75rem', // 28px
         17: '4.25rem', // 68px
         18: '4.5rem', // 72px
         19: '4.75rem', // 76px

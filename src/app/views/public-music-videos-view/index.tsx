@@ -6,28 +6,31 @@ import { useStore } from "@/app/state/useStore"
 import { cn } from "@/lib/utils"
 import { VideoInfo } from "@/types"
 import { getVideos } from "@/app/server/actions/ai-tube-hf/getVideos"
-import { VideoList } from "@/app/interface/video-list"
+import { TrackList } from "@/app/interface/track-list"
 
 export function PublicMusicVideosView() {
   const [_isPending, startTransition] = useTransition()
   const setView = useStore(s => s.setView)
-  const setPublicVideos = useStore(s => s.setPublicVideos)
-  const setPublicVideo = useStore(s => s.setPublicVideo)
-  const publicVideos = useStore(s => s.publicVideos)
+  const setPublicTracks = useStore(s => s.setPublicTracks)
+  const setPublicTrack = useStore(s => s.setPublicTrack)
+  const publicTracks = useStore(s => s.publicTracks)
 
   useEffect(() => {
+  
+    /*
     startTransition(async () => {
-      const videos = await getVideos({
+      const newTracks = await getVideos({
         sortBy: "date",
-        mandatoryTags:["music"],
+        mandatoryTags: ["music"],
         maxVideos: 25
       })
 
-      setPublicVideos(videos)
+      setPublicVideos(newTracks)
     })
+    */
   }, [])
 
-  const handleSelect = (video: VideoInfo) => {
+  const handleSelect = (media: VideoInfo) => {
     //
     // setView("public_video")
     // setPublicVideo(video)
@@ -38,9 +41,10 @@ export function PublicMusicVideosView() {
     <div className={cn(
      `sm:pr-4`
     )}>
-      <VideoList
-        videos={publicVideos}
+      <TrackList
+        items={publicTracks}
         onSelect={handleSelect}
+        layout="table"
       />
     </div>
   )

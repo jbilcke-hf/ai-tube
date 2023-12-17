@@ -381,6 +381,13 @@ export type VideoInfo = {
   numberOfLikes: number
 
   /**
+   * Counter for the number of dislikes
+   * 
+   * Note: should be managed by the index to prevent cheating
+   */
+  numberOfDislikes: number
+
+  /**
    * When was the video updated
    */
   updatedAt: string
@@ -632,7 +639,21 @@ export type AppQueryProps = {
   params: { id: string }
   searchParams: {
     v?: string | string[],
+    m?: string | string[],
     c?: string | string[],
     [key: string]: string | string[] | undefined
   }
+}
+
+export type MediaDisplayLayout =
+  | "grid" // default mode, items goas back to the line
+  | "horizontal" // will be used for a "Netflix" horizontal sliding mode
+  | "vertical" // used in the right recommendation panel
+  | "table" // used when shown in a table mode
+
+export type VideoRating = {
+  isLikedByUser: boolean
+  isDislikedByUser: boolean
+  numberOfLikes: number
+  numberOfDislikes: number
 }

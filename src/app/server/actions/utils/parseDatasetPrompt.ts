@@ -27,7 +27,7 @@ export function parseDatasetPrompt(markdown: string, channel: ChannelInfo): Pars
       title: typeof title === "string" && title ? title : "",
       description: typeof description === "string" && description ? description : "",
       tags:
-        tags && typeof tags === "string" ? tags.split("-").map(x => x.trim()).filter(x => x)
+        tags && typeof tags === "string" ? tags.split("- ").map(x => x.trim()).filter(x => x)
         : (channel.tags || []),
       prompt: typeof prompt === "string" && prompt ? prompt : "",
       model: parseVideoModelName(model, channel.model),

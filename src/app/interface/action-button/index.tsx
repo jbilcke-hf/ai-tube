@@ -14,11 +14,13 @@ export const actionButtonClassName = cn(
 export function ActionButton({
   className,
   children,
-  href
+  href,
+  onClick,
 }: {
   className?: string
   children?: ReactNode
   href?: string
+  onClick?: () => void
 }) {
 
   const classNames = cn(
@@ -34,7 +36,11 @@ export function ActionButton({
     )
   }
   return (
-    <div className={classNames}>
+    <div className={classNames} onClick={() => {
+      try {
+        onClick?.()
+    } catch (err) {}
+    }}>
       {children}
     </div>
   )
