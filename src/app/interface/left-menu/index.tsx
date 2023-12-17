@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { TbBrandDiscord } from "react-icons/tb"
 
 import { GrChannel } from "react-icons/gr"
 import { MdVideoLibrary } from "react-icons/md"
@@ -69,6 +70,13 @@ export function LeftMenu() {
           My Videos
         </MenuItem>
       */}
+        <a href="https://discord.gg/Q6mJ2rnDPe" target="_blank">
+          <MenuItem
+            icon={<TbBrandDiscord className="h-6 w-6" />}
+            >
+            Community
+          </MenuItem>
+        </a>
         <Link href="/account">
           <MenuItem
             icon={<CgProfile className="h-6 w-6" />}

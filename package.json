@@ -44,7 +44,7 @@
     "hash-wasm": "^4.11.0",
     "lucide-react": "^0.260.0",
     "markdown-yaml-metadata-parser": "^3.0.0",
-    "next": "^14.0.3",
+    "next": "^14.0.4",
     "pick": "^0.0.1",
     "postcss": "8.4.26",
     "qs": "^6.11.2",
