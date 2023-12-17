@@ -39,7 +39,7 @@ export function ReportModal({
         </DialogHeader>
 
         <div className="flex flex-col w-full space-y-4">
-          <p className="text-sm">If you believe there is an issue with the prompt, you can ask the author to remove it or change its prompt, by creating a pull request explaining why:</p>
+          <p className="text-sm">If you believe there is an issue with a content, you can ask the author to remove it, by creating a pull request explaining why:</p>
 
           <div className="flex flex-row py-2">
             {video && video.id ? <ActionButton
@@ -53,13 +53,17 @@ export function ReportModal({
                 }.md`
                   }
                 >
-                <span>Request author for prompt removal</span>
+                <span>Request author for content removal</span>
               </ActionButton>
             : null}
           </div>
 
           <p className="text-sm">
-            If the prompt is in violation of <a href="https://huggingface.co/content-guidelines" target="_blank">our content guidelines</a>,
+            Note: it may take some time for the AiTube robot to synchronize and delete the video.
+          </p>
+
+          <p className="text-sm">
+            If the content is in violation of <a href="https://huggingface.co/content-guidelines" target="_blank">our content guidelines</a>,
             you can flag the channel from the Hugging Face dataset page:
           </p>
 
