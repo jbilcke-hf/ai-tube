@@ -87,10 +87,10 @@ export async function getVideoRating(videoId: string, apiKey?: string): Promise<
       const credentials = { accessToken: apiKey }
       
       const user = await whoAmI({ credentials }) as unknown as WhoAmIUser
-      const isLiked = await redis.get(`users:${user.id}:tastes:videos:${videoId}`)
+      const isLiked = await redis.get<boolean>(`users:${user.id}:activity:videos:${videoId}:liked`)
       if (isLiked !== null) {
-        isLikedByUser = Boolean(isLiked)
-        isDislikedByUser = !isLikedByUser
+        isLikedByUser = !!isLiked
+        isDislikedByUser = !isLiked
       }
     } catch (err) {
       console.error("failed to get user like status")
