@@ -117,6 +117,17 @@ export async function rateVideo(videoId: string, liked: boolean, apiKey: string)
   const user = await whoAmI({ credentials }) as unknown as WhoAmIUser
 
   const hasLiked = await redis.get<boolean>(`users:${user.id}:activity:videos:${videoId}:liked`)
+  
+  const hasAlreadyRatedTheSame =  hasLiked !== null && liked === hasLiked
+
+  if (hasAlreadyRatedTheSame) {
+    return {
+      numberOfLikes: await redis.get(`videos:${videoId}:stats:likes`) || 0,
+      numberOfDislikes: await redis.get(`videos:${videoId}:stats:likes`) || 0,
+      isLikedByUser: liked,
+      isDislikedByUser: !liked
+    }
+  }
   const hasAlreadyRatedAndDifferently = hasLiked !== null && liked !== hasLiked
 
   await redis.set(`users:${user.id}:activity:videos:${videoId}:liked`, liked)
