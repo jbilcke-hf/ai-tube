@@ -32,6 +32,8 @@ export function GenericLikeButton({
   numberOfDislikes?: number
 }) {
 
+  const hasAlreadyVoted = isLikedByUser || isDislikedByUser
+
   const classNames = cn(
     likeButtonClassName,
     className,
@@ -48,7 +50,7 @@ export function GenericLikeButton({
         )}
         onClick={() => {
           try {
-            onLike?.()
+            if (!isLikedByUser) onLike?.()
           } catch (err) {
 
           }}}
@@ -66,7 +68,7 @@ export function GenericLikeButton({
       )}
       onClick={() => {
         try {
-          onDislike?.()
+          if (!isDislikedByUser) onDislike?.()
         } catch (err) {
 
         }}}
