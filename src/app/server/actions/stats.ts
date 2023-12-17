@@ -123,7 +123,7 @@ export async function rateVideo(videoId: string, liked: boolean, apiKey: string)
   if (hasAlreadyRatedTheSame) {
     return {
       numberOfLikes: await redis.get(`videos:${videoId}:stats:likes`) || 0,
-      numberOfDislikes: await redis.get(`videos:${videoId}:stats:likes`) || 0,
+      numberOfDislikes: await redis.get(`videos:${videoId}:stats:dislikes`) || 0,
       isLikedByUser: liked,
       isDislikedByUser: !liked
     }
