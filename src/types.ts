@@ -650,6 +650,7 @@ export type MediaDisplayLayout =
   | "horizontal" // will be used for a "Netflix" horizontal sliding mode
   | "vertical" // used in the right recommendation panel
   | "table" // used when shown in a table mode
+  | "micro"
 
 export type VideoRating = {
   isLikedByUser: boolean

@@ -4,6 +4,8 @@ import { VideoInfo } from "@/types"
 
 import { getVideoIndex } from "./getVideoIndex"
 import { extendVideosWithStats } from "./extendVideosWithStats"
+import { isHighQuality } from "../utils/isHighQuality"
+import { isAntisocial } from "../utils/isAntisocial"
 
 const HARD_LIMIT = 100
 
@@ -41,9 +43,12 @@ export async function getVideos({
       renewCache: true
     })
 
-
     let allPotentiallyValidVideos = Object.values(published)
     
+    if (ignoreVideoIds.length) {
+      allPotentiallyValidVideos = allPotentiallyValidVideos.filter(video => !ignoreVideoIds.includes(video.id))
+    }
+
     if (ignoreVideoIds.length) {
       allPotentiallyValidVideos = allPotentiallyValidVideos.filter(video => !ignoreVideoIds.includes(video.id))
     }
@@ -92,16 +97,22 @@ export async function getVideos({
         ]
       }
     }
-    
 
+    const sanitizedVideos = videosMatchingFilters.filter(v => !isAntisocial(v))
+        
     // we enforce the max limit of HARD_LIMIT (eg. 100)
-    const cappedVideos = videosMatchingFilters.slice(0, Math.min(HARD_LIMIT, maxVideos))
+    const limitedNumberOfVideos = sanitizedVideos.slice(0, Math.min(HARD_LIMIT, maxVideos))
 
+    // we ask Redis for the freshest stats
+    const videosWithStats = await extendVideosWithStats(limitedNumberOfVideos)
 
-    // finally, we ask Redis for the freshest stats
-    const videosWithStats = await extendVideosWithStats(cappedVideos)
-
-    return videosWithStats
+    const highQuality = videosWithStats.filter(v => isHighQuality(v))
+    const lowQuality = videosWithStats.filter(v => !isHighQuality(v))
+ 
+    return [
+      ...highQuality,
+      ...lowQuality
+    ]
   } catch (err) {
     if (neverThrow) {
       console.error("failed to get videos:", err)

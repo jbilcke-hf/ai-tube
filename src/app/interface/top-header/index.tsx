@@ -116,7 +116,7 @@ export function TopHeader() {
         </div>
       </div>
       {
-      isNormalSize ? 
+      isNormalSize && view !== "public_music_videos"  ? 
       <div className={cn(
         `hidden sm:flex flex-row space-x-3`,
         `text-[13px] font-semibold`,

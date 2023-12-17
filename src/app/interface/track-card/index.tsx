@@ -36,6 +36,7 @@ export function TrackCard({
   const [shouldLoadMedia, setShouldLoadMedia] = useState(false)
 
   const isTable = layout === "table"
+  const isMicro = layout === "micro"
   const isCompact = layout === "vertical"
 
   const handlePointerEnter = () => {
@@ -77,12 +78,14 @@ export function TrackCard({
     <div
       className={cn(
         `w-full flex`,
-        isTable ? `flex-row h-14 space-x-2 px-2 py-2 rounded-lg` :
+        isTable ? `flex-row h-16 space-x-4 px-2 py-2 rounded-lg` :
         isCompact ? `flex-row h-24 py-1 space-x-2` :
         `flex-col space-y-3`,
         `bg-line-900`,
         `cursor-pointer`,
-        index % 2 ? "bg-neutral-800/40" : "",
+        (isTable || isMicro) ? (
+          (index % 2) ? "bg-neutral-800/40 hover:bg-neutral-800/70" : "hover:bg-neutral-800/70"
+        ) : "",
         className,
       )}
       onPointerEnter={handlePointerEnter}
@@ -94,7 +97,8 @@ export function TrackCard({
           className={cn(
             `flex items-center justify-center`,
             `rounded overflow-hidden`,
-            isTable ? ` flex-col` :
+            isTable ? `flex-col` :
+            isMicro ? `flex-col` :
             isCompact ? ` flex-col w-42 h-42` :
             ` flex-col aspect-square`
           )}
@@ -172,6 +176,10 @@ export function TrackCard({
         {/* TEXT BLOCK */}
         <div className={cn(
           `flex flex-row`,
+
+
+          isTable ? `w-full` :
+
           isCompact ? `w-40 lg:w-44 xl:w-51` : `space-x-4`,
         )}>
           {
@@ -192,13 +200,15 @@ export function TrackCard({
               roundShape
             />}
           <div className={cn(
-            `flex flex-col`,
-            isTable ? `justify-center` :
-            isCompact ?  `` : `flex-grow`
+            `flex`,
+            isMicro ? ` flex-col justify-center` :
+            isTable ? `w-full flex-col md:flex-row justify-center md:justify-start items-start md:items-center` :
+            isCompact ?  `flex-col` : `flex-col flex-grow`
           )}>
             <h3 className={cn(
               `text-zinc-100 mb-0 line-clamp-2`,
-              isTable ? `font-normal text-2xs md:text-xs lg:text-sm mb-0.5` : 
+              isMicro ? `font-normal text-2xs md:text-xs lg:text-sm mb-0.5` : 
+              isTable ? `w-[30%] font-normal text-xs md:text-sm lg:text-base mb-0.5` : 
               isCompact ? `font-medium text-2xs md:text-xs lg:text-sm mb-1.5` :
               `font-medium text-base`
             )}>{media.label}</h3>
@@ -222,6 +232,14 @@ export function TrackCard({
             <div className="font-semibold scale-125">·</div>
             <div>{formatTimeAgo(media.updatedAt)}</div>
             </div>}
+
+            {/*
+            {isTable ? <div className={cn(
+              `hidden md:flex flex-row flex-grow`,
+              `text-zinc-100 mb-0 line-clamp-2`,
+              `w-[30%] font-normal text-xs md:text-sm lg:text-base mb-0.5` 
+            )}>{media.duration}</div> : null}
+            */}
           </div>
         </div>
       </div>

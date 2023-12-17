@@ -13,29 +13,38 @@ const redis = new Redis({
   token: redisToken
 })
 
-export async function getNumberOfViewsForVideos(videoIds: string[]): Promise<Record<string, number>> {
+export async function getStatsForVideos(videoIds: string[]): Promise<Record<string, { numberOfViews: number; numberOfLikes: number; numberOfDislikes: number}>> {
   if (!Array.isArray(videoIds)) {
     return {}
   }
 
   try {
     
-    const stats: Record<string, number> = {}
+    const stats: Record<string, { numberOfViews: number; numberOfLikes: number; numberOfDislikes: number; }> = {}
 
-    const ids: string[] = []
+    const listOfRedisIDs: string[] = []
 
     for (const videoId of videoIds) {
-      ids.push(`videos:${videoId}:stats:views`)
-      stats[videoId] = 0
+      listOfRedisIDs.push(`videos:${videoId}:stats:views`)
+      listOfRedisIDs.push(`videos:${videoId}:stats:likes`)
+      listOfRedisIDs.push(`videos:${videoId}:stats:dislikes`)
+      stats[videoId] = {
+        numberOfViews: 0,
+        numberOfLikes: 0,
+        numberOfDislikes: 0,
+      }
     }
 
-    const values = await redis.mget<number[]>(...ids)
+    const listOfRedisValues = await redis.mget<number[]>(...listOfRedisIDs)
 
-    values.forEach((nbViews, i) => {
-      const redisId = `${ids[i] || ""}`
-      const videoId = redisId.replace(":stats:views", "").replace("videos:", "")
-      stats[videoId] = nbViews || 0
-    })
+    let v = 0
+    for (let i = 0; i < listOfRedisValues.length; i += 3) {
+      stats[videoIds[v++]] = {
+        numberOfViews: listOfRedisValues[i] || 0,
+        numberOfLikes: listOfRedisValues[i + 1] || 0,
+        numberOfDislikes: listOfRedisValues[i + 2] || 0
+      }
+    }
 
     return stats
   } catch (err) {
@@ -43,22 +52,11 @@ export async function getNumberOfViewsForVideos(videoIds: string[]): Promise<Rec
   }
 }
 
-export async function getNumberOfViewsForVideo(videoId: string): Promise<number> {
-  try {
-    const key = `videos:${videoId}:stats`
-
-    const result = await redis.get<number>(key) || 0
-
-    return result
-  } catch (err) {
-    return 0
-  }
-}
-
-
 export async function watchVideo(videoId: string): Promise<number> {
   if (developerMode) {
-    return getNumberOfViewsForVideo(videoId)
+    const stats = await getStatsForVideos([videoId])
+
+    return stats[videoId].numberOfViews
   }
 
   try {

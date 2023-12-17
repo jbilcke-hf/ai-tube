@@ -41,31 +41,42 @@ export function LikeButton({
   if (!huggingfaceApiKey) { return null }
 
   const handleLike = huggingfaceApiKey ? () => {
-    // we use premeptive update
+    // we use optimistic updates
+    const previousRating = { ...rating }
     setRating({
       ...rating,
       isLikedByUser: true,
       isDislikedByUser: false,
-      numberOfLikes: rating.numberOfLikes + 1,
-      numberOfDislikes: rating.numberOfDislikes - 1,
+      numberOfLikes:  Math.abs(Math.max(0, rating.numberOfLikes + 1)),
+      numberOfDislikes:  Math.abs(Math.max(0, rating.numberOfDislikes - 1)),
     })
     startTransition(async () => {
-      const freshRating = await rateVideo(video.id, true, huggingfaceApiKey)
-      setRating(freshRating)
+      try {
+        const freshRating = await rateVideo(video.id, true, huggingfaceApiKey)
+        // setRating(freshRating)
+      } catch (err) {
+        setRating(previousRating)
+      }
     })
   } : undefined
 
   const handleDislike = huggingfaceApiKey ? () => {
+    // we use optimistic updates
+    const previousRating = { ...rating }
     setRating({
       ...rating,
       isLikedByUser: false,
       isDislikedByUser: true,
-      numberOfLikes: rating.numberOfLikes - 1,
-      numberOfDislikes: rating.numberOfDislikes + 1,
+      numberOfLikes: Math.abs(Math.max(0, rating.numberOfLikes - 1)),
+      numberOfDislikes: Math.abs(Math.max(0, rating.numberOfDislikes + 1)),
     })
     startTransition(async () => {
-      const freshRating = await rateVideo(video.id, false, huggingfaceApiKey)
-      setRating(freshRating)
+      try {
+        const freshRating = await rateVideo(video.id, false, huggingfaceApiKey)
+        // setRating(freshRating)
+      } catch (err) {
+        setRating(previousRating)
+      }
     })
   } : undefined
 

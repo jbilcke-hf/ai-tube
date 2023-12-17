@@ -1,14 +1,24 @@
 "use server"
 
 import { VideoInfo } from "@/types"
-import { getNumberOfViewsForVideos } from "../stats"
+
+import { getStatsForVideos } from "../stats"
 
 export async function extendVideosWithStats(videos: VideoInfo[]): Promise<VideoInfo[]> {
   
-  const stats = await getNumberOfViewsForVideos(videos.map(v => v.id))
+  const allStats = await getStatsForVideos(videos.map(v => v.id))
 
   return videos.map(v => {
-    v.numberOfViews = stats[v.id] || 0
+    const stats = allStats[v.id] || {
+      numberOfViews: 0,
+      numberOfLikes: 0,
+      numberOfDislikes: 0
+    }
+
+    v.numberOfViews = stats.numberOfViews
+    v.numberOfLikes = stats.numberOfLikes
+    v.numberOfDislikes = stats.numberOfDislikes
+
     return v
   })
 }

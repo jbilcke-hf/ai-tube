@@ -56,7 +56,7 @@ export function GenericLikeButton({
         <div>{
           isLikedByUser ? <RiThumbUpFill /> :  <RiThumbUpLine />
         }</div>
-        <div>{numberOfLikes}</div>
+        <div>{Math.max(0, numberOfLikes)}</div>
       </div>
       <div className={cn(
         `flex flex-row items-center justify-center`,
@@ -74,7 +74,7 @@ export function GenericLikeButton({
         <div>{
           isDislikedByUser ? <RiThumbDownFill /> :  <RiThumbDownLine />
         }</div>
-        <div>{numberOfDislikes}</div>
+        <div>{Math.max(0, numberOfDislikes0}</div>
       </div>
     </div>
   )
