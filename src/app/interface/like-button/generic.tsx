@@ -74,7 +74,7 @@ export function GenericLikeButton({
         <div>{
           isDislikedByUser ? <RiThumbDownFill /> :  <RiThumbDownLine />
         }</div>
-        <div>{Math.max(0, numberOfDislikes0}</div>
+        <div>{Math.max(0, numberOfDislikes)}</div>
       </div>
     </div>
   )
