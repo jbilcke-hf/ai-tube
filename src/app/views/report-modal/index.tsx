@@ -38,7 +38,7 @@ export function ReportModal({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="flex flex-col w-full space-y-4">
+        <div className="flex flex-col w-full space-y-3">
           <p className="text-sm">If you believe there is an issue with a content, you can ask the author to remove it, by creating a pull request explaining why:</p>
 
           <div className="flex flex-row py-2">
