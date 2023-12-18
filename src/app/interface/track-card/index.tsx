@@ -11,6 +11,7 @@ import { formatTimeAgo } from "@/lib/formatTimeAgo"
 import { isCertifiedUser } from "@/app/certification"
 import { transparentImage } from "@/lib/transparentImage"
 import { DefaultAvatar } from "../default-avatar"
+import { formatLargeNumber } from "@/lib/formatLargeNumber"
 
 export function TrackCard({
   media,
@@ -228,7 +229,7 @@ export function TrackCard({
               isCompact ? `text-2xs lg:text-xs` : `text-sm`,
               `space-x-1`
             )}>
-            <div>{media.numberOfViews} views</div>
+            <div>{formatLargeNumber(media.numberOfViews)} views</div>
             <div className="font-semibold scale-125">·</div>
             <div>{formatTimeAgo(media.updatedAt)}</div>
             </div>}

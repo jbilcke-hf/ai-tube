@@ -4,6 +4,7 @@ import { RiThumbDownLine } from "react-icons/ri"
 import { RiThumbDownFill } from "react-icons/ri"
 
 import { cn } from "@/lib/utils"
+import { formatLargeNumber } from "@/lib/formatLargeNumber"
 
 export const likeButtonClassName = cn(
   `flex flex-row`,
@@ -58,7 +59,7 @@ export function GenericLikeButton({
         <div>{
           isLikedByUser ? <RiThumbUpFill /> :  <RiThumbUpLine />
         }</div>
-        <div>{Math.max(0, numberOfLikes)}</div>
+        <div>{formatLargeNumber(Math.max(0, numberOfLikes))}</div>
       </div>
       <div className={cn(
         `flex flex-row items-center justify-center`,
@@ -76,7 +77,7 @@ export function GenericLikeButton({
         <div>{
           isDislikedByUser ? <RiThumbDownFill /> :  <RiThumbDownLine />
         }</div>
-        <div>{Math.max(0, numberOfDislikes)}</div>
+        <div>{formatLargeNumber(Math.max(0, numberOfDislikes))}</div>
       </div>
     </div>
   )

@@ -13,6 +13,7 @@ const pathway = Pathway_Gothic_One({
 import { useStore } from "@/app/state/useStore"
 import { cn } from "@/lib/utils"
 import { getTags } from '@/app/server/actions/ai-tube-hf/getTags'
+import Link from 'next/link'
 
 export function TopHeader() {
   const [_pending, startTransition] = useTransition()
@@ -95,9 +96,11 @@ export function TopHeader() {
                 )} />
               </div>
             </div>
-            <div className="font-semibold">
-              {view === "public_music_videos" ? "AiTube Music" : "AiTube"}
-            </div>
+            <Link href="/">
+              <div className="font-semibold">
+                {view === "public_music_videos" ? "AiTube Music" : "AiTube"}
+              </div>
+            </Link>
           </div>
         </div>
         <div className={cn(

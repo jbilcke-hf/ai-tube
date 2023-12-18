@@ -21,6 +21,7 @@ import { DefaultAvatar } from "@/app/interface/default-avatar"
 import { LikeButton } from "@/app/interface/like-button"
 
 import { ReportModal } from "../report-modal"
+import { formatLargeNumber } from "@/lib/formatLargeNumber"
 
 export function PublicVideoView() {
   const [_pending, startTransition] = useTransition()
@@ -188,7 +189,10 @@ export function PublicVideoView() {
                 `flex flex-row items-center`,
                 `text-neutral-400 text-xs font-normal space-x-1`,
                 )}>
-                <div>0 followers</div>
+                <div>{
+                  // TODO implement the follower system
+                  formatLargeNumber(0)
+                } followers</div>
                 <div></div>
               </div>
             </a>
@@ -271,7 +275,7 @@ export function PublicVideoView() {
           `text-sm text-zinc-100`,
         )}>
           <div className="flex flex-row space-x-2 font-medium mb-1">
-            <div>{video.numberOfViews} views</div>
+            <div>{formatLargeNumber(video.numberOfViews)} views</div>
             <div>{formatTimeAgo(video.updatedAt).replace("about ", "")}</div>
           </div>
           <p>{video.description}</p>

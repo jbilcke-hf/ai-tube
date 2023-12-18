@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils"
 import { ChannelInfo } from "@/types"
 import { isCertifiedUser } from "@/app/certification"
 import { DefaultAvatar } from "../default-avatar"
+import { formatLargeNumber } from "@/lib/formatLargeNumber"
 
 export function ChannelCard({
   channel,
@@ -103,9 +104,9 @@ export function ChannelCard({
             {isCertifiedUser(channel.datasetUser) ? <div className="text-xs text-neutral-400"><RiCheckboxCircleFill className="" /></div> : null}
           </div>}
           {!isCreateButton && <div className="flex flex-row items-center justify-center text-neutral-400">
-            <div className="text-center text-xs">{0} videos</div>
+            <div className="text-center text-xs">{formatLargeNumber(0)} videos</div>
             <div className="px-1">-</div>
-            <div className="text-center text-xs">{channel.likes} likes</div>
+            <div className="text-center text-xs">{formatLargeNumber(channel.likes)} likes</div>
           </div>}
         </div>
       </div>
