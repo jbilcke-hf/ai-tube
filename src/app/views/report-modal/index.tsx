@@ -31,10 +31,10 @@ export function ReportModal({
           <span>Report</span>
         </ActionButton>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[512px] text-zinc-200">
+      <DialogContent className="sm:max-w-[512px] text-zinc-200 overflow-y-scroll">
         <DialogHeader>
           <DialogDescription className="w-full text-center text-lg font-normal text-stone-300">
-            Report an issue with the video
+            Report an issue with the content
           </DialogDescription>
         </DialogHeader>
 
@@ -97,7 +97,7 @@ export function ReportModal({
           </div>
 
           <div className="flex flex-col items-center justify-center">
-            <img src="/report.jpg" className="rounded w-[300px]" />
+            <img src="/report.jpg" className="rounded w-[280px]" />
           </div>
 
             <p className="text-sm">
