@@ -29,7 +29,7 @@ export function TubeLayout({ children }: { children?: ReactNode }) {
         <TopHeader />
         <main className={cn(
           `w-full overflow-x-hidden overflow-y-scroll`,
-          `h-[calc(100%-200px)]`,
+          `h-[calc(100%-116px)]`,
           headerMode === "normal"
             ? `sm:h-[calc(100vh-112px)]`
             : `sm:h-[calc(100vh-48px)]`
