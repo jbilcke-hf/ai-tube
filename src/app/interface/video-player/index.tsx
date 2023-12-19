@@ -5,16 +5,32 @@ import "react-tuby/css/main.css"
 
 import { cn } from "@/lib/utils"
 import { VideoInfo } from "@/types"
+import { MutableRefObject, useEffect, useRef } from "react"
+import { isValidNumber } from "@/app/server/actions/utils/isValidNumber"
 
 export function VideoPlayer({
   video,
   enableShortcuts = true,
-  className = ""
+  className = "",
+  // currentTime,
  }: {
   video?: VideoInfo
   enableShortcuts?: boolean
   className?: string
+  // currentTime?: number
 }) {
+
+  /*
+  const ref = useRef(null)
+
+  useEffect(() => {
+    if (!ref.current) { return }
+    if (!isValidNumber(currentTime)) { return }
+    
+    (ref.current as any).currentTime = currentTime 
+    // $(".tuby-container video").currentTime = 2
+  }, [currentTime])
+  */
 
   // TODO: keep the same form factor?
   if (!video) { return null }
@@ -33,6 +49,8 @@ export function VideoPlayer({
         )}>
         <Player
         
+          // playerRef={ref}
+
           src={[
             {
               quality: "Full HD",

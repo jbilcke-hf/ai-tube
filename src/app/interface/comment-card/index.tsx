@@ -3,6 +3,7 @@ import { CommentInfo } from "@/types"
 import { useEffect, useState } from "react"
 import { DefaultAvatar } from "../default-avatar"
 import { formatTimeAgo } from "@/lib/formatTimeAgo"
+import { CommentWithTimeSeeks } from "./time-seeker"
 
 export function CommentCard({
   comment,
@@ -33,7 +34,6 @@ export function CommentCard({
       
     }
   }
-
 
   return (
     <div className={cn(
@@ -77,14 +77,26 @@ export function CommentCard({
             <div className="text-xs font-medium text-zinc-100">@{comment?.userInfo?.userName}</div>
             <div className="text-xs font-medium text-neutral-400">{formatTimeAgo(comment.updatedAt)}</div>
           </div>
-          <p className={cn(
-            `text-sm font-normal`,
-            `shrink`,
-            `overflow-hidden break-words`,
-            isExpanded ? `` : `line-clamp-4`
-          )}>{
-           comment.message
-          }</p>
+          <CommentWithTimeSeeks
+            className={cn(
+              `text-sm font-normal`,
+              `shrink`,
+              `overflow-hidden break-words`,
+              isExpanded ? `` : `line-clamp-4`
+            )}
+            linkClassName="font-medium text-neutral-400 cursor-pointer hover:underline"
+            onSeek={(timeInSec) => {
+              try {
+                const videoElement: HTMLVideoElement | undefined = (document.getElementsByClassName("tuby-container")?.[0]?.children?.[0] as any)
+                if (videoElement) {
+                  videoElement.currentTime = timeInSec
+                }
+              } catch (err) {
+                // 
+              }
+            }}>{
+            comment.message
+          }</CommentWithTimeSeeks>
           {isLongContent && 
             <div className={cn(
             `flex`,

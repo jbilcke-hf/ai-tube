@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, useTransition } from "react"
+import { useEffect, useRef, useState, useTransition } from "react"
 import { RiCheckboxCircleFill } from "react-icons/ri"
 import { PiShareFatLight } from "react-icons/pi"
 import CopyToClipboard from "react-copy-to-clipboard"
@@ -37,9 +37,14 @@ export function PublicVideoView() {
   const [isCommenting, setCommenting] = useState(false)
   const [isFocusedOnInput, setFocusedOnInput] = useState(false)
 
+  // current time in the video
+  // note: this is used to *set* the current time, not to read it
+  // EDIT: you know what, let's do this the dirty way for now
+  // const [desiredCurrentTime, setDesiredCurrentTime] = useState()
+
   const currentUser = useCurrentUser()
 
- const [userThumbnail, setUserThumbnail] = useState("")
+  const [userThumbnail, setUserThumbnail] = useState("")
   
   useEffect(() => {
     setUserThumbnail(currentUser?.thumbnail || "")
@@ -51,6 +56,7 @@ export function PublicVideoView() {
       setUserThumbnail("")
     }
   }
+
 
   const video = useStore(s => s.publicVideo)
 
@@ -166,6 +172,10 @@ export function PublicVideoView() {
         <VideoPlayer
           video={video}
           enableShortcuts={!isFocusedOnInput}
+
+          // that could be, but let's do it the dirty way for now
+          // currentTime={desiredCurrentTime}
+
           className="mb-4"
         />
 
