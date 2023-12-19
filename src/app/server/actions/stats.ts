@@ -1,17 +1,9 @@
 "use server"
 
-import { Redis } from "@upstash/redis"
-
 import { developerMode } from "@/app/config"
 import { WhoAmIUser, whoAmI } from "@/huggingface/hub/src"
-
-import { redisToken, redisUrl } from "./config"
 import { VideoRating } from "@/types"
-
-const redis = new Redis({
-  url: redisUrl,
-  token: redisToken
-})
+import { redis } from "./redis";
 
 export async function getStatsForVideos(videoIds: string[]): Promise<Record<string, { numberOfViews: number; numberOfLikes: number; numberOfDislikes: number}>> {
   if (!Array.isArray(videoIds)) {

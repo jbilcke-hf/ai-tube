@@ -506,32 +506,31 @@ export type CollectionInfo = {
   items: Array<VideoInfo>[]
 }
 
-export type PublicUserInfo = {
+export type UserInfo = {
   id: string
 
-  type: "normal" | "admin"
+  type: "creator" | "normal" | "admin"
 
   userName: string
 
-  firstName: string
-
-  lastName: string
-
+  fullName: string
+  
   thumbnail: string
 
   channels: ChannelInfo[]
+
+  // the Hugging Face API token is confidential,
+  // and will only be available for the current user
+  hfApiToken?: string
 }
 
-export type PrivateUserInfo = PublicUserInfo & {
-
-  // the Hugging Face API token is confidential!
-  hfApiToken: string
-}
-
-export type VideoComment = {
+export type CommentInfo = {
   id: string
   
-  user: PublicUserInfo
+  userId: string
+
+  // only populated when rendering
+  userInfo?: UserInfo
 
   // if the video comment is in response to another comment,
   // then "inReplyTo" will contain the other video comment id
@@ -542,11 +541,16 @@ export type VideoComment = {
   message: string
 
   // how many likes did the comment receive
-  nbLikes: number
+  numberOfLikes: number
 
-  // if the comment was appreciated by the video owner
-  appreciated: number
+  // how many replies did the comment receive
+  numberOfReplies: number
+
+  // if the comment was appreciated by the original content poster
+  likedByOriginalPoster: boolean
 }
+
+export type StoredCommentInfo = Omit<CommentInfo, "userInfo">
 
 export type VideoGenerationModel =
   | "HotshotXL"

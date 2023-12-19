@@ -8,9 +8,11 @@ import { VideoInfo } from "@/types"
 
 export function VideoPlayer({
   video,
+  enableShortcuts = true,
   className = ""
  }: {
   video?: VideoInfo
+  enableShortcuts?: boolean
   className?: string
 }) {
 
@@ -37,6 +39,9 @@ export function VideoPlayer({
               url: video.assetUrl,
             }
           ]}
+
+          keyboardShortcut={enableShortcuts}
+
           subtitles={[]}
           // poster="https://cdn.jsdelivr.net/gh/naptestdev/video-examples@master/poster.png"
         />

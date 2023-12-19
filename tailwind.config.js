@@ -46,6 +46,9 @@ module.exports = {
       screens: {
         'print': { 'raw': 'print' },
       },
+      spacing: {
+        '13': '3.25rem', // 52px
+      },
       height: {
         '6.5': '1.625rem', // 26px
         7: '1.75rem', // 28px

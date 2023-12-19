@@ -2,7 +2,7 @@
 
 import { create } from "zustand"
 
-import { ChannelInfo, VideoInfo, InterfaceDisplayMode, InterfaceView, InterfaceMenuMode, InterfaceHeaderMode } from "@/types"
+import { ChannelInfo, VideoInfo, InterfaceDisplayMode, InterfaceView, InterfaceMenuMode, InterfaceHeaderMode, CommentInfo, UserInfo } from "@/types"
 
 export const useStore = create<{
   displayMode: InterfaceDisplayMode
@@ -17,7 +17,10 @@ export const useStore = create<{
   view: InterfaceView
   setView: (view?: InterfaceView) => void
 
-  setPathname: (patname: string) => void
+  setPathname: (pathname: string) => void
+
+  currentUser?: UserInfo
+  setCurrentUser: (currentUser?: UserInfo) => void
 
   publicChannel?: ChannelInfo
   setPublicChannel: (setPublicChannel?: ChannelInfo) => void
@@ -45,6 +48,9 @@ export const useStore = create<{
 
   publicVideo?: VideoInfo
   setPublicVideo: (publicVideo?: VideoInfo) => void
+
+  publicComments: CommentInfo[]
+  setPublicComments: (publicComment: CommentInfo[]) => void
 
   publicVideos: VideoInfo[]
   setPublicVideos: (publicVideos: VideoInfo[]) => void
@@ -95,6 +101,11 @@ export const useStore = create<{
     set({ view: routes[pathname] || "not_found" })
   },
 
+  currentUser: undefined,
+  setCurrentUser: (currentUser?: UserInfo) => {
+    set({ currentUser })
+  },
+  
   headerMode: "normal",
   setHeaderMode: (headerMode: InterfaceHeaderMode) => {
     set({ headerMode })
@@ -152,6 +163,11 @@ export const useStore = create<{
   publicVideo: undefined,
   setPublicVideo: (publicVideo?: VideoInfo) => {
     set({ publicVideo })
+  },
+
+  publicComments: [],
+  setPublicComments: (publicComments: CommentInfo[]) => {
+    set({ publicComments })
   },
 
   publicVideos: [],

@@ -1,22 +1,26 @@
 import { cn } from "@/lib/utils"
-import { VideoComment } from "@/types"
+import { CommentInfo } from "@/types"
 import { useEffect, useState } from "react"
 import { DefaultAvatar } from "../default-avatar"
+import { formatTimeAgo } from "@/lib/formatTimeAgo"
 
 export function CommentCard({
   comment,
   replies = []
 }: {
-  comment?: VideoComment,
-  replies: VideoComment[]
+  comment?: CommentInfo,
+  replies: CommentInfo[]
 }) {
 
-  const [userThumbnail, setUserThumbnail] = useState(comment?.user?.thumbnail || "")
+  const isLongContent = (comment?.message.length || 0) > 370
+
+  const [userThumbnail, setUserThumbnail] = useState(comment?.userInfo?.thumbnail || "")
+  const [isExpanded, setExpanded] = useState(false)
 
   useEffect(() => {
-    setUserThumbnail(comment?.user?.thumbnail || "")
+    setUserThumbnail(comment?.userInfo?.thumbnail || "")
   
-  }, [comment?.user?.thumbnail])
+  }, [comment?.userInfo?.thumbnail])
 
   if (!comment) { return null }
 
@@ -33,33 +37,67 @@ export function CommentCard({
 
   return (
     <div className={cn(
-      `flex flex-col`,
+      `flex flex-col w-full`,
 
     )}>
       {/* THE COMMENT INFO - HORIZONTAL */}
       <div className={cn(
-      `flex flex-col`,
+      `flex flex-row w-full`,
+      // `space-x-3`
 
       )}>
-          <div
+        <div 
+        // className="flex flex-col w-10 pr-13 overflow-hidden"
+         className="flex flex-none flex-col w-10 pr-13 overflow-hidden">
+        {
+            userThumbnail ? 
+              <div className="flex w-9 rounded-full overflow-hidden">
+                <img
+                  src={userThumbnail}
+                  onError={handleBadUserThumbnail}
+                />
+            </div>
+            : <DefaultAvatar
+                username={comment?.userInfo?.userName}
+                bgColor="#fde047"
+                textColor="#1c1917"
+                width={36}
+                roundShape
+              />}
+        </div>
+
+        {/* USER INFO AND ACTUAL MESSAGE */}
+        <div
           className={cn(
-            `flex flex-col items-center justify-center`,
-            `rounded-full overflow-hidden`,
-            `w-26 h-26`
+            `flex flex-col items-start justify-center`,
+            `space-y-1.5`,
           )}
         >
-         {comment.user.thumbnail
-          ? <img
-              src={comment.user.thumbnail}
-              onError={handleBadUserThumbnail}
-            />
-          : <DefaultAvatar
-              username={comment.user.userName}
-              bgColor="#fde047"
-              textColor="#1c1917"
-              width={104}
-              roundShape
-            />}
+          <div className="flex flex-row space-x-3">
+            <div className="text-xs font-medium text-zinc-100">@{comment?.userInfo?.userName}</div>
+            <div className="text-xs font-medium text-neutral-400">{formatTimeAgo(comment.updatedAt)}</div>
+          </div>
+          <p className={cn(
+            `text-sm font-normal`,
+            `shrink`,
+            `overflow-hidden break-words`,
+            isExpanded ? `` : `line-clamp-4`
+          )}>{
+           comment.message
+          }</p>
+          {isLongContent && 
+            <div className={cn(
+            `flex`,
+            `text-sm font-medium text-neutral-400`,
+            `cursor-pointer`,
+            `hover:underline`
+            )}
+            onClick={() => {
+              setExpanded(!isExpanded)
+            }}
+            >
+              {isExpanded ? 'Read less' : 'Read more'}
+            </div>}
         </div>
       </div>
 

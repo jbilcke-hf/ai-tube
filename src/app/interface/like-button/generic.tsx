@@ -33,13 +33,13 @@ export function GenericLikeButton({
   numberOfDislikes?: number
 }) {
 
-  const hasAlreadyVoted = isLikedByUser || isDislikedByUser
-
   const classNames = cn(
     likeButtonClassName,
     className,
   )
 
+  const nbLikes = Math.max(0, numberOfLikes)
+  const nbDislikes = Math.max(0, numberOfDislikes)
 
   return (
     <div className={classNames}>
@@ -47,7 +47,7 @@ export function GenericLikeButton({
         `flex flex-row items-center justify-center`,
         `cursor-pointer rounded-l-full overflow-hidden`,
         `hover:bg-neutral-700/90`,
-        `space-x-1.5 lg:space-x-2 pl-2 lg:pl-3 pr-3 lg:pr-4 h-8 lg:h-9`
+        `space-x-1.5 lg:space-x-2 pl-2 lg:pl-3 pr-1 lg:pr-1 h-8 lg:h-9`
         )}
         onClick={() => {
           try {
@@ -57,15 +57,17 @@ export function GenericLikeButton({
           }}}
         >
         <div>{
-          isLikedByUser ? <RiThumbUpFill /> :  <RiThumbUpLine />
+          isLikedByUser
+          ? <RiThumbUpFill className="w-5 h-5" />
+          : <RiThumbUpLine className="w-5 h-5" />
         }</div>
-        <div>{formatLargeNumber(Math.max(0, numberOfLikes))}</div>
+        <div>{nbLikes > 0 ? formatLargeNumber(nbLikes) : ""}</div>
       </div>
       <div className={cn(
         `flex flex-row items-center justify-center`,
         `cursor-pointer rounded-r-full overflow-hidden`,
         `hover:bg-neutral-700/90`,
-        `space-x-1.5 lg:space-x-2 pl-2 lg:pl-3 pr-3 lg:pr-4 h-8 lg:h-9`
+        `space-x-1.5 lg:space-x-2 pl-2 lg:pl-3 pr-2 lg:pr-3 h-8 lg:h-9`
       )}
       onClick={() => {
         try {
@@ -74,10 +76,13 @@ export function GenericLikeButton({
 
         }}}
       >
+        <div className="border-l border-l-zinc-600 h-[70%]">&nbsp;</div>
         <div>{
-          isDislikedByUser ? <RiThumbDownFill /> :  <RiThumbDownLine />
+          isDislikedByUser
+          ? <RiThumbDownFill className="w-5 h-5" />
+          : <RiThumbDownLine className="w-5 h-5" />
         }</div>
-        <div>{formatLargeNumber(Math.max(0, numberOfDislikes))}</div>
+        <div>{nbDislikes > 0 ? formatLargeNumber(numberOfDislikes) : ""}</div>
       </div>
     </div>
   )

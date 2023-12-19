@@ -8,23 +8,31 @@ export const actionButtonClassName = cn(
   `rounded-2xl`,
   `cursor-pointer`,
   `text-xs lg:text-sm font-medium`,
-  `bg-neutral-700/50 hover:bg-neutral-700/90 text-zinc-100`,
 )
 
 export function ActionButton({
   className,
   children,
   href,
+
+  // by default most buttons are just secondary ("neutral") buttons
+  variant = "secondary",
   onClick,
 }: {
   className?: string
   children?: ReactNode
   href?: string
+  variant?: "primary" | "secondary" | "ghost"
   onClick?: () => void
 }) {
 
   const classNames = cn(
     actionButtonClassName,
+      variant === "ghost"
+      ? `bg-transparent hover:bg-transparent text-zinc-100`
+      : variant === "primary"
+      ? `bg-lime-700/80 hover:bg-lime-700 text-zinc-100`
+      : `bg-neutral-700/50 hover:bg-neutral-700/90 text-zinc-100`,
     className,
   )
 

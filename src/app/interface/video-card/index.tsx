@@ -77,7 +77,9 @@ export function VideoCard({
     <div
       className={cn(
         `w-full flex`,
-        isCompact ? `flex-row h-24 py-1 space-x-2` : `flex-col space-y-3`,
+        isCompact 
+        ? `space-x-2`
+        : `flex-col space-y-3`,
         `bg-line-900`,
         `cursor-pointer`,
         className,
@@ -90,13 +92,14 @@ export function VideoCard({
         <div
           className={cn(
             `flex flex-col items-center justify-center`,
-            `rounded-xl overflow-hidden`,
-            isCompact ? `w-42 h-[94px]` : `aspect-video`
+            isCompact ? `` : ``
           )}
         >
           <div className={cn(
             `relative w-full`,
-            isCompact ? `w-42 h-[94px]` : `aspect-video`
+            `aspect-video`,
+           //  `aspect-video rounded-xl overflow-hidden`,
+           isCompact ? `w-42 h-24` : ``
           )}>
             {mediaThumbnailReady && shouldLoadMedia
               ? <video
@@ -110,7 +113,8 @@ export function VideoCard({
                 src={media.assetUrl}
                 className={cn(
                   `w-full h-full`,
-                  `aspect-video`,
+                  `object-cover`,
+                  `rounded-xl overflow-hidden aspect-video`,
                   duration > 0 ? `opacity-100`: 'opacity-0',
                   `transition-all duration-500`,
                   )}
@@ -121,9 +125,8 @@ export function VideoCard({
               src={mediaThumbnail}
               className={cn(
                 `absolute`,
-                `aspect-video`,
-               // `aspect-video object-cover`,
-                `rounded-lg overflow-hidden`,
+                `object-cover`,
+                `rounded-xl overflow-hidden aspect-video`,
                 mediaThumbnailReady ? `opacity-100`: 'opacity-0',
                 `hover:opacity-0 w-full h-full top-0 z-30`,
                 //`pointer-events-none`,
@@ -167,6 +170,7 @@ export function VideoCard({
         {/* TEXT BLOCK */}
         <div className={cn(
           `flex flex-row`,
+          `flex-none`,
           isCompact ? `w-40 lg:w-44 xl:w-51` : `space-x-4`,
         )}>
           {
@@ -192,12 +196,12 @@ export function VideoCard({
           )}>
             <h3 className={cn(
               `text-zinc-100 font-medium mb-0 line-clamp-2`,
-              isCompact ? `text-2xs md:text-xs lg:text-sm mb-1.5` : `text-base`
+              isCompact ? `text-sm mb-1.5` : `text-base`
             )}>{media.label}</h3>
             <div className={cn(
               `flex flex-row items-center`,
               `text-neutral-400 font-normal space-x-1`,
-              isCompact ? `text-3xs md:text-2xs lg:text-xs` : `text-sm`
+              isCompact ? `text-xs` : `text-sm`
               )}>
               <div>{media.channel.label}</div>
               {isCertifiedUser(media.channel.datasetUser) ? <div><RiCheckboxCircleFill className="" /></div> : null}
@@ -206,7 +210,7 @@ export function VideoCard({
             <div className={cn(
               `flex flex-row`,
               `text-neutral-400 font-normal`,
-              isCompact ? `text-2xs lg:text-xs` : `text-sm`,
+              isCompact ? `text-xs` : `text-sm`,
               `space-x-1`
             )}>
             <div>{formatLargeNumber(media.numberOfViews)} views</div>

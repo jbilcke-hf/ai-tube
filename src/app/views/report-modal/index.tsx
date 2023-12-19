@@ -27,7 +27,7 @@ export function ReportModal({
     }}>
       <DialogTrigger asChild>
       <ActionButton onClick={() => setOpen(true)}>
-          <LuShieldAlert className="w-4 h-4" />
+          <LuShieldAlert className="w-5 h-5" />
           <span>Report</span>
         </ActionButton>
       </DialogTrigger>
