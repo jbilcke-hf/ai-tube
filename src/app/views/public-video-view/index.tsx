@@ -399,6 +399,7 @@ export function PublicVideoView() {
                 className={cn(
                   `w-full`,
                   `rounded-none`,
+                  `bg-transparent dark:bg-transparent`,
                   `border-l-transparent border-r-transparent border-t-transparent dark:border-l-transparent dark:border-r-transparent dark:border-t-transparent`,
                   `border-b border-b-zinc-600 dark:border-b dark:border-b-zinc-600`,
                   `hover:pt-[2px] hover:pb-[1px] hover:border-b-2 hover:border-b-zinc-200 dark:hover:border-b-2 dark:hover:border-b-zinc-200`,
