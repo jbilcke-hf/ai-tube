@@ -9,6 +9,7 @@ export function MediaList({
   layout = "grid",
   className = "",
   onSelect,
+  selectedId,
 }: {
   items: VideoInfo[]
 
@@ -31,6 +32,8 @@ export function MediaList({
   className?: string
 
   onSelect?: (media: VideoInfo) => void
+
+  selectedId?: string
 }) {
   
   return (
@@ -56,6 +59,7 @@ export function MediaList({
           className="w-full"
           layout={layout}
           onSelect={onSelect}
+          selected={selectedId === media.id}
           index={i}
         />
       )

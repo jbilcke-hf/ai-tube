@@ -12,18 +12,21 @@ import { isCertifiedUser } from "@/app/certification"
 import { transparentImage } from "@/lib/transparentImage"
 import { DefaultAvatar } from "../default-avatar"
 import { formatLargeNumber } from "@/lib/formatLargeNumber"
+import { usePlaylist } from "@/lib/usePlaylist"
 
 export function TrackCard({
   media,
   className = "",
   layout = "grid",
   onSelect,
+  selected,
   index
 }: {
   media: VideoInfo
   className?: string
   layout?: MediaDisplayLayout
   onSelect?: (media: VideoInfo) => void
+  selected?: boolean
   index: number
  }) {
   const ref = useRef<HTMLVideoElement>(null)
@@ -36,6 +39,8 @@ export function TrackCard({
   const [mediaThumbnailReady, setMediaThumbnailReady] = useState(false)
   const [shouldLoadMedia, setShouldLoadMedia] = useState(false)
 
+  const playlist = usePlaylist()
+  
   const isTable = layout === "table"
   const isMicro = layout === "micro"
   const isCompact = layout === "vertical"
@@ -54,9 +59,6 @@ export function TrackCard({
     }
   }
 
-  const handleClick = () => {
-    onSelect?.(media)
-  }
 
   const handleBadChannelThumbnail = () => {
     try {
@@ -84,14 +86,16 @@ export function TrackCard({
         `flex-col space-y-3`,
         `bg-line-900`,
         `cursor-pointer`,
+        `transition-all duration-200 ease-in-out`,
         (isTable || isMicro) ? (
-          (index % 2) ? "bg-neutral-800/40 hover:bg-neutral-800/70" : "hover:bg-neutral-800/70"
+          (index % 2) ? "bg-zinc-800/30 hover:bg-zinc-800/50" : "hover:bg-zinc-800/50"
         ) : "",
+        selected ? `border-2 border-zinc-400` : `border-2 border-transparent`,
         className,
       )}
       onPointerEnter={handlePointerEnter}
       onPointerLeave={handlePointerLeave}
-      // onClick={handleClick}
+      onClick={() => onSelect?.(media)}
       >
         {/* THUMBNAIL BLOCK */}
         <div
@@ -111,9 +115,6 @@ export function TrackCard({
           )}>
             {!isTable && mediaThumbnailReady && shouldLoadMedia
               ? <video
-                // mute the video
-                muted
-
                 // prevent iOS from attempting to open the video in full screen, which is annoying
                 playsInline
 
@@ -135,7 +136,7 @@ export function TrackCard({
                 `aspect-square object-cover`,
                 `rounded-lg overflow-hidden`,
                 mediaThumbnailReady ? `opacity-100`: 'opacity-0',
-                `hover:opacity-0 w-full h-full top-0 z-30`,
+                `hover:brightness-110 w-full h-full top-0 z-30`,
                 //`pointer-events-none`,
                 `transition-all duration-500 hover:delay-300 ease-in-out`,
               )}
@@ -216,7 +217,7 @@ export function TrackCard({
             <div className={cn(
               `flex flex-row items-center`,
               `text-neutral-400 font-normal space-x-1`,
-              isTable ? `text-2xs md:text-xs lg:text-sm` :
+              isTable ? `w-[30%] text-2xs md:text-xs lg:text-sm` :
               isCompact ? `text-3xs md:text-2xs lg:text-xs` : `text-sm`
               )}>
               <div>{media.channel.label}</div>
@@ -234,13 +235,12 @@ export function TrackCard({
             <div>{formatTimeAgo(media.updatedAt)}</div>
             </div>}
 
-            {/*
+    
             {isTable ? <div className={cn(
               `hidden md:flex flex-row flex-grow`,
               `text-zinc-100 mb-0 line-clamp-2`,
-              `w-[30%] font-normal text-xs md:text-sm lg:text-base mb-0.5` 
-            )}>{media.duration}</div> : null}
-            */}
+              `justify-end font-normal text-xs md:text-sm lg:text-base mb-0.5` 
+            )}>{formatDuration(media.duration || 0)}</div> : null}
           </div>
         </div>
       </div>

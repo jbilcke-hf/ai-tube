@@ -24,7 +24,7 @@ export function TubeLayout({ children }: { children?: ReactNode }) {
       <div className={cn(
         `flex flex-col`,
         `w-full sm:w-[calc(100vw-96px)]`,
-        `px-2`
+        `pl-2`
       )}>
         <TopHeader />
         <main className={cn(

@@ -18,12 +18,14 @@ export function VideoCard({
   className = "",
   layout = "grid",
   onSelect,
+  selected,
   index
 }: {
   media: VideoInfo
   className?: string
   layout?: MediaDisplayLayout
   onSelect?: (media: VideoInfo) => void
+  selected?: boolean
   index: number
  }) {
   const ref = useRef<HTMLVideoElement>(null)

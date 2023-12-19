@@ -47,7 +47,6 @@ export function LeftMenu() {
             Channels
           </MenuItem>
         </Link>
-        {/*
         <Link href="/music">
           <MenuItem
             icon={<MdOutlinePlayCircleOutline className="h-6.5 w-6.5" />}
@@ -56,7 +55,6 @@ export function LeftMenu() {
             Music
           </MenuItem>
         </Link>
-        */}
       </div>
       <div className={cn(
         `flex flex-col w-full`,

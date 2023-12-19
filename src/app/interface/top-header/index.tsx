@@ -37,7 +37,7 @@ export function TopHeader() {
 
 
   useEffect(() => {
-    if (view === "public_video" ||  view === "public_channel") {
+    if (view === "public_video" ||  view === "public_channel" || view === "public_music_videos") {
       setHeaderMode("compact")
       setMenuMode("slider_hidden")
     } else {
@@ -92,7 +92,7 @@ export function TopHeader() {
                 `rounded-lg w-6 h-7`
               )}>
                 <PiPopcornBold className={cn(
-                 `w-5 h-5`
+                 `size-5`
                 )} />
               </div>
             </div>

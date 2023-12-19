@@ -7,6 +7,8 @@ import { cn } from "@/lib/utils"
 import { VideoInfo } from "@/types"
 import { getVideos } from "@/app/server/actions/ai-tube-hf/getVideos"
 import { TrackList } from "@/app/interface/track-list"
+import { PlaylistControl } from "@/app/interface/playlist-control"
+import { usePlaylist } from "@/lib/usePlaylist"
 
 export function PublicMusicVideosView() {
   const [_isPending, startTransition] = useTransition()
@@ -14,6 +16,8 @@ export function PublicMusicVideosView() {
   const setPublicTracks = useStore(s => s.setPublicTracks)
   const setPublicTrack = useStore(s => s.setPublicTrack)
   const publicTracks = useStore(s => s.publicTracks)
+
+  const playlist = usePlaylist()
 
   useEffect(() => {
   
@@ -31,21 +35,29 @@ export function PublicMusicVideosView() {
   }, [])
 
   const handleSelect = (media: VideoInfo) => {
-    //
-    // setView("public_video")
-    // setPublicVideo(video)
-    console.log("play the track in the background, but don't reload everything")
+    console.log("going to play:", media.assetUrl.replace(".mp4", ".mp3"))
+    playlist.playback({
+      url: media.assetUrl.replace(".mp4", ".mp3"),
+      meta: media,
+      isLastTrackOfPlaylist: false,
+      playNow: true,
+    })
   }
 
   return (
     <div className={cn(
-     `sm:pr-4`
+     `w-full h-full`
     )}>
-      <TrackList
-        items={publicTracks}
-        onSelect={handleSelect}
-        layout="table"
-      />
+      <div className="flex flex-col w-full overflow-y-scroll h-[calc(100%-80px)] sm:pr-4">
+        <TrackList
+          items={publicTracks}
+          onSelect={handleSelect}
+          selectedId={playlist.current?.id}
+          layout="table"
+        />
+      </div>
+
+      <PlaylistControl />
     </div>
   )
 }
