@@ -1,12 +1,13 @@
 "use client"
 
-import { Player } from "react-tuby"
-import "react-tuby/css/main.css"
+import AutoSizer from "react-virtualized-auto-sizer"
 
 import { cn } from "@/lib/utils"
 import { VideoInfo } from "@/types"
-import { MutableRefObject, useEffect, useRef } from "react"
-import { isValidNumber } from "@/app/server/actions/utils/isValidNumber"
+import { parseProjectionFromLoRA } from "@/app/server/actions/utils/parseProjectionFromLoRA"
+
+import { EquirectangularVideoPlayer } from "./equirectangular"
+import { CartesianVideoPlayer } from "./cartesian"
 
 export function VideoPlayer({
   video,
@@ -19,51 +20,26 @@ export function VideoPlayer({
   className?: string
   // currentTime?: number
 }) {
+  // we should our video players from  misssing data
+  if (!video?.assetUrl) { return null }
 
-  /*
-  const ref = useRef(null)
+  const isEquirectangular = (
+    video.projection === "equirectangular" ||
+    parseProjectionFromLoRA(video.lora) === "equirectangular"
+  )
 
-  useEffect(() => {
-    if (!ref.current) { return }
-    if (!isValidNumber(currentTime)) { return }
-    
-    (ref.current as any).currentTime = currentTime 
-    // $(".tuby-container video").currentTime = 2
-  }, [currentTime])
-  */
-
-  // TODO: keep the same form factor?
-  if (!video) { return null }
+  if (isEquirectangular) {
+    // note: for AutoSizer to work properly it needs to be inside a normal div with no display: "flex"
+    return (
+      <div className={cn(`w-full aspect-video`, className)}>
+        <AutoSizer>{({ height, width }) => (
+           <EquirectangularVideoPlayer video={video} className={className} width={width} height={height} />
+          )}</AutoSizer>
+      </div>
+    )
+  }
 
   return (
-    <div className={cn(
-      `w-full`,
-      `flex flex-col items-center justify-center`,
-      `rounded-xl overflow-hidden`,
-      className
-      )}>
-      <div className={cn(
-        `w-[calc(100%+16px)]`,
-        `-ml-2 -mr-2`,
-        `flex flex-col items-center justify-center`,
-        )}>
-        <Player
-        
-          // playerRef={ref}
-
-          src={[
-            {
-              quality: "Full HD",
-              url: video.assetUrl,
-            }
-          ]}
-
-          keyboardShortcut={enableShortcuts}
-
-          subtitles={[]}
-          // poster="https://cdn.jsdelivr.net/gh/naptestdev/video-examples@master/poster.png"
-        />
-      </div>
-    </div>
+    <CartesianVideoPlayer video={video} enableShortcuts={enableShortcuts} className={className} />
   )
 }

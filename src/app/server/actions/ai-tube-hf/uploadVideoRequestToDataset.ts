@@ -6,6 +6,7 @@ import { Credentials, uploadFile, whoAmI } from "@/huggingface/hub/src"
 import { ChannelInfo, VideoGenerationModel, VideoInfo, VideoOrientation, VideoRequest } from "@/types"
 import { formatPromptFileName } from "../utils/formatPromptFileName"
 import { orientationToWidthHeight } from "../utils/orientationToWidthHeight"
+import { parseProjectionFromLoRA } from "../utils/parseProjectionFromLoRA"
 
 /**
  * Save the video request to the user's own dataset
@@ -142,6 +143,7 @@ ${prompt}
     model,
     style,
     lora,
+    projection: parseProjectionFromLoRA(lora),
     voice,
     music,
     thumbnailUrl: channel.thumbnail, // will be generated in async

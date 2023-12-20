@@ -42,7 +42,7 @@ export function UserAccountView() {
         }
       })
     }
-  }, [isLoaded, huggingfaceApiKey])
+  }, [isLoaded, huggingfaceApiKey, setUserChannels, setLoaded])
 
   return (
     <div className={cn(`flex flex-col space-y-4`)}>

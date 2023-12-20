@@ -109,7 +109,7 @@ export function usePlaylist() {
         dequeue();
       }
     }
-  }, [audio?.currentTime, dequeue, setProgress, isPlaying]);
+  }, [audio, audio?.currentTime, dequeue, setProgress, isPlaying]);
 
   const playback = useCallback(async (options?: PlaybackOptions<VideoInfo>): Promise<void> => {
     if (!audio) { return }

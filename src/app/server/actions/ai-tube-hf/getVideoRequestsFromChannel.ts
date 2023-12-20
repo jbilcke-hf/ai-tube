@@ -8,6 +8,7 @@ import { downloadFileAsText } from "./downloadFileAsText"
 import { parseDatasetPrompt } from "../utils/parseDatasetPrompt"
 import { parseVideoModelName } from "../utils/parseVideoModelName"
 import { orientationToWidthHeight } from "../utils/orientationToWidthHeight"
+import { parseProjectionFromLoRA } from "../utils/parseProjectionFromLoRA"
 
 /**
  * Return all the videos requests created by a user on their channel

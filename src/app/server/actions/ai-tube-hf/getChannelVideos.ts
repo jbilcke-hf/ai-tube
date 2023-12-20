@@ -7,6 +7,7 @@ import { adminApiKey } from "../config"
 import { getVideoIndex } from "./getVideoIndex"
 import { extendVideosWithStats } from "./extendVideosWithStats"
 import { orientationToWidthHeight } from "../utils/orientationToWidthHeight"
+import { parseProjectionFromLoRA } from "../utils/parseProjectionFromLoRA"
 
 // return 
 export async function getChannelVideos({
@@ -46,6 +47,7 @@ export async function getChannelVideos({
         thumbnailUrl: v.thumbnailUrl,
         model: v.model,
         lora: v.lora,
+        projection: parseProjectionFromLoRA(v.lora),
         style: v.style,
         voice: v.voice,
         music: v.music,

@@ -330,6 +330,11 @@ export type VideoOrientation =
   | "landscape"
   | "square"
 
+export type VideoProjection =
+  | "cartesian" // this is the default
+  | "equirectangular"
+
+
 export type VideoInfo = {
   /**
    * UUID (v4)
@@ -446,6 +451,11 @@ export type VideoInfo = {
    * General video aspect ratio
    */
   orientation: VideoOrientation
+
+  /**
+   * Video projection (cartesian by default)
+   */
+  projection: VideoProjection
 }
 
 export type CollectionInfo = {
