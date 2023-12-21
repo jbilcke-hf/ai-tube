@@ -4,7 +4,7 @@ import { VideoOrientation } from "@/types"
 export function parseVideoOrientation(text: any, defaultToUse?: VideoOrientation): VideoOrientation {
   const rawOrientationString = `${text || ""}`.trim().toLowerCase()
 
-  let orientation: VideoOrientation = defaultToUse || defaultVideoOrientation
+  let orientation: VideoOrientation = defaultToUse || (defaultVideoOrientation || "landscape")
 
   if (
     rawOrientationString === "landscape" || 
@@ -15,7 +15,8 @@ export function parseVideoOrientation(text: any, defaultToUse?: VideoOrientation
 
   if (
     rawOrientationString === "portrait" || 
-    rawOrientationString === "vertical"
+    rawOrientationString === "vertical" ||
+    rawOrientationString === "mobile"
   ) {
     orientation = "portrait"
   }

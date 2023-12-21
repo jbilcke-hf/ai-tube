@@ -6,9 +6,7 @@ import { listFiles } from "@/huggingface/hub/src"
 import { parsePromptFileName } from "../utils/parsePromptFileName"
 import { downloadFileAsText } from "./downloadFileAsText"
 import { parseDatasetPrompt } from "../utils/parseDatasetPrompt"
-import { parseVideoModelName } from "../utils/parseVideoModelName"
-import { orientationToWidthHeight } from "../utils/orientationToWidthHeight"
-import { parseProjectionFromLoRA } from "../utils/parseProjectionFromLoRA"
+import { computeOrientationProjectionWidthHeight } from "../utils/computeOrientationProjectionWidthHeight"
 
 /**
  * Return all the videos requests created by a user on their channel
@@ -115,9 +113,12 @@ export async function getVideoRequestsFromChannel({
           updatedAt: file.lastCommit?.date || new Date().toISOString(),
           tags: Array.isArray(tags) && tags.length ? tags : channel.tags,
           channel,
-          orientation,
-          ...orientationToWidthHeight(orientation),
           duration: 0,
+          ...computeOrientationProjectionWidthHeight({
+            lora,
+            orientation,
+            // projection, // <- will be extrapolated from the LoRA for now
+          }),
         }
 
         videos[id] = video

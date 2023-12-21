@@ -20,5 +20,14 @@ export function parseVideoModelName(text: any, defaultToUse: VideoGenerationMode
     model = "LaVie"
   }
 
+  if (
+    rawModelString === "hotshot" || 
+    rawModelString === "hotshotxl" ||
+    rawModelString === "hotshot xl" ||
+    rawModelString === "hotshot-xl"
+  ) {
+    model = "HotshotXL"
+  }
+
   return model
 }

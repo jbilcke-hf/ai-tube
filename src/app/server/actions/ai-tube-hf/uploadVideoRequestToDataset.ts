@@ -5,8 +5,7 @@ import { Blob } from "buffer"
 import { Credentials, uploadFile, whoAmI } from "@/huggingface/hub/src"
 import { ChannelInfo, VideoGenerationModel, VideoInfo, VideoOrientation, VideoRequest } from "@/types"
 import { formatPromptFileName } from "../utils/formatPromptFileName"
-import { orientationToWidthHeight } from "../utils/orientationToWidthHeight"
-import { parseProjectionFromLoRA } from "../utils/parseProjectionFromLoRA"
+import { computeOrientationProjectionWidthHeight } from "../utils/computeOrientationProjectionWidthHeight"
 
 /**
  * Save the video request to the user's own dataset
@@ -131,7 +130,11 @@ ${prompt}
     tags,
     channel,
     duration: 0,
-    orientation,
+    ...computeOrientationProjectionWidthHeight({
+      lora,
+      orientation,
+      // projection, // <- will be extrapolated from the LoRA for now
+    }),
   }
 
   const newVideo: VideoInfo = {
@@ -143,7 +146,6 @@ ${prompt}
     model,
     style,
     lora,
-    projection: parseProjectionFromLoRA(lora),
     voice,
     music,
     thumbnailUrl: channel.thumbnail, // will be generated in async
@@ -155,8 +157,11 @@ ${prompt}
     tags,
     channel,
     duration,
-    orientation,
-    ...orientationToWidthHeight(orientation),
+    ...computeOrientationProjectionWidthHeight({
+      lora,
+      orientation,
+      // projection, // <- will be extrapolated from the LoRA for now
+    }),
   }
 
   return {

@@ -254,6 +254,9 @@ export type VideoRequest = {
    */
   id: string
 
+  // skip generation (mostly used for debugging)
+  // skip?: boolean
+
   /**
    * Human readable title for the video
    */

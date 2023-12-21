@@ -72,7 +72,7 @@ export function EquirectangularVideoPlayer({
             // progressbar: true,
             bigbutton: false
           }],
-          // SettingsPlugin,
+          SettingsPlugin,
           [ResolutionPlugin, {
             defaultResolution: 'HD',
             resolutions: [

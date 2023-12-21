@@ -6,8 +6,7 @@ import { getVideoRequestsFromChannel  } from "./getVideoRequestsFromChannel"
 import { adminApiKey } from "../config"
 import { getVideoIndex } from "./getVideoIndex"
 import { extendVideosWithStats } from "./extendVideosWithStats"
-import { orientationToWidthHeight } from "../utils/orientationToWidthHeight"
-import { parseProjectionFromLoRA } from "../utils/parseProjectionFromLoRA"
+import { computeOrientationProjectionWidthHeight } from "../utils/computeOrientationProjectionWidthHeight"
 
 // return 
 export async function getChannelVideos({
@@ -47,7 +46,6 @@ export async function getChannelVideos({
         thumbnailUrl: v.thumbnailUrl,
         model: v.model,
         lora: v.lora,
-        projection: parseProjectionFromLoRA(v.lora),
         style: v.style,
         voice: v.voice,
         music: v.music,
@@ -59,8 +57,11 @@ export async function getChannelVideos({
         tags: v.tags,
         channel,
         duration: v.duration || 0,
-        orientation: v.orientation,
-        ...orientationToWidthHeight(v.orientation),
+        ...computeOrientationProjectionWidthHeight({
+          lora: v.lora,
+          orientation: v.orientation,
+          // projection, // <- will be extrapolated from the LoRA for now
+        }),
       }
 
       if (queued[v.id]) {
