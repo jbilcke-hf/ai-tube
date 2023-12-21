@@ -23,9 +23,6 @@ export function VideoPlayer({
   // we should our video players from  misssing data
   if (!video?.assetUrl) { return null }
 
-  video.assetUrl = "/demo.mp4"
-  video.projection = "equirectangular"
-
   const isEquirectangular = (
     video.projection === "equirectangular" ||
     parseProjectionFromLoRA(video.lora) === "equirectangular"

@@ -136,6 +136,15 @@ export function PublicVideoView() {
     defaultSettings.huggingfaceApiKey
   )
   
+  /*
+  useEffect(() => {
+    window.addEventListener("keydown", function (e) {
+      if (e.code === "Space") {
+        e.preventDefault();
+      }
+    })
+  }, [])
+  */
   if (!video) { return null }
 
   const handleSubmitComment = () => {
