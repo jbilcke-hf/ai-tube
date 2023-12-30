@@ -1,7 +1,7 @@
 
 import { Metadata, ResolvingMetadata } from "next"
 
-import { AppQueryProps } from "@/types"
+import { AppQueryProps } from "@/types/general"
 
 import { Main } from "../main"
 import { getVideo } from "../server/actions/ai-tube-hf/getVideo"

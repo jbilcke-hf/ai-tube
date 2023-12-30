@@ -1,5 +1,5 @@
 
-import { AppQueryProps } from "@/types"
+import { AppQueryProps } from "@/types/general"
 import { Main } from "../main"
 import { getVideos } from "../server/actions/ai-tube-hf/getVideos"
 import { getVideo } from "../server/actions/ai-tube-hf/getVideo"

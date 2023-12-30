@@ -2,7 +2,7 @@
 
 import { create } from "zustand"
 
-import { ChannelInfo, VideoInfo, InterfaceDisplayMode, InterfaceView, InterfaceMenuMode, InterfaceHeaderMode, CommentInfo, UserInfo } from "@/types"
+import { ChannelInfo, VideoInfo, InterfaceDisplayMode, InterfaceView, InterfaceMenuMode, InterfaceHeaderMode, CommentInfo, UserInfo } from "@/types/general"
 
 export const useStore = create<{
   displayMode: InterfaceDisplayMode

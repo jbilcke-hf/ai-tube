@@ -4,7 +4,7 @@ import { RiCheckboxCircleFill } from "react-icons/ri"
 import { IoAdd } from "react-icons/io5"
 
 import { cn } from "@/lib/utils"
-import { ChannelInfo } from "@/types"
+import { ChannelInfo } from "@/types/general"
 import { isCertifiedUser } from "@/app/certification"
 import { DefaultAvatar } from "../default-avatar"
 import { formatLargeNumber } from "@/lib/formatLargeNumber"

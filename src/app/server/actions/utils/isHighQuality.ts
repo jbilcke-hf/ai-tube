@@ -1,4 +1,4 @@
-import { VideoInfo } from "@/types"
+import { VideoInfo } from "@/types/general"
 
 export function isHighQuality(video: VideoInfo) {
   const numberOfViews = Math.abs(Math.max(0, video.numberOfViews))

@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils"
-import { CollectionInfo } from "@/types"
+import { CollectionInfo } from "@/types/general"
 
 import { CollectionCard } from "../collection-card"
 

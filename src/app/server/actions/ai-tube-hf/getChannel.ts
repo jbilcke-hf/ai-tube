@@ -1,7 +1,7 @@
 "use server"
 
 
-import { ChannelInfo } from "@/types"
+import { ChannelInfo } from "@/types/general"
 
 import { getChannels } from "./getChannels"
 

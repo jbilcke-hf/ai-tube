@@ -1,4 +1,4 @@
-import { ChannelInfo } from "@/types"
+import { ChannelInfo } from "@/types/general"
 
 const winners = new Set(`${process.env.WINNERS || ""}`.toLowerCase().split(",").map(x => x.trim()).filter(x => x))
 

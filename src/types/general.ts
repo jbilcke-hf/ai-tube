@@ -239,9 +239,12 @@ export type ChannelInfo = {
 }
 
 export type VideoStatus =
-  | "submitted" // the prompt has been submitted, but is not added to the index queue yet
-  | "queued" // the prompt has been added to the index queue, but is not processed yet. Once queued it cannot be modified.
+  | "draft" // the video should be ignored for now
+  | "submitted" // the video has been submitted, but is not added to the index queue yet
+  | "queued" // the video has been added to the index queue, but is not processed yet. Once queued it cannot be modified.
   | "generating" // the video is being generated
+  // TODO add a state to indicate the audio is being generated
+  // this will be useful in case generation fails
   | "published" // success!
   | "error" // video failed to generate
 
@@ -276,6 +279,11 @@ export type VideoRequest = {
    * URL to the video thumbnail
    */
   thumbnailUrl: string
+
+  /**
+   * URL to a clap file
+   */
+  clapUrl: string
 
   /**
    * When was the video updated
@@ -370,9 +378,26 @@ export type VideoInfo = {
   thumbnailUrl: string
 
   /**
+   * URL to a clap file
+   */
+  clapUrl: string
+  
+  /**
    * URL to the binary file
+   * 
+   * This is the standard format
+   * 
+   * see width and height for details
+   * 
+   * (it will be something like 1024x576, 576x1024, 1024x512)
+   * 
    */
   assetUrl: string
+
+  /**
+   * This is contain the storage URL of the higher-resolution video
+   */
+  assetUrlHd: string
 
   /**
    * Counter for the number of views

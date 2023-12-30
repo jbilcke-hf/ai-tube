@@ -1,6 +1,6 @@
 "use server"
 
-import { ChannelInfo, VideoGenerationModel, VideoInfo, VideoOrientation } from "@/types"
+import { ChannelInfo, VideoGenerationModel, VideoInfo, VideoOrientation } from "@/types/general"
 
 import { uploadVideoRequestToDataset } from "./ai-tube-hf/uploadVideoRequestToDataset"
 

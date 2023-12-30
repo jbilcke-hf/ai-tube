@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils"
-import { CommentInfo } from "@/types"
+import { CommentInfo } from "@/types/general"
 import { useEffect, useState } from "react"
 import { DefaultAvatar } from "../default-avatar"
 import { formatTimeAgo } from "@/lib/formatTimeAgo"

@@ -3,7 +3,7 @@ import { IoIosPause } from "react-icons/io"
 
 import { cn } from "@/lib/utils"
 import { usePlaylist } from "@/lib/usePlaylist"
-import { VideoInfo } from "@/types"
+import { VideoInfo } from "@/types/general"
 
 export function PlaylistControl() {
   const playlist = usePlaylist()

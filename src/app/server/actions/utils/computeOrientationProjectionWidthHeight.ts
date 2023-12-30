@@ -1,4 +1,4 @@
-import { VideoOrientation, VideoProjection } from "@/types"
+import { VideoOrientation, VideoProjection } from "@/types/general"
 
 import { parseVideoOrientation } from "./parseVideoOrientation"
 import { parseProjectionFromLoRA } from "./parseProjectionFromLoRA"

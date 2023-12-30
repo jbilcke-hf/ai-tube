@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils"
-import { ChannelInfo } from "@/types"
+import { ChannelInfo } from "@/types/general"
 
 import { ChannelCard } from "../channel-card"
 

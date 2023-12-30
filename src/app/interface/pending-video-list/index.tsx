@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils"
-import { VideoInfo } from "@/types"
+import { VideoInfo } from "@/types/general"
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
 import { PendingVideoCard } from "../pending-video-card"

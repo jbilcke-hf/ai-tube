@@ -1,5 +1,5 @@
 
-import { ChannelInfo, ParsedDatasetPrompt } from "@/types"
+import { ChannelInfo, ParsedDatasetPrompt } from "@/types/general"
 import { parseVideoModelName } from "./parseVideoModelName"
 import { parseVideoOrientation } from "./parseVideoOrientation"
 import { defaultVideoModel, defaultVideoOrientation } from "@/app/config"

@@ -1,4 +1,4 @@
-import { VideoGenerationModel, VideoOrientation } from "@/types"
+import { VideoGenerationModel, VideoOrientation } from "@/types/general"
 
 export const showBetaFeatures = `${
   process.env.NEXT_PUBLIC_SHOW_BETA_FEATURES || ""

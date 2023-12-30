@@ -3,7 +3,7 @@
 import { Blob } from "buffer"
 
 import { Credentials, uploadFile, whoAmI } from "@/huggingface/hub/src"
-import { ChannelInfo, VideoGenerationModel, VideoInfo, VideoOrientation, VideoRequest } from "@/types"
+import { ChannelInfo, VideoGenerationModel, VideoInfo, VideoOrientation, VideoRequest } from "@/types/general"
 import { formatPromptFileName } from "../utils/formatPromptFileName"
 import { computeOrientationProjectionWidthHeight } from "../utils/computeOrientationProjectionWidthHeight"
 
@@ -126,6 +126,10 @@ ${prompt}
     voice,
     music,
     thumbnailUrl: channel.thumbnail,
+
+    // for now AI Tube doesn't support upload of clap files
+    clapUrl: "",
+
     updatedAt: new Date().toISOString(),
     tags,
     channel,
@@ -149,7 +153,12 @@ ${prompt}
     voice,
     music,
     thumbnailUrl: channel.thumbnail, // will be generated in async
+
+    // for now AI Tube doesn't support upload of clap files
+    clapUrl: "",
+    
     assetUrl: "", // will be generated in async
+    assetUrlHd: "",
     numberOfViews: 0,
     numberOfLikes: 0,
     numberOfDislikes: 0,

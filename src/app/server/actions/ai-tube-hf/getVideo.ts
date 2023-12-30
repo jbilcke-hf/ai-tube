@@ -1,6 +1,6 @@
 "use server"
 
-import { VideoInfo } from "@/types"
+import { VideoInfo } from "@/types/general"
 
 import { getVideoIndex } from "./getVideoIndex"
 import { getStatsForVideos } from "../stats"

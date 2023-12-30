@@ -1,6 +1,6 @@
 import { useEffect, useTransition } from "react"
 
-import { UserInfo } from "@/types"
+import { UserInfo } from "@/types/general"
 
 import { useStore } from "./useStore"
 import { useLocalStorage } from "usehooks-ts"

@@ -1,4 +1,4 @@
-import { VideoInfo } from "@/types"
+import { VideoInfo } from "@/types/general"
 
 const winners = new Set(`${process.env.WINNERS || ""}`.toLowerCase().split(",").map(x => x.trim()).filter(x => x))
 

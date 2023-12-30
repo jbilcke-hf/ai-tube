@@ -1,7 +1,7 @@
 "use client"
 
 import { cn } from "@/lib/utils"
-import { CommentInfo } from "@/types"
+import { CommentInfo } from "@/types/general"
 import { CommentCard } from "../comment-card"
 
 export function CommentList({

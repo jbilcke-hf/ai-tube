@@ -1,5 +1,5 @@
 import { useEffect, useState, useTransition } from "react"
-import { VideoInfo, VideoRating } from "@/types"
+import { VideoInfo, VideoRating } from "@/types/general"
 
 import { GenericLikeButton } from "./generic"
 import { getVideoRating, rateVideo } from "@/app/server/actions/stats"

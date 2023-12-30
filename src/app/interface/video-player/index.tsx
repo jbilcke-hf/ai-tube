@@ -3,7 +3,7 @@
 import AutoSizer from "react-virtualized-auto-sizer"
 
 import { cn } from "@/lib/utils"
-import { VideoInfo } from "@/types"
+import { VideoInfo } from "@/types/general"
 import { parseProjectionFromLoRA } from "@/app/server/actions/utils/parseProjectionFromLoRA"
 
 import { EquirectangularVideoPlayer } from "./equirectangular"

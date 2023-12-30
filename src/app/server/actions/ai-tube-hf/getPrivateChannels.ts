@@ -1,7 +1,7 @@
 "use server"
 
 import { Credentials, listDatasets, whoAmI } from "@/huggingface/hub/src"
-import { ChannelInfo } from "@/types"
+import { ChannelInfo } from "@/types/general"
 
 import { adminCredentials } from "../config"
 import { parseChannel } from "./parseChannel"

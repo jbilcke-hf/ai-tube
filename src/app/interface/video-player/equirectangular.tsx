@@ -6,7 +6,7 @@ import { PanoramaPosition, PluginConstructor, Point, Position, SphericalPosition
 import { EquirectangularVideoAdapter, LensflarePlugin, ReactPhotoSphereViewer, ResolutionPlugin, SettingsPlugin, VideoPlugin } from "react-photo-sphere-viewer"
 
 import { cn } from "@/lib/utils"
-import { VideoInfo } from "@/types"
+import { VideoInfo } from "@/types/general"
 
 type PhotoSpherePlugin = (PluginConstructor | [PluginConstructor, any])
 

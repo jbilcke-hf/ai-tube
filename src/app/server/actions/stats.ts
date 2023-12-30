@@ -2,7 +2,7 @@
 
 import { developerMode } from "@/app/config"
 import { WhoAmIUser, whoAmI } from "@/huggingface/hub/src"
-import { VideoRating } from "@/types"
+import { VideoRating } from "@/types/general"
 import { redis } from "./redis";
 
 export async function getStatsForVideos(videoIds: string[]): Promise<Record<string, { numberOfViews: number; numberOfLikes: number; numberOfDislikes: number}>> {

@@ -2,7 +2,7 @@
 
 import { Credentials, downloadFile, whoAmI } from "@/huggingface/hub/src"
 import { parseDatasetReadme } from "@/app/server/actions/utils/parseDatasetReadme"
-import { ChannelInfo, VideoGenerationModel, VideoOrientation } from "@/types"
+import { ChannelInfo, VideoGenerationModel, VideoOrientation } from "@/types/general"
 
 import { adminCredentials } from "../config"
 import { defaultVideoModel, defaultVideoOrientation } from "@/app/config"

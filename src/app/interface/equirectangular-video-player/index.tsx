@@ -3,7 +3,7 @@
 import AutoSizer from "react-virtualized-auto-sizer"
 
 import { cn } from "@/lib/utils"
-import { VideoInfo } from "@/types"
+import { VideoInfo } from "@/types/general"
 
 import { VideoSphereViewer } from "./viewer"
 

@@ -2,7 +2,7 @@
 
 import { v4 as uuidv4 } from "uuid"
 
-import { CommentInfo, StoredCommentInfo } from "@/types"
+import { CommentInfo, StoredCommentInfo } from "@/types/general"
 import { stripHtml } from "@/lib/stripHtml"
 import { getCurrentUser, getUsers } from "./users"
 import { redis } from "./redis"

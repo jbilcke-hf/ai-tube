@@ -5,7 +5,7 @@ import Link from "next/link"
 import { RiCheckboxCircleFill } from "react-icons/ri"
 
 import { cn } from "@/lib/utils"
-import { MediaDisplayLayout, VideoInfo } from "@/types"
+import { MediaDisplayLayout, VideoInfo } from "@/types/general"
 import { formatDuration } from "@/lib/formatDuration"
 import { formatTimeAgo } from "@/lib/formatTimeAgo"
 import { isCertifiedUser } from "@/app/certification"

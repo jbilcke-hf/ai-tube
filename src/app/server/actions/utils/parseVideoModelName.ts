@@ -1,4 +1,4 @@
-import { VideoGenerationModel } from "@/types"
+import { VideoGenerationModel } from "@/types/general"
 
 export function parseVideoModelName(text: any, defaultToUse: VideoGenerationModel): VideoGenerationModel {
   const rawModelString = `${text || ""}`.trim().toLowerCase()

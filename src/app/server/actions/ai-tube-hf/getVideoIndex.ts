@@ -1,4 +1,4 @@
-import { VideoInfo, VideoStatus } from "@/types"
+import { VideoInfo, VideoStatus } from "@/types/general"
 
 import { adminUsername } from "../config"
 

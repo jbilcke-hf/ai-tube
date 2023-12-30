@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef } from "react";
 import { create } from "zustand";
 
-import { VideoInfo } from "@/types";
+import { VideoInfo } from "@/types/general";
 
 // Define the new track type with an optional playNow property
 interface PlaybackOptions<T> {

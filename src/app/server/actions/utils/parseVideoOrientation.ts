@@ -1,5 +1,5 @@
 import { defaultVideoOrientation } from "@/app/config"
-import { VideoOrientation } from "@/types"
+import { VideoOrientation } from "@/types/general"
 
 export function parseVideoOrientation(text: any, defaultToUse?: VideoOrientation): VideoOrientation {
   const rawOrientationString = `${text || ""}`.trim().toLowerCase()

@@ -1,4 +1,4 @@
-import { Settings } from "@/types"
+import { Settings } from "@/types/general"
 
 export const localStorageKeys: Record<keyof Settings, string> = {
   // important: prefix with AI_TUBE to avoid collisions when running the app on localhost

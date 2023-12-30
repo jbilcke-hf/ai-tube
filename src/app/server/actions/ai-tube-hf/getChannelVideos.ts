@@ -1,12 +1,13 @@
 "use server"
 
-import { ChannelInfo, VideoInfo, VideoStatus } from "@/types"
+import { ChannelInfo, VideoInfo, VideoStatus } from "@/types/general"
 
 import { getVideoRequestsFromChannel  } from "./getVideoRequestsFromChannel"
 import { adminApiKey } from "../config"
 import { getVideoIndex } from "./getVideoIndex"
 import { extendVideosWithStats } from "./extendVideosWithStats"
 import { computeOrientationProjectionWidthHeight } from "../utils/computeOrientationProjectionWidthHeight"
+import { defaultVideoModel } from "@/app/config"
 
 // return 
 export async function getChannelVideos({
@@ -40,16 +41,18 @@ export async function getChannelVideos({
     let video: VideoInfo = {
         id: v.id,
         status: "submitted",
-        label: v.label,
-        description: v.description,
-        prompt: v.prompt,
-        thumbnailUrl: v.thumbnailUrl,
-        model: v.model,
-        lora: v.lora,
-        style: v.style,
-        voice: v.voice,
-        music: v.music,
+        label: v.label || "",
+        description: v.description || "",
+        prompt: v.prompt || "",
+        thumbnailUrl: v.thumbnailUrl || "",
+        clapUrl: v.clapUrl || "",
+        model: v.model || defaultVideoModel,
+        lora: v.lora || "",
+        style: v.style || "",
+        voice: v.voice || "",
+        music: v.music || "",
         assetUrl: "",
+        assetUrlHd: "",
         numberOfViews: 0,
         numberOfLikes: 0,
         numberOfDislikes: 0,

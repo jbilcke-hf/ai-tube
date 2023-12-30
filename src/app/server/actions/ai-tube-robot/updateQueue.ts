@@ -1,6 +1,6 @@
 "use server"
 
-import { ChannelInfo, UpdateQueueResponse } from "@/types"
+import { ChannelInfo, UpdateQueueResponse } from "@/types/general"
 
 import { aiTubeRobotApi } from "../config"
 

@@ -19,6 +19,7 @@ export function UserAccountView() {
     defaultSettings.huggingfaceApiKey
   )
   const setView = useStore(s => s.setView)
+  const userChannel = useStore(s => s.userChannel)
   const setUserChannel = useStore(s => s.setUserChannel)
 
   const userChannels = useStore(s => s.userChannels)
@@ -26,23 +27,23 @@ export function UserAccountView() {
   const [isLoaded, setLoaded] = useState(false)
 
   useEffect(() => {
-    if (!isLoaded) {
       startTransition(async () => {
-        try {
-          const channels = await getPrivateChannels({
-            apiKey: huggingfaceApiKey,
-            renewCache: true,
-          })
-          setUserChannels(channels)
-        } catch (err) {
-          console.error("failed to load the channel for the current user:", err)
-          setUserChannels([])
-        } finally {
-          setLoaded(true)
+        if (!isLoaded && huggingfaceApiKey) {
+          try {
+            const newUserChannels = await getPrivateChannels({
+              apiKey: huggingfaceApiKey,
+              renewCache: true,
+            })
+            setUserChannels(newUserChannels)
+          } catch (err) {
+            console.error("failed to load the channel for the current user:", err)
+            setUserChannels([])
+          } finally {
+            setLoaded(true)
+          }
         }
       })
-    }
-  }, [isLoaded, huggingfaceApiKey, setUserChannels, setLoaded])
+  }, [isLoaded, huggingfaceApiKey, userChannels.map(c => c.id).join(","), setUserChannels, setLoaded])
 
   return (
     <div className={cn(`flex flex-col space-y-4`)}>

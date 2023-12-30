@@ -1,7 +1,7 @@
 
 import metadataParser from "markdown-yaml-metadata-parser"
 
-import { ParsedDatasetReadme, ParsedMetadataAndContent } from "@/types"
+import { ParsedDatasetReadme, ParsedMetadataAndContent } from "@/types/general"
 import { parseVideoModelName } from "./parseVideoModelName"
 import { parseVideoOrientation } from "./parseVideoOrientation"
 import { defaultVideoModel, defaultVideoOrientation } from "@/app/config"

@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils"
-import { MediaDisplayLayout, VideoInfo } from "@/types"
+import { MediaDisplayLayout, VideoInfo } from "@/types/general"
 import { TrackCard } from "../track-card"
 import { VideoCard } from "../video-card"
 

@@ -3,7 +3,7 @@ import { useEffect, useTransition } from "react"
 
 import { useStore } from "@/app/state/useStore"
 import { cn } from "@/lib/utils"
-import { VideoInfo } from "@/types"
+import { VideoInfo } from "@/types/general"
 
 import { VideoList } from "../video-list"
 import { getVideos } from "@/app/server/actions/ai-tube-hf/getVideos"

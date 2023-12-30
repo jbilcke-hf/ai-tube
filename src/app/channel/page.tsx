@@ -1,4 +1,4 @@
-import { AppQueryProps } from "@/types"
+import { AppQueryProps } from "@/types/general"
 
 import { Main } from "../main"
 import { getChannel } from "../server/actions/ai-tube-hf/getChannel"

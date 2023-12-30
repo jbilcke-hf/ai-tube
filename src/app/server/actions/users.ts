@@ -1,7 +1,7 @@
 "use server"
 
 import { WhoAmIUser, whoAmI } from "@/huggingface/hub/src"
-import {  UserInfo } from "@/types"
+import {  UserInfo } from "@/types/general"
 import { adminApiKey } from "./config"
 import { redis } from "./redis"
 

@@ -1,5 +1,5 @@
 
-import { VideoInfo } from "@/types"
+import { VideoInfo } from "@/types/general"
 
 import { deleteFileFromDataset } from "./deleteFileFromDataset"
 import { formatPromptFileName } from "../utils/formatPromptFileName"

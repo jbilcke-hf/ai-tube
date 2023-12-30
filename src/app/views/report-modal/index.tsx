@@ -4,7 +4,7 @@ import { LuShieldAlert } from "react-icons/lu"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTrigger } from "@/components/ui/dialog"
 
-import { ChannelInfo, VideoInfo } from "@/types"
+import { ChannelInfo, VideoInfo } from "@/types/general"
 import { ActionButton } from "@/app/interface/action-button"
 
 // modal to report a video or channel

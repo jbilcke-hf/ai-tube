@@ -4,7 +4,7 @@ import { Player } from "react-tuby"
 import "react-tuby/css/main.css"
 
 import { cn } from "@/lib/utils"
-import { VideoInfo } from "@/types"
+import { VideoInfo } from "@/types/general"
 
 export function CartesianVideoPlayer({
   video,
