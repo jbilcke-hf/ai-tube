@@ -14,20 +14,26 @@ export async function parseChannel(options: {
   updatedAt: Date
   apiKey?: string
   owner?: string
+  // ownerId?: string
   renewCache?: boolean
 }): Promise<ChannelInfo> {
   // console.log("getChannels")
   let credentials: Credentials = adminCredentials
-  let owner = options.owner
+  let owner = options.owner || ""
+  // let ownerId = options.ownerId || ""
 
   if (options.apiKey) {
     try {
       credentials = { accessToken: options.apiKey }
-      const { name: username } = await whoAmI({ credentials })
+      const { id: userId, name: username } = await whoAmI({ credentials })
+      if (!userId) {
+        throw new Error(`couldn't get the userId`)
+      }
       if (!username) {
         throw new Error(`couldn't get the username`)
       }
-      // everything is in order,
+      // everything is in order
+      // ownerId = userId
       owner = username
     } catch (err) {
       console.error(err)
@@ -115,6 +121,7 @@ export async function parseChannel(options: {
 
   const channel: ChannelInfo = {
     id: options.id,
+    // datasetUserId: ownerId,
     datasetUser,
     datasetName,
     slug,

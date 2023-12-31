@@ -192,6 +192,14 @@ export type ChannelInfo = {
   slug: string
 
   /**
+   * username id of the Hugging Face dataset
+   * 
+   * ex: f9a38286ec3436a45edd2cca
+   */
+  // DISABLED FOR NOW
+  // datasetUserId: string
+
+  /**
    * username slug of the Hugging Face dataset
    * 
    * eg: jbilcke-hf
