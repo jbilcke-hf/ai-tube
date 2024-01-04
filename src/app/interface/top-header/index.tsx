@@ -37,7 +37,9 @@ export function TopHeader() {
 
 
   useEffect(() => {
-    if (view === "public_video" ||  view === "public_channel" || view === "public_music_videos") {
+    if (view === "public_video_embed") {
+      setHeaderMode("hidden")
+    } else if (view === "public_video" || view === "public_channel" || view === "public_music_videos") {
       setHeaderMode("compact")
       setMenuMode("slider_hidden")
     } else {
@@ -53,6 +55,10 @@ export function TopHeader() {
     })
   }, [])
   
+  if (headerMode === "hidden") {
+    return null
+  }
+
   return (
     <div className={cn(
       `flex flex-col`,

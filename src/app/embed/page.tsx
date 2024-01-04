@@ -76,7 +76,7 @@ export async function generateMetadata(
 }
 
 
-export default async function WatchPage({ searchParams: { v: videoId } }: AppQueryProps) {
+export default async function Embed({ searchParams: { v: videoId } }: AppQueryProps) {
   const publicVideo = await getVideo({ videoId, neverThrow: true })
   // console.log("WatchPage: --> " + video?.id)
   return (

@@ -59,7 +59,7 @@ export async function getVideoRequestsFromChannel({
           const clap = await downloadClapProject({
             path: file.path,
             channel,
-            apiKey
+            credentials,
           })
           console.log("got a clap file:", clap.clapProject.meta)
           

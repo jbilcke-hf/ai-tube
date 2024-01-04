@@ -1,24 +1,24 @@
 import { v4 as uuidv4 } from "uuid"
+import { Credentials } from "@/huggingface/hub/src"
 
-import { ClapProject } from "@/types/clap"
+import { ClapProject } from "@/clap/types"
 import { ChannelInfo, VideoInfo, VideoRequest } from "@/types/general"
 import { defaultVideoModel } from "@/app/config"
+import { parseClap } from "@/clap/parseClap"
 
-import { parseClap } from "../utils/parseClap"
 import { parseVideoModelName } from "../utils/parseVideoModelName"
 import { computeOrientationProjectionWidthHeight } from "../utils/computeOrientationProjectionWidthHeight"
 
-import { downloadFileAsText } from "./downloadFileAsText"
 import { downloadFileAsBlob } from "./downloadFileAsBlob"
 
 export async function downloadClapProject({
   path,
-  apiKey,
-  channel
+  channel,
+  credentials,
 }: {
   path: string
-  apiKey?: string
   channel: ChannelInfo
+  credentials: Credentials
 }): Promise<{
   videoRequest: VideoRequest
   videoInfo: VideoInfo
@@ -31,7 +31,7 @@ export async function downloadClapProject({
   const clapString = await downloadFileAsBlob({
     repo,
     path,
-    apiKey,
+    apiKey: credentials.accessToken,
     expectedMimeType: "application/gzip"
   })
 

@@ -1,8 +1,8 @@
 import YAML from "yaml"
 import { v4 as uuidv4 } from "uuid"
 
-import { ClapHeader, ClapMeta, ClapProject, ClapSegment } from "@/types/clap"
-import { getValidNumber } from "@/lib/getValidNumber"
+import { ClapHeader, ClapMeta, ClapModel, ClapProject, ClapSegment } from "./types"
+import { getValidNumber } from "@/lib/getValidNumber";
 
 /**
  * import a Clap file (from a plain text string)
@@ -38,6 +38,7 @@ export async function parseClap(inputStringOrBlob: string | Blob): Promise<ClapP
     throw new Error("invalid clap file (sorry, but you can't make up version numbers like that)")
   }
 
+
   const maybeClapMeta = rawData[1] as ClapMeta
 
   const clapMeta: ClapMeta = {
@@ -46,14 +47,71 @@ export async function parseClap(inputStringOrBlob: string | Blob): Promise<ClapP
     description: typeof maybeClapMeta.description === "string" ? maybeClapMeta.description : "",
     licence: typeof maybeClapMeta.licence === "string" ? maybeClapMeta.licence : "",
     orientation: maybeClapMeta.orientation === "portrait" ? "portrait" : maybeClapMeta.orientation === "square" ? "square" : "landscape",
-    width: getValidNumber(maybeClapMeta.width, 256, 4096, 1024),
-    height: getValidNumber(maybeClapMeta.height, 256, 4096, 1024),
+    width: getValidNumber(maybeClapMeta.width, 256, 8192, 1024),
+    height: getValidNumber(maybeClapMeta.height, 256, 8192, 576),
     defaultVideoModel: typeof maybeClapMeta.defaultVideoModel === "string" ? maybeClapMeta.defaultVideoModel : "SVD",
+    extraPositivePrompt: Array.isArray(maybeClapMeta.extraPositivePrompt) ? maybeClapMeta.extraPositivePrompt : [],
   }
 
-  const maybeSegments = rawData.slice(2) as ClapSegment[]
+  /*
+  in case we want to support streaming (mix of models and segments etc), we could do it this way:
 
-  const clapSegments: ClapSegment[] = Array.isArray(maybeSegments) ? maybeSegments.map(({
+  const maybeModelsOrSegments = rawData.slice(2)
+  maybeModelsOrSegments.forEach((unknownElement: any) => {
+    if (isValidNumber(unknownElement?.track)) {
+      maybeSegments.push(unknownElement as ClapSegment)
+    } else {
+      maybeModels.push(unknownElement as ClapModel)
+    }
+  })
+  */
+
+
+  const expectedNumberOfModels = maybeClapHeader.numberOfModels || 0
+  const expectedNumberOfSegments = maybeClapHeader.numberOfSegments || 0
+
+  // note: we assume the order is strictly enforced!
+  // if you implement streaming (mix of models and segments) you will have to rewrite this!
+
+  const afterTheHeaders = 2
+  const afterTheModels = afterTheHeaders + expectedNumberOfModels
+
+  // note: if there are no expected models, maybeModels will be empty
+  const maybeModels = rawData.slice(afterTheHeaders, afterTheModels) as ClapModel[]
+
+  const maybeSegments = rawData.slice(afterTheModels) as ClapSegment[]
+
+  const clapModels: ClapModel[] = maybeModels.map(({
+    id,
+    imageType,
+    audioType,
+    category,
+    triggerName,
+    label,
+    description,
+    author,
+    thumbnailUrl,
+    storageUrl,
+    imagePrompt,
+    audioPrompt,
+  }) => ({
+    // TODO: we should verify each of those, probably
+    id,
+    imageType,
+    audioType,
+    category,
+    triggerName,
+    label,
+    description,
+    author,
+    thumbnailUrl,
+    storageUrl,
+    imagePrompt,
+    audioPrompt,
+  }))
+
+
+  const clapSegments: ClapSegment[] = maybeSegments.map(({
     id,
     track,
     startTimeInMs,
@@ -82,10 +140,11 @@ export async function parseClap(inputStringOrBlob: string | Blob): Promise<ClapP
     assetUrl,
     outputGain,
     seed,
-  })) : []
+  }))
 
   return {
     meta: clapMeta,
+    models: clapModels,
     segments: clapSegments
   }
 }

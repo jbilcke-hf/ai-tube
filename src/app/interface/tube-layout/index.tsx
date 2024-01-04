@@ -12,6 +12,15 @@ import { TopHeader } from "../top-header"
 export function TubeLayout({ children }: { children?: ReactNode }) {
   const headerMode = useStore(s => s.headerMode)
   const view = useStore(s => s.view)
+  if (headerMode === "hidden") {
+    return (
+      <div className={cn(
+        `dark flex flex-row h-screen w-screen inset-0 overflow-hidden`
+      )}>
+        {children}
+      </div>
+    ) 
+  }
   return (
     <div className={cn(
       `dark flex flex-row h-screen w-screen inset-0 overflow-hidden`,

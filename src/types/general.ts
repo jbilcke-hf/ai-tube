@@ -608,6 +608,7 @@ export type InterfaceDisplayMode =
   | "tv"
 
 export type InterfaceHeaderMode =
+  | "hidden"
   | "normal"
   | "compact"
 
@@ -627,6 +628,7 @@ export type InterfaceView =
   | "public_channels"
   | "public_channel" // public view of a channel
   | "public_video" // public view of a video
+  | "public_video_embed" // for integration into twitter etc
   | "public_music_videos" // public music videos - it's a special category, because music is *cool*
   | "not_found"
 

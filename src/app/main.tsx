@@ -8,12 +8,13 @@ import { UserChannelView } from "./views/user-channel-view"
 import { PublicVideoView } from "./views/public-video-view"
 import { UserAccountView } from "./views/user-account-view"
 import { NotFoundView } from "./views/not-found-view"
-import { ChannelInfo, InterfaceView, VideoInfo } from "@/types/general"
+import { ChannelInfo, VideoInfo } from "@/types/general"
 import { useEffect } from "react"
 import { usePathname, useRouter } from "next/navigation"
 import { TubeLayout } from "./interface/tube-layout"
 import { PublicMusicVideosView } from "./views/public-music-videos-view"
 import { getCollectionKey } from "@/lib/getCollectionKey"
+import { PublicVideoEmbedView } from "./views/public-video-embed-view"
 
 // this is where we transition from the server-side space
 // and the client-side space
@@ -99,6 +100,7 @@ export function Main({
 
     if (!publicVideo || !publicVideo?.id) { return }
 
+    if (pathname === "/embed") { return }
     // this is a hack for hugging face:
     // we allow the ?v=<id> param on the root of the domain
     if (pathname !== "/watch") {
@@ -138,6 +140,7 @@ export function Main({
   return (
     <TubeLayout>
       {view === "home" && <HomeView />}
+      {view === "public_video_embed" && <PublicVideoEmbedView />}
       {view === "public_video" && <PublicVideoView />}
       {view === "public_music_videos" && <PublicMusicVideosView />}
       {view === "public_channels" && <PublicChannelsView />}
