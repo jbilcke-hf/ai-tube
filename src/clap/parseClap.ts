@@ -2,7 +2,7 @@ import YAML from "yaml"
 import { v4 as uuidv4 } from "uuid"
 
 import { ClapHeader, ClapMeta, ClapModel, ClapProject, ClapSegment } from "./types"
-import { getValidNumber } from "@/lib/getValidNumber";
+import { getValidNumber } from "@/lib/getValidNumber"
 
 /**
  * import a Clap file (from a plain text string)
@@ -50,7 +50,7 @@ export async function parseClap(inputStringOrBlob: string | Blob): Promise<ClapP
     width: getValidNumber(maybeClapMeta.width, 256, 8192, 1024),
     height: getValidNumber(maybeClapMeta.height, 256, 8192, 576),
     defaultVideoModel: typeof maybeClapMeta.defaultVideoModel === "string" ? maybeClapMeta.defaultVideoModel : "SVD",
-    extraPositivePrompt: Array.isArray(maybeClapMeta.extraPositivePrompt) ? maybeClapMeta.extraPositivePrompt : [],
+    extraPositivePrompt: Array.isArray(maybeClapMeta.extraPositivePrompt) ? maybeClapMeta.extraPositivePrompt : []
   }
 
   /*
@@ -83,31 +83,39 @@ export async function parseClap(inputStringOrBlob: string | Blob): Promise<ClapP
 
   const clapModels: ClapModel[] = maybeModels.map(({
     id,
-    imageType,
-    audioType,
     category,
     triggerName,
     label,
     description,
     author,
     thumbnailUrl,
-    storageUrl,
-    imagePrompt,
-    audioPrompt,
+    seed,
+    assetSourceType,
+    assetUrl,
+    age,
+    gender,
+    region,
+    appearance,
+    voiceVendor,
+    voiceId,
   }) => ({
     // TODO: we should verify each of those, probably
     id,
-    imageType,
-    audioType,
     category,
     triggerName,
     label,
     description,
     author,
     thumbnailUrl,
-    storageUrl,
-    imagePrompt,
-    audioPrompt,
+    seed,
+    assetSourceType,
+    assetUrl,
+    age,
+    gender,
+    region,
+    appearance,
+    voiceVendor,
+    voiceId,
   }))
 
 
@@ -148,3 +156,4 @@ export async function parseClap(inputStringOrBlob: string | Blob): Promise<ClapP
     segments: clapSegments
   }
 }
+

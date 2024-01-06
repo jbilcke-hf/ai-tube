@@ -2,8 +2,60 @@
 export type ClapSegmentCategory = "render" | "preview" | "characters" | "location" | "time" | "era" | "lighting" | "weather" | "action" | "music" | "sound" | "dialogue" | "style" | "camera" | "generic"
 export type ClapOutputType = "text" | "movement" | "image" | "video" | "audio"
 export type ClapSegmentStatus = "pending" | "completed" | "error"
-export type ClapImageType = "reference_image" | "text_prompt" | "other"
-export type ClapAudioType =  "reference_audio" | "text_prompt" | "other"
+
+export type ClapAssetSource =
+  | "REMOTE" // http:// or https://
+
+    // note that "path" assets are potentially a security risk, they need to be treated with care
+  | "PATH" // a file path eg. /path or ./path/to/ or ../path/to/
+
+  | "DATA" // a data URI, starting with data:
+
+  | "PROMPT" // by default, a plain text prompt
+
+  | "EMPTY"
+
+export type ClapModelGender =
+  | "male"
+  | "female"
+  | "person"
+  | "object"
+
+export type ClapModelAppearance = "serious" | "neutral" | "friendly" | "chill"
+
+// this is used for accent, style..
+export type ClapModelRegion =
+  | "american"
+  | "british"
+  | "australian"
+  | "canadian"
+  | "indian"
+  | "french"
+  | "italian"
+  | "german"
+  | "chinese"
+
+// note: this is all very subjective, so please use good judgment
+//
+// "deep" might indicate a deeper voice tone, thicker, rich in harmonics
+// in this context, it is used to indicate voices that could
+// be associated with African American (AADOS) characters
+//
+// "high" could be used for some other countries, eg. asia
+export type ClapModelTimbre = "high" | "neutral" | "deep"
+
+export type ClapVoiceVendor = "ElevenLabs" | "XTTS"
+
+export type ClapVoice = {
+  name: string
+  gender: ClapModelGender
+  age: number
+  region: ClapModelRegion
+  timbre: ClapModelTimbre
+  appearance: ClapModelAppearance
+  voiceVendor: ClapVoiceVendor
+  voiceId: string
+}
 
 export type ClapHeader = {
   format: "clap-0"
@@ -41,17 +93,24 @@ export type ClapSegment = {
 
 export type ClapModel = {
   id: string
-  imageType: ClapImageType
-  audioType: ClapAudioType
   category: ClapSegmentCategory
   triggerName: string
   label: string
   description: string
   author: string
   thumbnailUrl: string
-  storageUrl: string
-  imagePrompt: string
-  audioPrompt: string
+  seed: number
+
+  assetSourceType: ClapAssetSource
+  assetUrl: string
+  
+  // those are only used by certain types of models
+  age: number
+  gender: ClapModelGender
+  region: ClapModelRegion
+  appearance: ClapModelAppearance
+  voiceVendor: ClapVoiceVendor
+  voiceId: string
 }
 
 export type ClapProject = {
