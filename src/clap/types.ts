@@ -113,11 +113,12 @@ export type ClapSegment = {
   modelId: string
   sceneId: string
   prompt: string
+  label: string
   outputType: ClapOutputType
   renderId: string
   status: ClapSegmentStatus
   assetUrl: string
-  assetDuration: number
+  assetDurationInMs: number
   createdBy: ClapAuthor
   editedBy: ClapAuthor
   outputGain: number
