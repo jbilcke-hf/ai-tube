@@ -3,6 +3,11 @@ export type ClapSegmentCategory = "render" | "preview" | "characters" | "locatio
 export type ClapOutputType = "text" | "movement" | "image" | "video" | "audio"
 export type ClapSegmentStatus = "pending" | "completed" | "error"
 
+export type ClapAuthor =
+  | "auto" // the element was edited automatically using basic if/else logical rules
+  | "ai" // the element was edited using a large language model
+  | "human" // the element was edited by a human
+
 export type ClapAssetSource =
   | "REMOTE" // http:// or https://
 
@@ -60,6 +65,7 @@ export type ClapVoice = {
 export type ClapHeader = {
   format: "clap-0"
   numberOfModels: number
+  numberOfScenes: number
   numberOfSegments: number
 }
 
@@ -75,6 +81,29 @@ export type ClapMeta = {
   extraPositivePrompt: string[]
 }
 
+export type ClapSceneEvent = {
+  id: string
+  type: "description" | "dialogue" | "action"
+  character?: string
+  description: string
+  behavior: string
+  startAtLine: number
+  endAtLine: number
+}
+
+export type ClapScene = {
+  id: string
+  scene: string
+  line: string
+  rawLine: string
+  sequenceFullText: string
+  sequenceStartAtLine: number
+  sequenceEndAtLine: number
+  startAtLine: number
+  endAtLine: number
+  events: ClapSceneEvent[]
+}
+
 export type ClapSegment = {
   id: string
   track: number
@@ -82,11 +111,15 @@ export type ClapSegment = {
   endTimeInMs: number
   category: ClapSegmentCategory
   modelId: string
+  sceneId: string
   prompt: string
   outputType: ClapOutputType
   renderId: string
   status: ClapSegmentStatus
   assetUrl: string
+  assetDuration: number
+  createdBy: ClapAuthor
+  editedBy: ClapAuthor
   outputGain: number
   seed: number
 }
@@ -116,6 +149,7 @@ export type ClapModel = {
 export type ClapProject = {
   meta: ClapMeta
   models: ClapModel[]
+  scenes: ClapScene[]
   segments: ClapSegment[]
   // let's keep room for other stuff (screenplay etc)
 }

@@ -1,12 +1,13 @@
 import YAML from "yaml"
 import { v4 as uuidv4 } from "uuid"
 
-import { ClapHeader, ClapMeta, ClapModel, ClapProject, ClapSegment } from "./types"
+import { ClapHeader, ClapMeta, ClapModel, ClapProject, ClapScene, ClapSegment } from "./types"
 import { getValidNumber } from "@/lib/getValidNumber"
 
 export async function serializeClap({
   meta, // ClapMeta
   models, // ClapModel[]
+  scenes, // ClapScene[]
   segments, // ClapSegment[]
 }: ClapProject): Promise<Blob> {
   
@@ -48,6 +49,30 @@ export async function serializeClap({
     voiceId,
   }))
 
+  const clapScenes: ClapScene[] = scenes.map(({
+    id,
+    scene,
+    line,
+    rawLine,
+    sequenceFullText,
+    sequenceStartAtLine,
+    sequenceEndAtLine,
+    startAtLine,
+    endAtLine,
+    events,
+  }) => ({
+    id,
+    scene,
+    line,
+    rawLine,
+    sequenceFullText,
+    sequenceStartAtLine,
+    sequenceEndAtLine,
+    startAtLine,
+    endAtLine,
+    events: events.map(e => e)
+  }))
+
   const clapSegments: ClapSegment[] = segments.map(({
     id,
     track,
@@ -55,11 +80,15 @@ export async function serializeClap({
     endTimeInMs,
     category,
     modelId,
+    sceneId,
     prompt,
     outputType,
     renderId,
     status,
     assetUrl,
+    assetDuration,
+    createdBy,
+    editedBy,
     outputGain,
     seed,
   }) => ({
@@ -69,11 +98,15 @@ export async function serializeClap({
     endTimeInMs,
     category,
     modelId,
+    sceneId,
     prompt,
     outputType,
     renderId,
     status,
     assetUrl,
+    assetDuration,
+    createdBy,
+    editedBy,
     outputGain,
     seed,
   }))
@@ -81,6 +114,7 @@ export async function serializeClap({
   const clapHeader: ClapHeader = {
     format: "clap-0",
     numberOfModels: clapModels.length,
+    numberOfScenes: clapScenes.length,
     numberOfSegments: clapSegments.length,
   }
 
@@ -100,6 +134,7 @@ export async function serializeClap({
     clapHeader,
     clapMeta,
     ...clapModels,
+    ...clapScenes,
     ...clapSegments
   ]
 

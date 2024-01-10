@@ -1,7 +1,7 @@
 import YAML from "yaml"
 import { v4 as uuidv4 } from "uuid"
 
-import { ClapHeader, ClapMeta, ClapModel, ClapProject, ClapSegment } from "./types"
+import { ClapHeader, ClapMeta, ClapModel, ClapProject, ClapScene, ClapSegment } from "./types"
 import { getValidNumber } from "@/lib/getValidNumber"
 
 /**
@@ -68,6 +68,7 @@ export async function parseClap(inputStringOrBlob: string | Blob): Promise<ClapP
 
 
   const expectedNumberOfModels = maybeClapHeader.numberOfModels || 0
+  const expectedNumberOfScenes = maybeClapHeader.numberOfScenes || 0
   const expectedNumberOfSegments = maybeClapHeader.numberOfSegments || 0
 
   // note: we assume the order is strictly enforced!
@@ -76,10 +77,15 @@ export async function parseClap(inputStringOrBlob: string | Blob): Promise<ClapP
   const afterTheHeaders = 2
   const afterTheModels = afterTheHeaders + expectedNumberOfModels
 
+  const afterTheScenes = afterTheModels + expectedNumberOfScenes
+
   // note: if there are no expected models, maybeModels will be empty
   const maybeModels = rawData.slice(afterTheHeaders, afterTheModels) as ClapModel[]
 
-  const maybeSegments = rawData.slice(afterTheModels) as ClapSegment[]
+  // note: if there are no expected scenes, maybeScenes will be empty
+  const maybeScenes = rawData.slice(afterTheModels, afterTheScenes) as ClapScene[]
+
+  const maybeSegments = rawData.slice(afterTheScenes) as ClapSegment[]
 
   const clapModels: ClapModel[] = maybeModels.map(({
     id,
@@ -118,7 +124,30 @@ export async function parseClap(inputStringOrBlob: string | Blob): Promise<ClapP
     voiceId,
   }))
 
-
+  const clapScenes: ClapScene[] = maybeScenes.map(({
+    id,
+    scene,
+    line,
+    rawLine,
+    sequenceFullText,
+    sequenceStartAtLine,
+    sequenceEndAtLine,
+    startAtLine,
+    endAtLine,
+    events,
+  }) => ({
+    id,
+    scene,
+    line,
+    rawLine,
+    sequenceFullText,
+    sequenceStartAtLine,
+    sequenceEndAtLine,
+    startAtLine,
+    endAtLine,
+    events: events.map(e => e)
+  }))
+  
   const clapSegments: ClapSegment[] = maybeSegments.map(({
     id,
     track,
@@ -126,11 +155,15 @@ export async function parseClap(inputStringOrBlob: string | Blob): Promise<ClapP
     endTimeInMs,
     category,
     modelId,
+    sceneId,
     prompt,
     outputType,
     renderId,
     status,
     assetUrl,
+    assetDuration,
+    createdBy,
+    editedBy,
     outputGain,
     seed,
   }) => ({
@@ -141,11 +174,15 @@ export async function parseClap(inputStringOrBlob: string | Blob): Promise<ClapP
     endTimeInMs,
     category,
     modelId,
+    sceneId,
     prompt,
     outputType,
     renderId,
     status,
     assetUrl,
+    assetDuration,
+    createdBy,
+    editedBy,
     outputGain,
     seed,
   }))
@@ -153,7 +190,7 @@ export async function parseClap(inputStringOrBlob: string | Blob): Promise<ClapP
   return {
     meta: clapMeta,
     models: clapModels,
+    scenes: clapScenes,
     segments: clapSegments
   }
 }
-
