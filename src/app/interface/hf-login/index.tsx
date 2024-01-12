@@ -10,7 +10,7 @@ export function HuggingFaceLogin() {
   const hf = useHuggingFaceLogin()
 
   // feature is not finished yet
-  // if (user?.userName !== "Julian Bilcke") { return }
+  if (user?.userName !== "jbilcke-hf") { return }
 
   console.log("user:", user)
   console.log("hf.isLoggedIn:", hf.isLoggedIn)
