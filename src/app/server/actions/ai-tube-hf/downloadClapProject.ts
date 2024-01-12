@@ -37,8 +37,8 @@ export async function downloadClapProject({
 
   const clapProject = await parseClap(clapString)
 
-  const id = uuidv4()
-
+  const id = clapProject.meta.id || uuidv4()
+  
   const videoRequest: VideoRequest = {
     id,
     label: clapProject.meta.title || "Untitled",

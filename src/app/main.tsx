@@ -16,6 +16,8 @@ import { PublicMusicVideosView } from "./views/public-music-videos-view"
 import { getCollectionKey } from "@/lib/getCollectionKey"
 import { PublicVideoEmbedView } from "./views/public-video-embed-view"
 
+import { HuggingFaceLogin } from "./interface/hf-login"
+
 // this is where we transition from the server-side space
 // and the client-side space
 // basically, all the views are generated in client-side space
@@ -136,9 +138,9 @@ export function Main({
 
 
   const view = useStore(s => s.view)
-
   return (
     <TubeLayout>
+      <HuggingFaceLogin />
       {view === "home" && <HomeView />}
       {view === "public_video_embed" && <PublicVideoEmbedView />}
       {view === "public_video" && <PublicVideoView />}

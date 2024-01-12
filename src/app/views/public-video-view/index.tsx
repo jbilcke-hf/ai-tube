@@ -24,11 +24,12 @@ import { ReportModal } from "../report-modal"
 import { formatLargeNumber } from "@/lib/formatLargeNumber"
 import { CommentList } from "@/app/interface/comment-list"
 import { Input } from "@/components/ui/input"
-import useLocalStorage from "usehooks-ts/dist/esm/useLocalStorage/useLocalStorage"
+
 import { localStorageKeys } from "@/app/state/localStorageKeys"
 import { defaultSettings } from "@/app/state/defaultSettings"
 import { getComments, submitComment } from "@/app/server/actions/comments"
 import { useCurrentUser } from "@/app/state/userCurrentUser"
+import { useLocalStorage } from "usehooks-ts"
 
 export function PublicVideoView() {
   const [_pending, startTransition] = useTransition()

@@ -7,6 +7,7 @@ sdk: docker
 pinned: true
 app_port: 3000
 disable_embedding: false
+hf_oauth: true
 ---
 
 # 🍿 AI Tube

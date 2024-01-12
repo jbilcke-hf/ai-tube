@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@huggingface/hub": "0.12.3-oauth",
     "@huggingface/inference": "^2.6.4",
     "@photo-sphere-viewer/core": "^5.5.1",
     "@photo-sphere-viewer/video-plugin": "^5.5.1",
