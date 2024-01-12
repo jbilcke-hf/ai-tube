@@ -64,7 +64,7 @@ export function UserAccountView() {
       {apiKey ? 
       <div className="flex flex-col space-y-4">
         <h2 className="text-3xl font-bold">@{user?.userName} channels</h2>
-        <p>Don&apos;t see your channel? try to <Button onClick={login}>synchronize</Button> again.</p>
+        <p>Don&apos;t see your channel? try to <Button onClick={() => login("/account")}>synchronize</Button> again.</p>
      
         {userChannels?.length ? <ChannelList
           layout="grid"
@@ -82,7 +82,7 @@ export function UserAccountView() {
           }}
         />
         : isLoaded ? null : <p>Loading channels owned by @{user?.userName}..</p>}
-      </div> : <p>To create a channel, comment or like a video please <Button onClick={login}>Login with Hugging Face</Button>.</p>}
+      </div> : <p>To create a channel, comment or like a video please <Button onClick={() => login("/account")}>Login with Hugging Face</Button>.</p>}
     </div>
   )
 }
