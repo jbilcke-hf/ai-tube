@@ -10,13 +10,13 @@ export function HuggingFaceLogin() {
   const hf = useHuggingFaceLogin()
 
   // feature is not finished yet
-  if (user?.userName !== "Julian Bilcke") { return }
+  // if (user?.userName !== "Julian Bilcke") { return }
 
   console.log("user:", user)
   console.log("hf.isLoggedIn:", hf.isLoggedIn)
   console.log("hf.oauthResult:", hf.oauthResult)
 
   return (
-    <div><Button onClick={hf.login}>Click me</Button></div>
+    <div><Button onClick={hf.login}>test</Button></div>
   )
 }
