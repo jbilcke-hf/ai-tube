@@ -43,14 +43,14 @@ export function PublicVideoView() {
   // EDIT: you know what, let's do this the dirty way for now
   // const [desiredCurrentTime, setDesiredCurrentTime] = useState()
 
-  const currentUser = useCurrentUser()
+  const { user } = useCurrentUser()
 
   const [userThumbnail, setUserThumbnail] = useState("")
   
   useEffect(() => {
-    setUserThumbnail(currentUser?.thumbnail || "")
+    setUserThumbnail(user?.thumbnail || "")
   
-  }, [currentUser?.thumbnail])
+  }, [user?.thumbnail])
 
   const handleBadUserThumbnail = () => {
     if (userThumbnail) {
@@ -388,7 +388,7 @@ export function PublicVideoView() {
           </div>
           
           {/* COMMENT INPUT BLOCK - HORIZONTAL */}
-          {currentUser && <div className="flex flex-row w-full">
+          {user && <div className="flex flex-row w-full">
             
             {/* AVATAR */}
             <div 
@@ -403,7 +403,7 @@ export function PublicVideoView() {
                   />
               </div>
               : <DefaultAvatar
-                  username={currentUser?.userName}
+                  username={user?.userName}
                   bgColor="#fde047"
                   textColor="#1c1917"
                   width={36}

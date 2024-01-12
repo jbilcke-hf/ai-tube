@@ -635,6 +635,7 @@ export type InterfaceView =
 
 export type Settings = {
   huggingfaceApiKey: string
+  huggingfaceTemporaryApiKey: string
 }
 
 export type ParsedDatasetReadme = {

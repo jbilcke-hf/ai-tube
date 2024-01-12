@@ -1,23 +1,20 @@
 "use client"
 
 import { useEffect, useState, useTransition } from "react"
-import { useLocalStorage } from "usehooks-ts"
 
 import { useStore } from "@/app/state/useStore"
 import { cn } from "@/lib/utils"
 import { ChannelList } from "@/app/interface/channel-list"
-import { localStorageKeys } from "@/app/state/localStorageKeys"
-import { defaultSettings } from "@/app/state/defaultSettings"
-import { Input } from "@/components/ui/input"
 
 import { getPrivateChannels } from "@/app/server/actions/ai-tube-hf/getPrivateChannels"
+import { useCurrentUser } from "@/app/state/userCurrentUser"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 
 export function UserAccountView() {
   const [_isPending, startTransition] = useTransition()
-  const [huggingfaceApiKey, setHuggingfaceApiKey] = useLocalStorage<string>(
-    localStorageKeys.huggingfaceApiKey,
-    defaultSettings.huggingfaceApiKey
-  )
+
+  const { user, login, apiKey, longStandingApiKey, setLongStandingApiKey } = useCurrentUser({ isLoginRequired: true })
   const setView = useStore(s => s.setView)
   const userChannel = useStore(s => s.userChannel)
   const setUserChannel = useStore(s => s.setUserChannel)
@@ -28,10 +25,10 @@ export function UserAccountView() {
 
   useEffect(() => {
       startTransition(async () => {
-        if (!isLoaded && huggingfaceApiKey) {
+        if (!isLoaded && apiKey) {
           try {
             const newUserChannels = await getPrivateChannels({
-              apiKey: huggingfaceApiKey,
+              apiKey,
               renewCache: true,
             })
             setUserChannels(newUserChannels)
@@ -43,36 +40,32 @@ export function UserAccountView() {
           }
         }
       })
-  }, [isLoaded, huggingfaceApiKey, userChannels.map(c => c.id).join(","), setUserChannels, setLoaded])
-
+  }, [isLoaded, apiKey, userChannels.map(c => c.id).join(","), setUserChannels, setLoaded])
+ 
   return (
     <div className={cn(`flex flex-col space-y-4`)}>
-      <h2 className="text-3xl font-bold">Want your own channels? Setup your account!</h2>
-        
-      <div className="flex flex-col space-y-4 max-w-2xl">
-        <div className="flex flex-row space-x-2 items-center">
-          <label className="flex w-64">Hugging Face token:</label>
-          <Input
-            placeholder="Hugging Face token (with WRITE access)"
-            type="password"
-            className="font-mono"
-            onChange={(x) => {
-              setHuggingfaceApiKey(x.target.value)
-            }}
-            value={huggingfaceApiKey}
-          />
-        </div>
-        <p className="text-neutral-100/70">
-          Note: your Hugging Face token must be a <span className="font-bold font-mono text-yellow-300">WRITE</span> access token.
-        </p>
-        {huggingfaceApiKey
-        ? <p className="">Nice, looks like you are ready to go!</p>
-        : <p>Please setup your account (see above) to get started</p>}
-      </div>
 
-      {huggingfaceApiKey ? 
+      {
+      // this is a beta feature, only necessary for users who use Clap files
+      user?.userName.startsWith("jbilcke")
+        ? <div className="flex flex-row space-x-2 items-center">
+        <label className="flex w-64">Save videos to my HF account</label>
+        <Input
+          placeholder="Hugging Face token (with WRITE access)"
+          type="password"
+          className="font-mono"
+          onChange={(x) => {
+            setLongStandingApiKey(x.target.value, false)
+          }}
+          value={longStandingApiKey}
+        />
+      </div> : null}
+
+      {apiKey ? 
       <div className="flex flex-col space-y-4">
-        <h2 className="text-3xl font-bold">Your custom channels:</h2>
+        <h2 className="text-3xl font-bold">@{user?.userName} channels</h2>
+        <p>Don&apos;t see your channel? try to <Button onClick={login}>synchronize</Button> again.</p>
+     
         {userChannels?.length ? <ChannelList
           layout="grid"
           channels={[
@@ -88,9 +81,8 @@ export function UserAccountView() {
             setView("user_channel")
           }}
         />
-        : isLoaded ? <p>You don&apos;t seem to have any channel yet. See @flngr on X to learn more about how to do this!</p> : <p>Loading channels..</p>}
-      </div> : null}
-
+        : isLoaded ? null : <p>Loading channels owned by @{user?.userName}..</p>}
+      </div> : <p>To create a channel, comment or like a video please <Button onClick={login}>Login with Hugging Face</Button>.</p>}
     </div>
   )
 }
