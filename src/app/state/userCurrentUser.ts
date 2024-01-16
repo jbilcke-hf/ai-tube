@@ -92,7 +92,7 @@ export function useCurrentUser({
     // (depending on if it's a secret page or not)
 
     if (isLoginRequired) {
-      await login()
+      await login("/")
     }
 
     return undefined
