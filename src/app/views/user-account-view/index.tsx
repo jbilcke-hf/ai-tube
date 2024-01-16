@@ -42,14 +42,15 @@ export function UserAccountView() {
       })
   }, [isLoaded, apiKey, userChannels.map(c => c.id).join(","), setUserChannels, setLoaded])
  
+  const showSecretFeature = user?.userName.startsWith("jbilcke")
+
   return (
     <div className={cn(`flex flex-col space-y-4`)}>
 
-      {
-      // this is a beta feature, only necessary for users who use Clap files
-      user?.userName.startsWith("jbilcke")
-        ? <div className="flex flex-row space-x-2 items-center">
-        <label className="flex w-64">Save videos to my HF account</label>
+      <div className="flex flex-row space-x-2 items-center">
+        {showSecretFeature
+          ? <label className="flex w-64">Save videos to my HF account</label>
+          : <label className="flex w-64">Note: currently only the API login mode is working.</label>}
         <Input
           placeholder="Hugging Face token (with WRITE access)"
           type="password"
@@ -59,13 +60,16 @@ export function UserAccountView() {
           }}
           value={longStandingApiKey}
         />
-      </div> : null}
+      </div>
 
       {apiKey ? 
       <div className="flex flex-col space-y-4">
         <h2 className="text-3xl font-bold">@{user?.userName} channels</h2>
-        <p>Don&apos;t see your channel? try to <Button onClick={() => login("/account")}>synchronize</Button> again.</p>
-     
+        {showSecretFeature
+          ? <p>Don&apos;t see your channel? try to <Button onClick={() => login("/account")}>synchronize</Button> again.</p>
+          : null
+        }
+       
         {userChannels?.length ? <ChannelList
           layout="grid"
           channels={[
@@ -82,7 +86,12 @@ export function UserAccountView() {
           }}
         />
         : isLoaded ? null : <p>Loading channels owned by @{user?.userName}..</p>}
-      </div> : <p>To create a channel, comment or like a video please <Button onClick={() => login("/account")}>Login with Hugging Face</Button>.</p>}
+      </div> : 
+      (
+        showSecretFeature
+        ? <p>To create a channel, comment or like a video please <Button onClick={() => login("/account")}>Login with Hugging Face</Button>.</p>
+        : null)
+      }
     </div>
   )
 }
