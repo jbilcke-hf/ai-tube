@@ -191,7 +191,7 @@ export function useCurrentUser({
         setHuggingfaceApiKey("")
         setCurrentUser(undefined)
         if (loginOnFailure) {
-          login()
+          // login()
         }
       }
     })()
