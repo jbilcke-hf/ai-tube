@@ -92,7 +92,7 @@ export function useCurrentUser({
     // (depending on if it's a secret page or not)
 
     if (isLoginRequired) {
-      await login("/")
+      // await login("/")
     }
 
     return undefined
@@ -141,6 +141,7 @@ export function useCurrentUser({
     // already logged-in, no need to spend an API call
     // although it is worth noting that the API token might be expired at this stage
     if (userId) {
+      console.log("we are already logged-in")
       return
     }
 
