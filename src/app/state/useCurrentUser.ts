@@ -107,7 +107,7 @@ export function useCurrentUser({
         "huggingface.co:oauth:nonce",
         localStorage.getItem("aitube.at:oauth:nonce") || ""
       )
-      localStorage.removeItem("aitube.co:oauth:code_verifier")
+      localStorage.removeItem("aitube.at:oauth:code_verifier")
       localStorage.setItem(
         "huggingface.co:oauth:code_verifier",
         localStorage.getItem("aitube.at:oauth:code_verifier") || ""
@@ -205,7 +205,7 @@ export function useCurrentUser({
       localStorage.getItem("huggingface.co:oauth:nonce") || ""
     )
     localStorage.setItem(
-      "huggingface.at:oauth:code_verifier",
+      "aitube.at:oauth:code_verifier",
       localStorage.getItem("huggingface.co:oauth:code_verifier") || ""
     )
 
