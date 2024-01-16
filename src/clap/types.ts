@@ -1,7 +1,12 @@
 
 export type ClapSegmentCategory = "render" | "preview" | "characters" | "location" | "time" | "era" | "lighting" | "weather" | "action" | "music" | "sound" | "dialogue" | "style" | "camera" | "generic"
 export type ClapOutputType = "text" | "movement" | "image" | "video" | "audio"
-export type ClapSegmentStatus = "pending" | "completed" | "error"
+export type ClapSegmentStatus =
+  | "to_generate"
+  | "to_interpolate"
+  | "to_upscale"
+  | "completed"
+  | "error"
 
 export type ClapAuthor =
   | "auto" // the element was edited automatically using basic if/else logical rules

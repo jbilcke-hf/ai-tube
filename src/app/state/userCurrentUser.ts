@@ -130,12 +130,10 @@ export function useCurrentUser({
   }, [isLoginRequired, huggingfaceApiKey, huggingfaceTemporaryApiKey, userId])
 
 
-  const login = async (redirectUrlOrPath: string = "") => {
-
-    const redirectUrl = redirectUrlOrPath[0] === "/"
-     ? `https://jbilcke-hf-ai-tube.hf.space${redirectUrlOrPath || ""}`
-     : redirectUrlOrPath ? redirectUrlOrPath
-     : ""
+  const login = async (
+    // used to redirect the user back to the route they were browsing
+    redirectTo: string = ""
+  ) => {
 
     const oauthUrl = await oauthLoginUrl({
       /**
@@ -171,12 +169,12 @@ export function useCurrentUser({
        *
        * For Developer Applications, you can add any URL you want to the list of allowed redirect URIs at https://huggingface.co/settings/connected-applications.
        */
-      redirectUrl,
+      redirectUrl: "https://aitube.at/api/login",
 
       /**
        * State to pass to the OAuth provider, which will be returned in the call to `oauthLogin` after the redirect.
        */
-      // state: ""
+      state: JSON.stringify({ redirectTo })
     })
 
     window.location.href = oauthUrl

@@ -68,7 +68,10 @@ export interface ImageSegment {
 }
 
 export type RenderedSceneStatus =
-  | "pending"
+  | "pending" // for retro-compatibility only, but this is deprecated
+  | "to_generate"
+  | "to_interpolate"
+  | "to_upscale"
   | "completed"
   | "error"
 
