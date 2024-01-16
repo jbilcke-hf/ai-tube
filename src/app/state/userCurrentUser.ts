@@ -102,9 +102,17 @@ export function useCurrentUser({
   const main = async (isLoginRequired: boolean) => {
 
     console.log("useCurrentUser()")
+    const searchParams = new URLSearchParams(window.location.search);
 
+
+    console.log("debug:", {
+      "window.location.search:": window.location.search,
+      searchParams,
+    })
+ 
     try {
       const res = await oauthHandleRedirectIfPresent()
+      console.log("result of oauthHandleRedirectIfPresent:", res)
       if (res) {
         console.log("useCurrentUser(): we just received an oauth login!")
         setOauthResult(res)
