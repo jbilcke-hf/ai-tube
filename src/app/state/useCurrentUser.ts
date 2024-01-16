@@ -119,8 +119,6 @@ export function useCurrentUser({
     main(isLoginRequired)
   }, [isLoginRequired, huggingfaceApiKey, huggingfaceTemporaryApiKey, userId])
 
-
-
   useEffect(() => {
 
     // DIY
@@ -154,6 +152,7 @@ export function useCurrentUser({
         if (res) {
           console.log("oauthHandleRedirectIfPresent returned something!", res)
           setOauthResult(res)
+          console.log("debug:", { accessToken: res.accessToken })
           setHuggingfaceTemporaryApiKey(res.accessToken)
           startTransition(async () => {
             console.log("TODO julian do something, eg. reload the page, remove the things in the URL etc")
@@ -168,9 +167,6 @@ export function useCurrentUser({
 
     fn()
   }, [isLoginRequired])
-
-
-
 
 
   const login = async (
