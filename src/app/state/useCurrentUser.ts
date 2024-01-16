@@ -56,8 +56,15 @@ export function useCurrentUser({
   const checkSession = async (isLoginRequired: boolean = false): Promise<UserInfo | undefined> => {
 
     console.log("useCurrentUser.checkSession()")
-    const huggingfaceTemporaryApiKey = localStorage.getItem(localStorageKeys.huggingfaceTemporaryApiKey) || ""
+    let huggingfaceTemporaryApiKey = localStorage.getItem(localStorageKeys.huggingfaceTemporaryApiKey) || ""
+    
     console.log("huggingfaceTemporaryApiKey:", huggingfaceTemporaryApiKey)
+    if (huggingfaceApiKey.startsWith('"')) {
+      console.log("the key has been corrupted..")
+      localStorage.setItem(localStorageKeys.huggingfaceTemporaryApiKey, JSON.parse(huggingfaceApiKey))
+      huggingfaceTemporaryApiKey = localStorage.getItem(localStorageKeys.huggingfaceTemporaryApiKey) || ""
+      console.log(`the recovered key is: ${huggingfaceTemporaryApiKey}`)
+    }
     // new way: try to use the safer temporary key whenever possible
     if (huggingfaceTemporaryApiKey) {
       try {
