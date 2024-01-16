@@ -99,7 +99,29 @@ export function useCurrentUser({
   }
 
   // can be called many times, but won't do the API call if not necessary
-  const main = async (isLoginRequired: boolean) => {
+  const main = (isLoginRequired: boolean) => {
+    // already logged-in, no need to spend an API call
+    // although it is worth noting that the API token might be expired at this stage
+    if (userId) {
+      console.log("we are already logged-in")
+      return
+    }
+
+    startTransition(async () => {
+  
+      console.log("useCurrentUser(): yes, we need to call synchronizeSession()")
+    
+      await checkSession(isLoginRequired)
+    })
+  }
+
+  useEffect(() => {
+    main(isLoginRequired)
+  }, [isLoginRequired, huggingfaceApiKey, huggingfaceTemporaryApiKey, userId])
+
+
+
+  useEffect(() => {
 
     // DIY
     try {
@@ -125,33 +147,30 @@ export function useCurrentUser({
       searchParams,
     })
  
-    try {
-      const res = await oauthHandleRedirectIfPresent()
-      console.log("result of oauthHandleRedirectIfPresent:", res)
-      if (res) {
-        console.log("useCurrentUser(): we just received an oauth login!")
-        setOauthResult(res)
-        setHuggingfaceTemporaryApiKey(res.accessToken)
-        await checkSession(isLoginRequired)
-        return
+    const fn = async () => {
+      try {
+        const res = await oauthHandleRedirectIfPresent()
+        console.log("result of oauthHandleRedirectIfPresent:", res)
+        if (res) {
+          console.log("oauthHandleRedirectIfPresent returned something!", res)
+          setOauthResult(res)
+          setHuggingfaceTemporaryApiKey(res.accessToken)
+          startTransition(async () => {
+            console.log("TODO julian do something, eg. reload the page, remove the things in the URL etc")
+            // await checkSession(isLoginRequired)
+          })
+        }
+        
+      } catch (err) {
+        console.error(err)
       }
-    } catch (err) {
-    }
-    
-    // already logged-in, no need to spend an API call
-    // although it is worth noting that the API token might be expired at this stage
-    if (userId) {
-      console.log("we are already logged-in")
-      return
     }
 
-    console.log("useCurrentUser(): yes, we need to call synchronizeSession()")
-    await checkSession(isLoginRequired)
-  }
+    fn()
+  }, [isLoginRequired])
 
-  useEffect(() => {
-    startTransition(async () => { await main(isLoginRequired) })
-  }, [isLoginRequired, huggingfaceApiKey, huggingfaceTemporaryApiKey, userId])
+
+
 
 
   const login = async (
