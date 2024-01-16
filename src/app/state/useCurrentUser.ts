@@ -107,11 +107,12 @@ export function useCurrentUser({
         "huggingface.co:oauth:nonce",
         localStorage.getItem("aitube.at:oauth:nonce") || ""
       )
-      localStorage.removeItem("aitube.at:oauth:code_verifier")
+      // localStorage.removeItem("aitube.at:oauth:nonce")
       localStorage.setItem(
         "huggingface.co:oauth:code_verifier",
         localStorage.getItem("aitube.at:oauth:code_verifier") || ""
       )
+            // localStorage.removeItem("aitube.at:oauth:code_verifier")
     } catch (err) {
       console.log("no pending oauth flow to finish")
     }
