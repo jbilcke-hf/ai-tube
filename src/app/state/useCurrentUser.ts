@@ -56,9 +56,13 @@ export function useCurrentUser({
   const checkSession = async (isLoginRequired: boolean = false): Promise<UserInfo | undefined> => {
 
     console.log("useCurrentUser.checkSession()")
+    const huggingfaceTemporaryApiKey = localStorage.getItem(localStorageKeys.huggingfaceTemporaryApiKey) || ""
+    console.log("huggingfaceTemporaryApiKey:", huggingfaceTemporaryApiKey)
     // new way: try to use the safer temporary key whenever possible
     if (huggingfaceTemporaryApiKey) {
       try {
+
+        console.log(`calling getCurrentUser()`, { huggingfaceTemporaryApiKey })
 
         const user = await getCurrentUser(huggingfaceTemporaryApiKey)
 
