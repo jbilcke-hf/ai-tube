@@ -8,10 +8,13 @@ const defaultState = JSON.stringify({
 })
 
 export async function GET(req: NextRequest) {
+ // we are going to pass the whole thing unchanged to the AI Tube frontend
+ const params = req.url.split("/api/login").pop() || ""
 
-  const query = querystring.parse(req.url)
+  
+ const query = querystring.parse(params)
 
-  console.log("Received GET /api/login:", req.url)
+  console.log("Received GET /api/login:", params)
   console.log(query)
 
 
@@ -27,16 +30,17 @@ export async function GET(req: NextRequest) {
   // eg. this can be /account, /, or nothing
   const redirectTo = `${state.redirectTo || "/"}`
 
-  // we are going to pass the whole thing unchanged to the AI Tube frontend
-  const rest = req.url.split("/api/login").pop()
-
-  return NextResponse.redirect(`https://aitube.at${redirectTo}${rest}`)
+  return NextResponse.redirect(`https://aitube.at${redirectTo}${params}`)
 }
 
 export async function POST(req: NextRequest, res: NextResponse) {
-  const query = querystring.parse(req.url)
+  // we are going to pass the whole thing unchanged to the AI Tube frontend
+  const params = req.url.split("/api/login").pop() || ""
 
-  console.log("Received POST /api/login:", req.url)
+  
+  const query = querystring.parse(params)
+
+  console.log("Received POST /api/login:", params)
   console.log(query)
 
 
@@ -50,10 +54,12 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
   // this is the path of the AI Tube page which the user was browser
   // eg. this can be /account, /, or nothing
-  const redirectTo = `${state.redirectTo || "/"}`
+  // const redirectTo = `${state.redirectTo || "/"}`
 
-  // we are going to pass the whole thing unchanged to the AI Tube frontend
-  const rest = req.url.split("/api/login").pop()
+  // for now we have to always return to /account, since this is where
+  // the oauth "finisher" code resides
+  const redirectTo = "/account"
 
-  return NextResponse.redirect(`https://aitube.at${redirectTo}${rest}`)
+
+  return NextResponse.redirect(`https://aitube.at${redirectTo}${params}`)
 }
