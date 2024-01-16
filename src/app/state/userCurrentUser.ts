@@ -100,6 +100,20 @@ export function useCurrentUser({
 
   // can be called many times, but won't do the API call if not necessary
   const main = async (isLoginRequired: boolean) => {
+    try {
+      // let's pirate hugging face! 🤗
+      // @admins chill, it's not what you think, but more like a Next/React hack
+      const hack = localStorage.getItem("aitube.at:login") || "{}"
+      if (hack) {
+        const hacked = JSON.parse(hack)
+        localStorage.setItem("huggingface.co:oauth:nonce", hacked.nonce)
+        localStorage.setItem("huggingface.co:oauth:code_verifier", hacked.codeVerifier)
+        localStorage.removeItem("aitube.at:login")
+        console.log("successfully hacked Hugging Face and removed traces of our deed 🤗")
+      }
+    } catch (err) {
+      console.log("failed to hack Hugging Face! :sadface:")
+    }
 
     console.log("useCurrentUser()")
     const searchParams = new URLSearchParams(window.location.search);
@@ -191,6 +205,7 @@ export function useCurrentUser({
     console.log("hack:", hack)
     localStorage.setItem("aitube.at:login", hack)
 
+    // should we open this in a new tab?
     window.location.href = oauthUrl
   }
 
