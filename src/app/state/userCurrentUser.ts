@@ -185,6 +185,12 @@ export function useCurrentUser({
       state: JSON.stringify({ redirectTo })
     })
 
+    const nonce = localStorage.getItem("huggingface.co:oauth:nonce")
+    const codeVerifier = localStorage.getItem("huggingface.co:oauth:code_verifier")
+    const hack = JSON.stringify({ nonce, codeVerifier })
+    console.log("hack:", hack)
+    localStorage.setItem("aitube.at:login", hack)
+
     window.location.href = oauthUrl
   }
 
