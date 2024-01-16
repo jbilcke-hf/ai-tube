@@ -59,9 +59,9 @@ export function useCurrentUser({
     let huggingfaceTemporaryApiKey = localStorage.getItem(localStorageKeys.huggingfaceTemporaryApiKey) || ""
     
     console.log("huggingfaceTemporaryApiKey:", huggingfaceTemporaryApiKey)
-    if (huggingfaceApiKey.startsWith('"')) {
+    if (huggingfaceTemporaryApiKey.startsWith('"')) {
       console.log("the key has been corrupted..")
-      localStorage.setItem(localStorageKeys.huggingfaceTemporaryApiKey, JSON.parse(huggingfaceApiKey))
+      localStorage.setItem(localStorageKeys.huggingfaceTemporaryApiKey, JSON.parse(huggingfaceTemporaryApiKey))
       huggingfaceTemporaryApiKey = localStorage.getItem(localStorageKeys.huggingfaceTemporaryApiKey) || ""
       console.log(`the recovered key is: ${huggingfaceTemporaryApiKey}`)
     }
