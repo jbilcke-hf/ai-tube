@@ -28,7 +28,12 @@ export async function GET(req: NextRequest) {
 
   // this is the path of the AI Tube page which the user was browser
   // eg. this can be /account, /, or nothing
-  const redirectTo = `${state.redirectTo || "/"}`
+  // const redirectTo = `${state.redirectTo || "/"}`
+
+  // for now we have to always return to /account, since this is where
+  // the oauth "finisher" code resides
+  const redirectTo = "/account"
+
 
   return NextResponse.redirect(`https://aitube.at${redirectTo}${params}`)
 }
