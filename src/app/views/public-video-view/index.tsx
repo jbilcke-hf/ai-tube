@@ -28,7 +28,7 @@ import { Input } from "@/components/ui/input"
 import { localStorageKeys } from "@/app/state/localStorageKeys"
 import { defaultSettings } from "@/app/state/defaultSettings"
 import { getComments, submitComment } from "@/app/server/actions/comments"
-import { useCurrentUser } from "@/app/state/userCurrentUser"
+import { useCurrentUser } from "@/app/state/useCurrentUser"
 import { useLocalStorage } from "usehooks-ts"
 
 export function PublicVideoView() {

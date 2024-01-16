@@ -100,24 +100,24 @@ export function useCurrentUser({
 
   // can be called many times, but won't do the API call if not necessary
   const main = async (isLoginRequired: boolean) => {
+
+    // DIY
     try {
-      // let's pirate hugging face! 🤗
-      // @admins chill, it's not what you think, but more like a Next/React hack
-      const hack = localStorage.getItem("aitube.at:login") || "{}"
-      if (hack) {
-        const hacked = JSON.parse(hack)
-        localStorage.setItem("huggingface.co:oauth:nonce", hacked.nonce)
-        localStorage.setItem("huggingface.co:oauth:code_verifier", hacked.codeVerifier)
-        localStorage.removeItem("aitube.at:login")
-        console.log("successfully hacked Hugging Face and removed traces of our deed 🤗")
-      }
+      localStorage.setItem(
+        "huggingface.co:oauth:nonce",
+        localStorage.getItem("aitube.at:oauth:nonce") || ""
+      )
+      localStorage.removeItem("aitube.co:oauth:code_verifier")
+      localStorage.setItem(
+        "huggingface.co:oauth:code_verifier",
+        localStorage.getItem("aitube.at:oauth:code_verifier") || ""
+      )
     } catch (err) {
-      console.log("failed to hack Hugging Face! :sadface:")
+      console.log("no pending oauth flow to finish")
     }
 
     console.log("useCurrentUser()")
     const searchParams = new URLSearchParams(window.location.search);
-
 
     console.log("debug:", {
       "window.location.search:": window.location.search,
@@ -199,11 +199,15 @@ export function useCurrentUser({
       state: JSON.stringify({ redirectTo })
     })
 
-    const nonce = localStorage.getItem("huggingface.co:oauth:nonce")
-    const codeVerifier = localStorage.getItem("huggingface.co:oauth:code_verifier")
-    const hack = JSON.stringify({ nonce, codeVerifier })
-    console.log("hack:", hack)
-    localStorage.setItem("aitube.at:login", hack)
+    // DIY
+    localStorage.setItem(
+      "aitube.at:oauth:nonce",
+      localStorage.getItem("huggingface.co:oauth:nonce") || ""
+    )
+    localStorage.setItem(
+      "huggingface.at:oauth:code_verifier",
+      localStorage.getItem("huggingface.co:oauth:code_verifier") || ""
+    )
 
     // should we open this in a new tab?
     window.location.href = oauthUrl

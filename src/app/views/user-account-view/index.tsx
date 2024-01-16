@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils"
 import { ChannelList } from "@/app/interface/channel-list"
 
 import { getPrivateChannels } from "@/app/server/actions/ai-tube-hf/getPrivateChannels"
-import { useCurrentUser } from "@/app/state/userCurrentUser"
+import { useCurrentUser } from "@/app/state/useCurrentUser"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
