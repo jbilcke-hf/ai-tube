@@ -1,8 +1,13 @@
 import { ClapAssetSource } from "@/clap/types"
 
-export function getClapAssetSourceSource(input: string): ClapAssetSource {
+export function getClapAssetSourceSource(input: string = ""): ClapAssetSource {
   
-  const str = `${input || ""}`
+  const str = `${input || ""}`.trim()
+
+  if (!str || !str.length) {
+    return "EMPTY"
+  }
+
   if (str.startsWith("https://") || str.startsWith("http://")) {
     return "REMOTE"
   }
@@ -14,10 +19,6 @@ export function getClapAssetSourceSource(input: string): ClapAssetSource {
 
   if (str.startsWith("data:")) {
     return "DATA"
-  }
-
-  if (!str) {
-    return "EMPTY"
   }
 
   return "PROMPT"

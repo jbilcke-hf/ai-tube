@@ -1,5 +1,6 @@
 ---
 title: AI Tube
+header: mini
 emoji: 🍿
 colorFrom: red
 colorTo: red
