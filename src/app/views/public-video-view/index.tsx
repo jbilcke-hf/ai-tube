@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useTransition } from "react"
 import { RiCheckboxCircleFill } from "react-icons/ri"
 import { PiShareFatLight } from "react-icons/pi"
+import { BsHeadsetVr } from "react-icons/bs"
 import CopyToClipboard from "react-copy-to-clipboard"
 import { LuCopyCheck } from "react-icons/lu"
 import { LuScrollText } from "react-icons/lu"
@@ -30,6 +31,7 @@ import { defaultSettings } from "@/app/state/defaultSettings"
 import { getComments, submitComment } from "@/app/server/actions/comments"
 import { useCurrentUser } from "@/app/state/useCurrentUser"
 import { useLocalStorage } from "usehooks-ts"
+import { parseProjectionFromLoRA } from "@/app/server/actions/utils/parseProjectionFromLoRA"
 
 export function PublicVideoView() {
   const [_pending, startTransition] = useTransition()
@@ -72,6 +74,11 @@ export function PublicVideoView() {
 
   const setPublicComments = useStore(s => s.setPublicComments)
 
+  const isEquirectangular = (
+    video?.projection === "equirectangular" ||
+    parseProjectionFromLoRA(video?.lora) === "equirectangular"
+  )
+  
   // we inject the current videoId in the URL, if it's not already present
   // this is a hack for Hugging Face iframes
   useEffect(() => {
@@ -335,6 +342,15 @@ export function PublicVideoView() {
                 {video.model}
               </span>
             </ActionButton>
+
+            {isEquirectangular && <ActionButton
+              href={`/api/video/${video.id}`}
+            >
+              <BsHeadsetVr className="w-5 h-5" />
+              <span>
+                See in VR
+              </span>
+            </ActionButton>}
 
             <ActionButton
               href={

@@ -1,5 +1,5 @@
 
-export type ClapSegmentCategory = "render" | "preview" | "transition" | "characters" | "location" | "time" | "era" | "lighting" | "weather" | "action" | "music" | "sound" | "dialogue" | "style" | "camera" | "generic"
+export type ClapSegmentCategory = "splat" | "mesh" | "depth" | "video" | "storyboard" | "transition" | "characters" | "location" | "time" | "era" | "lighting" | "weather" | "action" | "music" | "sound" | "dialogue" | "style" | "camera" | "generic"
 export type ClapOutputType = "text" | "animation" | "transition" | "image" | "video" | "audio"
 export type ClapSegmentStatus =
   | "to_generate"

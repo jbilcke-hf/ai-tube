@@ -118,8 +118,7 @@ export function TopHeader() {
           `px-4 py-2 w-max-64`,
           `text-neutral-400 text-2xs sm:text-xs lg:text-sm italic`
         )}>
-        All the videos are generated using AI, for research purposes only. Some models might produce factually incorrect or biased outputs.
-        </div>
+         Note: AI Tube is still in beta (and this text will be replaced by a search box)</div>
         <div className={cn()}>
           &nbsp; {/* more buttons? unused for now */}
         </div>

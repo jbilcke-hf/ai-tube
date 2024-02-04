@@ -26,11 +26,11 @@ export function MenuItem({
       `p-1`,
       `group`
     )}
-      onClick={() => {
-      if (onClick && !selected) {
-        onClick()
-      }
-      }}
+      onClick={onClick ? () => {
+        if (!selected) {
+          onClick()
+        }
+      } : undefined}
     >
       <div
         className={cn(

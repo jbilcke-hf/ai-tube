@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { TbBrandDiscord } from "react-icons/tb"
-
+import { AiOutlineQuestionCircle } from "react-icons/ai"
 import { GrChannel } from "react-icons/gr"
 import { MdVideoLibrary } from "react-icons/md"
 import { RiHome8Line } from "react-icons/ri"
@@ -13,6 +13,7 @@ import { cn } from "@/lib/utils"
 import { showBetaFeatures } from "@/app/config"
 
 import { MenuItem } from "./menu-item"
+import { About } from "../about"
 
 export function LeftMenu() {
   const view = useStore(s => s.view)
@@ -68,6 +69,7 @@ export function LeftMenu() {
           My Videos
         </MenuItem>
       */}
+        <About />
         <a href="https://discord.gg/Q6mJ2rnDPe" target="_blank">
           <MenuItem
             icon={<TbBrandDiscord className="h-6 w-6" />}
