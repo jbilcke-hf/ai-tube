@@ -34,13 +34,13 @@ There can be 5 different types of objects:
 This can be represented in javascript like this:
 
 ```javascript
-  const entries = [
-    clapHeader,
-    clapMeta,
-    ...clapModels,
-    ...clapScenes,
-    ...clapSegments
-  ]
+[
+  clapHeader, // one metadata object
+  clapMeta, // one metadata object
+  ...clapModels, // optional array of models
+  ...clapScenes, // optional array of scenes
+  ...clapSegments // optional array of segments
+]
 ```
 
 ## Header
@@ -100,6 +100,7 @@ Either by recognizing the shape of each object (fields), or by using a specific 
   // the screenplay (script) of the video
   screenplay: string
 }
+```
 
 ## Models
 
