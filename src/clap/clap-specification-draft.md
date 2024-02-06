@@ -1,8 +1,9 @@
 # CLAP Format Specification
 
-Status: DRAFT
-Document revision: 0.0.1
-Last updated: Feb 6th, 2024
+- Status: DRAFT
+- Document revision: 0.0.1
+- Last updated: Feb 6th, 2024
+- Author(s): Julian BILCKE (@flngr)
 
 ## BEFORE YOU READ
 
