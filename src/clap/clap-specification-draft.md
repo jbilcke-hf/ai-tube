@@ -12,9 +12,9 @@ There might be inconsistencies, unnecessary redundancies or blatant omissions.
 
 ## What are CLAP files?
 
-The CLAP format (.clap) is a video project format used to store information about a generative AI video.
+The CLAP format (.clap) is a file format designed for AI video projects.
 
-It preserves prompts and assets into the same container, making easier to share a project between different people or applications.
+It preserves prompts and assets into the same container, making it easier to share an AI video project between different people or applications.
 
 ## Structure
 
