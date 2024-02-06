@@ -50,7 +50,8 @@ export async function parseClap(inputStringOrBlob: string | Blob): Promise<ClapP
     width: getValidNumber(maybeClapMeta.width, 256, 8192, 1024),
     height: getValidNumber(maybeClapMeta.height, 256, 8192, 576),
     defaultVideoModel: typeof maybeClapMeta.defaultVideoModel === "string" ? maybeClapMeta.defaultVideoModel : "SVD",
-    extraPositivePrompt: Array.isArray(maybeClapMeta.extraPositivePrompt) ? maybeClapMeta.extraPositivePrompt : []
+    extraPositivePrompt: Array.isArray(maybeClapMeta.extraPositivePrompt) ? maybeClapMeta.extraPositivePrompt : [],
+    screenplay: typeof maybeClapMeta.screenplay === "string" ? maybeClapMeta.screenplay : "",
   }
 
   /*

@@ -84,6 +84,7 @@ export type ClapMeta = {
   height: number
   defaultVideoModel: string
   extraPositivePrompt: string[]
+  screenplay: string
 }
 
 export type ClapSceneEvent = {

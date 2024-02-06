@@ -130,6 +130,7 @@ export async function serializeClap({
     height: getValidNumber(meta.height, 256, 8192, 576),
     defaultVideoModel:  typeof meta.defaultVideoModel === "string" ? meta.defaultVideoModel : "SVD",
     extraPositivePrompt: Array.isArray(meta.extraPositivePrompt) ? meta.extraPositivePrompt : [],
+    screenplay: typeof meta.screenplay == "string" ? meta.screenplay : "",
   }
 
   const entries = [
