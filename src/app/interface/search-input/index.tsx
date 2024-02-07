@@ -1,4 +1,4 @@
-import { useState, useTransition } from "react"
+import { useRef, useState, useTransition } from "react"
 import Link from "next/link"
 // import throttle from "@jcoreio/async-throttle"
 import debounce from "lodash.debounce"
@@ -24,6 +24,9 @@ export function SearchInput() {
 
   const [searchDraft, setSearchDraft] = useState("")
 
+  const ref = useRef<HTMLInputElement>(null)
+
+
   // called when pressing enter or clicking on search
   const debouncedSearch = debounce((query: string) => {
     startTransition(async () => {
@@ -43,10 +46,11 @@ export function SearchInput() {
       // TODO: only close the show autocomplete box if we found something
       // setShowAutocompleteBox(false)
     })
-  }, 1000)
+  }, 500)
 
   // called when pressing enter or clicking on search
   const handleSearch = () => {
+    ref.current?.focus()
     setSearchQuery(searchDraft)
     setShowAutocompleteBox(true)
     debouncedSearch(searchDraft)
@@ -55,19 +59,20 @@ export function SearchInput() {
   return (
     <div className="flex flex-row flex-grow w-[380px] lg:w-[600px]">
 
-      <div className="flex flex-row w-full"
-        onClick={() => {
-          handleSearch()
-        }}>
+      <div className="flex flex-row w-full">
         <Input
+          ref={ref}
           placeholder="Search"
           className={cn(
             `bg-neutral-900 text-neutral-200 dark:bg-neutral-900 dark:text-neutral-200`,
             `rounded-l-full rounded-r-none`,
+            
+            // we increase the line height to better catch the clicks
+            `py-0 h-10 leading-7`,
+
             `border-neutral-700 dark:border-neutral-700 border-r-0`,
     
           )}
-          // disabled={atLeastOnePanelIsBusy}
           onFocus={() => {
             handleSearch()
           }}
@@ -76,7 +81,8 @@ export function SearchInput() {
           }}
           onChange={(e) => {
             setSearchDraft(e.target.value)
-            handleSearch()
+            setShowAutocompleteBox(true)
+            // handleSearch()
           }}
           onKeyDown={({ key }) => {
             if (key === 'Enter') {
@@ -117,11 +123,11 @@ export function SearchInput() {
         
         `transition-all duration-200 ease-in-out`,
         showAutocompleteBox
-          ? `opacity-100 scale-100 mt-11`
-          : `opacity-0 scale-95 mt-6`
+          ? `opacity-100 scale-100 mt-11 pointer-events-auto`
+          : `opacity-0 scale-95 mt-6 pointer-events-none`
       )}
     >
-      {searchAutocompleteResults.length === 0 ? <div>No results found.</div> : null}
+      {searchAutocompleteResults.length === 0 ? <div>Nothing to show, type something and press enter</div> : null}
         {searchAutocompleteResults.map(media => (
           <Link key={media.id} href={`/watch?v=${media.id}`}>
             <div
