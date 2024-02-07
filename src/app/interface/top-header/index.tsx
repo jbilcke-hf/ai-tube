@@ -1,7 +1,8 @@
-import { useEffect, useTransition } from 'react'
+import { useEffect, useState, useTransition } from 'react'
 
 import { Pathway_Gothic_One } from 'next/font/google'
 import { PiPopcornBold } from "react-icons/pi"
+import { GoSearch } from "react-icons/go"
 
 const pathway = Pathway_Gothic_One({
   weight: "400",
@@ -14,6 +15,9 @@ import { useStore } from "@/app/state/useStore"
 import { cn } from "@/lib/utils"
 import { getTags } from '@/app/server/actions/ai-tube-hf/getTags'
 import Link from 'next/link'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import { SearchInput } from '../search-input'
 
 export function TopHeader() {
   const [_pending, startTransition] = useTransition()
@@ -32,6 +36,17 @@ export function TopHeader() {
 
   const currentTags = useStore(s => s.currentTags)
   const setCurrentTags = useStore(s => s.setCurrentTags)
+
+  const setSearchAutocompleteQuery = useStore(s => s.setSearchAutocompleteQuery)
+  const searchAutocompleteResults = useStore(s => s.searchAutocompleteResults)
+
+  const setSearchQuery = useStore(s => s.setSearchQuery)
+
+  const [searchDraft, setSearchDraft] = useState("")
+  useEffect(() => {
+    const searchQuery = searchDraft.trim().toLowerCase()
+    setSearchQuery(searchQuery)
+  }, [searchDraft])
 
   const isNormalSize = headerMode === "normal"
 
@@ -118,9 +133,13 @@ export function TopHeader() {
           `px-4 py-2 w-max-64`,
           `text-neutral-400 text-2xs sm:text-xs lg:text-sm italic`
         )}>
-         Note: AI Tube is still in beta (and this text will be replaced by a search box)</div>
-        <div className={cn()}>
-          &nbsp; {/* more buttons? unused for now */}
+          <SearchInput />
+        </div>
+        <div className={cn("w-32 xl:w-42")}>
+          <span>
+            &nbsp;
+            {/* reserved for future use */}
+          </span>
         </div>
       </div>
       {

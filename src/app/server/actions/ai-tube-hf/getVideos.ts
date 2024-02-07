@@ -1,5 +1,8 @@
 "use server"
 
+// import { distance } from "fastest-levenshtein"
+import MiniSearch from "minisearch"
+
 import { VideoInfo } from "@/types/general"
 
 import { getVideoIndex } from "./getVideoIndex"
@@ -11,13 +14,18 @@ const HARD_LIMIT = 100
 
 // this just return ALL videos on the platform
 export async function getVideos({
+  query = "",
   mandatoryTags = [],
   niceToHaveTags = [],
   sortBy = "date",
   ignoreVideoIds = [],
   maxVideos = HARD_LIMIT,
   neverThrow = false,
+  renewCache = true,
 }: {
+  // optional search query
+  query?: string
+
   // the videos MUST include those tags
   mandatoryTags?: string[]
 
@@ -25,7 +33,10 @@ export async function getVideos({
   // but it isn't a hard limit - TODO: use some semantic search here?
   niceToHaveTags?: string[]
 
-  sortBy?: "random" | "date"
+  sortBy?:
+    | "random" // for the home
+    | "date" // most recent first
+    | "match" // how close we are from the query
 
   // ignore some ids - this is used to not show the same videos again
   // eg. videos already watched, or disliked etc
@@ -34,13 +45,15 @@ export async function getVideos({
   maxVideos?: number
 
   neverThrow?: boolean
+
+  renewCache?: boolean
 }): Promise<VideoInfo[]> {
   try {
     // the index is gonna grow more and more,
     // but in the future we will use some DB eg. Prisma or sqlite
     const published = await getVideoIndex({
       status: "published",
-      renewCache: true
+      renewCache,
     })
 
     let allPotentiallyValidVideos = Object.values(published)
@@ -53,8 +66,32 @@ export async function getVideos({
       allPotentiallyValidVideos = allPotentiallyValidVideos.filter(video => !ignoreVideoIds.includes(video.id))
     }
 
-    if (sortBy === "date") {
-      allPotentiallyValidVideos.sort(((a, b) => b.updatedAt.localeCompare(a.updatedAt)))
+    const q = query.trim().toLowerCase()
+
+    if (sortBy === "match") {
+      // now obviously we are going to migrate to a database search instead,
+      // maybe a bit of vector search too,
+      // but let's say that for now this is good enough
+      let miniSearch = new MiniSearch({
+        fields: ['label', 'description', 'tags'], // fields to index for full-text search
+        storeFields: ['id'] // fields to return with search results
+      })
+      
+      miniSearch.addAll(allPotentiallyValidVideos)
+      
+      // mini search has plenty of options, see:
+      // https://www.npmjs.com/package/minisearch
+      const results = miniSearch.search(query, {
+        prefix: true, // "moto" will match "motorcycle"
+        fuzzy: 0.2,
+        // to search within a specific category
+        // filter: (result) => result.category === 'fiction'
+      })
+
+      allPotentiallyValidVideos = allPotentiallyValidVideos.filter(v => results.some(r => r.id === v.id))
+
+    } if (sortBy === "date") {
+      allPotentiallyValidVideos.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
     } else {
       allPotentiallyValidVideos.sort(() => Math.random() - 0.5)
     }

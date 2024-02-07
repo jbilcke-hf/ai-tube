@@ -19,6 +19,21 @@ export const useStore = create<{
 
   setPathname: (pathname: string) => void
 
+  searchQuery: string
+  setSearchQuery: (searchQuery?: string) => void
+
+  showAutocompleteBox: boolean
+  setShowAutocompleteBox: (showAutocompleteBox: boolean) => void
+
+  searchAutocompleteQuery: string
+  setSearchAutocompleteQuery: (searchAutocompleteQuery?: string) => void
+
+  searchAutocompleteResults: VideoInfo[]
+  setSearchAutocompleteResults: (searchAutocompleteResults: VideoInfo[]) => void
+
+  searchResults: VideoInfo[]
+  setSearchResults: (searchResults: VideoInfo[]) => void
+
   currentUser?: UserInfo
   setCurrentUser: (currentUser?: UserInfo) => void
 
@@ -102,12 +117,37 @@ export const useStore = create<{
     set({ view: routes[pathname] || "not_found" })
   },
 
+  searchAutocompleteQuery: "",
+  setSearchAutocompleteQuery: (searchAutocompleteQuery?: string) => {
+    set({ searchAutocompleteQuery })
+  },
+
+  showAutocompleteBox: false,
+  setShowAutocompleteBox: (showAutocompleteBox: boolean) => {
+    set({ showAutocompleteBox })
+  },
+
+  searchAutocompleteResults: [] as VideoInfo[],
+  setSearchAutocompleteResults: (searchAutocompleteResults: VideoInfo[]) => {
+    set({ searchAutocompleteResults })
+  },
+
+  searchQuery: "",
+  setSearchQuery: (searchQuery?: string) => {
+    set({ searchQuery })
+  },
+
+  searchResults: [] as VideoInfo[],
+  setSearchResults: (searchResults: VideoInfo[]) => {
+    set({ searchResults })
+  },
+
   currentUser: undefined,
   setCurrentUser: (currentUser?: UserInfo) => {
     set({ currentUser })
   },
   
-  headerMode: "normal",
+  headerMode: "normal" as InterfaceHeaderMode,
   setHeaderMode: (headerMode: InterfaceHeaderMode) => {
     set({ headerMode })
   },
