@@ -75,7 +75,7 @@ export function VideoCard({
   }, [index])
 
   return (
-  <Link href={`/watch?v=${media.id}`}>
+  <Link href={`https://aitube.at/watch?v=${media.id}`}>
     <div
       className={cn(
         `w-full flex`,

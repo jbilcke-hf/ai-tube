@@ -76,9 +76,6 @@ export function SearchInput() {
           onFocus={() => {
             handleSearch()
           }}
-          onBlur={() => {
-            setShowAutocompleteBox(false)
-          }}
           onChange={(e) => {
             setSearchDraft(e.target.value)
             setShowAutocompleteBox(true)
@@ -129,7 +126,7 @@ export function SearchInput() {
     >
       {searchAutocompleteResults.length === 0 ? <div>Nothing to show, type something and press enter</div> : null}
         {searchAutocompleteResults.map(media => (
-          <Link key={media.id} href={`/watch?v=${media.id}`}>
+          <a key={media.id} href={`https://aitube.at/watch?v=${media.id}`}>
             <div
               className={cn(
                 `dark:hover:bg-neutral-800 hover:bg-neutral-800`,
@@ -139,10 +136,9 @@ export function SearchInput() {
               )}
 
             >
-            
               {media.label}
-          </div>
-          </Link>
+            </div>
+          </a>
         ))}
     </div>
   </div>
