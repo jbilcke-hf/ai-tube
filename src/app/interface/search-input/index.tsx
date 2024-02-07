@@ -126,7 +126,7 @@ export function SearchInput() {
     >
       {searchAutocompleteResults.length === 0 ? <div>Nothing to show, type something and press enter</div> : null}
         {searchAutocompleteResults.map(media => (
-          <a key={media.id} href={`https://aitube.at/watch?v=${media.id}`}>
+          <Link key={media.id} href={`https://aitube.at/watch?v=${media.id}`}>
             <div
               className={cn(
                 `dark:hover:bg-neutral-800 hover:bg-neutral-800`,
@@ -138,7 +138,7 @@ export function SearchInput() {
             >
               {media.label}
             </div>
-          </a>
+          </Link>
         ))}
     </div>
   </div>
