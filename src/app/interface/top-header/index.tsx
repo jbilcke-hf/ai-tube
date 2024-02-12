@@ -1,8 +1,11 @@
+"use client"
+
 import { useEffect, useState, useTransition } from 'react'
 
 import { Pathway_Gothic_One } from 'next/font/google'
 import { PiPopcornBold } from "react-icons/pi"
 import { GoSearch } from "react-icons/go"
+import { AiTubeLogo } from "./logo"
 
 const pathway = Pathway_Gothic_One({
   weight: "400",
@@ -90,6 +93,7 @@ export function TopHeader() {
           `flex flex-col items-start justify-center`,
           `w-full sm:w-64`,
         )}>
+          <Link href="/">
           <div className={cn(
             `flex flex-row items-center justify-start`,
             `transition-all duration-200 ease-in-out`,
@@ -98,7 +102,7 @@ export function TopHeader() {
              view === "public_music_videos" ? "pl-1" : "",
               pathway.className,
               isNormalSize
-              ? "sm:scale-125 sm:ml-4 sm:mb-4" : "sm:scale-100 sm:mb-2"
+              ? "sm:scale-125 mb-2 sm:ml-4 sm:mb-4" : "sm:scale-100 sm:mb-2"
             )}
             /*
             onClick={() => {
@@ -106,23 +110,17 @@ export function TopHeader() {
             }}
             */
             >
-            <div className="mr-1">
-              <div className={cn(
-                `flex flex-col items-center justify-center`,
-                `bg-yellow-300 text-neutral-950`,
-                `rounded-lg w-6 h-7`
-              )}>
-                <PiPopcornBold className={cn(
-                 `size-5`
-                )} />
+            <div className="flex items-center justify-center overflow-hidden h-10 w-6">
+              <div className="scale-[5%]">
+              <AiTubeLogo />
               </div>
             </div>
-            <Link href="/">
-              <div className="font-semibold">
-                {view === "public_music_videos" ? "AiTube Music" : "AiTube"}
-              </div>
-            </Link>
+
+            <div className="font-semibold">
+              {view === "public_music_videos" ? "AiTube Music" : "AiTube"}
+            </div>
           </div>
+          </Link>
         </div>
         <div className={cn(
           // TODO: show the disclaimer on mobile too, maybe with a modal or something
