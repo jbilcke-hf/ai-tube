@@ -112,7 +112,7 @@ export function VideoCard({
                 playsInline
 
                 ref={ref}
-                src={media.assetUrlHd || media.assetUrl}
+                src={media.assetUrl}
                 className={cn(
                   `w-full h-full`,
                   `object-cover`,
