@@ -39,7 +39,7 @@ export async function generateMetadata(
         ],
         videos: [
           {
-            "url": video.assetUrl
+            "url": video.assetUrlHd || video.assetUrl
           }
         ],
         // images: ['/some-specific-page-image.jpg', ...previousImages],

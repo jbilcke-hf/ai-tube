@@ -35,7 +35,7 @@ export function PublicMusicVideosView() {
   }, [])
 
   const handleSelect = (media: VideoInfo) => {
-    console.log("going to play:", media.assetUrl.replace(".mp4", ".mp3"))
+    // console.log("going to play:", media.assetUrl.replace(".mp4", ".mp3"))
     playlist.playback({
       url: media.assetUrl.replace(".mp4", ".mp3"),
       meta: media,

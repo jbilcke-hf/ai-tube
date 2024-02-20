@@ -14,6 +14,8 @@ export function EquirectangularVideoPlayer({
   video?: VideoInfo
   className?: string
 }) {
+
+
   // we shield the VideeoSphere viewer from bad data
   if (!video?.assetUrl) { return null }
 

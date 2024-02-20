@@ -35,7 +35,7 @@ export async function GET(req: NextRequest) {
           crossorigin="anonymous"
           playsinline
           webkit-playsinline
-          src="${video.assetUrl}">
+          src="${video.assetUrlHd || video.assetUrl}">
         </video>
       </a-assets>
       ${

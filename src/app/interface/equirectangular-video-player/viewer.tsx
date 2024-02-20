@@ -79,7 +79,7 @@ export function VideoSphereViewer({
               {
                 id: 'HD',
                 label: 'Standard',
-                panorama: { source: video.assetUrl },
+                panorama: { source: video.assetUrlHd || video.assetUrl },
               },
             ],
           }],

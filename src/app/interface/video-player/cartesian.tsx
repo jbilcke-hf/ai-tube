@@ -36,7 +36,7 @@ export function CartesianVideoPlayer({
           src={[
             {
               quality: "Full HD",
-              url: video.assetUrl,
+              url: video.assetUrlHd || video.assetUrl,
             }
           ]}
 
