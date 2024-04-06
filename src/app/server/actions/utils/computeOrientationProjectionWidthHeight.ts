@@ -1,4 +1,4 @@
-import { VideoOrientation, VideoProjection } from "@/types/general"
+import { VideoOrientation, MediaProjection } from "@/types/general"
 
 import { parseVideoOrientation } from "./parseVideoOrientation"
 import { parseProjectionFromLoRA } from "./parseProjectionFromLoRA"
@@ -13,7 +13,7 @@ export function computeOrientationProjectionWidthHeight({
   orientation?: any
 }): {
   orientation: VideoOrientation
-  projection: VideoProjection
+  projection: MediaProjection
   width: number
   height: number
 } {

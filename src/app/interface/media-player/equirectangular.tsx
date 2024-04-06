@@ -1,23 +1,30 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef } from "react"
 
-import { PanoramaPosition, PluginConstructor, Point, Position, SphericalPosition, Viewer } from "@photo-sphere-viewer/core"
-import { EquirectangularVideoAdapter, LensflarePlugin, ReactPhotoSphereViewer, ResolutionPlugin, SettingsPlugin, VideoPlugin } from "react-photo-sphere-viewer"
+import { ReactPhotoSphereViewer } from "react-photo-sphere-viewer"
 
-import { cn } from "@/lib/utils"
-import { VideoInfo } from "@/types/general"
+import { Viewer } from "@photo-sphere-viewer/core"
 
-type PhotoSpherePlugin = (PluginConstructor | [PluginConstructor, any])
+import { EquirectangularVideoAdapter } from "@photo-sphere-viewer/equirectangular-video-adapter"
+
+import { SettingsPlugin } from "@photo-sphere-viewer/settings-plugin"
+import { ResolutionPlugin } from "@photo-sphere-viewer/resolution-plugin"
+import { VideoPlugin } from "@photo-sphere-viewer/video-plugin"
+
+import "@photo-sphere-viewer/settings-plugin/index.css"
+import "@photo-sphere-viewer/video-plugin/index.css"
+
+import { MediaInfo } from "@/types/general"
 
 export function EquirectangularVideoPlayer({
-  video,
+  media,
   className = "",
   width,
   height,
   muted = false,
  }: {
-  video: VideoInfo
+  media: MediaInfo
   className?: string
   width: number
   height: number
@@ -37,7 +44,9 @@ export function EquirectangularVideoPlayer({
     })
   }, [width, height])
 
-  if (!video.assetUrl) { return null }
+  const assetUrl = media.assetUrlHd || media.assetUrl
+
+  if (!assetUrl) { return null }
 
   return (
     <div
@@ -47,10 +56,7 @@ export function EquirectangularVideoPlayer({
       <ReactPhotoSphereViewer
 
         container=""
-        containerClass={cn(
-          "rounded-xl overflow-hidden",
-          className
-        )}
+        containerClass={className}
 
         width={`${width}px`}
         height={`${height}px`}
@@ -67,19 +73,20 @@ export function EquirectangularVideoPlayer({
         navbar="video"
         src="" 
         plugins={[
+          [SettingsPlugin, {}],
           [VideoPlugin, {
             muted,
             // progressbar: true,
             bigbutton: false
           }],
-          SettingsPlugin,
           [ResolutionPlugin, {
             defaultResolution: 'HD',
             resolutions: [
               {
                 id: 'HD',
                 label: 'Standard',
-                panorama: { source: video.assetUrlHd || video.assetUrl },
+                // TODO: separate the resolutions
+                panorama: { source: media.assetUrlHd || media.assetUrl },
               },
             ],
           }],

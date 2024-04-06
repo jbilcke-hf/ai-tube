@@ -3,7 +3,7 @@
 import { Blob } from "buffer"
 
 import { Credentials, uploadFile, whoAmI } from "@/huggingface/hub/src"
-import { ChannelInfo, VideoGenerationModel, VideoInfo, VideoOrientation, VideoRequest } from "@/types/general"
+import { ChannelInfo, VideoGenerationModel, MediaInfo, VideoOrientation, VideoRequest } from "@/types/general"
 import { formatPromptFileName } from "../utils/formatPromptFileName"
 import { computeOrientationProjectionWidthHeight } from "../utils/computeOrientationProjectionWidthHeight"
 
@@ -41,7 +41,7 @@ export async function uploadVideoRequestToDataset({
   orientation: VideoOrientation
 }): Promise<{
   videoRequest: VideoRequest
-  videoInfo: VideoInfo
+  videoInfo: MediaInfo
 }> {
   if (!apiKey) {
     throw new Error(`the apiKey is required`)
@@ -127,7 +127,7 @@ ${prompt}
     music,
     thumbnailUrl: channel.thumbnail,
 
-    // for now AI Tube doesn't support upload of clap files
+    // for now AiTube doesn't support upload of clap files
     clapUrl: "",
 
     updatedAt: new Date().toISOString(),
@@ -141,7 +141,7 @@ ${prompt}
     }),
   }
 
-  const newVideo: VideoInfo = {
+  const newVideo: MediaInfo = {
     id,
     status: "submitted",
     label: title,
@@ -154,7 +154,7 @@ ${prompt}
     music,
     thumbnailUrl: channel.thumbnail, // will be generated in async
 
-    // for now AI Tube doesn't support upload of clap files
+    // for now AiTube doesn't support upload of clap files
     clapUrl: "",
     
     assetUrl: "", // will be generated in async

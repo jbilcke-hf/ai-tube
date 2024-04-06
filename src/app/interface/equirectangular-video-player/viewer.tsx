@@ -1,14 +1,21 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
-import AutoSizer from "react-virtualized-auto-sizer"
-import { PanoramaPosition, PluginConstructor, Point, Position, SphericalPosition, Viewer } from "@photo-sphere-viewer/core"
-import { EquirectangularVideoAdapter, LensflarePlugin, ReactPhotoSphereViewer, ResolutionPlugin, SettingsPlugin, VideoPlugin } from "react-photo-sphere-viewer"
+import { useEffect, useRef } from "react"
+import { ReactPhotoSphereViewer } from "react-photo-sphere-viewer"
+
+import { Viewer } from "@photo-sphere-viewer/core"
+
+import { EquirectangularVideoAdapter } from "@photo-sphere-viewer/equirectangular-video-adapter"
+
+import { SettingsPlugin } from "@photo-sphere-viewer/settings-plugin"
+import { ResolutionPlugin } from "@photo-sphere-viewer/resolution-plugin"
+import { VideoPlugin } from "@photo-sphere-viewer/video-plugin"
+
+import "@photo-sphere-viewer/settings-plugin/index.css"
+import "@photo-sphere-viewer/video-plugin/index.css"
 
 import { cn } from "@/lib/utils"
-import { VideoInfo } from "@/types/general"
-
-type PhotoSpherePlugin = (PluginConstructor | [PluginConstructor, any])
+import { MediaInfo } from "@/types/general"
 
 export function VideoSphereViewer({
   video,
@@ -17,7 +24,7 @@ export function VideoSphereViewer({
   height,
   muted = false,
  }: {
-  video: VideoInfo
+  video: MediaInfo
   className?: string
   width: number
   height: number
@@ -64,15 +71,16 @@ export function VideoSphereViewer({
         // plugins={[[LensflarePlugin, { lensflares: [] }]]}
 
         adapter={[EquirectangularVideoAdapter, { muted }]}
+
         navbar="video"
         src="" 
         plugins={[
+          [SettingsPlugin, {}],
           [VideoPlugin, {
             muted,
             // progressbar: true,
             bigbutton: false
           }],
-          // SettingsPlugin,
           [ResolutionPlugin, {
             defaultResolution: 'HD',
             resolutions: [

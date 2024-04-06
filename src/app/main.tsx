@@ -8,7 +8,7 @@ import { UserChannelView } from "./views/user-channel-view"
 import { PublicVideoView } from "./views/public-video-view"
 import { UserAccountView } from "./views/user-account-view"
 import { NotFoundView } from "./views/not-found-view"
-import { ChannelInfo, VideoInfo } from "@/types/general"
+import { ChannelInfo, MediaInfo } from "@/types/general"
 import { useEffect } from "react"
 import { usePathname, useRouter } from "next/navigation"
 import { TubeLayout } from "./interface/tube-layout"
@@ -35,11 +35,11 @@ export function Main({
 }: {
  // server side params
  // view?: InterfaceView
- publicVideo?: VideoInfo
- publicVideos?: VideoInfo[]
- publicChannelVideos?: VideoInfo[]
- publicTracks?: VideoInfo[]
- publicTrack?: VideoInfo
+ publicVideo?: MediaInfo
+ publicVideos?: MediaInfo[]
+ publicChannelVideos?: MediaInfo[]
+ publicTracks?: MediaInfo[]
+ publicTrack?: MediaInfo
  channel?: ChannelInfo
 }) {
   // this could be also a parameter of main, where we pass this manually

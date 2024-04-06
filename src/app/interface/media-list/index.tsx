@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils"
-import { MediaDisplayLayout, VideoInfo } from "@/types/general"
+import { MediaDisplayLayout, MediaInfo } from "@/types/general"
 import { TrackCard } from "../track-card"
 import { VideoCard } from "../video-card"
 
@@ -11,7 +11,7 @@ export function MediaList({
   onSelect,
   selectedId,
 }: {
-  items: VideoInfo[]
+  items: MediaInfo[]
 
   /**
    * Layout mode
@@ -31,7 +31,7 @@ export function MediaList({
 
   className?: string
 
-  onSelect?: (media: VideoInfo) => void
+  onSelect?: (media: MediaInfo) => void
 
   selectedId?: string
 }) {

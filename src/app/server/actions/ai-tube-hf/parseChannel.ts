@@ -54,7 +54,7 @@ export async function parseChannel(options: {
   
   // ignore channels which don't start with ai-tube
   if (!datasetName.startsWith(prefix)) {
-    throw new Error("this is not an AI Tube channel")
+    throw new Error("this is not an AiTube channel")
   }
 
   // ignore the video index
@@ -64,7 +64,7 @@ export async function parseChannel(options: {
 
   const slug = datasetName.replaceAll(prefix, "")
   
-  // console.log(`found an AI Tube channel: "${slug}"`)
+  // console.log(`found an AiTube channel: "${slug}"`)
 
   // TODO parse the README to get the proper label
   let label = slug.replaceAll("-", " ")

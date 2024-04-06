@@ -1,6 +1,6 @@
-import { VideoInfo } from "@/types/general"
+import { MediaInfo } from "@/types/general"
 
-export function isHighQuality(video: VideoInfo) {
+export function isHighQuality(video: MediaInfo) {
   const numberOfViews = Math.abs(Math.max(0, video.numberOfViews))
   const numberOfLikes = Math.abs(Math.max(0, video.numberOfLikes))
   const numberOfDislikes = Math.abs(Math.max(0, video.numberOfDislikes))

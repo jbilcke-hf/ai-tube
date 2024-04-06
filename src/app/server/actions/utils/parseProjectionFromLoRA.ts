@@ -1,6 +1,6 @@
-import { VideoProjection } from "@/types/general"
+import { MediaProjection } from "@/types/general"
 
-export function parseProjectionFromLoRA(input?: any): VideoProjection {
+export function parseProjectionFromLoRA(input?: any): MediaProjection {
  const name = `${input || ""}`.trim().toLowerCase()
 
   const isEquirectangular = (

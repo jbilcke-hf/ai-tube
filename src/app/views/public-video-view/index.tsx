@@ -8,15 +8,15 @@ import CopyToClipboard from "react-copy-to-clipboard"
 import { LuCopyCheck } from "react-icons/lu"
 import { LuScrollText } from "react-icons/lu"
 import { BiCameraMovie } from "react-icons/bi"
+import { useLocalStorage } from "usehooks-ts"
 
 import { useStore } from "@/app/state/useStore"
 import { cn } from "@/lib/utils"
-import { VideoPlayer } from "@/app/interface/video-player"
 
 import { ActionButton, actionButtonClassName } from "@/app/interface/action-button"
 import { RecommendedVideos } from "@/app/interface/recommended-videos"
 import { isCertifiedUser } from "@/app/certification"
-import { watchVideo } from "@/app/server/actions/stats"
+import { countNewMediaView } from "@/app/server/actions/stats"
 import { formatTimeAgo } from "@/lib/formatTimeAgo"
 import { DefaultAvatar } from "@/app/interface/default-avatar"
 import { LikeButton } from "@/app/interface/like-button"
@@ -30,9 +30,10 @@ import { localStorageKeys } from "@/app/state/localStorageKeys"
 import { defaultSettings } from "@/app/state/defaultSettings"
 import { getComments, submitComment } from "@/app/server/actions/comments"
 import { useCurrentUser } from "@/app/state/useCurrentUser"
-import { useLocalStorage } from "usehooks-ts"
-import { parseProjectionFromLoRA } from "@/app/server/actions/utils/parseProjectionFromLoRA"
+import { parseMediaProjectionType } from "@/lib/parseMediaProjectionType"
+import { MediaPlayer } from "@/app/interface/media-player"
 
+// TODO: rename to PublicMediaView
 export function PublicVideoView() {
   const [_pending, startTransition] = useTransition()
 
@@ -40,7 +41,7 @@ export function PublicVideoView() {
   const [isCommenting, setCommenting] = useState(false)
   const [isFocusedOnInput, setFocusedOnInput] = useState(false)
 
-  // current time in the video
+  // current time in the media
   // note: this is used to *set* the current time, not to read it
   // EDIT: you know what, let's do this the dirty way for now
   // const [desiredCurrentTime, setDesiredCurrentTime] = useState()
@@ -61,41 +62,40 @@ export function PublicVideoView() {
   }
 
 
-  const video = useStore(s => s.publicVideo)
+  const media = useStore(s => s.publicVideo)
 
-  const videoId = `${video?.id || ""}`
+  const mediaId = `${media?.id || ""}`
 
   const [copied, setCopied] = useState<boolean>(false)
 
-  const [channelThumbnail, setChannelThumbnail] = useState(`${video?.channel.thumbnail || ""}`)
+  const [channelThumbnail, setChannelThumbnail] = useState(`${media?.channel.thumbnail || ""}`)
   const setPublicVideo = useStore(s => s.setPublicVideo)
 
   const publicComments = useStore(s => s.publicComments)
 
   const setPublicComments = useStore(s => s.setPublicComments)
 
-  const isEquirectangular = (
-    video?.projection === "equirectangular" ||
-    parseProjectionFromLoRA(video?.lora) === "equirectangular"
-  )
+  const isEquirectangular = parseMediaProjectionType(media) === "equirectangular"
   
   // we inject the current videoId in the URL, if it's not already present
   // this is a hack for Hugging Face iframes
   useEffect(() => {
     const queryString = new URL(location.href).search
     const searchParams = new URLSearchParams(queryString)
-    if (videoId) {
-      if (searchParams.get("v") !== videoId) {
-        console.log(`current videoId "${videoId}" isn't set in the URL query params.. TODO we should set it`)
+    if (mediaId) {
+      // TODO: the "v" parameter is legacy, it made sense in the past when
+      // AiTube used to only support traditional videos
+      if (searchParams.get("v") !== mediaId || searchParams.get("m") !== mediaId) {
+        console.log(`current mediaId "${mediaId}" isn't set in the URL query params.. TODO we should set it`)
         
-        // searchParams.set("v", videoId)
+        // searchParams.set("m", mediaId)
         // location.search = searchParams.toString()
       }
     } else {
-      // searchParams.delete("v")
+      // searchParams.delete("m")
       // location.search = searchParams.toString()
     }
-  }, [videoId])
+  }, [mediaId])
 
   useEffect(() => {
     if (copied) {
@@ -114,30 +114,30 @@ export function PublicVideoView() {
 
   useEffect(() => {
     startTransition(async () => {
-      if (!video || !video.id) {
+      if (!media || !media.id) {
         return
       }
-      const numberOfViews = await watchVideo(videoId)
+      const numberOfViews = await countNewMediaView(mediaId)
 
       setPublicVideo({
-        ...video,
+        ...media,
         numberOfViews
       })
     })
 
-  }, [video?.id])
+  }, [media?.id])
 
 
   useEffect(() => {
     startTransition(async () => {
-      if (!video || !video.id) {
+      if (!media || !media.id) {
         return
       }
-      const comments = await getComments(videoId)
+      const comments = await getComments(mediaId)
       setPublicComments(comments)
     })
 
-  }, [video?.id])
+  }, [media?.id])
 
   const [huggingfaceApiKey] = useLocalStorage<string>(
     localStorageKeys.huggingfaceApiKey,
@@ -153,16 +153,16 @@ export function PublicVideoView() {
     })
   }, [])
   */
-  if (!video) { return null }
+  if (!media) { return null }
 
   const handleSubmitComment = () => {
 
     startTransition(async () => {
-      if (!commentDraft || !huggingfaceApiKey || !videoId) { return }
+      if (!commentDraft || !huggingfaceApiKey || !mediaId) { return }
     
       const limitedSizeComment = commentDraft.trim().slice(0, 1024).trim()
 
-      const comment = await submitComment(video.id, limitedSizeComment, huggingfaceApiKey)
+      const comment = await submitComment(media.id, limitedSizeComment, huggingfaceApiKey)
 
       setPublicComments(
         [comment].concat(publicComments)
@@ -185,25 +185,25 @@ export function PublicVideoView() {
         `transition-all duration-200 ease-in-out`,
         `px-2 xl:px-0`
       )}>
-        {/** VIDEO PLAYER - HORIZONTAL */}
-        <VideoPlayer
-          video={video}
+        {/** AI MEDIA PLAYER - HORIZONTAL */}
+        <MediaPlayer
+          media={media}
           enableShortcuts={!isFocusedOnInput}
 
           // that could be, but let's do it the dirty way for now
           // currentTime={desiredCurrentTime}
 
-          className="mb-4"
+          className="rounded-xl overflow-hidden mb-4"
         />
 
-        {/** VIDEO TITLE - HORIZONTAL */}
+        {/** AI MEDIA TITLE - HORIZONTAL */}
         <div className={cn(
           `flex flex-row space-x-2`,
           `transition-all duration-200 ease-in-out`,
           `text-lg lg:text-xl text-zinc-100 font-medium mb-0 line-clamp-2`,
           `mb-2`,
         )}>
-          <div className="">{video.label}</div>
+          <div className="">{media.label}</div>
           {/*
           <div className={cn(
             `flex flex-row`, // `inline-block`,
@@ -213,12 +213,12 @@ export function PublicVideoView() {
             `px-1.5 py-0.5`,
             `text-xs`
             )}>
-            AI Video Model: {video.model || "HotshotXL"}
+            AI Media Model: {media.model || "HotshotXL"}
           </div>
           */}
         </div>
         
-        {/** VIDEO TOOLBAR - HORIZONTAL */}
+        {/** MEDIA TOOLBAR - HORIZONTAL */}
         <div className={cn(
           `flex flex-col space-y-3 xl:space-y-0 xl:flex-row`,
           `transition-all duration-200 ease-in-out`,
@@ -238,7 +238,7 @@ export function PublicVideoView() {
                 `mr-3`,
                 `cursor-pointer`
               )}
-              href={`https://huggingface.co/datasets/${video.channel.datasetUser}/${video.channel.datasetName}`}
+              href={`https://huggingface.co/datasets/${media.channel.datasetUser}/${media.channel.datasetName}`}
               target="_blank">
               <div className="flex w-10 rounded-full overflow-hidden">
               {
@@ -251,7 +251,7 @@ export function PublicVideoView() {
                   </div>
                 </div>
                 : <DefaultAvatar
-                    username={video.channel.datasetUser}
+                    username={media.channel.datasetUser}
                     bgColor="#fde047"
                     textColor="#1c1917"
                     width={36}
@@ -266,15 +266,15 @@ export function PublicVideoView() {
               `transition-all duration-200 ease-in-out`,
               `cursor-pointer`,
               )}
-              href={`https://huggingface.co/datasets/${video.channel.datasetUser}/${video.channel.datasetName}`}
+              href={`https://huggingface.co/datasets/${media.channel.datasetUser}/${media.channel.datasetName}`}
               target="_blank">
               <div className={cn(
                 `flex flex-row items-center`,
                 `transition-all duration-200 ease-in-out`,
                 `text-zinc-100 text-sm lg:text-base font-medium space-x-1`,
                 )}>
-                <div>{video.channel.label}</div>
-                {isCertifiedUser(video.channel.datasetUser) ? <div className="text-sm text-neutral-400"><RiCheckboxCircleFill className="" /></div> : null}
+                <div>{media.channel.label}</div>
+                {isCertifiedUser(media.channel.datasetUser) ? <div className="text-sm text-neutral-400"><RiCheckboxCircleFill className="" /></div> : null}
               </div>
               <div className={cn(
                 `flex flex-row items-center`,
@@ -298,7 +298,7 @@ export function PublicVideoView() {
             `space-x-2`
           )}>
 
-            <LikeButton video={video} />
+            <LikeButton media={media} />
 
             {/* SHARE */}
             <div className={cn(
@@ -306,7 +306,7 @@ export function PublicVideoView() {
               `items-center`
             )}>
               <CopyToClipboard
-                text={`https://jbilcke-hf-ai-tube.hf.space/watch?v=${video.id}`}
+                text={`${process.env.NEXT_PUBLIC_DOMAIN}/watch?v=${media.id}`}
                 onCopy={() => setCopied(true)}>
                 <div className={cn(
                   actionButtonClassName,
@@ -327,24 +327,24 @@ export function PublicVideoView() {
 
             <ActionButton
               href={
-                video.model === "LaVie"
+                media.model === "LaVie"
                 ? "https://huggingface.co/vdo/LaVie"
-                : video.model === "SVD"
+                : media.model === "SVD"
                 ? "https://huggingface.co/stabilityai/stable-video-diffusion-img2vid"
                 : "https://huggingface.co/hotshotco/Hotshot-XL"
               }
             >
               <BiCameraMovie className="w-5 h-5" />
               <span className="hidden 2xl:inline">
-                Made with {video.model}
+                Made with {media.model}
               </span>
               <span className="inline 2xl:hidden">
-                {video.model}
+                {media.model}
               </span>
             </ActionButton>
 
             {isEquirectangular && <ActionButton
-              href={`/api/video/${video.id}`}
+              href={`/api/video/${media.id}`}
             >
               <BsHeadsetVr className="w-5 h-5" />
               <span>
@@ -355,11 +355,11 @@ export function PublicVideoView() {
             <ActionButton
               href={
                 `https://huggingface.co/datasets/${
-                  video.channel.datasetUser
+                  media.channel.datasetUser
                 }/${
-                  video.channel.datasetName
+                  media.channel.datasetName
                 }/raw/main/prompt_${
-                  video.id
+                  media.id
                 }.md`
               }
             >
@@ -369,13 +369,13 @@ export function PublicVideoView() {
               </span>
             </ActionButton>
 
-            <ReportModal video={video} />
+            <ReportModal media={media} />
 
           </div>
 
         </div>
 
-        {/** VIDEO DESCRIPTION - VERTICAL */}
+        {/** MEDIA DESCRIPTION - VERTICAL */}
         <div className={cn(
           `flex flex-col p-3`,
           `transition-all duration-200 ease-in-out`,
@@ -386,10 +386,10 @@ export function PublicVideoView() {
 
           {/* DESCRIPTION BLOCK */}
           <div className="flex flex-row space-x-2 font-medium mb-1">
-            <div>{formatLargeNumber(video.numberOfViews)} views</div>
-            <div>{formatTimeAgo(video.updatedAt).replace("about ", "")}</div>
+            <div>{formatLargeNumber(media.numberOfViews)} views</div>
+            <div>{formatTimeAgo(media.updatedAt).replace("about ", "")}</div>
           </div>
-          <p>{video.description}</p>
+          <p>{media.description}</p>
         </div>
 
         {/* COMMENTS */}
@@ -525,7 +525,7 @@ export function PublicVideoView() {
         `w-full md:w-[360px] lg:w-[400px] xl:w-[450px]`,
         `transition-all duration-200 ease-in-out`,
       )}>
-       <RecommendedVideos video={video} />
+       <RecommendedVideos media={media} />
       </div>
     </div>
   )

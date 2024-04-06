@@ -1,6 +1,6 @@
 "use server"
 
-import { ChannelInfo, VideoGenerationModel, VideoInfo, VideoOrientation } from "@/types/general"
+import { ChannelInfo, VideoGenerationModel, MediaInfo, VideoOrientation } from "@/types/general"
 
 import { uploadVideoRequestToDataset } from "./ai-tube-hf/uploadVideoRequestToDataset"
 
@@ -32,7 +32,7 @@ export async function submitVideoRequest({
   tags: string[]
   duration: number
   orientation: VideoOrientation
-}): Promise<VideoInfo> {
+}): Promise<MediaInfo> {
   if (!apiKey) {
     throw new Error(`the apiKey is required`)
   }

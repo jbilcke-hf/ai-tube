@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from "uuid"
 import { Credentials } from "@/huggingface/hub/src"
 
 import { ClapProject } from "@/clap/types"
-import { ChannelInfo, VideoInfo, VideoRequest } from "@/types/general"
+import { ChannelInfo, MediaInfo, VideoRequest } from "@/types/general"
 import { defaultVideoModel } from "@/app/config"
 import { parseClap } from "@/clap/parseClap"
 
@@ -21,7 +21,7 @@ export async function downloadClapProject({
   credentials: Credentials
 }): Promise<{
   videoRequest: VideoRequest
-  videoInfo: VideoInfo
+  videoInfo: MediaInfo
   clapProject: ClapProject
 }> {
   // we recover the repo from the cnannel info
@@ -62,7 +62,7 @@ export async function downloadClapProject({
     }),
   }
 
-  const videoInfo: VideoInfo = {
+  const videoInfo: MediaInfo = {
     id,
     status: "submitted",
     label: videoRequest.label || "",

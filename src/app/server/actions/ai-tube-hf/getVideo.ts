@@ -1,9 +1,9 @@
 "use server"
 
-import { VideoInfo } from "@/types/general"
+import { MediaInfo } from "@/types/general"
 
 import { getVideoIndex } from "./getVideoIndex"
-import { getStatsForVideos } from "../stats"
+import { getStatsForMedias } from "../stats"
 
 export async function getVideo({
   videoId,
@@ -11,7 +11,7 @@ export async function getVideo({
 }: {
   videoId?: string | string[] | null,
   neverThrow?: boolean
-}): Promise<VideoInfo | undefined> {
+}): Promise<MediaInfo | undefined> {
   try {
     const id = `${videoId || ""}`
 
@@ -26,7 +26,7 @@ export async function getVideo({
       throw new Error(`cannot get the video, nothing found for id "${id}"`)
     }
 
-    const allStats = await getStatsForVideos([video.id])
+    const allStats = await getStatsForMedias([video.id])
     
     const stats = allStats[video.id] || {
       numberOfViews: 0,

@@ -4,25 +4,37 @@ import { Player } from "react-tuby"
 import "react-tuby/css/main.css"
 
 import { cn } from "@/lib/utils"
-import { VideoInfo } from "@/types/general"
+import { MediaInfo } from "@/types/general"
 
 export function CartesianVideoPlayer({
-  video,
+  media,
   enableShortcuts = true,
   className = "",
   // currentTime,
  }: {
-  video: VideoInfo
+  media: MediaInfo
   enableShortcuts?: boolean
   className?: string
   // currentTime?: number
 }) {
+
+  const assetUrl = media.assetUrlHd || media.assetUrl
+
+  if (!assetUrl) {
+    return (
+      <div className={cn(
+        `w-full`,
+        `flex flex-col items-center justify-center`,
+        className
+      )}>
+    </div>
+  )}
+
   return (
     <div className={cn(
-      `w-full`,
-      `flex flex-col items-center justify-center`,
-      `rounded-xl overflow-hidden`,
-      className
+        `w-full`,
+        `flex flex-col items-center justify-center`,
+        className
       )}>
       <div className={cn(
         `w-[calc(100%+16px)]`,
@@ -36,7 +48,10 @@ export function CartesianVideoPlayer({
           src={[
             {
               quality: "Full HD",
-              url: video.assetUrlHd || video.assetUrl,
+
+              // TODO: separate the media asset URLs into separate source channels,
+              // one for each resolution
+              url: media.assetUrlHd || media.assetUrl,
             }
           ]}
 
@@ -44,7 +59,7 @@ export function CartesianVideoPlayer({
 
           subtitles={[]}
           poster={
-            `https://huggingface.co/datasets/jbilcke-hf/ai-tube-index/resolve/main/videos/${video.id}.webp`
+            `https://huggingface.co/datasets/jbilcke-hf/ai-tube-index/resolve/main/videos/${media.id}.webp`
           }
         />
       </div>

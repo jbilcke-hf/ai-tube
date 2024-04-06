@@ -112,6 +112,7 @@ export function CollectionCard({
                   `flex flex-col items-center justify-center text-center`,
                   `bg-neutral-900 rounded`,
                   `text-2xs font-semibold px-[3px] py-[1px]`,
+                  isFinite(duration) && !isNaN(duration) && duration > 0 ? 'opacity-100' : 'opacity-0'
                 )}
                 >{formatDuration(duration)}</div>
               </div>

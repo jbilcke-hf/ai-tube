@@ -1,5 +1,5 @@
 
-import { VideoInfo } from "@/types/general"
+import { MediaInfo } from "@/types/general"
 
 import { deleteFileFromDataset } from "./deleteFileFromDataset"
 import { formatPromptFileName } from "../utils/formatPromptFileName"
@@ -9,7 +9,7 @@ export async function deleteVideoRequest({
   apiKey,
   neverThrow,
 }: {
-   video: VideoInfo
+   video: MediaInfo
    apiKey: string
    neverThrow?: boolean
 }): Promise<boolean> {

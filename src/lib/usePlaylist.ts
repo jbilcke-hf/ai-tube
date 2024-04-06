@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef } from "react";
 import { create } from "zustand";
 
-import { VideoInfo } from "@/types/general";
+import { MediaInfo } from "@/types/general";
 
 // Define the new track type with an optional playNow property
 interface PlaybackOptions<T> {
@@ -36,7 +36,7 @@ function getAudio(): HTMLAudioElement | null {
   }
 }
 
-export const usePlaylistStore = create<PlaylistState<VideoInfo>>((set, get) => ({
+export const usePlaylistStore = create<PlaylistState<MediaInfo>>((set, get) => ({
   playlist: [],
   audio: getAudio(),
   current: null,
@@ -111,7 +111,7 @@ export function usePlaylist() {
     }
   }, [audio, audio?.currentTime, dequeue, setProgress, isPlaying]);
 
-  const playback = useCallback(async (options?: PlaybackOptions<VideoInfo>): Promise<void> => {
+  const playback = useCallback(async (options?: PlaybackOptions<MediaInfo>): Promise<void> => {
     if (!audio) { return }
 
     if (!options) {

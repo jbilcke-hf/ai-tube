@@ -1,20 +1,20 @@
 import { useEffect, useState, useTransition } from "react"
-import { VideoInfo, VideoRating } from "@/types/general"
-
-import { GenericLikeButton } from "./generic"
-import { getVideoRating, rateVideo } from "@/app/server/actions/stats"
 import { useLocalStorage } from "usehooks-ts"
+
+import { MediaInfo, MediaRating } from "@/types/general"
+import { getMediaRating, rateMedia } from "@/app/server/actions/stats"
 import { localStorageKeys } from "@/app/state/localStorageKeys"
 import { defaultSettings } from "@/app/state/defaultSettings"
 
+import { GenericLikeButton } from "./generic"
 export function LikeButton({
-  video
+  media
 }: {
-  video?: VideoInfo
+  media?: MediaInfo
 }) {
   const [_pending, startTransition] = useTransition()
 
-  const [rating, setRating] = useState<VideoRating>({
+  const [rating, setRating] = useState<MediaRating>({
     isLikedByUser: false,
     isDislikedByUser: false,
     numberOfLikes: 0,
@@ -28,15 +28,15 @@ export function LikeButton({
 
   useEffect(() => {
     startTransition(async () => {
-      if (!video || !video?.id) { return }
+      if (!media || !media?.id) { return }
 
-      const freshRating = await getVideoRating(video.id, huggingfaceApiKey)
+      const freshRating = await getMediaRating(media.id, huggingfaceApiKey)
       setRating(freshRating)
 
     })
-  }, [video?.id, huggingfaceApiKey])
+  }, [media?.id, huggingfaceApiKey])
 
-  if (!video) { return null }
+  if (!media) { return null }
   
   if (!huggingfaceApiKey) { return null }
 
@@ -52,7 +52,7 @@ export function LikeButton({
     })
     startTransition(async () => {
       try {
-        const freshRating = await rateVideo(video.id, true, huggingfaceApiKey)
+        const freshRating = await rateMedia(media.id, true, huggingfaceApiKey)
         // setRating(freshRating)
       } catch (err) {
         setRating(previousRating)
@@ -72,7 +72,7 @@ export function LikeButton({
     })
     startTransition(async () => {
       try {
-        const freshRating = await rateVideo(video.id, false, huggingfaceApiKey)
+        const freshRating = await rateMedia(media.id, false, huggingfaceApiKey)
         // setRating(freshRating)
       } catch (err) {
         setRating(previousRating)

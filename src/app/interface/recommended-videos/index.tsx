@@ -2,17 +2,16 @@
 import { useEffect, useTransition } from "react"
 
 import { useStore } from "@/app/state/useStore"
-import { cn } from "@/lib/utils"
-import { VideoInfo } from "@/types/general"
+import { MediaInfo } from "@/types/general"
 
 import { VideoList } from "../video-list"
 import { getVideos } from "@/app/server/actions/ai-tube-hf/getVideos"
 
 export function RecommendedVideos({
-  video,
+  media,
 }: {
-  // the video to use for the recommendations
-  video: VideoInfo
+  // the media to use for the recommendations
+  media: MediaInfo
 }) {
   const [_isPending, startTransition] = useTransition()
   const setRecommendedVideos = useStore(s => s.setRecommendedVideos)
@@ -22,12 +21,12 @@ export function RecommendedVideos({
     startTransition(async () => {
       setRecommendedVideos(await getVideos({
         sortBy: "random",
-        niceToHaveTags: video.tags,
-        ignoreVideoIds: [video.id],
+        niceToHaveTags: media.tags,
+        ignoreVideoIds: [media.id],
         maxVideos: 16,
       }))
     })
-  }, video.tags)
+  }, media.tags)
 
   return (
     <VideoList

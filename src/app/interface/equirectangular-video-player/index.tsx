@@ -3,7 +3,7 @@
 import AutoSizer from "react-virtualized-auto-sizer"
 
 import { cn } from "@/lib/utils"
-import { VideoInfo } from "@/types/general"
+import { MediaInfo } from "@/types/general"
 
 import { VideoSphereViewer } from "./viewer"
 
@@ -11,7 +11,7 @@ export function EquirectangularVideoPlayer({
   video,
   className = "",
  }: {
-  video?: VideoInfo
+  video?: MediaInfo
   className?: string
 }) {
 

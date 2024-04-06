@@ -1,8 +1,8 @@
-import { VideoInfo } from "@/types/general"
+import { MediaInfo } from "@/types/general"
 
 const winners = new Set(`${process.env.WINNERS || ""}`.toLowerCase().split(",").map(x => x.trim()).filter(x => x))
 
-export function isAntisocial(video: VideoInfo): boolean {
+export function isAntisocial(video: MediaInfo): boolean {
 
   // some people are reported by the community for their anti-social behavior
   // this include:

@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils"
-import { VideoInfo } from "@/types/general"
+import { MediaInfo } from "@/types/general"
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
 import { PendingVideoCard } from "../pending-video-card"
@@ -9,8 +9,8 @@ export function PendingVideoList({
   onDelete,
   className = "",
 }: {
-  videos: VideoInfo[]
-  onDelete?: (video: VideoInfo) => void
+  videos: MediaInfo[]
+  onDelete?: (video: MediaInfo) => void
   className?: string
 }) {
   return (

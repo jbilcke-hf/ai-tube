@@ -1,8 +1,8 @@
 import Link from "next/link"
-import { TbBrandDiscord } from "react-icons/tb"
+import { TbBrandDiscord, TbOctahedron } from "react-icons/tb"
 import { AiOutlineQuestionCircle } from "react-icons/ai"
 import { GrChannel } from "react-icons/gr"
-import { MdVideoLibrary } from "react-icons/md"
+import { MdOutlineLiveTv, MdOutlineVideogameAsset, MdVideoLibrary } from "react-icons/md"
 import { RiHome8Line } from "react-icons/ri"
 import { PiRobot } from "react-icons/pi"
 import { CgProfile } from "react-icons/cg"
@@ -56,6 +56,32 @@ export function LeftMenu() {
             Music
           </MenuItem>
         </Link>
+        {/*
+        <Link href="/gaming">
+          <MenuItem
+            icon={<TbOctahedron className="h-6.5 w-6.5" />}
+            selected={view === "public_4d"}
+            >
+            4D
+          </MenuItem>
+        </Link>
+        <Link href="/gaming">
+          <MenuItem
+            icon={<MdOutlineVideogameAsset className="h-6.5 w-6.5" />}
+            selected={view === "public_gaming"}
+            >
+            Gaming
+          </MenuItem>
+        </Link>
+        <Link href="/live">
+          <MenuItem
+            icon={<MdOutlineLiveTv className="h-6.5 w-6.5" />}
+            selected={view === "public_live"}
+            >
+            Live
+          </MenuItem>
+        </Link>
+        */}
       </div>
       <div className={cn(
         `flex flex-col w-full`,

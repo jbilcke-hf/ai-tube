@@ -3,7 +3,7 @@ import { PiTrashBold } from "react-icons/pi"
 import { TableCell, TableRow } from "@/components/ui/table"
 import { cn } from "@/lib/utils"
 import { MdLockClock } from "react-icons/md"
-import { VideoInfo } from "@/types/general"
+import { MediaInfo } from "@/types/general"
 import { truncate } from "./truncate"
 
 export function PendingVideoCard({
@@ -11,8 +11,8 @@ export function PendingVideoCard({
   onDelete,
   className = "",
 }: {
-  video: VideoInfo
-  onDelete?: (video: VideoInfo) => void
+  video: MediaInfo
+  onDelete?: (video: MediaInfo) => void
   className?: string
  }) {
 

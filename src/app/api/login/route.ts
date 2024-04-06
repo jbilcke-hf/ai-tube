@@ -3,12 +3,12 @@ import { NextResponse, NextRequest } from "next/server"
 
 const defaultState = JSON.stringify({
   nonce: "",
-  redirectUri: "https://aitube.at/api/login",
+  redirectUri: `${process.env.NEXT_PUBLIC_DOMAIN}/api/login`,
   state: JSON.stringify({ redirectTo: "/" })
 })
 
 export async function GET(req: NextRequest) {
- // we are going to pass the whole thing unchanged to the AI Tube frontend
+ // we are going to pass the whole thing unchanged to the AiTube frontend
  const params = req.url.split("/api/login").pop() || ""
 
   
@@ -26,7 +26,7 @@ export async function GET(req: NextRequest) {
     state // <-- this is defined by us!
   } = JSON.parse(`${query.state || defaultState}`)
 
-  // this is the path of the AI Tube page which the user was browser
+  // this is the path of the AiTube page which the user was browser
   // eg. this can be /account, /, or nothing
   // const redirectTo = `${state.redirectTo || "/"}`
 
@@ -35,11 +35,11 @@ export async function GET(req: NextRequest) {
   const redirectTo = "/account"
 
 
-  return NextResponse.redirect(`https://aitube.at${redirectTo}${params}`)
+  return NextResponse.redirect(`${process.env.NEXT_PUBLIC_DOMAIN}${redirectTo}${params}`)
 }
 
 export async function POST(req: NextRequest, res: NextResponse) {
-  // we are going to pass the whole thing unchanged to the AI Tube frontend
+  // we are going to pass the whole thing unchanged to the AiTube frontend
   const params = req.url.split("/api/login").pop() || ""
 
   
@@ -57,7 +57,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
     state // <-- this is defined by us!
   } = JSON.parse(`${query.state || defaultState}`)
 
-  // this is the path of the AI Tube page which the user was browser
+  // this is the path of the AiTube page which the user was browser
   // eg. this can be /account, /, or nothing
   // const redirectTo = `${state.redirectTo || "/"}`
 
@@ -66,5 +66,5 @@ export async function POST(req: NextRequest, res: NextResponse) {
   const redirectTo = "/account"
 
 
-  return NextResponse.redirect(`https://aitube.at${redirectTo}${params}`)
+  return NextResponse.redirect(`${process.env.NEXT_PUBLIC_DOMAIN}${redirectTo}${params}`)
 }

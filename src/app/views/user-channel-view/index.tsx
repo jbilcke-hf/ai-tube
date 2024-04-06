@@ -4,7 +4,7 @@ import { useEffect, useState, useTransition } from "react"
 
 import { useStore } from "@/app/state/useStore"
 import { cn } from "@/lib/utils"
-import { VideoGenerationModel, VideoInfo } from "@/types/general"
+import { VideoGenerationModel, MediaInfo } from "@/types/general"
 
 import { useLocalStorage } from "usehooks-ts"
 import { localStorageKeys } from "@/app/state/localStorageKeys"
@@ -130,7 +130,7 @@ export function UserChannelView() {
     })
   }
 
-  const handleDelete = (video: VideoInfo) => {
+  const handleDelete = (video: MediaInfo) => {
     // step 1: delete it from the dataset
     
 

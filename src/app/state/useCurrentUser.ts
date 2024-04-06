@@ -24,7 +24,7 @@ export function useCurrentUser({
   apiKey: string
   oauthResult?: OAuthResult
 
-  // the long standing API is a temporary solution for "PRO" users of AI Tube
+  // the long standing API is a temporary solution for "PRO" users of AiTube
   // (users who use Clap files using external tools,
   // or want ot use their own HF account to generate videos)
   longStandingApiKey: string
@@ -219,7 +219,7 @@ export function useCurrentUser({
        *
        * For Developer Applications, you can add any URL you want to the list of allowed redirect URIs at https://huggingface.co/settings/connected-applications.
        */
-      redirectUrl: "https://aitube.at/api/login",
+      redirectUrl: `${process.env.NEXT_PUBLIC_DOMAIN}/api/login`,
 
       /**
        * State to pass to the OAuth provider, which will be returned in the call to `oauthLogin` after the redirect.

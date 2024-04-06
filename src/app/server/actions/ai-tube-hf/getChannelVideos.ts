@@ -1,6 +1,6 @@
 "use server"
 
-import { ChannelInfo, VideoInfo, VideoStatus } from "@/types/general"
+import { ChannelInfo, MediaInfo, VideoStatus } from "@/types/general"
 
 import { getVideoRequestsFromChannel  } from "./getVideoRequestsFromChannel"
 import { adminApiKey } from "../config"
@@ -21,7 +21,7 @@ export async function getChannelVideos({
   status?: VideoStatus
 
   neverThrow?: boolean
-}): Promise<VideoInfo[]> {
+}): Promise<MediaInfo[]> {
 
   if (!channel) { return [] }
 
@@ -38,7 +38,7 @@ export async function getChannelVideos({
     const published = await getVideoIndex({ status: "published" })
 
     const validVideos = videos.map(v => {
-    let video: VideoInfo = {
+    let video: MediaInfo = {
         id: v.id,
         status: "submitted",
         label: v.label || "",

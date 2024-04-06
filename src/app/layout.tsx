@@ -14,8 +14,8 @@ const roboto = Roboto({
 })
 
 export const metadata: Metadata = {
-  title: '🍿 AI Tube',
-  description: '🍿 AI Tube',
+  title: '🍿 AiTube',
+  description: '🍿 AiTube',
 }
 
 export default function RootLayout({

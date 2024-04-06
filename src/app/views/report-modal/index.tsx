@@ -4,16 +4,16 @@ import { LuShieldAlert } from "react-icons/lu"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTrigger } from "@/components/ui/dialog"
 
-import { ChannelInfo, VideoInfo } from "@/types/general"
+import { ChannelInfo, MediaInfo } from "@/types/general"
 import { ActionButton } from "@/app/interface/action-button"
 
-// modal to report a video or channel
+// modal to report a media or channel
 export function ReportModal({
-    video,
+    media,
     channel,
     children,
   }: {
-    video?: VideoInfo
+    media?: MediaInfo
     channel?: ChannelInfo
     children?: ReactNode
   }) {
@@ -42,14 +42,14 @@ export function ReportModal({
           <p className="text-sm">If you believe there is an issue with a content, you can ask the author to remove it, by creating a pull request explaining why:</p>
 
           <div className="flex flex-row py-2">
-            {video && video.id ? <ActionButton
+            {media && media.id ? <ActionButton
               href={
                 `https://huggingface.co/datasets/${
-                  video.channel.datasetUser
+                  media.channel.datasetUser
                 }/${
-                  video.channel.datasetName
+                  media.channel.datasetName
                 }/delete/main/prompt_${
-                  video.id
+                  media.id
                 }.md`
                   }
                 >
@@ -68,12 +68,12 @@ export function ReportModal({
           </p>
 
           <div className="flex flex-row py-2">
-          {video && video.id ? <ActionButton
+          {media && media.id ? <ActionButton
             href={
               `https://huggingface.co/datasets/${
-                video.channel.datasetUser
+                media.channel.datasetUser
               }/${
-                video.channel.datasetName
+                media.channel.datasetName
               }`
                 }
               >

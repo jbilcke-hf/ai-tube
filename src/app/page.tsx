@@ -16,14 +16,14 @@ export async function generateMetadata(
 
   if (!videoId) {
     return {
-      title: `🍿 AI Tube`,
+      title: `🍿 AiTube`,
       metadataBase,
       openGraph: {
         type: "website",
         // url: "https://example.com",
-        title: "AI Tube",
+        title: "AiTube",
         description: "The first fully AI generated video platform",
-        siteName: "🍿 AI Tube",
+        siteName: "🍿 AiTube",
 
         videos: [],
         images: [],
@@ -39,14 +39,14 @@ export async function generateMetadata(
     }
 
     return {
-      title: `${video.label} - AI Tube`,
+      title: `${video.label} - AiTube`,
       metadataBase,
       openGraph: {
         type: "website",
         // url: "https://example.com",
         title: video.label || "", // put the video title here
         description: video.description || "", // put the vide description here
-        siteName: "AI Tube",
+        siteName: "AiTube",
   
         videos: [
           {
@@ -58,14 +58,14 @@ export async function generateMetadata(
     }
   } catch (err) {
     return {
-      title: "AI Tube",
+      title: "AiTube",
       metadataBase,
       openGraph: {
         type: "website",
         // url: "https://example.com",
-        title: "AI Tube", // put the video title here
+        title: "AiTube", // put the video title here
         description: "", // put the vide description here
-        siteName: "AI Tube",
+        siteName: "AiTube",
   
         videos: [],
         images: [],

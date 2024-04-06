@@ -11,7 +11,7 @@ export const videoCategoriesWithLabels = {
   "Time Travel": "Time Travel", // vlogs etc
   // "gaming": "Gaming",
   // "trailers": "Trailers",
-  // "aitubers": "AI tubers",
+  // "aitubers": "AiTubers",
   // "ads": "100% Ads",
 }
 

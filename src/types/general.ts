@@ -352,39 +352,41 @@ export type VideoOrientation =
   | "landscape"
   | "square"
 
-export type VideoProjection =
+export type MediaProjection =
   | "cartesian" // this is the default
   | "equirectangular"
+  | "gaussian"
 
 
-export type VideoInfo = {
+// TODO: renamed this to MediaInfo
+export type MediaInfo = {
   /**
    * UUID (v4)
    */
   id: string
 
   /**
-   * Status of the video
+   * Status of the media
    */
   status: VideoStatus
 
   /**
-   * Human readable title for the video
+   * Human readable title for the media
    */
   label: string
 
   /**
-   * Human readable description for the video
+   * Human readable description for the media
    */
   description: string
 
   /**
-   * Video prompt
+   * Content prompt
    */
   prompt: string
 
   /**
-   * URL to the video thumbnail
+   * URL to the media thumbnail
    */
   thumbnailUrl: string
 
@@ -406,7 +408,7 @@ export type VideoInfo = {
   assetUrl: string
 
   /**
-   * This is contain the storage URL of the higher-resolution video
+   * This is contain the storage URL of the higher-resolution content
    */
   assetUrlHd: string
 
@@ -432,7 +434,7 @@ export type VideoInfo = {
   numberOfDislikes: number
 
   /**
-   * When was the video updated
+   * When was the media updated
    */
   updatedAt: string
 
@@ -472,29 +474,29 @@ export type VideoInfo = {
   channel: ChannelInfo
 
   /**
-   * Video duration
+   * Media duration
    */
   duration: number
 
   /**
-   * Video width (eg. 1024)
+   * Media width (eg. 1024)
    */
   width: number
 
   /**
-   * Video height (eg. 576)
+   * Media height (eg. 576)
    */
   height: number
 
   /**
-   * General video aspect ratio
+   * General media aspect ratio
    */
   orientation: VideoOrientation
 
   /**
-   * Video projection (cartesian by default)
+   * Media projection (cartesian by default)
    */
-  projection: VideoProjection
+  projection: MediaProjection
 }
 
 export type CollectionInfo = {
@@ -552,7 +554,7 @@ export type CollectionInfo = {
    */
   duration: number
 
-  items: Array<VideoInfo>[]
+  items: Array<MediaInfo>[]
 }
 
 export type UserInfo = {
@@ -633,6 +635,9 @@ export type InterfaceView =
   | "public_video" // public view of a video
   | "public_video_embed" // for integration into twitter etc
   | "public_music_videos" // public music videos - it's a special category, because music is *cool*
+  | "public_gaming" // for AiTube Gaming
+  | "public_4d" // for AiTube 4D
+  | "public_live" // for AiTube Live
   | "not_found"
 
 
@@ -708,7 +713,7 @@ export type MediaDisplayLayout =
   | "table" // used when shown in a table mode
   | "micro"
 
-export type VideoRating = {
+export type MediaRating = {
   isLikedByUser: boolean
   isDislikedByUser: boolean
   numberOfLikes: number

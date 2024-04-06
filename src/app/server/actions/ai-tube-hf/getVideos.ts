@@ -3,7 +3,7 @@
 // import { distance } from "fastest-levenshtein"
 import MiniSearch from "minisearch"
 
-import { VideoInfo } from "@/types/general"
+import { MediaInfo } from "@/types/general"
 
 import { getVideoIndex } from "./getVideoIndex"
 import { extendVideosWithStats } from "./extendVideosWithStats"
@@ -47,7 +47,7 @@ export async function getVideos({
   neverThrow?: boolean
 
   renewCache?: boolean
-}): Promise<VideoInfo[]> {
+}): Promise<MediaInfo[]> {
   try {
     // the index is gonna grow more and more,
     // but in the future we will use some DB eg. Prisma or sqlite
@@ -96,7 +96,7 @@ export async function getVideos({
       allPotentiallyValidVideos.sort(() => Math.random() - 0.5)
     }
 
-    let videosMatchingFilters: VideoInfo[] = allPotentiallyValidVideos
+    let videosMatchingFilters: MediaInfo[] = allPotentiallyValidVideos
 
     // filter videos by mandatory tags, or else we return everything
     const mandatoryTagsList = mandatoryTags.map(tag => tag.toLowerCase().trim()).filter(tag => tag)

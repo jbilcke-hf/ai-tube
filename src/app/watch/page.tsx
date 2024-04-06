@@ -6,7 +6,6 @@ import { AppQueryProps } from "@/types/general"
 import { Main } from "../main"
 import { getVideo } from "../server/actions/ai-tube-hf/getVideo"
 
-
 // https://nextjs.org/docs/pages/building-your-application/optimizing/fonts 
 export async function generateMetadata(
   { params, searchParams: { v: videoId } }: AppQueryProps,
@@ -17,29 +16,29 @@ export async function generateMetadata(
   const metadataBase = new URL('https://huggingface.co/spaces/jbilcke-hf/ai-tube')
 
   try {
-    const video = await getVideo({ videoId, neverThrow: true })
+    const media = await getVideo({ videoId, neverThrow: true })
 
-    if (!video) {
+    if (!media) {
       throw new Error("Video not found")
     }
 
     return {
-      title: `${video.label} - AiTube`,
+      title: `${media.label} - AiTube`,
       metadataBase,
       openGraph: {
         // some cool stuff we could use here:
         // 'video.tv_show' | 'video.other' | 'video.movie' | 'video.episode';
         type: "video.other",
         // url: "https://example.com",
-        title: video.label || "", // put the video title here
-        description: video.description || "", // put the video description here
+        title: media.label || "", // put the video title here
+        description: media.description || "", // put the video description here
         siteName: "AiTube",
         images: [
-          `https://huggingface.co/datasets/jbilcke-hf/ai-tube-index/resolve/main/videos/${video.id}.webp`
+          `https://huggingface.co/datasets/jbilcke-hf/ai-tube-index/resolve/main/videos/${media.id}.webp`
         ],
         videos: [
           {
-            "url": video.assetUrlHd || video.assetUrl
+            "url": media.assetUrlHd || media.assetUrl
           }
         ],
         // images: ['/some-specific-page-image.jpg', ...previousImages],
@@ -47,11 +46,11 @@ export async function generateMetadata(
       twitter: {
         card: "player",
         site: "@flngr",
-        description: video.description || "", 
-        images: `https://huggingface.co/datasets/jbilcke-hf/ai-tube-index/resolve/main/videos/${video.id}.webp`,
+        description: media.description || "", 
+        images: `https://huggingface.co/datasets/jbilcke-hf/ai-tube-index/resolve/main/videos/${media.id}.webp`,
         players: {
-          playerUrl: `https://jbilcke-hf-ai-tube.hf.space/embed?v=${video.id}`,
-          streamUrl: `https://huggingface.co/datasets/jbilcke-hf/ai-tube-index/resolve/main/videos/${video.id}.mp4`,
+          playerUrl: `${process.env.NEXT_PUBLIC_DOMAIN}/embed?v=${media.id}`,
+          streamUrl: `https://huggingface.co/datasets/jbilcke-hf/ai-tube-index/resolve/main/videos/${media.id}.mp4`,
           width: 1024,
           height: 576
         }
@@ -76,7 +75,12 @@ export async function generateMetadata(
 }
 
 
-export default async function WatchPage({ searchParams: { v: videoId } }: AppQueryProps) {
+export default async function WatchPage({ searchParams: {
+  v: videoId,
+
+  // TODO add:
+  // m: mediaId
+} }: AppQueryProps) {
   const publicVideo = await getVideo({ videoId, neverThrow: true })
   // console.log("WatchPage: --> " + video?.id)
   return (

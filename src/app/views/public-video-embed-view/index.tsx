@@ -4,66 +4,68 @@ import { useEffect, useTransition } from "react"
 
 import { useStore } from "@/app/state/useStore"
 import { cn } from "@/lib/utils"
-import { VideoPlayer } from "@/app/interface/video-player"
+import { MediaPlayer } from "@/app/interface/media-player"
 
-import { watchVideo } from "@/app/server/actions/stats"
+import { countNewMediaView } from "@/app/server/actions/stats"
 
 export function PublicVideoEmbedView() {
   const [_pending, startTransition] = useTransition()
 
-  // current time in the video
+  // current time in the media
   // note: this is used to *set* the current time, not to read it
   // EDIT: you know what, let's do this the dirty way for now
   // const [desiredCurrentTime, setDesiredCurrentTime] = useState()
 
-  const video = useStore(s => s.publicVideo)
+  const media = useStore(s => s.publicVideo)
 
-  const videoId = `${video?.id || ""}`
+  const mediaId = `${media?.id || ""}`
 
   const setPublicVideo = useStore(s => s.setPublicVideo)
 
-  // we inject the current videoId in the URL, if it's not already present
+  // we inject the current mediaId in the URL, if it's not already present
   // this is a hack for Hugging Face iframes
   useEffect(() => {
     const queryString = new URL(location.href).search
     const searchParams = new URLSearchParams(queryString)
-    if (videoId) {
-      if (searchParams.get("v") !== videoId) {
-        console.log(`current videoId "${videoId}" isn't set in the URL query params.. TODO we should set it`)
+    if (mediaId) {
+      // "v" is the legacy parameter, for when we only worked on videos
+      if (searchParams.get("m") !== mediaId || searchParams.get("v") !== mediaId) {
+        console.log(`current mediaId "${mediaId}" isn't set in the URL query params.. TODO we should set it`)
         
-        // searchParams.set("v", videoId)
+        // searchParams.set("v", mediaoId)
         // location.search = searchParams.toString()
       }
     } else {
       // searchParams.delete("v")
       // location.search = searchParams.toString()
     }
-  }, [videoId])
+  }, [mediaId])
 
   useEffect(() => {
     startTransition(async () => {
-      if (!video || !video.id) {
+      if (!media || !media.id) {
         return
       }
-      const numberOfViews = await watchVideo(videoId)
+      const numberOfViews = await countNewMediaView(mediaId)
 
       setPublicVideo({
-        ...video,
+        ...media,
         numberOfViews
       })
     })
 
-  }, [video?.id])
+  }, [media?.id])
 
-  if (!video) { return null }
+  if (!media) { return null }
   
   return (
     <div className={cn(
       `w-full`,
       `flex flex-col`
     )}>
-      <VideoPlayer
-        video={video}
+      <MediaPlayer
+        className="rounded-xl overflow-hidden"
+        media={media}
         enableShortcuts={false}
       />
     </div>

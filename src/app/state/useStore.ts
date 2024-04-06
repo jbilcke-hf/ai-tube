@@ -2,7 +2,7 @@
 
 import { create } from "zustand"
 
-import { ChannelInfo, VideoInfo, InterfaceDisplayMode, InterfaceView, InterfaceMenuMode, InterfaceHeaderMode, CommentInfo, UserInfo } from "@/types/general"
+import { ChannelInfo, MediaInfo, InterfaceDisplayMode, InterfaceView, InterfaceMenuMode, InterfaceHeaderMode, CommentInfo, UserInfo } from "@/types/general"
 
 export const useStore = create<{
   displayMode: InterfaceDisplayMode
@@ -28,11 +28,11 @@ export const useStore = create<{
   searchAutocompleteQuery: string
   setSearchAutocompleteQuery: (searchAutocompleteQuery?: string) => void
 
-  searchAutocompleteResults: VideoInfo[]
-  setSearchAutocompleteResults: (searchAutocompleteResults: VideoInfo[]) => void
+  searchAutocompleteResults: MediaInfo[]
+  setSearchAutocompleteResults: (searchAutocompleteResults: MediaInfo[]) => void
 
-  searchResults: VideoInfo[]
-  setSearchResults: (searchResults: VideoInfo[]) => void
+  searchResults: MediaInfo[]
+  setSearchResults: (searchResults: MediaInfo[]) => void
 
   currentUser?: UserInfo
   setCurrentUser: (currentUser?: UserInfo) => void
@@ -61,35 +61,35 @@ export const useStore = create<{
   currentModel?: string
   setCurrentModel: (currentModel?: string) => void
 
-  publicVideo?: VideoInfo
-  setPublicVideo: (publicVideo?: VideoInfo) => void
+  publicVideo?: MediaInfo
+  setPublicVideo: (publicVideo?: MediaInfo) => void
 
   publicComments: CommentInfo[]
   setPublicComments: (publicComment: CommentInfo[]) => void
 
-  publicVideos: VideoInfo[]
-  setPublicVideos: (publicVideos: VideoInfo[]) => void
+  publicVideos: MediaInfo[]
+  setPublicVideos: (publicVideos: MediaInfo[]) => void
 
-  publicChannelVideos: VideoInfo[]
-  setPublicChannelVideos: (publicChannelVideos: VideoInfo[]) => void
+  publicChannelVideos: MediaInfo[]
+  setPublicChannelVideos: (publicChannelVideos: MediaInfo[]) => void
 
-  publicTrack?: VideoInfo
-  setPublicTrack: (publicTrack?: VideoInfo) => void
+  publicTrack?: MediaInfo
+  setPublicTrack: (publicTrack?: MediaInfo) => void
 
-  publicTracks: VideoInfo[]
-  setPublicTracks: (publicTracks: VideoInfo[]) => void
+  publicTracks: MediaInfo[]
+  setPublicTracks: (publicTracks: MediaInfo[]) => void
 
-  userVideo?: VideoInfo
-  setUserVideo: (userVideo?: VideoInfo) => void
+  userVideo?: MediaInfo
+  setUserVideo: (userVideo?: MediaInfo) => void
 
-  userVideos: VideoInfo[]
-  setUserVideos: (userVideos: VideoInfo[]) => void
+  userVideos: MediaInfo[]
+  setUserVideos: (userVideos: MediaInfo[]) => void
 
-  recommendedVideos: VideoInfo[]
-  setRecommendedVideos: (recommendedVideos: VideoInfo[]) => void
+  recommendedVideos: MediaInfo[]
+  setRecommendedVideos: (recommendedVideos: MediaInfo[]) => void
 
-  // currentPrompts: VideoInfo[]
-  // setCurrentPrompts: (currentPrompts: VideoInfo[]) => void
+  // currentPrompts: MediaInfo[]
+  // setCurrentPrompts: (currentPrompts: MediaInfo[]) => void
 }>((set, get) => ({
   displayMode: "desktop",
   setDisplayMode: (displayMode: InterfaceDisplayMode) => {
@@ -127,8 +127,8 @@ export const useStore = create<{
     set({ showAutocompleteBox })
   },
 
-  searchAutocompleteResults: [] as VideoInfo[],
-  setSearchAutocompleteResults: (searchAutocompleteResults: VideoInfo[]) => {
+  searchAutocompleteResults: [] as MediaInfo[],
+  setSearchAutocompleteResults: (searchAutocompleteResults: MediaInfo[]) => {
     set({ searchAutocompleteResults })
   },
 
@@ -137,8 +137,8 @@ export const useStore = create<{
     set({ searchQuery })
   },
 
-  searchResults: [] as VideoInfo[],
-  setSearchResults: (searchResults: VideoInfo[]) => {
+  searchResults: [] as MediaInfo[],
+  setSearchResults: (searchResults: MediaInfo[]) => {
     set({ searchResults })
   },
 
@@ -202,7 +202,7 @@ export const useStore = create<{
   },
 
   publicVideo: undefined,
-  setPublicVideo: (publicVideo?: VideoInfo) => {
+  setPublicVideo: (publicVideo?: MediaInfo) => {
     set({ publicVideo })
   },
 
@@ -212,7 +212,7 @@ export const useStore = create<{
   },
 
   publicVideos: [],
-  setPublicVideos: (publicVideos: VideoInfo[] = []) => {
+  setPublicVideos: (publicVideos: MediaInfo[] = []) => {
     set({
       publicVideos: Array.isArray(publicVideos) ? publicVideos : [] 
     })
@@ -220,36 +220,36 @@ export const useStore = create<{
 
 
   publicTrack: undefined,
-  setPublicTrack: (publicTrack?: VideoInfo) => {
+  setPublicTrack: (publicTrack?: MediaInfo) => {
     set({ publicTrack })
   },
 
   publicTracks: [],
-  setPublicTracks: (publicTracks: VideoInfo[] = []) => {
+  setPublicTracks: (publicTracks: MediaInfo[] = []) => {
     set({
       publicTracks: Array.isArray(publicTracks) ? publicTracks : [] 
     })
   },
 
   publicChannelVideos: [],
-  setPublicChannelVideos: (publicChannelVideos: VideoInfo[] = []) => {
+  setPublicChannelVideos: (publicChannelVideos: MediaInfo[] = []) => {
     set({
       publicVideos: Array.isArray(publicChannelVideos) ? publicChannelVideos : [] 
     })
   },
 
   userVideo: undefined,
-  setUserVideo: (userVideo?: VideoInfo) => { set({ userVideo }) },
+  setUserVideo: (userVideo?: MediaInfo) => { set({ userVideo }) },
 
   userVideos: [],
-  setUserVideos: (userVideos: VideoInfo[] = []) => {
+  setUserVideos: (userVideos: MediaInfo[] = []) => {
     set({
       userVideos: Array.isArray(userVideos) ? userVideos : [] 
     })
   },
 
   recommendedVideos: [],
-  setRecommendedVideos: (recommendedVideos: VideoInfo[]) => {
+  setRecommendedVideos: (recommendedVideos: MediaInfo[]) => {
     set({
       recommendedVideos: Array.isArray(recommendedVideos) ? recommendedVideos : [] 
     })

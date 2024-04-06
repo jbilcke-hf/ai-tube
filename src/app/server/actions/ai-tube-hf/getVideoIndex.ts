@@ -1,4 +1,4 @@
-import { VideoInfo, VideoStatus } from "@/types/general"
+import { MediaInfo, VideoStatus } from "@/types/general"
 
 import { adminUsername } from "../config"
 
@@ -11,7 +11,7 @@ export async function getVideoIndex({
 
   renewCache?: boolean
   neverThrow?: boolean
-}): Promise<Record<string, VideoInfo>> {
+}): Promise<Record<string, MediaInfo>> {
   try {
     const response = await fetch(
       `https://huggingface.co/datasets/${adminUsername}/ai-tube-index/raw/main/${status}.json`
@@ -29,7 +29,7 @@ export async function getVideoIndex({
       throw new Error("index is not an object, admin repair needed")
     }
 
-    const videos = jsonResponse as Record<string, VideoInfo>
+    const videos = jsonResponse as Record<string, MediaInfo>
 
     return videos
   } catch (err) {

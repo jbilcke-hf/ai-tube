@@ -5,7 +5,7 @@ import Link from "next/link"
 import { RiCheckboxCircleFill } from "react-icons/ri"
 
 import { cn } from "@/lib/utils"
-import { MediaDisplayLayout, VideoInfo } from "@/types/general"
+import { MediaDisplayLayout, MediaInfo } from "@/types/general"
 import { formatDuration } from "@/lib/formatDuration"
 import { formatTimeAgo } from "@/lib/formatTimeAgo"
 import { isCertifiedUser } from "@/app/certification"
@@ -22,10 +22,10 @@ export function TrackCard({
   selected,
   index
 }: {
-  media: VideoInfo
+  media: MediaInfo
   className?: string
   layout?: MediaDisplayLayout
-  onSelect?: (media: VideoInfo) => void
+  onSelect?: (media: MediaInfo) => void
   selected?: boolean
   index: number
  }) {
@@ -169,6 +169,7 @@ export function TrackCard({
                   `flex flex-col items-center justify-center text-center`,
                   `bg-neutral-900 rounded`,
                   `text-2xs font-semibold px-[3px] py-[1px]`,
+                  isFinite(duration) && !isNaN(duration) && duration > 0 ? 'opacity-100' : 'opacity-0'
                 )}
                 >{formatDuration(duration)}</div>
               </div>

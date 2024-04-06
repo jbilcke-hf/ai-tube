@@ -1,12 +1,12 @@
 "use server"
 
-import { VideoInfo } from "@/types/general"
+import { MediaInfo } from "@/types/general"
 
-import { getStatsForVideos } from "../stats"
+import { getStatsForMedias } from "../stats"
 
-export async function extendVideosWithStats(videos: VideoInfo[]): Promise<VideoInfo[]> {
+export async function extendVideosWithStats(videos: MediaInfo[]): Promise<MediaInfo[]> {
   
-  const allStats = await getStatsForVideos(videos.map(v => v.id))
+  const allStats = await getStatsForMedias(videos.map(v => v.id))
 
   return videos.map(v => {
     const stats = allStats[v.id] || {

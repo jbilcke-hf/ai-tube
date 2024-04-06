@@ -3,17 +3,13 @@ import { NextResponse, NextRequest } from "next/server"
 import { getVideo } from "@/app/server/actions/ai-tube-hf/getVideo"
 import { parseMediaProjectionType } from "@/lib/parseMediaProjectionType";
 
-/**
- * @deprecated
- */
 export async function GET(req: NextRequest) {
-  
-  const videoId = req.url.split("/").pop() || ""
-  const video = await getVideo({ videoId, neverThrow: true })
-  if (!video) {
-    return new NextResponse("video not found", { status: 404 });
+  const mediaId = req.url.split("/").pop() || ""
+  const media = await getVideo({ videoId: mediaId, neverThrow: true })
+  if (!media) {
+    return new NextResponse("media not found", { status: 404 });
   }
-  const isEquirectangular = parseMediaProjectionType(video) === "equirectangular"
+  const isEquirectangular = parseMediaProjectionType(media) === "equirectangular"
   
   const html = `
 <!DOCTYPE html>
@@ -21,8 +17,8 @@ export async function GET(req: NextRequest) {
   <head>
     <meta charset="utf-8">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>${video.label} - AiTube</title>
-    <meta name="description" content="${video.description}<">
+    <title>${media.label} - AiTube</title>
+    <meta name="description" content="${media.description}<">
     <script src="/aframe/aframe-master.js"></script>
     <script src="/aframe/play-on-click.js"></script>
     <script src="/aframe/hide-on-play.js"></script>
@@ -36,7 +32,7 @@ export async function GET(req: NextRequest) {
           crossorigin="anonymous"
           playsinline
           webkit-playsinline
-          src="${video.assetUrlHd || video.assetUrl}">
+          src="${media.assetUrlHd || media.assetUrl}">
         </video>
       </a-assets>
       ${

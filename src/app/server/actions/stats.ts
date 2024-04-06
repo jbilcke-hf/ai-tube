@@ -2,11 +2,11 @@
 
 import { developerMode } from "@/app/config"
 import { WhoAmIUser, whoAmI } from "@/huggingface/hub/src"
-import { VideoRating } from "@/types/general"
+import { MediaRating } from "@/types/general"
 import { redis } from "./redis";
 
-export async function getStatsForVideos(videoIds: string[]): Promise<Record<string, { numberOfViews: number; numberOfLikes: number; numberOfDislikes: number}>> {
-  if (!Array.isArray(videoIds)) {
+export async function getStatsForMedias(mediaIds: string[]): Promise<Record<string, { numberOfViews: number; numberOfLikes: number; numberOfDislikes: number}>> {
+  if (!Array.isArray(mediaIds)) {
     return {}
   }
 
@@ -16,11 +16,11 @@ export async function getStatsForVideos(videoIds: string[]): Promise<Record<stri
 
     const listOfRedisIDs: string[] = []
 
-    for (const videoId of videoIds) {
-      listOfRedisIDs.push(`videos:${videoId}:stats:views`)
-      listOfRedisIDs.push(`videos:${videoId}:stats:likes`)
-      listOfRedisIDs.push(`videos:${videoId}:stats:dislikes`)
-      stats[videoId] = {
+    for (const mediaId of mediaIds) {
+      listOfRedisIDs.push(`videos:${mediaId}:stats:views`)
+      listOfRedisIDs.push(`videos:${mediaId}:stats:likes`)
+      listOfRedisIDs.push(`videos:${mediaId}:stats:dislikes`)
+      stats[mediaId] = {
         numberOfViews: 0,
         numberOfLikes: 0,
         numberOfDislikes: 0,
@@ -31,7 +31,7 @@ export async function getStatsForVideos(videoIds: string[]): Promise<Record<stri
 
     let v = 0
     for (let i = 0; i < listOfRedisValues.length; i += 3) {
-      stats[videoIds[v++]] = {
+      stats[mediaIds[v++]] = {
         numberOfViews: listOfRedisValues[i] || 0,
         numberOfLikes: listOfRedisValues[i + 1] || 0,
         numberOfDislikes: listOfRedisValues[i + 2] || 0
@@ -44,15 +44,15 @@ export async function getStatsForVideos(videoIds: string[]): Promise<Record<stri
   }
 }
 
-export async function watchVideo(videoId: string): Promise<number> {
+export async function countNewMediaView(mediaId: string): Promise<number> {
   if (developerMode) {
-    const stats = await getStatsForVideos([videoId])
+    const stats = await getStatsForMedias([mediaId])
 
-    return stats[videoId].numberOfViews
+    return stats[mediaId].numberOfViews
   }
 
   try {
-    const result = await redis.incr(`videos:${videoId}:stats:views`)
+    const result = await redis.incr(`videos:${mediaId}:stats:views`)
     
     return result
   } catch (err) {
@@ -60,7 +60,7 @@ export async function watchVideo(videoId: string): Promise<number> {
   }
 }
 
-export async function getVideoRating(videoId: string, apiKey?: string): Promise<VideoRating> {
+export async function getMediaRating(mediaId: string, apiKey?: string): Promise<MediaRating> {
   let numberOfLikes = 0
   let numberOfDislikes = 0
   let isLikedByUser = false
@@ -68,8 +68,8 @@ export async function getVideoRating(videoId: string, apiKey?: string): Promise<
 
   try {
     // update video likes counter
-    numberOfLikes = (await redis.get<number>(`videos:${videoId}:stats:likes`)) || 0
-    numberOfDislikes = (await redis.get<number>(`videos:${videoId}:stats:dislikes`)) || 0
+    numberOfLikes = (await redis.get<number>(`videos:${mediaId}:stats:likes`)) || 0
+    numberOfDislikes = (await redis.get<number>(`videos:${mediaId}:stats:dislikes`)) || 0
   } catch (err) {
   }
 
@@ -79,7 +79,7 @@ export async function getVideoRating(videoId: string, apiKey?: string): Promise<
       const credentials = { accessToken: apiKey }
       
       const user = await whoAmI({ credentials }) as unknown as WhoAmIUser
-      const isLiked = await redis.get<boolean>(`users:${user.id}:activity:videos:${videoId}:liked`)
+      const isLiked = await redis.get<boolean>(`users:${user.id}:activity:videos:${mediaId}:liked`)
       if (isLiked !== null) {
         isLikedByUser = !!isLiked
         isDislikedByUser = !isLiked
@@ -97,7 +97,7 @@ export async function getVideoRating(videoId: string, apiKey?: string): Promise<
   }
 }
 
-export async function rateVideo(videoId: string, liked: boolean, apiKey: string): Promise<VideoRating> {
+export async function rateMedia(mediaId: string, liked: boolean, apiKey: string): Promise<MediaRating> {
   // note: we want the like to throw an exception if it failed
   let numberOfLikes = 0
   let numberOfDislikes = 0
@@ -108,21 +108,21 @@ export async function rateVideo(videoId: string, liked: boolean, apiKey: string)
   
   const user = await whoAmI({ credentials }) as unknown as WhoAmIUser
 
-  const hasLiked = await redis.get<boolean>(`users:${user.id}:activity:videos:${videoId}:liked`)
+  const hasLiked = await redis.get<boolean>(`users:${user.id}:activity:videos:${mediaId}:liked`)
   
   const hasAlreadyRatedTheSame =  hasLiked !== null && liked === hasLiked
 
   if (hasAlreadyRatedTheSame) {
     return {
-      numberOfLikes: await redis.get(`videos:${videoId}:stats:likes`) || 0,
-      numberOfDislikes: await redis.get(`videos:${videoId}:stats:dislikes`) || 0,
+      numberOfLikes: await redis.get(`videos:${mediaId}:stats:likes`) || 0,
+      numberOfDislikes: await redis.get(`videos:${mediaId}:stats:dislikes`) || 0,
       isLikedByUser: liked,
       isDislikedByUser: !liked
     }
   }
   const hasAlreadyRatedAndDifferently = hasLiked !== null && liked !== hasLiked
 
-  await redis.set(`users:${user.id}:activity:videos:${videoId}:liked`, liked)
+  await redis.set(`users:${user.id}:activity:videos:${mediaId}:liked`, liked)
 
   isLikedByUser = liked
   isDislikedByUser = !liked
@@ -133,14 +133,14 @@ export async function rateVideo(videoId: string, liked: boolean, apiKey: string)
   try {
     if (liked) {
       // update video likes counter
-      numberOfLikes = await redis.incr(`videos:${videoId}:stats:likes`)
+      numberOfLikes = await redis.incr(`videos:${mediaId}:stats:likes`)
       if (hasAlreadyRatedAndDifferently) {
-        numberOfDislikes = await redis.decr(`videos:${videoId}:stats:dislikes`)
+        numberOfDislikes = await redis.decr(`videos:${mediaId}:stats:dislikes`)
       }
     } else {
-      numberOfDislikes = await redis.incr(`videos:${videoId}:stats:dislikes`)
+      numberOfDislikes = await redis.incr(`videos:${mediaId}:stats:dislikes`)
       if (hasAlreadyRatedAndDifferently) {
-        numberOfLikes = await redis.decr(`videos:${videoId}:stats:likes`)
+        numberOfLikes = await redis.decr(`videos:${mediaId}:stats:likes`)
       }
     }
   } catch (err) {

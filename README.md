@@ -1,5 +1,5 @@
 ---
-title: AI Tube
+title: AiTube
 emoji: 🍿
 colorFrom: red
 colorTo: red
@@ -9,7 +9,7 @@ app_port: 3000
 disable_embedding: false
 ---
 
-# 🍿 AI Tube
+# 🍿 AiTube
 
 ## FAQ
 
@@ -19,7 +19,7 @@ There will be a UI to edit them in the future
 
 ### How often videos are generated?
 
-There is a script (called the AI Tube Robot - code is also available, see my profile) which checks the Hugging Face platform every 5 minutes for new content.
+There is a script (called the AiTube Robot - code is also available, see my profile) which checks the Hugging Face platform every 5 minutes for new content.
 
 However, once it starts generating a video, the bot will be kept busy for an hour or so (sometimes more),
 and during this time the other videos will wait patiently.
@@ -27,7 +27,7 @@ and during this time the other videos will wait patiently.
 ### My video failed to generate! Is it lost?
 
 That's the beauty of the dataset system: as long as you keep your video in your dataset,
-and it is not published yet (is not visible on the AI Tube home page), then for the AI Tube Robot it will still be marked as "TODO".
+and it is not published yet (is not visible on the AiTube home page), then for the AiTube Robot it will still be marked as "TODO".
 
 So.. you normally have nothing to do (unless your video config or channel config is really damaged or invalid).
 
@@ -42,7 +42,7 @@ This delay will be reduced in the future.
 
 ### Videos are taking too long to generate
 
-AI Tube is about generating videos in the background, slowly.
+AiTube is about generating videos in the background, slowly.
 
 It's the whole concept: to generate multi-minutes videos, with lot of stuff like audio, speech etc
 (if you are only interested in generate a 2 to 4 sec silent video, I suggest you use ComfyUI, Automatic1111 stable-diffusion-webui, or RunwayML or Pika Labs if your prefer commercial services).
@@ -70,9 +70,9 @@ This is all new technology based on research tools, so sometimes they can crash,
 
 This is a bug, it will be fixed in the future but I haven't had the opportunity to take a look yet (the cause is that I don't generate the video based on audio length yet).
 
-### Can I clone AI Tube or download it to run on my machine?
+### Can I clone AiTube or download it to run on my machine?
 
-AI Tube is designed to be a unique community and platform, not a downloadable tool or app.
+AiTube is designed to be a unique community and platform, not a downloadable tool or app.
 Maybe one day there will be an offline version (similar to how my latent browser project worked), but for the moment the focus is on developing it as a community rather than a tool that can be cloned, rebranded, wrapped into ads by someone else etc.
 
 ### My video has been generated, but I don't see it anymore

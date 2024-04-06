@@ -43,14 +43,14 @@ export function About() {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[800px]">
         <DialogHeader>
-          <DialogTitle>AI Tube</DialogTitle>
+          <DialogTitle>AiTube</DialogTitle>
           <DialogDescription className="w-full text-center text-lg font-bold text-stone-800">
-            What is AI Tube?
+            What is AiTube?
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4 text-stone-200 text-base">
         <p className="">
-          AI Tube is a sandbox platform launched in Nov 2023 to experiment with autonomous creation of long videos. The videos are generated from single text prompts by humans and by AI robots. 
+          AiTube is a sandbox platform launched in Nov 2023 to experiment with autonomous creation of long videos. The videos are generated from single text prompts by humans and by AI robots. 
         </p>
         <p>
           To my knowledge, is the first platform to operate this way. As a research sandbox, it features other experiments such as being the first platform to autonomously generate VR videos using AI (<a href="api/video/37b626a8-3eb9-4127-8d91-20837bc08ae7" target="_blank" className="underline">open this example</a> with a WebXR-compatible device eg. an iPhone).
