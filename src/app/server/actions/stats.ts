@@ -1,7 +1,7 @@
 "use server"
 
 import { developerMode } from "@/app/config"
-import { WhoAmIUser, whoAmI } from "@/huggingface/hub/src"
+import { WhoAmIUser, whoAmI } from "@/lib/huggingface/hub/src"
 import { MediaRating } from "@/types/general"
 import { redis } from "./redis";
 

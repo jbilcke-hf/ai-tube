@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTrigger } from "@/components/ui/dialog"
 
 import { ChannelInfo, MediaInfo } from "@/types/general"
-import { ActionButton } from "@/app/interface/action-button"
+import { ActionButton } from "@/components/interface/action-button"
 
 // modal to report a media or channel
 export function ReportModal({

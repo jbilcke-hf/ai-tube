@@ -1,4 +1,4 @@
-import { deleteFile } from "@/huggingface/hub/src"
+import { deleteFile } from "@/lib/huggingface/hub/src"
 
 import { getCredentials } from "./getCredentials"
 

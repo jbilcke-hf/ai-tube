@@ -3,9 +3,9 @@
 import { useEffect, useState, useTransition } from "react"
 
 import { useStore } from "@/app/state/useStore"
-import { cn } from "@/lib/utils"
-import { VideoList } from "@/app/interface/video-list"
-import { DefaultAvatar } from "@/app/interface/default-avatar"
+import { cn } from "@/lib/utils/cn"
+import { VideoList } from "@/components/interface/video-list"
+import { DefaultAvatar } from "@/components/interface/default-avatar"
 
 export function PublicChannelView() {
   const [_isPending, startTransition] = useTransition()

@@ -356,6 +356,7 @@ export type MediaProjection =
   | "cartesian" // this is the default
   | "equirectangular"
   | "gaussian"
+  | "latent"
 
 
 // TODO: renamed this to MediaInfo
@@ -627,13 +628,13 @@ export type InterfaceView =
   | "home"
   | "user_channels"
   | "user_channel" // for a user to admin their channels
-  | "user_videos"
-  | "user_video"
+  | "user_medias"
+  | "user_media"
   | "user_account"
   | "public_channels"
   | "public_channel" // public view of a channel
-  | "public_video" // public view of a video
-  | "public_video_embed" // for integration into twitter etc
+  | "public_media" // public view of a video
+  | "public_media_embed" // for integration into twitter etc
   | "public_music_videos" // public music videos - it's a special category, because music is *cool*
   | "public_gaming" // for AiTube Gaming
   | "public_4d" // for AiTube 4D

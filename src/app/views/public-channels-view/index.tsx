@@ -3,9 +3,9 @@
 import { useEffect, useState, useTransition } from "react"
 
 import { useStore } from "@/app/state/useStore"
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils/cn"
 import { getChannels } from "@/app/server/actions/ai-tube-hf/getChannels"
-import { ChannelList } from "@/app/interface/channel-list"
+import { ChannelList } from "@/components/interface/channel-list"
 
 export function PublicChannelsView() {
   const [_isPending, startTransition] = useTransition()

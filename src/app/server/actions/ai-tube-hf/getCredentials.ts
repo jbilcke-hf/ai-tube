@@ -1,7 +1,7 @@
 
 // safe way to get the credentials
 
-import { Credentials, WhoAmIUser, whoAmI } from "@/huggingface/hub/src"
+import { Credentials, WhoAmIUser, whoAmI } from "@/lib/huggingface/hub/src"
 
 import { adminCredentials, adminUsername } from "../config"
 

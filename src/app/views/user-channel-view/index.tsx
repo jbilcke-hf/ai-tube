@@ -3,7 +3,7 @@
 import { useEffect, useState, useTransition } from "react"
 
 import { useStore } from "@/app/state/useStore"
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils/cn"
 import { VideoGenerationModel, MediaInfo } from "@/types/general"
 
 import { useLocalStorage } from "usehooks-ts"
@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { submitVideoRequest } from "@/app/server/actions/submitVideoRequest"
-import { PendingVideoList } from "@/app/interface/pending-video-list"
+import { PendingVideoList } from "@/components/interface/pending-video-list"
 import { getChannelVideos } from "@/app/server/actions/ai-tube-hf/getChannelVideos"
 import { parseVideoModelName } from "@/app/server/actions/utils/parseVideoModelName"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"

@@ -3,12 +3,12 @@
 import { useEffect, useTransition } from "react"
 
 import { useStore } from "@/app/state/useStore"
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils/cn"
 import { MediaInfo } from "@/types/general"
 import { getVideos } from "@/app/server/actions/ai-tube-hf/getVideos"
-import { TrackList } from "@/app/interface/track-list"
-import { PlaylistControl } from "@/app/interface/playlist-control"
-import { usePlaylist } from "@/lib/usePlaylist"
+import { TrackList } from "@/components/interface/track-list"
+import { PlaylistControl } from "@/components/interface/playlist-control"
+import { usePlaylist } from "@/lib/hooks/usePlaylist"
 
 export function PublicMusicVideosView() {
   const [_isPending, startTransition] = useTransition()

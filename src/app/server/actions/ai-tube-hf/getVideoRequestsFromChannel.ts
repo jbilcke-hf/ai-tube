@@ -2,7 +2,7 @@
 
 import { ChannelInfo, VideoRequest } from "@/types/general"
 import { getCredentials } from "./getCredentials"
-import { listFiles } from "@/huggingface/hub/src"
+import { listFiles } from "@/lib/huggingface/hub/src"
 import { parsePromptFileName } from "../utils/parsePromptFileName"
 import { downloadFileAsText } from "./downloadFileAsText"
 import { parseDatasetPrompt } from "../utils/parseDatasetPrompt"

@@ -1,10 +1,10 @@
 import { v4 as uuidv4 } from "uuid"
-import { Credentials } from "@/huggingface/hub/src"
+import { Credentials } from "@/lib/huggingface/hub/src"
 
-import { ClapProject } from "@/clap/types"
+import { ClapProject } from "@/lib/clap/types"
 import { ChannelInfo, MediaInfo, VideoRequest } from "@/types/general"
 import { defaultVideoModel } from "@/app/config"
-import { parseClap } from "@/clap/parseClap"
+import { parseClap } from "@/lib/clap/parseClap"
 
 import { parseVideoModelName } from "../utils/parseVideoModelName"
 import { computeOrientationProjectionWidthHeight } from "../utils/computeOrientationProjectionWidthHeight"

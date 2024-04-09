@@ -1,6 +1,6 @@
 "use server"
 
-import { Credentials, downloadFile, whoAmI } from "@/huggingface/hub/src"
+import { Credentials, downloadFile, whoAmI } from "@/lib/huggingface/hub/src"
 import { parseDatasetReadme } from "@/app/server/actions/utils/parseDatasetReadme"
 import { ChannelInfo, VideoGenerationModel, VideoOrientation } from "@/types/general"
 

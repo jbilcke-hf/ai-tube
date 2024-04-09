@@ -1,4 +1,4 @@
-import { downloadFile } from "@/huggingface/hub/src"
+import { downloadFile } from "@/lib/huggingface/hub/src"
 import { getCredentials } from "./getCredentials"
 
 export async function downloadFileAsBlob({

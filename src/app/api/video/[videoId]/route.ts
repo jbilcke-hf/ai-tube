@@ -1,7 +1,7 @@
 import { NextResponse, NextRequest } from "next/server"
 
 import { getVideo } from "@/app/server/actions/ai-tube-hf/getVideo"
-import { parseMediaProjectionType } from "@/lib/parseMediaProjectionType";
+import { parseMediaProjectionType } from "@/lib/utils/parseMediaProjectionType";
 
 /**
  * @deprecated

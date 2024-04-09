@@ -105,8 +105,8 @@ export const useStore = create<{
   setPathname: (pathname: string) => {
     const routes: Record<string, InterfaceView> = {
       "/": "home",
-      "/watch": "public_video",
-      "/embed": "public_video_embed",
+      "/watch": "public_media",
+      "/embed": "public_media_embed",
       "/music": "public_music_videos",
       "/channels": "public_channels",
       "/channel": "public_channel",

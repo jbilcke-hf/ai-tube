@@ -1,5 +1,5 @@
 
-import { Credentials } from "@/huggingface/hub/src"
+import { Credentials } from "@/lib/huggingface/hub/src"
 
 export const adminApiKey = `${process.env.ADMIN_HUGGING_FACE_API_TOKEN || ""}`
 export const adminUsername = `${process.env.ADMIN_HUGGING_FACE_USERNAME || ""}`

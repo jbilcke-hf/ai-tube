@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { Roboto } from 'next/font/google'
 
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/cn'
 
 import './globals.css'
 import Head from 'next/head'

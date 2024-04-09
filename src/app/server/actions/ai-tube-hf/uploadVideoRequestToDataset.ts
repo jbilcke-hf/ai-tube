@@ -2,7 +2,7 @@
 
 import { Blob } from "buffer"
 
-import { Credentials, uploadFile, whoAmI } from "@/huggingface/hub/src"
+import { Credentials, uploadFile, whoAmI } from "@/lib/huggingface/hub/src"
 import { ChannelInfo, VideoGenerationModel, MediaInfo, VideoOrientation, VideoRequest } from "@/types/general"
 import { formatPromptFileName } from "../utils/formatPromptFileName"
 import { computeOrientationProjectionWidthHeight } from "../utils/computeOrientationProjectionWidthHeight"

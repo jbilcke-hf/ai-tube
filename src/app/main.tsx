@@ -1,20 +1,22 @@
 "use client"
 
+import { useEffect } from "react"
+import { usePathname, useRouter } from "next/navigation"
+
+import { ChannelInfo, MediaInfo } from "@/types/general"
+import { getCollectionKey } from "@/lib/business/getCollectionKey"
+
 import { useStore } from "./state/useStore"
 import { HomeView } from "./views/home-view"
 import { PublicChannelsView } from "./views/public-channels-view"
 import { PublicChannelView } from "./views/public-channel-view"
 import { UserChannelView } from "./views/user-channel-view"
-import { PublicVideoView } from "./views/public-video-view"
 import { UserAccountView } from "./views/user-account-view"
 import { NotFoundView } from "./views/not-found-view"
-import { ChannelInfo, MediaInfo } from "@/types/general"
-import { useEffect } from "react"
-import { usePathname, useRouter } from "next/navigation"
-import { TubeLayout } from "./interface/tube-layout"
+import { TubeLayout } from "../components/interface/tube-layout"
 import { PublicMusicVideosView } from "./views/public-music-videos-view"
-import { getCollectionKey } from "@/lib/getCollectionKey"
-import { PublicVideoEmbedView } from "./views/public-video-embed-view"
+import { PublicMediaEmbedView } from "./views/public-media-embed-view"
+import { PublicMediaView } from "./views/public-media-view"
 
 // this is where we transition from the server-side space
 // and the client-side space
@@ -139,12 +141,12 @@ export function Main({
   return (
     <TubeLayout>
       {view === "home" && <HomeView />}
-      {view === "public_video_embed" && <PublicVideoEmbedView />}
-      {view === "public_video" && <PublicVideoView />}
+      {view === "public_media_embed" && <PublicMediaEmbedView />}
+      {view === "public_media" && <PublicMediaView />}
       {view === "public_music_videos" && <PublicMusicVideosView />}
       {view === "public_channels" && <PublicChannelsView />}
       {view === "public_channel" && <PublicChannelView />}
-      {/*view === "user_videos" && <UserVideosView />*/}
+      {/*view === "user_medias" && <UserMediasView />*/}
       {view === "user_channel" && <UserChannelView />}
       {view === "user_account" && <UserAccountView />}
       {view === "not_found" && <NotFoundView />}
