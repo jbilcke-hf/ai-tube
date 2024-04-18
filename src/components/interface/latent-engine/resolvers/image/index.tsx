@@ -23,6 +23,9 @@ export async function resolve(segment: ClapSegment, clap: ClapProject): Promise<
   // note: the latent-image class is not used for styling, but to grab the component
   // from JS when we need to segment etc
   return (
-    <img className="latent-image object-cover" src={assetUrl} />
+    <img
+      className="latent-image object-cover h-full"
+      src={assetUrl}
+    />
   )
 }

@@ -16,6 +16,7 @@ export function newClap(clap: {
     id: clap?.meta?.id === "string" ? clap.meta.id : uuidv4(),
     title: clap?.meta?.title === "string" ? clap.meta.title : "",
     description: typeof clap?.meta?.description === "string" ? clap.meta.description : "",
+    synopsis: typeof clap?.meta?.synopsis === "string" ? clap.meta.synopsis : "",
     licence: typeof clap?.meta?.licence === "string" ? clap.meta.licence : "",
     orientation: clap?.meta?.orientation === "portrait" ? "portrait" : clap?.meta?.orientation === "square" ? "square" : "landscape",
     width: getValidNumber(clap?.meta?.width, 256, 8192, 1024),

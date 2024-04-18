@@ -20,7 +20,7 @@ export function LatentPlayer({
   // TODO add a play bar which should support fixed, streaming and live modes
   return (
     <LatentEngine
-      url={media.clapUrl}
+      media={media}
       width={width}
       height={height}
       className={className}

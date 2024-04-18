@@ -1,5 +1,6 @@
 import { ClapProject, ClapSegment, ClapStreamType } from "@/lib/clap/types"
-import { ReactNode } from "react"
+import { InteractiveSegmenterResult } from "@mediapipe/tasks-vision"
+import { MouseEventHandler, ReactNode } from "react"
 
 export type LatentEngineStatus =
   | "idle"
@@ -30,6 +31,7 @@ export type LatentEngineStore = {
   height: number
 
   clap: ClapProject
+  debug: boolean
 
   streamType: ClapStreamType
 
@@ -61,6 +63,7 @@ export type LatentEngineStore = {
   videoLayerElement?: HTMLDivElement
   imageElement?: HTMLImageElement
   videoElement?: HTMLVideoElement
+  segmentationElement?: HTMLCanvasElement
 
   videoLayer: ReactNode
   videoBuffer: "A" | "B"
@@ -75,13 +78,17 @@ export type LatentEngineStore = {
   interfaceBufferB: ReactNode
 
   setContainerDimension: ({ width, height }: { width: number; height: number }) => void
-  openLatentClapFile: (prompt: string) => Promise<void>
-  openClapFile: (clap: ClapProject) => void
+  imagine: (prompt: string) => Promise<void>
+  open: (src?: string | ClapProject | Blob) => Promise<void>
 
   setVideoLayerElement: (videoLayerElement?: HTMLDivElement) => void
   setImageElement: (imageElement?: HTMLImageElement) => void
   setVideoElement: (videoElement?: HTMLVideoElement) => void
+  setSegmentationElement: (segmentationElement?: HTMLCanvasElement) => void
 
+  processClickOnSegment: (data: InteractiveSegmenterResult) => void
+  onClickOnSegmentationLayer: MouseEventHandler<HTMLDivElement> 
+  
   togglePlayPause: () => boolean
   play: () => boolean
   pause: () => boolean

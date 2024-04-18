@@ -22,12 +22,13 @@ export function MediaPlayer({
   className?: string
   // currentTime?: number
 }) {
-  // console.log("MediaPlayer called for \"" + media?.label + "\"")
+  console.log("MediaPlayer called for \"" + media?.label + "\"")
   
-  if (!media || !media?.assetUrl) { return null }
+  if (!media) { return null }
+  if (!media?.assetUrl && !media?.clapUrl) { return null }
 
-  // uncomment one of those to forcefully test the .clap player!
- media.assetUrlHd = "https://huggingface.co/datasets/jbilcke/ai-tube-cinema/tree/main/404.clap"
+  // uncomment one of those to forcefully test the .clap player from an external .clap file
+  // media.assetUrlHd = "https://huggingface.co/datasets/jbilcke/ai-tube-cinema/tree/main/404.clap"
 
   // uncomment one of those to forcefully test the .splatv player!
   // media.assetUrlHd = "https://huggingface.co/datasets/dylanebert/3dgs/resolve/main/4d/flame/flame.splatv"

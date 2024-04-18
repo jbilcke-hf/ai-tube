@@ -4,17 +4,23 @@ import { create } from "zustand"
 import { ClapProject } from "@/lib/clap/types"
 import { newClap } from "@/lib/clap/newClap"
 import { sleep } from "@/lib/utils/sleep"
-import { getSegmentationCanvas } from "@/lib/on-device-ai/getSegmentationCanvas"
+// import { getSegmentationCanvas } from "@/lib/on-device-ai/getSegmentationCanvas"
 
 import { LatentEngineStore } from "../core/types"
 import { resolveSegments } from "../resolvers/resolveSegments"
 import { fetchLatentClap } from "../core/fetchLatentClap"
+import { dataUriToBlob } from "@/app/api/utils/dataUriToBlob"
+import { parseClap } from "@/lib/clap/parseClap"
+import { InteractiveSegmenterResult, MPMask } from "@mediapipe/tasks-vision"
+import { segmentFrame } from "@/lib/on-device-ai/segmentFrameOnClick"
+import { drawSegmentation } from "../core/drawSegmentation"
 
 export const useLatentEngine = create<LatentEngineStore>((set, get) => ({
   width: 1024,
   height: 576,
 
   clap: newClap(),
+  debug: true,
 
   streamType: "static",
   isStatic: false,
@@ -42,7 +48,8 @@ export const useLatentEngine = create<LatentEngineStore>((set, get) => ({
   videoLayerElement: undefined,
   imageElement: undefined,
   videoElement: undefined,
-
+  segmentationElement: undefined,
+  
   videoLayer: undefined,
   videoBuffer: "A",
   videoBufferA: null,
@@ -62,7 +69,7 @@ export const useLatentEngine = create<LatentEngineStore>((set, get) => ({
     })
   },
 
-  openLatentClapFile: async (prompt: string): Promise<void> => {
+  imagine: async (prompt: string): Promise<void> => {
     set({
       isLoaded: false,
       isLoading: true, 
@@ -81,10 +88,30 @@ export const useLatentEngine = create<LatentEngineStore>((set, get) => ({
 
     if (!clap) { return }
 
-    get().openClapFile(clap)
+    get().open(clap)
   },
 
-  openClapFile: (clap: ClapProject) => {
+
+  open: async (src?: string | ClapProject | Blob) => {
+    const { debug } = get()
+    set({
+      isLoaded: false,
+      isLoading: true, 
+    })
+
+    let clap: ClapProject | undefined = undefined
+
+    try {
+      clap = await parseClap(src, debug)
+    } catch (err) {
+      console.error(`failed to open the Clap: ${err}`)
+      set({
+        isLoading: false,
+      })
+    }
+
+    if (!clap) { return }
+
     set({
       clap,
       isLoading: false,
@@ -99,7 +126,59 @@ export const useLatentEngine = create<LatentEngineStore>((set, get) => ({
   setVideoLayerElement: (videoLayerElement?: HTMLDivElement) => { set({ videoLayerElement }) },
   setImageElement: (imageElement?: HTMLImageElement) => { set({ imageElement }) },
   setVideoElement: (videoElement?: HTMLVideoElement) => { set({ videoElement }) },
+  setSegmentationElement: (segmentationElement?: HTMLCanvasElement) => { set({ segmentationElement }) },
 
+  processClickOnSegment: (result: InteractiveSegmenterResult) => {
+    console.log(`processClickOnSegment: user clicked on something:`, result)
+
+    const { videoElement, imageElement, segmentationElement, debug } = get()
+
+    if (!result?.categoryMask) {
+      if (debug) {
+        console.log(`processClickOnSegment: no categoryMask, so we skip the click`)
+      }
+      return
+    }
+
+    try {
+      if (debug) {
+        console.log(`processClickOnSegment: callling drawSegmentation`)
+      }
+      drawSegmentation(result.categoryMask, segmentationElement)
+
+      if (debug) {
+        console.log("processClickOnSegment: TODO call data.close() to free the memory!")
+      }
+      result.close()
+    } catch (err) {
+      console.error(`processClickOnSegment: something failed ${err}`)
+    }
+  },
+  onClickOnSegmentationLayer: (event) => {
+
+    const { videoElement, imageElement, segmentationLayer, segmentationElement, debug } = get()
+    if (debug) {
+      console.log("onClickOnSegmentationLayer")
+    }
+    // TODO use the videoElement if this is is video!
+    if (!imageElement) { return }
+
+    const box = event.currentTarget.getBoundingClientRect()
+
+    const px = event.clientX
+    const py = event.clientY
+
+    const x = px / box.width
+    const y = py / box.height
+    console.log(`onClickOnSegmentationLayer: user clicked on `, { x, y, px, py, box, imageElement })
+
+    const fn = async () => {
+      const results: InteractiveSegmenterResult = await segmentFrame(imageElement, x, y)
+      get().processClickOnSegment(results)
+    }
+    fn()
+  },
+  
   togglePlayPause: (): boolean => {
     const { isLoaded, isPlaying, renderingIntervalId } = get()
     if (!isLoaded) { return false }
@@ -176,6 +255,7 @@ export const useLatentEngine = create<LatentEngineStore>((set, get) => ({
 
     try {
 
+      /*
       // console.log("doing stuff")
       let timestamp = performance.now()
 
@@ -189,6 +269,7 @@ export const useLatentEngine = create<LatentEngineStore>((set, get) => ({
         })
         set({ segmentationLayer })
       }
+      */
 
       await sleep(500)
 

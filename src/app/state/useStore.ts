@@ -68,7 +68,13 @@ export const useStore = create<{
   setPublicComments: (publicComment: CommentInfo[]) => void
 
   publicMedias: MediaInfo[]
-  setPublicMedias: (publicMedias: MediaInfo[]) => void
+  setPublicMedias: (publicMedias?: MediaInfo[]) => void
+
+  latentMedia?: MediaInfo
+  setPublicLatentMedia: (latentMedia?: MediaInfo) => void
+
+  latentMedias: MediaInfo[]
+  setPublicLatentMedias: (latentMedias?: MediaInfo[]) => void
 
   publicChannelVideos: MediaInfo[]
   setPublicChannelVideos: (publicChannelVideos: MediaInfo[]) => void
@@ -109,7 +115,15 @@ export const useStore = create<{
       "/embed": "public_media_embed",
       "/music": "public_music_videos",
       "/channels": "public_channels",
+      "/dream": "public_latent_media",
+      "/dream/embed": "public_latent_media_embed",
       "/channel": "public_channel",
+
+      // those are reserved for future use
+      "/gaming": "public_music_videos",
+      "/live": "public_music_videos",
+      "/tv": "public_music_videos",
+
       "/account": "user_account",
       "/account/channel": "user_channel",
     }
@@ -218,6 +232,18 @@ export const useStore = create<{
     })
   },
 
+
+  latentMedia: undefined,
+  setPublicLatentMedia: (latentMedia?: MediaInfo) => {
+    set({ latentMedia })
+  },
+
+  latentMedias: [],
+  setPublicLatentMedias: (latentMedias: MediaInfo[] = []) => {
+    set({
+      latentMedias: Array.isArray(latentMedias) ? latentMedias : [] 
+    })
+  },
 
   publicTrack: undefined,
   setPublicTrack: (publicTrack?: MediaInfo) => {

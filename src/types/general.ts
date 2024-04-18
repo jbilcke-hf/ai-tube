@@ -637,9 +637,11 @@ export type InterfaceView =
   | "user_account"
   | "public_channels"
   | "public_channel" // public view of a channel
-  | "public_media" // public view of a video
+  | "public_media" // public view of an individual media (video, gaussian splat, clap video)
   | "public_media_embed" // for integration into twitter etc
   | "public_music_videos" // public music videos - it's a special category, because music is *cool*
+  | "public_latent_media" // public view of an individual dream (a latent media, so it's not a "real" file)
+  | "public_latent_media_embed" // for integration into twitter etc (which would be hardcore for our server load.. so maybe not)
   | "public_gaming" // for AiTube Gaming
   | "public_4d" // for AiTube 4D
   | "public_live" // for AiTube Live

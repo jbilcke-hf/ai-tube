@@ -1,32 +1,38 @@
 "use client"
 
-import React, { useEffect, useRef, useState } from "react"
+import React, { MouseEventHandler, useEffect, useRef, useState } from "react"
 
-import { mockClap } from "@/lib/clap/mockClap"
 import { cn } from "@/lib/utils/cn"
 
 import { useLatentEngine } from "../store/useLatentEngine"
 import { PlayPauseButton } from "../components/play-pause-button"
 import { StreamTag } from "../../stream-tag"
 import { ContentLayer } from "../components/content-layer"
+import { MediaInfo } from "@/types/general"
+import { getMockClap } from "@/lib/clap/getMockClap"
+import { serializeClap } from "@/lib/clap/serializeClap"
+import { blobToDataUri } from "@/app/api/utils/blobToDataUri"
+import { InteractiveSegmentationCanvas } from "@/lib/on-device-ai/getInteractiveSegmentationCanvas"
+import { InteractiveSegmenterResult } from "@mediapipe/tasks-vision"
 
 function LatentEngine({
-  url,
+  media,
   width,
   height,
   className = "" }: {
-  url: string
+  media: MediaInfo
   width?: number
   height?: number
   className?: string
 }) {
   const setContainerDimension = useLatentEngine(s => s.setContainerDimension)
   const isLoaded = useLatentEngine(s => s.isLoaded)
-  const openLatentClapFile = useLatentEngine(s => s.openLatentClapFile)
-  const openClapFile = useLatentEngine(s => s.openClapFile)
+  const imagine = useLatentEngine(s => s.imagine)
+  const open = useLatentEngine(s => s.open)
 
   const setImageElement = useLatentEngine(s => s.setImageElement)
   const setVideoElement = useLatentEngine(s => s.setVideoElement)
+  const setSegmentationElement = useLatentEngine(s => s.setSegmentationElement)
 
   const streamType = useLatentEngine(s => s.streamType)
   const isStatic = useLatentEngine(s => s.isStatic)
@@ -39,6 +45,10 @@ function LatentEngine({
   const videoLayer = useLatentEngine(s => s.videoLayer)
   const segmentationLayer = useLatentEngine(s => s.segmentationLayer)
   const interfaceLayer = useLatentEngine(s => s.interfaceLayer)
+  const videoElement = useLatentEngine(s => s.videoElement)
+  const imageElement = useLatentEngine(s => s.imageElement)
+
+  const onClickOnSegmentationLayer = useLatentEngine(s => s.onClickOnSegmentationLayer)
 
   const stateRef = useRef({ isInitialized: false })
 
@@ -47,15 +57,29 @@ function LatentEngine({
   const overlayTimerRef = useRef<NodeJS.Timeout>()
 
   const videoLayerRef = useRef<HTMLDivElement>(null)
+  const segmentationLayerRef = useRef<HTMLDivElement>(null)
+
+  const mediaUrl = media.clapUrl || media.assetUrlHd || media.assetUrl
 
   useEffect(() => {
-    if (!stateRef.current.isInitialized) {
+    if (!stateRef.current.isInitialized && mediaUrl) {
       stateRef.current.isInitialized = true
-      console.log("let's load an experience")
-      // openClapFile(mockClap({ showDisclaimer: true }))
-      openLatentClapFile("short story about a podracer race")
+
+      const fn = async () => {
+        // TODO julian
+        // there is a bug, we can't unpack the .clap when it's from a data-uri :/
+        
+        // open(mediaUrl)
+        const mockClap = getMockClap()
+        const mockArchive = await serializeClap(mockClap)
+        // for some reason conversion to data uri doesn't work
+        // const mockDataUri = await blobToDataUri(mockArchive, "application/x-gzip")
+        // console.log("mockDataUri:", mockDataUri)
+        open(mockArchive)
+      }
+      fn()
     }
-  }, [])
+  }, [mediaUrl])
 
   const isPlayingRef = useRef(isPlaying)
   isPlayingRef.current = isPlaying
@@ -88,17 +112,34 @@ function LatentEngine({
   useEffect(() => {
     if (!videoLayerRef.current) { return }
  
-    const videoElements = Array.from(videoLayerRef.current.querySelectorAll('.latent-video')) as HTMLVideoElement[]
+    // note how in both cases we are pulling from the videoLayerRef
+    // that's because one day everything will be a video, but for now we
+    // "fake it until we make it"
+    const videoElements = Array.from(
+      videoLayerRef.current.querySelectorAll('.latent-video')
+    ) as HTMLVideoElement[]
     setVideoElement(videoElements.at(0))
 
     // images are used for simpler or static experiences
-    const imageElements = Array.from(videoLayerRef.current.querySelectorAll('.latent-image')) as HTMLImageElement[]
+    const imageElements = Array.from(
+      videoLayerRef.current.querySelectorAll('.latent-image')
+    ) as HTMLImageElement[]
     setImageElement(imageElements.at(0))
+
+
+    if (!segmentationLayerRef.current) { return }
+ 
+     const segmentationElements = Array.from(
+       segmentationLayerRef.current.querySelectorAll('.segmentation-canvas')
+     ) as HTMLCanvasElement[]
+     setSegmentationElement(segmentationElements.at(0))
+
   })
 
   useEffect(() => {
     setContainerDimension({ width: width || 256, height: height || 256 })
   }, [width, height])
+
 
   return (
     <div
@@ -115,24 +156,31 @@ function LatentEngine({
 
       {/* main content container */}
       <ContentLayer
-        className=""
+        className="pointer-events-auto"
         width={width}
         height={height}
         ref={videoLayerRef}
+        onClick={onClickOnSegmentationLayer}
       >{videoLayer}</ContentLayer>
 
-      <ContentLayer
-        className=""
-        width={width}
-        height={height}
-      >{segmentationLayer}</ContentLayer>
 
       <ContentLayer
-        className=""
+        className="pointer-events-none"
         width={width}
         height={height}
-      >{interfaceLayer}</ContentLayer>
+        ref={segmentationLayerRef}
+      ><canvas
+        className="segmentation-canvas"
+        style={{ width, height }}
+      ></canvas></ContentLayer>
 
+      {/*
+      <ContentLayer
+        className="pointer-events-auto"
+        width={width}
+        height={height}
+  >{interfaceLayer}</ContentLayer>
+  */}
       
       {/* content overlay, with the gradient, buttons etc */}
       <div className={cn(`
@@ -142,6 +190,7 @@ function LatentEngine({
         items-center justify-end
         pt-5 px-3 pb-1
         transition-opacity duration-300 ease-in-out
+        pointer-events-none
       `,
       isOverlayVisible ? "opacity-100" : "opacity-0"
       )}
@@ -185,6 +234,7 @@ function LatentEngine({
           flex flex-row flex-none
           w-full h-14
           items-center justify-between
+          pointer-events-auto
           `)}>
 
             {/* left-side buttons */}

@@ -116,12 +116,17 @@ export function PublicMediaView() {
       if (!media || !media.id) {
         return
       }
-      const numberOfViews = await countNewMediaView(mediaId)
 
-      setPublicMedia({
-        ...media,
-        numberOfViews
-      })
+      try {
+        const numberOfViews = await countNewMediaView(mediaId)
+
+        setPublicMedia({
+          ...media,
+          numberOfViews
+        })
+      } catch (err) {
+        console.error(`failed to count the number of view for mediaId ${mediaId}`)
+      }
     })
 
   }, [media?.id])

@@ -4,12 +4,25 @@ import { ClapProject } from "./types"
 
 let defaultSegmentDurationInMs = 2000
 
-export function mockClap({
-  showDisclaimer
+// const demoPrompt = "closeup of Queen angelfish, bokeh"
+// const demoPrompt = "portrait of a man tv news anchor, pierre-jean-hyves, serious, bokeh"
+const demoPrompt = "dogs and cats, playing in garden, balls, trees"
+
+export function getMockClap({
+  prompt =demoPrompt,
+  showDisclaimer = true,
 }: {
-  showDisclaimer: boolean
+  prompt?: string
+  showDisclaimer?: boolean
+} = {
+  prompt: demoPrompt,
+  showDisclaimer: true,
 }): ClapProject {
-  const clap = newClap()
+  const clap = newClap({
+    meta: {
+      streamType: "interactive"
+    }
+  })
 
   let currentElapsedTimeInMs = 0
   let currentSegmentDurationInMs = defaultSegmentDurationInMs
@@ -57,8 +70,7 @@ export function mockClap({
     startTimeInMs: currentElapsedTimeInMs,
     endTimeInMs: currentSegmentDurationInMs,
     category: "video",
-    // prompt: "closeup of Queen angelfish, bokeh",
-    prompt: "portrait of a man tv news anchor, pierre-jean-hyves, serious, bokeh",
+    prompt,
     label: "demo",
     outputType: "video",
   }))

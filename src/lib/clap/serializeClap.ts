@@ -125,6 +125,7 @@ export async function serializeClap({
     id: meta.id || uuidv4(),
     title: typeof meta.title === "string" ? meta.title : "Untitled",
     description: typeof meta.description === "string" ? meta.description : "",
+    synopsis: typeof meta.synopsis === "string" ? meta.synopsis : "",
     licence: typeof meta.licence === "string" ? meta.licence : "",
     orientation: meta.orientation === "portrait" ? "portrait" : meta.orientation === "square" ? "square" : "landscape",
     width: getValidNumber(meta.width, 256, 8192, 1024),
@@ -149,14 +150,18 @@ export async function serializeClap({
   const blobResult = new Blob([strigifiedResult], { type: "application/x-yaml" })
 
    // Create a stream for the blob
-   const readableStream = blobResult.stream();
+   const readableStream = blobResult.stream()
 
    // Compress the stream using gzip
-   const compressionStream = new CompressionStream('gzip');
-   const compressedStream = readableStream.pipeThrough(compressionStream);
+   const compressionStream = new CompressionStream('gzip')
+   const compressedStream = readableStream.pipeThrough(compressionStream)
 
    // Create a new blob from the compressed stream
-   const compressedBlob = await new Response(compressedStream).blob();
+   const response = new Response(compressedStream)
+   
+   response.headers.set("Content-Type", "application/x-gzip")
+
+   const compressedBlob = await response.blob()
 
   return compressedBlob
 }

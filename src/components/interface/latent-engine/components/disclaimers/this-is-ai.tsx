@@ -4,12 +4,12 @@ import React from "react"
 import { cn } from "@/lib/utils/cn"
 
 import { arimoBold, arimoNormal } from "@/lib/fonts"
-import { StreamType } from "@/types/general"
+import { ClapStreamType } from "@/lib/clap/types"
 
 export function ThisIsAI({
   streamType,
 }: {
-  streamType?: StreamType
+  streamType?: ClapStreamType
 } = {}) {
 
   return (
