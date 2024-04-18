@@ -74,6 +74,9 @@ export function VideoCard({
     }, index * 1500)
   }, [index])
 
+  // uncomment this as a temporary hack when developping, to avoid making too many fetches and downloads
+  return null;
+
   return (
   <Link href={`${process.env.NEXT_PUBLIC_DOMAIN}/watch?v=${media.id}`}>
     <div

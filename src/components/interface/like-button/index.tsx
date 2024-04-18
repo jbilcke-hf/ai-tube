@@ -2,7 +2,7 @@ import { useEffect, useState, useTransition } from "react"
 import { useLocalStorage } from "usehooks-ts"
 
 import { MediaInfo, MediaRating } from "@/types/general"
-import { getMediaRating, rateMedia } from "@/app/server/actions/stats"
+import { getMediaRating, rateMedia } from "@/app/api/actions/stats"
 import { localStorageKeys } from "@/app/state/localStorageKeys"
 import { defaultSettings } from "@/app/state/defaultSettings"
 

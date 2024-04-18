@@ -1,6 +1,6 @@
 import { NextResponse, NextRequest } from "next/server"
 
-import { getVideo } from "@/app/server/actions/ai-tube-hf/getVideo"
+import { getVideo } from "@/app/api/actions/ai-tube-hf/getVideo"
 import { parseMediaProjectionType } from "@/lib/utils/parseMediaProjectionType";
 
 export async function GET(req: NextRequest) {
@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
     <meta charset="utf-8">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <title>${media.label} - AiTube</title>
-    <meta name="description" content="${media.description}<">
+    <meta name="description" content="${media.description}">
     <script src="/aframe/aframe-master.js"></script>
     <script src="/aframe/play-on-click.js"></script>
     <script src="/aframe/hide-on-play.js"></script>

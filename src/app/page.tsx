@@ -2,7 +2,7 @@
 import { AppQueryProps } from "@/types/general"
 
 import { Main } from "./main"
-import { getVideo } from "./server/actions/ai-tube-hf/getVideo"
+import { getVideo } from "./api/actions/ai-tube-hf/getVideo"
 import { Metadata, ResolvingMetadata } from "next"
 
 
@@ -77,11 +77,11 @@ export async function generateMetadata(
 // we have routes but on Hugging Face we don't see them
 // so.. let's use the work around
 export default async function Page({ searchParams: { v: videoId } }: AppQueryProps) {
-  const publicVideo = await getVideo({
+  const publicMedia = await getVideo({
     videoId,
     neverThrow: true
   })
   return (
-    <Main publicVideo={publicVideo} />
+    <Main publicMedia={publicMedia} />
   )
 }

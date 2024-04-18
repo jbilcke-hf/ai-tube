@@ -28,8 +28,8 @@ import { PublicMediaView } from "./views/public-media-view"
 // more easily
 export function Main({
   // view,
-  publicVideo,
-  publicVideos,
+  publicMedia,
+  publicMedias,
   publicChannelVideos,
   publicTracks,
   publicTrack,
@@ -37,8 +37,8 @@ export function Main({
 }: {
  // server side params
  // view?: InterfaceView
- publicVideo?: MediaInfo
- publicVideos?: MediaInfo[]
+ publicMedia?: MediaInfo
+ publicMedias?: MediaInfo[]
  publicChannelVideos?: MediaInfo[]
  publicTracks?: MediaInfo[]
  publicTrack?: MediaInfo
@@ -48,21 +48,21 @@ export function Main({
   const pathname = usePathname()
   const router = useRouter()
 
-  const setPublicVideo = useStore(s => s.setPublicVideo)
+  const setPublicMedia = useStore(s => s.setPublicMedia)
   const setView = useStore(s => s.setView)
   const setPathname = useStore(s => s.setPathname)
   const setPublicChannel = useStore(s => s.setPublicChannel)
-  const setPublicVideos = useStore(s => s.setPublicVideos)
+  const setPublicMedias = useStore(s => s.setPublicMedias)
   const setPublicChannelVideos = useStore(s => s.setPublicChannelVideos)
   const setPublicTracks = useStore(s => s.setPublicTracks)
   const setPublicTrack = useStore(s => s.setPublicTrack)
 
   useEffect(() => {
-    if (!publicVideos?.length) { return }
+    if (!publicMedias?.length) { return }
     // note: it is important to ALWAYS set the current video to videoId
     // even if it's undefined
-    setPublicVideos(publicVideos)
-  }, [getCollectionKey(publicVideos)])
+    setPublicMedias(publicMedias)
+  }, [getCollectionKey(publicMedias)])
 
 
   useEffect(() => {
@@ -98,19 +98,19 @@ export function Main({
   useEffect(() => {
     // note: it is important to ALWAYS set the current video to videoId
     // even if it's undefined
-    setPublicVideo(publicVideo)
+    setPublicMedia(publicMedia)
 
-    if (!publicVideo || !publicVideo?.id) { return }
+    if (!publicMedia || !publicMedia?.id) { return }
 
     if (pathname === "/embed") { return }
     // this is a hack for hugging face:
     // we allow the ?v=<id> param on the root of the domain
     if (pathname !== "/watch") {
       // console.log("we are on huggingface apparently!")
-      router.replace(`/watch?v=${publicVideo.id}`)
+      router.replace(`/watch?v=${publicMedia.id}`)
     }
     
-  }, [publicVideo?.id])
+  }, [publicMedia?.id])
 
 
   useEffect(() => {

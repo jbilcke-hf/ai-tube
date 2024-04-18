@@ -61,14 +61,14 @@ export const useStore = create<{
   currentModel?: string
   setCurrentModel: (currentModel?: string) => void
 
-  publicVideo?: MediaInfo
-  setPublicVideo: (publicVideo?: MediaInfo) => void
+  publicMedia?: MediaInfo
+  setPublicMedia: (publicMedia?: MediaInfo) => void
 
   publicComments: CommentInfo[]
   setPublicComments: (publicComment: CommentInfo[]) => void
 
-  publicVideos: MediaInfo[]
-  setPublicVideos: (publicVideos: MediaInfo[]) => void
+  publicMedias: MediaInfo[]
+  setPublicMedias: (publicMedias: MediaInfo[]) => void
 
   publicChannelVideos: MediaInfo[]
   setPublicChannelVideos: (publicChannelVideos: MediaInfo[]) => void
@@ -201,9 +201,9 @@ export const useStore = create<{
     set({ currentModel })
   },
 
-  publicVideo: undefined,
-  setPublicVideo: (publicVideo?: MediaInfo) => {
-    set({ publicVideo })
+  publicMedia: undefined,
+  setPublicMedia: (publicMedia?: MediaInfo) => {
+    set({ publicMedia })
   },
 
   publicComments: [],
@@ -211,10 +211,10 @@ export const useStore = create<{
     set({ publicComments })
   },
 
-  publicVideos: [],
-  setPublicVideos: (publicVideos: MediaInfo[] = []) => {
+  publicMedias: [],
+  setPublicMedias: (publicMedias: MediaInfo[] = []) => {
     set({
-      publicVideos: Array.isArray(publicVideos) ? publicVideos : [] 
+      publicMedias: Array.isArray(publicMedias) ? publicMedias : [] 
     })
   },
 
@@ -234,7 +234,7 @@ export const useStore = create<{
   publicChannelVideos: [],
   setPublicChannelVideos: (publicChannelVideos: MediaInfo[] = []) => {
     set({
-      publicVideos: Array.isArray(publicChannelVideos) ? publicChannelVideos : [] 
+      publicMedias: Array.isArray(publicChannelVideos) ? publicChannelVideos : [] 
     })
   },
 

@@ -4,7 +4,7 @@ import { Metadata, ResolvingMetadata } from "next"
 import { AppQueryProps } from "@/types/general"
 
 import { Main } from "../main"
-import { getVideo } from "../server/actions/ai-tube-hf/getVideo"
+import { getVideo } from "../api/actions/ai-tube-hf/getVideo"
 
 // https://nextjs.org/docs/pages/building-your-application/optimizing/fonts 
 export async function generateMetadata(
@@ -81,9 +81,9 @@ export default async function WatchPage({ searchParams: {
   // TODO add:
   // m: mediaId
 } }: AppQueryProps) {
-  const publicVideo = await getVideo({ videoId, neverThrow: true })
+  const publicMedia = await getVideo({ videoId, neverThrow: true })
   // console.log("WatchPage: --> " + video?.id)
   return (
-    <Main publicVideo={publicVideo} />
+    <Main publicMedia={publicMedia} />
    )
 }

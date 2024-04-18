@@ -22,7 +22,36 @@ export type ClapSegmentCategory =
   | "style"
   | "camera"
   | "generic"
-export type ClapOutputType = "text" | "animation" | "transition" | "image" | "video" | "audio"
+
+export type ClapOutputType =
+  | "text"
+  | "animation"
+  | "interface"
+  | "event"
+  | "phenomenon"
+  | "transition"
+  | "image"
+  | "video"
+  | "audio"
+
+  // note: this is always called a "stream"
+// as regardless of the format we are going to try
+// to implement a streaming mechanism
+export type ClapStreamType =
+  // content is static, same is sent to everyone
+  // note that this can be a video (eg.a mp4 movie)
+  // or something else completely (a webradio stream, a seq of gaussian splats)
+  | "static"
+
+  // content is generated on-the-fly and sent to ALL users
+  // (eg. a virtual influencer, a tv news cast)
+  | "live"
+
+  // content is generated on-the-fly and sent to ONE user
+  // it is also reactive (the user can interact with it)
+  // (eg. a point and click game, a tamagotchi experience)
+  | "interactive"
+
 export type ClapSegmentStatus =
   | "to_generate"
   | "to_interpolate"
@@ -100,6 +129,7 @@ export type ClapMeta = {
   id: string
   title: string
   description: string
+  synopsis: string
   licence: string
   orientation: string
   width: number
@@ -107,6 +137,7 @@ export type ClapMeta = {
   defaultVideoModel: string
   extraPositivePrompt: string[]
   screenplay: string
+  streamType: ClapStreamType
 }
 
 export type ClapSceneEvent = {

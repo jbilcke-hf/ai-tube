@@ -8,7 +8,7 @@ import { useStore } from "@/app/state/useStore"
 import { cn } from "@/lib/utils/cn"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { getVideos } from "@/app/server/actions/ai-tube-hf/getVideos"
+import { getVideos } from "@/app/api/actions/ai-tube-hf/getVideos"
 
 export function SearchInput() {
   const [_pending, startTransition] = useTransition()
@@ -35,7 +35,7 @@ export function SearchInput() {
       const videos = await getVideos({
         query,
         sortBy: "match",
-        maxVideos: 8,
+        maxNbMedias: 8,
         neverThrow: true,
         renewCache: false, // bit of optimization
       })

@@ -9,7 +9,7 @@ import { useStore } from "./useStore"
 
 import { localStorageKeys } from "./localStorageKeys"
 import { defaultSettings } from "./defaultSettings"
-import { getCurrentUser } from "../server/actions/users"
+import { getCurrentUser } from "../api/actions/users"
 
 export function useCurrentUser({
   isLoginRequired = false

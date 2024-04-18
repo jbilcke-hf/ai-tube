@@ -1,0 +1,36 @@
+"use client"
+
+import { useEffect, useState } from "react";
+
+import { ClapProject, ClapSegment } from "@/lib/clap/types";
+import { resolveSegment } from "./resolveSegment";
+
+export function LatentComponent({
+  segment,
+  clap
+}: {
+  segment: ClapSegment,
+  clap: ClapProject
+}): JSX.Element {
+  const [component, setComponent] = useState<JSX.Element | null>(null)
+  const [isInitialized, setInitialized] = useState(false)
+  const [isLoaded, setLoaded] = useState(false)
+
+  useEffect(() => {
+    if (isInitialized) { return }
+    setInitialized(true)
+
+    const fn = async () => {
+      const component = await resolveSegment(segment, clap)
+
+      setComponent(component)
+    }
+
+    fn()
+
+    return () => {}
+  }, [isInitialized])
+
+
+  return <>{component}</>
+}

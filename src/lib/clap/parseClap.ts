@@ -1,7 +1,7 @@
 import YAML from "yaml"
 import { v4 as uuidv4 } from "uuid"
 
-import { ClapHeader, ClapMeta, ClapModel, ClapProject, ClapScene, ClapSegment } from "./types"
+import { ClapHeader, ClapMeta, ClapModel, ClapProject, ClapScene, ClapSegment, ClapStreamType } from "./types"
 import { getValidNumber } from "@/lib/utils/getValidNumber"
 
 /**
@@ -52,6 +52,7 @@ export async function parseClap(inputStringOrBlob: string | Blob): Promise<ClapP
     defaultVideoModel: typeof maybeClapMeta.defaultVideoModel === "string" ? maybeClapMeta.defaultVideoModel : "SVD",
     extraPositivePrompt: Array.isArray(maybeClapMeta.extraPositivePrompt) ? maybeClapMeta.extraPositivePrompt : [],
     screenplay: typeof maybeClapMeta.screenplay === "string" ? maybeClapMeta.screenplay : "",
+    streamType: (typeof maybeClapMeta.streamType == "string" ? maybeClapMeta.streamType : "static") as ClapStreamType,
   }
 
   /*

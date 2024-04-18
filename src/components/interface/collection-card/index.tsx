@@ -79,7 +79,6 @@ export function CollectionCard({
               className={cn(
                 `absolute`,
                 `aspect-video`,
-               // `aspect-video object-cover`,
                 `rounded-lg overflow-hidden`,
                 collectionThumbnailReady ? `opacity-100`: 'opacity-0',
                 `hover:opacity-0 w-full h-full top-0 z-30`,

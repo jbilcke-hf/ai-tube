@@ -1,8 +1,8 @@
 
 import { AppQueryProps } from "@/types/general"
 import { Main } from "../main"
-import { getVideos } from "../server/actions/ai-tube-hf/getVideos"
-import { getVideo } from "../server/actions/ai-tube-hf/getVideo"
+import { getVideos } from "../api/actions/ai-tube-hf/getVideos"
+import { getVideo } from "../api/actions/ai-tube-hf/getVideo"
 import { Metadata } from "next"
 
 
@@ -74,7 +74,7 @@ export default async function MusicPage({ searchParams: { m: mediaId } }: AppQue
   const publicTracks = await getVideos({
     sortBy: "date",
     mandatoryTags: ["music"],
-    maxVideos: 25,
+    maxNbMedias: 25,
     neverThrow: true,
   })
 

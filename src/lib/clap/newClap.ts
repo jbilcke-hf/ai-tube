@@ -1,7 +1,7 @@
 
 import { v4 as uuidv4 } from "uuid"
 
-import { ClapMeta, ClapModel, ClapProject, ClapScene, ClapSegment } from "./types"
+import { ClapMeta, ClapModel, ClapProject, ClapScene, ClapSegment, ClapStreamType } from "./types"
 import { getValidNumber } from "@/lib/utils/getValidNumber"
 
 // generate an empty clap file, or copy one from a source
@@ -23,6 +23,7 @@ export function newClap(clap: {
     defaultVideoModel: typeof clap?.meta?.defaultVideoModel === "string" ? clap?.meta.defaultVideoModel : "SVD",
     extraPositivePrompt: Array.isArray(clap?.meta?.extraPositivePrompt) ? clap?.meta.extraPositivePrompt : [],
     screenplay: typeof clap?.meta?.screenplay === "string" ? clap?.meta.screenplay : "",
+    streamType: (typeof clap?.meta?.streamType == "string" ? clap?.meta?.streamType : "static") as ClapStreamType,
   }
 
   const models: ClapModel[] = clap?.models && Array.isArray(clap.models) ? clap.models : []

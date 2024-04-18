@@ -1,4 +1,5 @@
 
+
 export type ProjectionMode = 'cartesian' | 'spherical'
 
 export type MouseEventType = "hover" | "click"
@@ -83,6 +84,7 @@ export interface RenderedScene {
   error: string
   maskUrl: string
   segments: ImageSegment[]
+  durationInMs?: number
 }
 
 export interface ImageAnalysisRequest {
@@ -608,6 +610,8 @@ export type VideoGenerationModel =
   | "HotshotXL"
   | "SVD"
   | "LaVie"
+  | "AnimateDiff"
+  | "SDXL" // yep, we can use images!
 
 export type InterfaceDisplayMode =
   | "desktop"
@@ -700,9 +704,17 @@ export type UpdateQueueResponse = {
 export type AppQueryProps = {
   params: { id: string }
   searchParams: {
-    v?: string | string[],
-    m?: string | string[],
-    c?: string | string[],
+    v?: string | string[], // video id (deprecated)
+    m?: string | string[], // media id (a better term)
+    c?: string | string[], // clap id (do we still need this?)
+    [key: string]: string | string[] | undefined
+  }
+}
+
+export type LatentQueryProps = {
+  params: { id: string }
+  searchParams: {
+    l?: string | string[], // latent content (serialized to a base64 json)
     [key: string]: string | string[] | undefined
   }
 }

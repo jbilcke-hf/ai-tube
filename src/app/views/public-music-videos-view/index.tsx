@@ -5,7 +5,7 @@ import { useEffect, useTransition } from "react"
 import { useStore } from "@/app/state/useStore"
 import { cn } from "@/lib/utils/cn"
 import { MediaInfo } from "@/types/general"
-import { getVideos } from "@/app/server/actions/ai-tube-hf/getVideos"
+import { getVideos } from "@/app/api/actions/ai-tube-hf/getVideos"
 import { TrackList } from "@/components/interface/track-list"
 import { PlaylistControl } from "@/components/interface/playlist-control"
 import { usePlaylist } from "@/lib/hooks/usePlaylist"
@@ -26,10 +26,10 @@ export function PublicMusicVideosView() {
       const newTracks = await getVideos({
         sortBy: "date",
         mandatoryTags: ["music"],
-        maxVideos: 25
+        maxNbMedias: 25
       })
 
-      setPublicVideos(newTracks)
+      setPublicMedias(newTracks)
     })
     */
   }, [])

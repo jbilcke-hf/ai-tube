@@ -6,7 +6,7 @@ import { useStore } from "@/app/state/useStore"
 import { cn } from "@/lib/utils/cn"
 import { ChannelList } from "@/components/interface/channel-list"
 
-import { getPrivateChannels } from "@/app/server/actions/ai-tube-hf/getPrivateChannels"
+import { getPrivateChannels } from "@/app/api/actions/ai-tube-hf/getPrivateChannels"
 import { useCurrentUser } from "@/app/state/useCurrentUser"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"

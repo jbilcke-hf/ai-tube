@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid"
 
 import { getValidNumber } from "@/lib/utils/getValidNumber"
 
-import { ClapHeader, ClapMeta, ClapModel, ClapProject, ClapScene, ClapSegment } from "./types"
+import { ClapHeader, ClapMeta, ClapModel, ClapProject, ClapScene, ClapSegment, ClapStreamType } from "./types"
 
 export async function serializeClap({
   meta, // ClapMeta
@@ -132,6 +132,7 @@ export async function serializeClap({
     defaultVideoModel:  typeof meta.defaultVideoModel === "string" ? meta.defaultVideoModel : "SVD",
     extraPositivePrompt: Array.isArray(meta.extraPositivePrompt) ? meta.extraPositivePrompt : [],
     screenplay: typeof meta.screenplay == "string" ? meta.screenplay : "",
+    streamType: (typeof meta.streamType == "string" ? meta.streamType : "static") as ClapStreamType,
   }
 
   const entries = [

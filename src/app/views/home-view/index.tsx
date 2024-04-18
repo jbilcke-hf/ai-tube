@@ -5,37 +5,35 @@ import { useEffect, useTransition } from "react"
 import { useStore } from "@/app/state/useStore"
 import { cn } from "@/lib/utils/cn"
 import { MediaInfo } from "@/types/general"
-import { getVideos } from "@/app/server/actions/ai-tube-hf/getVideos"
+import { getVideos } from "@/app/api/actions/ai-tube-hf/getVideos"
 import { VideoList } from "@/components/interface/video-list"
-import { getTags } from "@/app/server/actions/ai-tube-hf/getTags"
-import { extendVideosWithStats } from "@/app/server/actions/ai-tube-hf/extendVideosWithStats"
 
 export function HomeView() {
   const [_isPending, startTransition] = useTransition()
   const setView = useStore(s => s.setView)
   const currentTag = useStore(s => s.currentTag)
-  const setPublicVideos = useStore(s => s.setPublicVideos)
-  const setPublicVideo = useStore(s => s.setPublicVideo)
-  const publicVideos = useStore(s => s.publicVideos)
+  const setPublicMedias = useStore(s => s.setPublicMedias)
+  const setPublicMedia = useStore(s => s.setPublicMedia)
+  const publicMedias = useStore(s => s.publicMedias)
 
   useEffect(() => {
     startTransition(async () => {
-      const videos = await getVideos({
+      const medias = await getVideos({
         sortBy: "date",
         mandatoryTags: currentTag ? [currentTag] : [],
-        maxVideos: 25
+        maxNbMedias: 25
       })
 
       // due to some caching on the first function.. we update with fresh data!
-      // const updatedVideos = await extendVideosWithStats(videos)
+      // const updatedVideos = await extendVideosWithStats(medias)
 
-      setPublicVideos(videos)
+      setPublicMedias(medias)
     })
   }, [currentTag])
 
-  const handleSelect = (video: MediaInfo) => {
+  const handleSelect = (media: MediaInfo) => {
     setView("public_media")
-    setPublicVideo(video)
+    setPublicMedia(media)
   }
 
   return (
@@ -43,7 +41,7 @@ export function HomeView() {
      `sm:pr-4`
     )}>
       <VideoList
-        items={publicVideos}
+        items={publicMedias}
         onSelect={handleSelect}
       />
     </div>

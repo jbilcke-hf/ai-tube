@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils/cn"
 import { ActionButton, actionButtonClassName } from "@/components/interface/action-button"
 import { RecommendedVideos } from "@/components/interface/recommended-videos"
 import { isCertifiedUser } from "@/app/certification"
-import { countNewMediaView } from "@/app/server/actions/stats"
+import { countNewMediaView } from "@/app/api/actions/stats"
 import { formatTimeAgo } from "@/lib/formatters/formatTimeAgo"
 import { DefaultAvatar } from "@/components/interface/default-avatar"
 import { LikeButton } from "@/components/interface/like-button"
@@ -28,7 +28,7 @@ import { Input } from "@/components/ui/input"
 
 import { localStorageKeys } from "@/app/state/localStorageKeys"
 import { defaultSettings } from "@/app/state/defaultSettings"
-import { getComments, submitComment } from "@/app/server/actions/comments"
+import { getComments, submitComment } from "@/app/api/actions/comments"
 import { useCurrentUser } from "@/app/state/useCurrentUser"
 import { parseMediaProjectionType } from "@/lib/utils/parseMediaProjectionType"
 import { MediaPlayer } from "@/components/interface/media-player"
@@ -61,14 +61,14 @@ export function PublicMediaView() {
   }
 
 
-  const media = useStore(s => s.publicVideo)
+  const media = useStore(s => s.publicMedia)
 
   const mediaId = `${media?.id || ""}`
 
   const [copied, setCopied] = useState<boolean>(false)
 
   const [channelThumbnail, setChannelThumbnail] = useState(`${media?.channel.thumbnail || ""}`)
-  const setPublicVideo = useStore(s => s.setPublicVideo)
+  const setPublicMedia = useStore(s => s.setPublicMedia)
 
   const publicComments = useStore(s => s.publicComments)
 
@@ -118,7 +118,7 @@ export function PublicMediaView() {
       }
       const numberOfViews = await countNewMediaView(mediaId)
 
-      setPublicVideo({
+      setPublicMedia({
         ...media,
         numberOfViews
       })

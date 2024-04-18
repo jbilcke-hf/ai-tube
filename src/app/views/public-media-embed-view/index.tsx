@@ -6,7 +6,7 @@ import { useStore } from "@/app/state/useStore"
 import { cn } from "@/lib/utils/cn"
 import { MediaPlayer } from "@/components/interface/media-player"
 
-import { countNewMediaView } from "@/app/server/actions/stats"
+import { countNewMediaView } from "@/app/api/actions/stats"
 
 export function PublicMediaEmbedView() {
   const [_pending, startTransition] = useTransition()
@@ -16,11 +16,11 @@ export function PublicMediaEmbedView() {
   // EDIT: you know what, let's do this the dirty way for now
   // const [desiredCurrentTime, setDesiredCurrentTime] = useState()
 
-  const media = useStore(s => s.publicVideo)
+  const media = useStore(s => s.publicMedia)
 
   const mediaId = `${media?.id || ""}`
 
-  const setPublicVideo = useStore(s => s.setPublicVideo)
+  const setPublicMedia = useStore(s => s.setPublicMedia)
 
   // we inject the current mediaId in the URL, if it's not already present
   // this is a hack for Hugging Face iframes
@@ -48,7 +48,7 @@ export function PublicMediaEmbedView() {
       }
       const numberOfViews = await countNewMediaView(mediaId)
 
-      setPublicVideo({
+      setPublicMedia({
         ...media,
         numberOfViews
       })

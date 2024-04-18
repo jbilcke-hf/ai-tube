@@ -2,25 +2,16 @@
 
 import { useEffect, useState, useTransition } from 'react'
 
-import { Pathway_Gothic_One } from 'next/font/google'
-import { PiPopcornBold } from "react-icons/pi"
-import { GoSearch } from "react-icons/go"
 import { AiTubeLogo } from "./logo"
-
-const pathway = Pathway_Gothic_One({
-  weight: "400",
-  style: "normal",
-  subsets: ["latin"],
-  display: "swap"
-})
 
 import { useStore } from "@/app/state/useStore"
 import { cn } from "@/lib/utils/cn"
-import { getTags } from '@/app/server/actions/ai-tube-hf/getTags'
+import { getTags } from '@/app/api/actions/ai-tube-hf/getTags'
 import Link from 'next/link'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { SearchInput } from '../search-input'
+import { pathway } from '@/lib/fonts'
 
 export function TopHeader() {
   const [_pending, startTransition] = useTransition()

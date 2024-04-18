@@ -5,7 +5,7 @@ import { useStore } from "@/app/state/useStore"
 import { MediaInfo } from "@/types/general"
 
 import { VideoList } from "../video-list"
-import { getVideos } from "@/app/server/actions/ai-tube-hf/getVideos"
+import { getVideos } from "@/app/api/actions/ai-tube-hf/getVideos"
 
 export function RecommendedVideos({
   media,
@@ -23,7 +23,7 @@ export function RecommendedVideos({
         sortBy: "random",
         niceToHaveTags: media.tags,
         ignoreVideoIds: [media.id],
-        maxVideos: 16,
+        maxNbMedias: 16,
       }))
     })
   }, media.tags)
