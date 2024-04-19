@@ -1,6 +1,6 @@
 
 import React from "react"
-import { ImageSegmenterResult, ImageSource } from "@mediapipe/tasks-vision"
+import { ImageSegmenterResult } from "@mediapipe/tasks-vision"
 
 import { segmentFrame } from "./segmentFrame"
 
@@ -10,7 +10,7 @@ export async function getSegmentationCanvas({
   width,
   height
 }: {
-  frame: ImageSource;
+  frame: TexImageSource;
   timestamp: number;
   width: number;
   height: number;

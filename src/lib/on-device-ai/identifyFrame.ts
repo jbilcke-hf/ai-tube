@@ -1,11 +1,10 @@
 import {
   FilesetResolver,
   ObjectDetector,
-  ObjectDetectorResult,
-  ImageSource
+  ObjectDetectorResult
 } from "@mediapipe/tasks-vision"
 
-export type VideoObjectDetector = (videoFrame: ImageSource, timestamp: number) => Promise<ObjectDetectorResult>
+export type VideoObjectDetector = (videoFrame: TexImageSource, timestamp: number) => Promise<ObjectDetectorResult>
 
 const getObjectDetector = async (): Promise<VideoObjectDetector> => {
   const vision = await FilesetResolver.forVisionTasks(
@@ -20,7 +19,7 @@ const getObjectDetector = async (): Promise<VideoObjectDetector> => {
     runningMode: "VIDEO"
   });
 
-  const detector: VideoObjectDetector = async (videoFrame: ImageSource, timestamp: number): Promise<ObjectDetectorResult> => {
+  const detector: VideoObjectDetector = async (videoFrame: TexImageSource, timestamp: number): Promise<ObjectDetectorResult> => {
     const result = objectDetector.detectForVideo(videoFrame, timestamp)
     return result
   }
@@ -35,7 +34,7 @@ const globalState: { detector?: VideoObjectDetector } = {};
   globalState.detector = globalState.detector || (await getObjectDetector())
 })();
 
-export async function identifyFrame(frame: ImageSource, timestamp: number): Promise<ObjectDetectorResult> {
+export async function identifyFrame(frame: TexImageSource, timestamp: number): Promise<ObjectDetectorResult> {
   console.log("identifyFrame: loading segmenter..")
   globalState.detector = globalState.detector || (await getObjectDetector())
 

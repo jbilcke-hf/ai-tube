@@ -1,6 +1,6 @@
-import { FilesetResolver, ImageSegmenter, ImageSegmenterResult, ImageSource } from "@mediapipe/tasks-vision"
+import { FilesetResolver, ImageSegmenter, ImageSegmenterResult } from "@mediapipe/tasks-vision"
 
-export type VideoSegmenter = (videoFrame: ImageSource, timestamp: number) => Promise<ImageSegmenterResult>
+export type VideoSegmenter = (videoFrame: TexImageSource, timestamp: number) => Promise<ImageSegmenterResult>
 
 const getSegmenter = async (): Promise<VideoSegmenter> => {
   const vision = await FilesetResolver.forVisionTasks(
@@ -24,7 +24,7 @@ const getSegmenter = async (): Promise<VideoSegmenter> => {
     runningMode: "VIDEO"
   });
 
-  const segmenter: VideoSegmenter = (videoFrame: ImageSource, timestamp: number): Promise<ImageSegmenterResult> => {
+  const segmenter: VideoSegmenter = (videoFrame: TexImageSource, timestamp: number): Promise<ImageSegmenterResult> => {
     return new Promise((resolve, reject) => {
       imageSegmenter.segmentForVideo(videoFrame, timestamp, (results) => {
         resolve(results)
@@ -42,7 +42,7 @@ const globalState: { segmenter?: VideoSegmenter } = {};
   globalState.segmenter = globalState.segmenter || (await getSegmenter())
 })();
 
-export async function segmentFrame(frame: ImageSource, timestamp: number): Promise<ImageSegmenterResult> {
+export async function segmentFrame(frame: TexImageSource, timestamp: number): Promise<ImageSegmenterResult> {
   console.log("segmentFrame: loading segmenter..")
   globalState.segmenter = globalState.segmenter || (await getSegmenter())
 

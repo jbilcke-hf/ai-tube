@@ -14,6 +14,7 @@ import { parseClap } from "@/lib/clap/parseClap"
 import { InteractiveSegmenterResult, MPMask } from "@mediapipe/tasks-vision"
 import { segmentFrame } from "@/lib/on-device-ai/segmentFrameOnClick"
 import { drawSegmentation } from "../core/drawSegmentation"
+import { filterImage } from "@/lib/on-device-ai/filterImage"
 
 export const useLatentEngine = create<LatentEngineStore>((set, get) => ({
   width: 1024,
@@ -144,7 +145,19 @@ export const useLatentEngine = create<LatentEngineStore>((set, get) => ({
       if (debug) {
         console.log(`processClickOnSegment: callling drawSegmentation`)
       }
-      drawSegmentation(result.categoryMask, segmentationElement)
+
+      const canvasMask: HTMLCanvasElement = drawSegmentation({
+        mask: result.categoryMask,
+        canvas: segmentationElement,
+        backgroundImage: imageElement,
+        fillStyle: "rgba(255, 255, 255, 1.0)"
+      })
+      // TODO: read the canvas te determine on what the user clicked
+
+      if (debug) {
+        console.log(`processClickOnSegment: filtering the original image`)
+      }
+      // filterImage(imageElement, canvasMask)
 
       if (debug) {
         console.log("processClickOnSegment: TODO call data.close() to free the memory!")
@@ -278,12 +291,23 @@ export const useLatentEngine = create<LatentEngineStore>((set, get) => ({
       if (get().isPlaying) {
         // console.log(`runSimulationLoop: rendering video content layer..`)
         // we only grab the first one
+    
         const videoLayer = (await resolveSegments(clap, "video", 1)).at(0)
 
         if (get().isPlaying) {
+
           set({
             videoLayer
           })
+
+          const { videoElement, imageElement, segmentationElement } = get()
+
+          const canvas = drawSegmentation({
+             // no mask means this will effectively clear the canvas
+            canvas: segmentationElement,
+            backgroundImage: imageElement,
+          })
+          
 
           console.log(`runSimulationLoop: rendered video content layer`)
         }

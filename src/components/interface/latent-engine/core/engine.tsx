@@ -11,9 +11,6 @@ import { ContentLayer } from "../components/content-layer"
 import { MediaInfo } from "@/types/general"
 import { getMockClap } from "@/lib/clap/getMockClap"
 import { serializeClap } from "@/lib/clap/serializeClap"
-import { blobToDataUri } from "@/app/api/utils/blobToDataUri"
-import { InteractiveSegmentationCanvas } from "@/lib/on-device-ai/getInteractiveSegmentationCanvas"
-import { InteractiveSegmenterResult } from "@mediapipe/tasks-vision"
 
 function LatentEngine({
   media,

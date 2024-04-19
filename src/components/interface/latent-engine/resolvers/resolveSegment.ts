@@ -13,10 +13,8 @@ export async function resolveSegment(segment: ClapSegment, clap: ClapProject): P
   if (segment.category === "interface") {
     latentComponentResolver = interfaceResolver
   } else if (segment.category === "video") {
-
-    // for backend performance reason (generative video is slow)
-    // we do not support "true" video for now
-    // latentComponentResolver = videoResolver
+    latentComponentResolver = videoResolver
+  } else if (segment.category === "storyboard") {
     latentComponentResolver = imageResolver
   }
 

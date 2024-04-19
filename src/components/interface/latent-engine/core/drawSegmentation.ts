@@ -1,36 +1,61 @@
-import { MPMask } from "@mediapipe/tasks-vision"
+import { MPMask } from "@mediapipe/tasks-vision";
+
+interface DrawSegmentationOptions {
+  mask?: MPMask;
+  canvas?: HTMLCanvasElement;
+  backgroundImage?: HTMLImageElement;
+  fillStyle?: string;
+}
 
 /**
- * Draw segmentation result
+ * Draw segmentation result with enhancements.
  */
-export function drawSegmentation(mask?: MPMask, canvas?: HTMLCanvasElement) {
+export function drawSegmentation(options: DrawSegmentationOptions): HTMLCanvasElement {
+  const {
+    mask,
+    canvas,
+    backgroundImage,
+    fillStyle = "rgba(255, 255, 255, 1.0)"
+  } = options;
 
-  if (!mask) { throw new Error("drawSegmentation failed: empty mask") }
+  if (!canvas) {
+    throw new Error("drawSegmentation failed: cannot access the canvas");
+  }
 
-  if (!canvas) { throw new Error("drawSegmentation failed: cannot access the canvas") }
+  const width = mask?.width || 0;
+  const height = mask?.height || 0;
 
-  const width = mask.width;
-  const height = mask.height;
-  const maskData = mask.getAsFloat32Array();
-
-  canvas.width = width;
-  canvas.height = height;
+  canvas.width = width || canvas.width;
+  canvas.height = height || canvas.height;
 
   console.log("drawSegmentation: drawing..")
 
   const ctx = canvas.getContext("2d")
+  if (!ctx) {
+    throw new Error("drawSegmentation failed: cannot access the 2D context")
+  }
 
-  if (!ctx) { throw new Error("drawSegmentation failed: cannot access the 2D context") }
-
-  ctx.fillStyle = "#00000000";
+  ctx.fillStyle = "#00000000"; // Maintain transparent background if no image provided
   ctx.fillRect(0, 0, width, height);
-  ctx.fillStyle = "rgba(18, 181, 203, 0.7)";
 
-  maskData.forEach((category: number, index: number, array: Float32Array) => {
-    if (Math.round(category * 255.0) === 0) {
-      const x = (index + 1) % width;
-      const y = (index + 1 - x) / width;
-      ctx.fillRect(x, y, 1, 1);
-    }
-  })
+  // Draw the background image if provided, otherwise default to transparent background.
+  if (backgroundImage) {
+    ctx.drawImage(backgroundImage, 0, 0, width, height);
+  }
+
+  if (mask) {
+  
+    ctx.fillStyle = fillStyle;
+    const maskData = mask.getAsFloat32Array();
+
+    maskData.forEach((category: number, index: number) => {
+      if (Math.round(category * 255.0) === 0) {
+        const x = index % width;
+        const y = Math.floor(index / width);
+        ctx.fillRect(x, y, 1, 1);
+      }
+    });
+  }
+
+  return canvas;
 }

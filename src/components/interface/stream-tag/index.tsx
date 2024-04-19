@@ -15,12 +15,14 @@ export function StreamTag({
   const isInteractive = streamType === "interactive"
   const isLive = streamType === "live"
   const isStatic = !isInteractive && !isLive
+  /*
   console.log("debug:", {
     streamType,
     isInteractive,
     isLive,
     isStatic
   })
+  */
 
   return (
     <div className={cn(`

@@ -6,10 +6,11 @@ let defaultSegmentDurationInMs = 2000
 
 // const demoPrompt = "closeup of Queen angelfish, bokeh"
 // const demoPrompt = "portrait of a man tv news anchor, pierre-jean-hyves, serious, bokeh"
-const demoPrompt = "dogs and cats, playing in garden, balls, trees"
+// const demoPrompt = "screenshot from Call of Duty, FPS game, nextgen, videogame screenshot, unreal engine, raytracing"
+const demoPrompt = "screenshot from a flight simulator, nextgen, videogame screenshot, unreal engine, raytracing"
 
 export function getMockClap({
-  prompt =demoPrompt,
+  prompt = demoPrompt,
   showDisclaimer = true,
 }: {
   prompt?: string

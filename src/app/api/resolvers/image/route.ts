@@ -4,7 +4,6 @@ import queryString from "query-string"
 import { newRender, getRender } from "../../providers/videochain/renderWithVideoChain"
 import { generateSeed } from "@/lib/utils/generateSeed"
 import { sleep } from "@/lib/utils/sleep"
-import { getContentType } from "@/lib/data/getContentType"
 
 export async function GET(req: NextRequest) {
 
@@ -22,8 +21,8 @@ let prompt = ""
   // console.log("calling await newRender")
 
   let render = await newRender({
-    prompt,
-    negativePrompt: "blurry, cropped, bad quality",
+    prompt: `${prompt}, cinematic, photo, sublime, pro quality, sharp, crisp, beautiful, impressive, amazing, high quality, 4K`,
+    negativePrompt: "logo, text, ui, hud, interface, buttons, ad, signature, copyright, blurry, cropped, bad quality",
     nbFrames: 1,
     nbSteps: 8,
     width: 1024,

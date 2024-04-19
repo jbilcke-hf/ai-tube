@@ -1,6 +1,6 @@
-import { FilesetResolver, InteractiveSegmenter, InteractiveSegmenterResult, ImageSource } from "@mediapipe/tasks-vision"
+import { FilesetResolver, InteractiveSegmenter, InteractiveSegmenterResult } from "@mediapipe/tasks-vision"
 
-export type InteractiveVideoSegmenter = (videoFrame: ImageSource, x: number, y: number) => Promise<InteractiveSegmenterResult>
+export type InteractiveVideoSegmenter = (videoFrame: TexImageSource, x: number, y: number) => Promise<InteractiveSegmenterResult>
 
 const getInteractiveSegmenter = async (): Promise<InteractiveVideoSegmenter> => {
   const vision = await FilesetResolver.forVisionTasks(
@@ -17,7 +17,7 @@ const getInteractiveSegmenter = async (): Promise<InteractiveVideoSegmenter> => 
   });
 
   const segmenter: InteractiveVideoSegmenter = (
-    videoFrame: ImageSource,
+    videoFrame: TexImageSource,
     x: number,
     y: number
   ): Promise<InteractiveSegmenterResult> => {
@@ -43,7 +43,7 @@ const globalState: { segmenter?: InteractiveVideoSegmenter } = {};
   globalState.segmenter = globalState.segmenter || (await getInteractiveSegmenter())
 })();
 
-export async function segmentFrame(frame: ImageSource, x: number, y: number): Promise<InteractiveSegmenterResult> {
+export async function segmentFrame(frame: TexImageSource, x: number, y: number): Promise<InteractiveSegmenterResult> {
   console.log("segmentFrame: loading segmenter..")
   globalState.segmenter = globalState.segmenter || (await getInteractiveSegmenter())
 

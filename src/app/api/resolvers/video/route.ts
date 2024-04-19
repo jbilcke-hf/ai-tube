@@ -22,10 +22,10 @@ let prompt = ""
   // console.log("calling await newRender")
 
   let render = await newRender({
-    prompt,
-    negativePrompt: "blurry, cropped, bad quality",
+    prompt: `${prompt}, cinematic, photo, sublime, pro quality, sharp, crisp, beautiful, impressive, amazing, high quality, 4K`,
+    negativePrompt: "logo, text, ui, hud, interface, buttons, ad, signature, copyright, blurry, cropped, bad quality",
     nbFrames: 1,
-    nbSteps: 4,
+    nbSteps: 8,
     width: 1024,
     height: 576,
     turbo: true,
