@@ -21,12 +21,8 @@ export interface RenderRequest {
   // actionnables are names of things like "chest", "key", "tree", "chair" etc
   actionnables: string[]
 
-  // note: this is the number of frames for Zeroscope,
-  // which is currently configured to only output 3 seconds, so:
-  // nbFrames=8 -> 1 sec
-  // nbFrames=16 -> 2 sec
-  // nbFrames=24 -> 3 sec
-  nbFrames: number // min: 1, max: 24
+  nbFrames: number
+  nbFPS: number
 
   nbSteps: number // min: 1, max: 50
 

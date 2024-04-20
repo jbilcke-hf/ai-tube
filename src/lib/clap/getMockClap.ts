@@ -4,10 +4,11 @@ import { ClapProject } from "./types"
 
 let defaultSegmentDurationInMs = 2000
 
-// const demoPrompt = "closeup of Queen angelfish, bokeh"
-// const demoPrompt = "portrait of a man tv news anchor, pierre-jean-hyves, serious, bokeh"
-// const demoPrompt = "screenshot from Call of Duty, FPS game, nextgen, videogame screenshot, unreal engine, raytracing"
-const demoPrompt = "screenshot from a flight simulator, nextgen, videogame screenshot, unreal engine, raytracing"
+let demoPrompt = "closeup of Queen angelfish, bokeh"
+// demoPrompt = "portrait of a man tv news anchor, pierre-jean-hyves, serious, bokeh"
+// demoPrompt = "screenshot from Call of Duty, FPS game, nextgen, videogame screenshot, unreal engine, raytracing"
+demoPrompt = "screenshot from a flight simulator, nextgen, videogame screenshot, unreal engine, raytracing"
+demoPrompt = "screenshot from fallout3, fallout4, wasteland, 3rd person RPG, nextgen, videogame screenshot, unreal engine, raytracing"
 
 export function getMockClap({
   prompt = demoPrompt,
@@ -66,15 +67,31 @@ export function getMockClap({
 
   currentElapsedTimeInMs += currentSegmentDurationInMs
   */
-    
-  clap.segments.push(newSegment({
-    startTimeInMs: currentElapsedTimeInMs,
-    endTimeInMs: currentSegmentDurationInMs,
-    category: "video",
-    prompt,
-    label: "demo",
-    outputType: "video",
-  }))
+  
+  // this is just for us, to quickly switch between video or image
+  const generationMode: "IMAGE" | "VIDEO" =
+  "VIDEO"
+  //"IMAGE"
+
+  if (generationMode === "VIDEO") {
+    clap.segments.push(newSegment({
+      startTimeInMs: currentElapsedTimeInMs,
+      endTimeInMs: currentSegmentDurationInMs,
+      category: "video",
+      prompt,
+      label: "demo",
+      outputType: "video",
+    }))
+  } else {
+    clap.segments.push(newSegment({
+      startTimeInMs: currentElapsedTimeInMs,
+      endTimeInMs: currentSegmentDurationInMs,
+      category: "storyboard",
+      prompt,
+      label: "demo",
+      outputType: "image",
+    }))
+  }
 
   return clap
 }

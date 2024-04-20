@@ -4,6 +4,8 @@ import queryString from "query-string"
 import { newRender, getRender } from "../../providers/videochain/renderWithVideoChain"
 import { generateSeed } from "@/lib/utils/generateSeed"
 import { sleep } from "@/lib/utils/sleep"
+import { getNegativePrompt, getPositivePrompt } from "../../utils/imagePrompts"
+import { getContentType } from "@/lib/data/getContentType"
 
 export async function GET(req: NextRequest) {
 
@@ -18,12 +20,21 @@ let prompt = ""
     return NextResponse.json({ error: 'no prompt provided' }, { status: 400 });
   }
 
+  let format = "binary"
+  try {
+    const f = decodeURIComponent(query?.f?.toString() || "").trim()
+    if (f === "json" || f === "binary") { format = f }
+  } catch (err) {}
+  
   // console.log("calling await newRender")
+  prompt = getPositivePrompt(prompt)
+  const negativePrompt = getNegativePrompt()
 
   let render = await newRender({
-    prompt: `${prompt}, cinematic, photo, sublime, pro quality, sharp, crisp, beautiful, impressive, amazing, high quality, 4K`,
-    negativePrompt: "logo, text, ui, hud, interface, buttons, ad, signature, copyright, blurry, cropped, bad quality",
+    prompt,
+    negativePrompt,
     nbFrames: 1,
+    nbFPS: 1,
     nbSteps: 8,
     width: 1024,
     height: 576,
@@ -36,11 +47,23 @@ let prompt = ""
 
   while (attempts-- > 0) {
     if (render.status === "completed") {
-      return NextResponse.json(render, {
-        status: 200,
-        statusText: "OK",
-      })
-
+      if (format === "json") {
+        return NextResponse.json(render, {
+          status: 200,
+          statusText: "OK",
+        })
+       } else {
+        const contentType = getContentType(render.assetUrl)
+        const base64String = render.assetUrl.split(";base64,").pop() || ""
+        const data = Buffer.from(base64String, "base64")
+        const headers = new Headers()
+        headers.set('Content-Type', contentType)
+        return new NextResponse(data, {
+          status: 200,
+          statusText: "OK",
+          headers
+        })
+      }
     }
 
     if (render.status === "error") {
@@ -50,9 +73,9 @@ let prompt = ""
       })
     }
 
-    await sleep(1000) // minimum wait time
+    await sleep(2000) // minimum wait time
 
-    console.log("asking getRender")
+    // console.log("asking getRender")
     render = await getRender(render.renderId)
   }
 

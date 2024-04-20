@@ -39,6 +39,11 @@ export const useLatentEngine = create<LatentEngineStore>((set, get) => ({
 
   simulationPromise: undefined,
   simulationPending: false,
+  simulationStartedAt: performance.now(),
+  simulationEndedAt: performance.now(),
+  simulationDurationInMs: 0,
+  simulationVideoPlaybackFPS: 0,
+  simulationRenderingTimeFPS: 0,
 
   renderingIntervalId: undefined,
   renderingIntervalDelayInMs: 2000, // 2 sec
@@ -174,7 +179,7 @@ export const useLatentEngine = create<LatentEngineStore>((set, get) => ({
       console.log("onClickOnSegmentationLayer")
     }
     // TODO use the videoElement if this is is video!
-    if (!imageElement) { return }
+    if (!videoElement) { return }
 
     const box = event.currentTarget.getBoundingClientRect()
 
@@ -183,17 +188,17 @@ export const useLatentEngine = create<LatentEngineStore>((set, get) => ({
 
     const x = px / box.width
     const y = py / box.height
-    console.log(`onClickOnSegmentationLayer: user clicked on `, { x, y, px, py, box, imageElement })
+    console.log(`onClickOnSegmentationLayer: user clicked on `, { x, y, px, py, box, videoElement })
 
     const fn = async () => {
-      const results: InteractiveSegmenterResult = await segmentFrame(imageElement, x, y)
+      const results: InteractiveSegmenterResult = await segmentFrame(videoElement, x, y)
       get().processClickOnSegment(results)
     }
     fn()
   },
   
   togglePlayPause: (): boolean => {
-    const { isLoaded, isPlaying, renderingIntervalId } = get()
+    const { isLoaded, isPlaying, renderingIntervalId, videoElement } = get()
     if (!isLoaded) { return false }
     
     const newValue = !isPlaying
@@ -201,11 +206,25 @@ export const useLatentEngine = create<LatentEngineStore>((set, get) => ({
     clearInterval(renderingIntervalId)
 
     if (newValue) {
+      if (videoElement) {
+        try {
+          videoElement.play()
+        } catch (err) {
+          console.error(`togglePlayPause: failed to start the video (${err})`)
+        }
+      }
       set({
         isPlaying: true,
         renderingIntervalId: setTimeout(() => { get().runRenderingLoop() }, 0)
       })
     } else {
+      if (videoElement) {
+        try {
+          videoElement.pause()
+        } catch (err) {
+          console.error(`togglePlayPause: failed to pause the video (${err})`)
+        }
+      }
       set({ isPlaying: false })
     }
 
@@ -264,6 +283,7 @@ export const useLatentEngine = create<LatentEngineStore>((set, get) => ({
 
     set({
       simulationPending: true,
+      simulationStartedAt: performance.now(),
     })
 
     try {
@@ -284,7 +304,7 @@ export const useLatentEngine = create<LatentEngineStore>((set, get) => ({
       }
       */
 
-      await sleep(500)
+      // await sleep(500)
 
       // note: since we are asynchronous, we need to regularly check if
       // the user asked to pause the system or no
@@ -292,6 +312,8 @@ export const useLatentEngine = create<LatentEngineStore>((set, get) => ({
         // console.log(`runSimulationLoop: rendering video content layer..`)
         // we only grab the first one
     
+
+
         const videoLayer = (await resolveSegments(clap, "video", 1)).at(0)
 
         if (get().isPlaying) {
@@ -302,6 +324,12 @@ export const useLatentEngine = create<LatentEngineStore>((set, get) => ({
 
           const { videoElement, imageElement, segmentationElement } = get()
 
+          if (videoElement) {
+            // yes, it is a very a dirty trick
+            // yes, it will look back
+            videoElement.defaultPlaybackRate = 0.5
+          }
+
           const canvas = drawSegmentation({
              // no mask means this will effectively clear the canvas
             canvas: segmentationElement,
@@ -309,7 +337,7 @@ export const useLatentEngine = create<LatentEngineStore>((set, get) => ({
           })
           
 
-          console.log(`runSimulationLoop: rendered video content layer`)
+          // console.log(`runSimulationLoop: rendered video content layer`)
         }
       }
 
@@ -319,7 +347,7 @@ export const useLatentEngine = create<LatentEngineStore>((set, get) => ({
 
     try {
       if (get().isPlaying) {
-        console.log(`runSimulationLoop: rendering UI layer..`)
+        // console.log(`runSimulationLoop: rendering UI layer..`)
 
         // note: for now we only display one element, to avoid handing a list of html elements
         const interfaceLayer = (await resolveSegments(clap, "interface", 1)).at(0)
@@ -328,15 +356,30 @@ export const useLatentEngine = create<LatentEngineStore>((set, get) => ({
             interfaceLayer
           })
 
-          console.log(`runSimulationLoop: rendered UI layer`)
+          // console.log(`runSimulationLoop: rendered UI layer`)
         }
       }
     } catch (err) {
       console.error(`runSimulationLoop failed to render UI layer ${err}`)
     }
 
+    const simulationEndedAt = performance.now()
+    const simulationDurationInMs = simulationEndedAt - get().simulationStartedAt 
+    const simulationDurationInSec =simulationDurationInMs / 1000
+
+    // I've counted the frames manually, and we indeed have, in term of pure video playback,
+    // 10 fps divided by 2 (the 0.5 playback factor)
+    const videoFPS = 10
+    const videoDurationInSec = 1
+    const videoPlaybackSpeed = 0.5
+    const simulationVideoPlaybackFPS = videoDurationInSec * videoFPS * videoPlaybackSpeed
+    const simulationRenderingTimeFPS = (videoDurationInSec * videoFPS) / simulationDurationInSec
     set({
       simulationPending: false,
+      simulationEndedAt,
+      simulationDurationInMs,
+      simulationVideoPlaybackFPS,
+      simulationRenderingTimeFPS,
     })
   },
 

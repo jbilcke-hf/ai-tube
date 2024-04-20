@@ -87,6 +87,7 @@ export async function searchResultToMediaInfo(searchResult: LatentSearchResult):
     prompt: searchResult.thumbnail,
     negativePrompt: "",
     nbFrames: 1,
+    nbFPS: 1,
     nbSteps: 4,
     width: 1024,
     height: 576,

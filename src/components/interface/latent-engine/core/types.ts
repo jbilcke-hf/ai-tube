@@ -53,6 +53,11 @@ export type LatentEngineStore = {
 
   simulationPromise?: Promise<void>
   simulationPending: boolean // used as a "lock"
+  simulationStartedAt: number
+  simulationEndedAt: number
+  simulationDurationInMs: number
+  simulationVideoPlaybackFPS: number
+  simulationRenderingTimeFPS: number
 
   renderingIntervalId: NodeJS.Timeout | string | number | undefined
   renderingIntervalDelayInMs: number

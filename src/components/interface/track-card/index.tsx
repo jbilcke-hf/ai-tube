@@ -118,6 +118,9 @@ export function TrackCard({
                 // prevent iOS from attempting to open the video in full screen, which is annoying
                 playsInline
 
+                // muted needs to be enabled for iOS to properly autoplay
+                muted
+
                 ref={ref}
                 src={media.assetUrlHd || media.assetUrl}
                 className={cn(

@@ -31,6 +31,9 @@ function LatentEngine({
   const setVideoElement = useLatentEngine(s => s.setVideoElement)
   const setSegmentationElement = useLatentEngine(s => s.setSegmentationElement)
 
+  const simulationVideoPlaybackFPS = useLatentEngine(s => s.simulationVideoPlaybackFPS)
+  const simulationRenderingTimeFPS = useLatentEngine(s => s.simulationRenderingTimeFPS)
+
   const streamType = useLatentEngine(s => s.streamType)
   const isStatic = useLatentEngine(s => s.isStatic)
   const isLive = useLatentEngine(s => s.isLive)
@@ -254,15 +257,17 @@ function LatentEngine({
 
             {/* right-side buttons */}
             <div className={cn(`
-            flex flex-none
+            flex flex-none flex-row space-x-2
             items-center justify-center
-             w-14 h-full
+             w-32 h-full
             `)}>
               {/*
 
               TODO: put a fullscreen button (and mode) here
 
              */}
+             <div className="mono text-xs text-center">playback: {Math.round(simulationVideoPlaybackFPS * 100) / 100} FPS</div>
+             <div className="mono text-xs text-center">rendering: {Math.round(simulationRenderingTimeFPS * 100) / 100} FPS</div>
             </div>
           </div>
         </div>

@@ -23,6 +23,18 @@ export async function resolve(segment: ClapSegment, clap: ClapProject): Promise<
   // note: the latent-video class is not used for styling, but to grab the component
   // from JS when we need to segment etc
   return (
-    <img className="latent-video object-cover" src={assetUrl} />
+    <video
+      loop
+      className="latent-video object-cover h-full"
+      playsInline
+
+      // muted needs to be enabled for iOS to properly autoplay
+      muted
+      autoPlay
+
+      // we hide the controls
+      // controls
+      src={assetUrl}>
+    </video>
   )
 }

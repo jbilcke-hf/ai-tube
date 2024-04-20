@@ -11,6 +11,7 @@ export async function newRender({
   prompt,
   negativePrompt,
   nbFrames,
+  nbFPS,
   nbSteps,
   width,
   height,
@@ -21,6 +22,7 @@ export async function newRender({
   prompt: string
   negativePrompt: string
   nbFrames: number
+  nbFPS: number
   nbSteps: number
   width: number
   height: number
@@ -64,6 +66,7 @@ export async function newRender({
           negativePrompt,
           // nbFrames: 8 and nbSteps: 15 --> ~10 sec generation
           nbFrames, // when nbFrames is 1, we will only generate static images
+          nbFPS,
           nbSteps, // 20 = fast, 30 = better, 50 = best
           width,
           height,
@@ -72,8 +75,11 @@ export async function newRender({
           segmentation: "disabled", // one day we will remove this param, to make it automatic
           upscalingFactor: 1, // let's disable upscaling right now
           turbo, // always use turbo mode (it's for images only anyway)
+
           // also what could be done iw that we could use the width and height to control this
           cache: "ignore", // shouldRenewCache ? "renew" : "use",
+
+          // this is the "blocking mode", which help us having to poll the server
           wait: true,
         } as Partial<RenderRequest>),
         cache: 'no-store',
