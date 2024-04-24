@@ -1,18 +1,20 @@
-
-
 import { LatentQueryProps } from "@/types/general"
 
 import { Main } from "../main"
-import { searchResultToMediaInfo } from "../api/generators/search/searchResultToMediaInfo"
-import { LatentSearchResult } from "../api/generators/search/types"
-import { serializeClap } from "@/lib/clap/serializeClap"
-import { getMockClap } from "@/lib/clap/getMockClap"
+import { generateClapFromSimpleStory } from "@/lib/clap/generateClapFromSimpleStory"
 import { clapToDataUri } from "@/lib/clap/clapToDataUri"
 import { getNewMediaInfo } from "../api/generators/search/getNewMediaInfo"
+import { getToken } from "../api/auth/getToken"
 
-export default async function DreamPage({ searchParams: {
-  l: latentContent,
-} }: LatentQueryProps) {
+// https://jmswrnr.com/blog/protecting-next-js-api-routes-query-parameters
+
+export default async function DreamPage({
+  searchParams: {
+    l: latentContent,
+  },
+  ...rest
+}: LatentQueryProps) {
+  const jwtToken = await getToken({ user: "anonymous" })
 
   // const latentSearchResult = JSON.parse(atob(`${latentContent}`)) as LatentSearchResult
 
@@ -24,10 +26,13 @@ export default async function DreamPage({ searchParams: {
   const latentMedia = getNewMediaInfo()
 
   latentMedia.clapUrl = await clapToDataUri(
-    getMockClap({showDisclaimer: true })
+    generateClapFromSimpleStory({
+      showIntroPoweredByEngine: false,
+      showIntroDisclaimerAboutAI: false
+    })
   )
 
   return (
-    <Main latentMedia={latentMedia} />
-   )
+    <Main latentMedia={latentMedia} jwtToken={jwtToken} />
+  )
 }

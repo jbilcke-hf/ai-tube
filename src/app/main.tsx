@@ -29,6 +29,8 @@ import { PublicLatentMediaView } from "./views/public-latent-media-view"
 // one benefit of doing this is that we will able to add some animations/transitions
 // more easily
 export function Main({
+  jwtToken,
+
   // view,
   publicMedia,
   publicMedias,
@@ -42,25 +44,31 @@ export function Main({
   publicTrack,
   channel,
 }: {
- // server side params
- // view?: InterfaceView
- publicMedia?: MediaInfo
- publicMedias?: MediaInfo[]
-
- latentMedia?: MediaInfo
- latentMedias?: MediaInfo[]
-
- publicChannelVideos?: MediaInfo[]
-
- publicTracks?: MediaInfo[]
- publicTrack?: MediaInfo
-
- channel?: ChannelInfo
+  // token used to secure communications between the Next frontend and the Next API
+  // this doesn't necessarily mean the user has to be logged it:
+  // we can use this for anonymous visitors too.
+  jwtToken?: string
+ 
+  // server side params
+  // view?: InterfaceView
+  publicMedia?: MediaInfo
+  publicMedias?: MediaInfo[]
+ 
+  latentMedia?: MediaInfo
+  latentMedias?: MediaInfo[]
+ 
+  publicChannelVideos?: MediaInfo[]
+ 
+  publicTracks?: MediaInfo[]
+  publicTrack?: MediaInfo
+ 
+  channel?: ChannelInfo
 }) {
   // this could be also a parameter of main, where we pass this manually
   const pathname = usePathname()
   const router = useRouter()
 
+  const setJwtToken = useStore(s => s.setJwtToken)
   const setPublicMedia = useStore(s => s.setPublicMedia)
   const setView = useStore(s => s.setView)
   const setPathname = useStore(s => s.setPathname)
@@ -71,6 +79,12 @@ export function Main({
   const setPublicChannelVideos = useStore(s => s.setPublicChannelVideos)
   const setPublicTracks = useStore(s => s.setPublicTracks)
   const setPublicTrack = useStore(s => s.setPublicTrack)
+
+  useEffect(() => {
+    if (typeof jwtToken !== "string" && !jwtToken) { return }
+    setJwtToken(jwtToken)
+  }, [jwtToken])
+
 
   useEffect(() => {
     if (!publicMedias?.length) { return }

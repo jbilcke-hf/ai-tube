@@ -4,12 +4,11 @@ import React from "react"
 import { cn } from "@/lib/utils/cn"
 
 import { arimoBold, arimoNormal } from "@/lib/fonts"
-import { ClapStreamType } from "@/lib/clap/types"
 
-export function ThisIsAI({
-  streamType,
+export function AIContentDisclaimer({
+  isInteractive = false,
 }: {
-  streamType?: ClapStreamType
+  isInteractive?: boolean
 } = {}) {
 
   return (
@@ -59,7 +58,7 @@ export function ThisIsAI({
             */
             } content
           </div> {
-          streamType !== "static"
+          isInteractive
           ? "will be"
           : "has been"
           } <div className={cn(`

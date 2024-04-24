@@ -81,6 +81,9 @@ Either by recognizing the shape of each object (fields), or by using a specific 
   // can be re-computed from width and height
   orientation: "landscape" | "vertical" | "square"
 
+  // the expected duration of the project
+  durationInMs: number
+
   // the suggested width and height of the video
   // note that this is just an indicator,
   // and might be superseeded by the application reading the .clap file
@@ -99,6 +102,12 @@ Either by recognizing the shape of each object (fields), or by using a specific 
 
   // the screenplay (script) of the video
   screenplay: string
+
+  // whether to loop the content by default or not
+  isLoop: boolean
+  
+  // helper to indicate whether the .clap might contain interactive elements
+  isInteractive: boolean
 }
 ```
 
@@ -144,6 +153,10 @@ This is why there is a common schema for all models:
 }
 ```
 
-TO BE CONTINUED
+## Atomic types
+
+...
+
+## TO BE CONTINUED
 
 (you can read "./types.ts" for more information)

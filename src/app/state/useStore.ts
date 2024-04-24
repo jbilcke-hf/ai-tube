@@ -19,6 +19,9 @@ export const useStore = create<{
 
   setPathname: (pathname: string) => void
 
+  jwtToken: string
+  setJwtToken: (jwtToken: string) => void
+
   searchQuery: string
   setSearchQuery: (searchQuery?: string) => void
 
@@ -129,6 +132,11 @@ export const useStore = create<{
     }
 
     set({ view: routes[pathname] || "not_found" })
+  },
+
+  jwtToken: "",
+  setJwtToken: (jwtToken: string) => {
+    set({ jwtToken })
   },
 
   searchAutocompleteQuery: "",

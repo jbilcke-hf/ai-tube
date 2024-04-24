@@ -3,7 +3,7 @@ import { MPMask } from "@mediapipe/tasks-vision";
 interface DrawSegmentationOptions {
   mask?: MPMask;
   canvas?: HTMLCanvasElement;
-  backgroundImage?: HTMLImageElement;
+  backgroundImage?: HTMLVideoElement | HTMLImageElement;
   fillStyle?: string;
 }
 

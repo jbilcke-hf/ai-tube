@@ -710,7 +710,7 @@ export type AppQueryProps = {
 }
 
 export type LatentQueryProps = {
-  params: { id: string }
+  params: { jwtToken: string }
   searchParams: {
     l?: string | string[], // latent content (serialized to a base64 json)
     [key: string]: string | string[] | undefined

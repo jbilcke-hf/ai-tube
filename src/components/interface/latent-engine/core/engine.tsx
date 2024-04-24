@@ -1,16 +1,20 @@
 "use client"
 
 import React, { MouseEventHandler, useEffect, useRef, useState } from "react"
+import { useLocalStorage } from "usehooks-ts"
 
 import { cn } from "@/lib/utils/cn"
-
-import { useLatentEngine } from "../store/useLatentEngine"
-import { PlayPauseButton } from "../components/play-pause-button"
-import { StreamTag } from "../../stream-tag"
-import { ContentLayer } from "../components/content-layer"
 import { MediaInfo } from "@/types/general"
-import { getMockClap } from "@/lib/clap/getMockClap"
 import { serializeClap } from "@/lib/clap/serializeClap"
+import { generateClapFromSimpleStory } from "@/lib/clap/generateClapFromSimpleStory"
+
+import { useLatentEngine } from "./useLatentEngine"
+import { PlayPauseButton } from "../components/play-pause-button"
+import { StaticOrInteractiveTag } from "../../static-or-interactive-tag"
+import { ContentLayer } from "../components/content-layer"
+import { localStorageKeys } from "@/app/state/localStorageKeys"
+import { defaultSettings } from "@/app/state/defaultSettings"
+import { useStore } from "@/app/state/useStore"
 
 function LatentEngine({
   media,
@@ -22,19 +26,35 @@ function LatentEngine({
   height?: number
   className?: string
 }) {
+  // used to prevent people from opening multiple sessions at the same time
+  // note: this should also be enforced with the Hugging Face ID
+  const [multiTabsLock, setMultiTabsLock] = useLocalStorage<number>(
+    "AI_TUBE_ENGINE_MULTI_TABS_LOCK",
+    Date.now()
+  )
+
+  const [huggingfaceApiKey, setHuggingfaceApiKey] = useLocalStorage<string>(
+    localStorageKeys.huggingfaceApiKey,
+    defaultSettings.huggingfaceApiKey
+  )
+  
+  // note here how we transfer the info from one store to another
+  const jwtToken = useStore(s => s.jwtToken)
+  const setJwtToken = useLatentEngine(s => s.setJwtToken)
+  useEffect(() => {
+    setJwtToken(jwtToken)
+  }, [jwtToken])
+
+
   const setContainerDimension = useLatentEngine(s => s.setContainerDimension)
   const isLoaded = useLatentEngine(s => s.isLoaded)
   const imagine = useLatentEngine(s => s.imagine)
   const open = useLatentEngine(s => s.open)
 
-  const setImageElement = useLatentEngine(s => s.setImageElement)
-  const setVideoElement = useLatentEngine(s => s.setVideoElement)
-  const setSegmentationElement = useLatentEngine(s => s.setSegmentationElement)
+  const videoSimulationVideoPlaybackFPS = useLatentEngine(s => s.videoSimulationVideoPlaybackFPS)
+  const videoSimulationRenderingTimeFPS = useLatentEngine(s => s.videoSimulationRenderingTimeFPS)
 
-  const simulationVideoPlaybackFPS = useLatentEngine(s => s.simulationVideoPlaybackFPS)
-  const simulationRenderingTimeFPS = useLatentEngine(s => s.simulationRenderingTimeFPS)
-
-  const streamType = useLatentEngine(s => s.streamType)
+  const isLoop = useLatentEngine(s => s.isLoop)
   const isStatic = useLatentEngine(s => s.isStatic)
   const isLive = useLatentEngine(s => s.isLive)
   const isInteractive = useLatentEngine(s => s.isInteractive)
@@ -42,11 +62,8 @@ function LatentEngine({
   const isPlaying = useLatentEngine(s => s.isPlaying)
   const togglePlayPause = useLatentEngine(s => s.togglePlayPause)
 
-  const videoLayer = useLatentEngine(s => s.videoLayer)
-  const segmentationLayer = useLatentEngine(s => s.segmentationLayer)
-  const interfaceLayer = useLatentEngine(s => s.interfaceLayer)
-  const videoElement = useLatentEngine(s => s.videoElement)
-  const imageElement = useLatentEngine(s => s.imageElement)
+  const videoLayers = useLatentEngine(s => s.videoLayers)
+  const interfaceLayers = useLatentEngine(s => s.interfaceLayers)
 
   const onClickOnSegmentationLayer = useLatentEngine(s => s.onClickOnSegmentationLayer)
 
@@ -70,7 +87,7 @@ function LatentEngine({
         // there is a bug, we can't unpack the .clap when it's from a data-uri :/
         
         // open(mediaUrl)
-        const mockClap = getMockClap()
+        const mockClap = generateClapFromSimpleStory()
         const mockArchive = await serializeClap(mockClap)
         // for some reason conversion to data uri doesn't work
         // const mockDataUri = await blobToDataUri(mockArchive, "application/x-gzip")
@@ -91,7 +108,7 @@ function LatentEngine({
         setOverlayVisible(!isPlayingRef.current)
       }
       clearTimeout(overlayTimerRef.current)
-    }, 1000)
+    }, 3000)
   }
 
   /*
@@ -109,32 +126,6 @@ function LatentEngine({
   }, [isPlaying])
   */
 
-  useEffect(() => {
-    if (!videoLayerRef.current) { return }
- 
-    // note how in both cases we are pulling from the videoLayerRef
-    // that's because one day everything will be a video, but for now we
-    // "fake it until we make it"
-    const videoElements = Array.from(
-      videoLayerRef.current.querySelectorAll('.latent-video')
-    ) as HTMLVideoElement[]
-    setVideoElement(videoElements.at(0))
-
-    // images are used for simpler or static experiences
-    const imageElements = Array.from(
-      videoLayerRef.current.querySelectorAll('.latent-image')
-    ) as HTMLImageElement[]
-    setImageElement(imageElements.at(0))
-
-
-    if (!segmentationLayerRef.current) { return }
- 
-     const segmentationElements = Array.from(
-       segmentationLayerRef.current.querySelectorAll('.segmentation-canvas')
-     ) as HTMLCanvasElement[]
-     setSegmentationElement(segmentationElements.at(0))
-
-  })
 
   useEffect(() => {
     setContainerDimension({ width: width || 256, height: height || 256 })
@@ -161,9 +152,26 @@ function LatentEngine({
         height={height}
         ref={videoLayerRef}
         onClick={onClickOnSegmentationLayer}
-      >{videoLayer}</ContentLayer>
-
-
+      >{videoLayers.map(({ id }) => (
+        <video
+          key={id}
+          id={id}
+          style={{ width, height }}
+          className={cn(
+            `video-buffer`,
+            `video-buffer-${id}`,
+          )}
+          data-segment-id="0"
+          data-segment-start-at="0"
+          data-z-index-depth="0"
+          playsInline={true}
+          muted={true}
+          autoPlay={false}
+          loop={true}
+          src="/blanks/blank_1sec_512x288.webm"
+      />))}
+      </ContentLayer>
+        
       <ContentLayer
         className="pointer-events-none"
         width={width}
@@ -174,14 +182,20 @@ function LatentEngine({
         style={{ width, height }}
       ></canvas></ContentLayer>
 
+      
       {/*
       <ContentLayer
         className="pointer-events-auto"
         width={width}
         height={height}
-  >{interfaceLayer}</ContentLayer>
-  */}
-      
+     >{interfaceLayers.map(({ id, element }) => (
+      <div
+        key={id}
+        id={id}
+        style={{ width, height }}
+        className={`interface-layer-${id}`}>{element}</div>))}</ContentLayer>
+     */}
+    
       {/* content overlay, with the gradient, buttons etc */}
       <div className={cn(`
         absolute
@@ -247,8 +261,8 @@ function LatentEngine({
                 isToggledOn={isPlaying}
                 onClick={togglePlayPause}
               />
-              <StreamTag
-                streamType={streamType}
+              <StaticOrInteractiveTag
+                isInteractive={isInteractive}
                 size="md"
                 className=""
               />
@@ -266,8 +280,8 @@ function LatentEngine({
               TODO: put a fullscreen button (and mode) here
 
              */}
-             <div className="mono text-xs text-center">playback: {Math.round(simulationVideoPlaybackFPS * 100) / 100} FPS</div>
-             <div className="mono text-xs text-center">rendering: {Math.round(simulationRenderingTimeFPS * 100) / 100} FPS</div>
+             <div className="mono text-xs text-center">playback: {Math.round(videoSimulationVideoPlaybackFPS * 100) / 100} FPS</div>
+             <div className="mono text-xs text-center">rendering: {Math.round(videoSimulationRenderingTimeFPS * 100) / 100} FPS</div>
             </div>
           </div>
         </div>

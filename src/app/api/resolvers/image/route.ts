@@ -1,4 +1,6 @@
 import { NextResponse, NextRequest } from "next/server"
+import { createSecretKey } from "node:crypto"
+
 import queryString from "query-string"
 
 import { newRender, getRender } from "../../providers/videochain/renderWithVideoChain"
@@ -6,19 +8,56 @@ import { generateSeed } from "@/lib/utils/generateSeed"
 import { sleep } from "@/lib/utils/sleep"
 import { getNegativePrompt, getPositivePrompt } from "../../utils/imagePrompts"
 import { getContentType } from "@/lib/data/getContentType"
+import { getValidNumber } from "@/lib/utils/getValidNumber"
+
+const secretKey = createSecretKey(`${process.env.API_SECRET_JWT_KEY || ""}`, 'utf-8');
 
 export async function GET(req: NextRequest) {
 
-const qs = queryString.parseUrl(req.url || "")
-const query = (qs || {}).query
+  const qs = queryString.parseUrl(req.url || "")
+  const query = (qs || {}).query
 
-let prompt = ""
+  /*
+  TODO: check the validity of the JWT token
+  let token = ""
+  try {
+    token = decodeURIComponent(query?.t?.toString() || "").trim()
+
+    // verify token
+    const { payload, protectedHeader } = await jwtVerify(token, secretKey, {
+      issuer: `${process.env.API_SECRET_JWT_ISSUER || ""}`, // issuer
+      audience: `${process.env.API_SECRET_JWT_AUDIENCE || ""}`, // audience
+    });
+      // log values to console
+      console.log(payload);
+      console.log(protectedHeader);
+  } catch (err) {
+    // token verification failed
+    console.log("Token is invalid");
+    return NextResponse.json({ error: `access denied ${err}` }, { status: 400 });
+  }
+  */
+
+  let prompt = ""
   try {
     prompt = decodeURIComponent(query?.p?.toString() || "").trim()
   } catch (err) {}
   if (!prompt) {
     return NextResponse.json({ error: 'no prompt provided' }, { status: 400 });
   }
+
+  let width = 512
+  try {
+    const rawString = decodeURIComponent(query?.w?.toString() || "").trim()
+    width = getValidNumber(rawString, 256, 8192, 512)
+  } catch (err) {}
+
+  let height = 288
+  try {
+    const rawString = decodeURIComponent(query?.h?.toString() || "").trim()
+    height = getValidNumber(rawString, 256, 8192, 288)
+  } catch (err) {}
+
 
   let format = "binary"
   try {
@@ -36,8 +75,8 @@ let prompt = ""
     nbFrames: 1,
     nbFPS: 1,
     nbSteps: 8,
-    width: 1024,
-    height: 576,
+    width,
+    height,
     turbo: true,
     shouldRenewCache: true,
     seed: generateSeed()

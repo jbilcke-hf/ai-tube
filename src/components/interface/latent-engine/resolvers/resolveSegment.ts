@@ -1,13 +1,13 @@
 import { ClapProject, ClapSegment } from "@/lib/clap/types"
 
-import { LatentComponentResolver } from "../core/types"
+import { LatentComponentResolver, LayerElement } from "../core/types"
 
 import { resolve as genericResolver } from "./generic"
 import { resolve as interfaceResolver } from "./interface"
 import { resolve as videoResolver } from "./video"
 import { resolve as imageResolver } from "./image"
 
-export async function resolveSegment(segment: ClapSegment, clap: ClapProject): Promise<JSX.Element> {
+export async function resolveSegment(segment: ClapSegment, clap: ClapProject): Promise<LayerElement> {
   let latentComponentResolver: LatentComponentResolver = genericResolver
   
   if (segment.category === "interface") {

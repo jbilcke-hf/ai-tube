@@ -26,7 +26,7 @@ export const ContentLayer = forwardRef(function ContentLayer({
       ref={ref}
       onClick={onClick}
       >
-      <div className="h-full aspect-video opacity-60">
+      <div className="h-full aspect-video opacity-100">
         {children}
       </div>
     </div>

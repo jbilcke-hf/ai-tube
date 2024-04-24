@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid"
 
 import { getValidNumber } from "@/lib/utils/getValidNumber"
 
-import { ClapHeader, ClapMeta, ClapModel, ClapProject, ClapScene, ClapSegment, ClapStreamType } from "./types"
+import { ClapHeader, ClapMeta, ClapModel, ClapProject, ClapScene, ClapSegment } from "./types"
 
 export async function serializeClap({
   meta, // ClapMeta
@@ -128,12 +128,14 @@ export async function serializeClap({
     synopsis: typeof meta.synopsis === "string" ? meta.synopsis : "",
     licence: typeof meta.licence === "string" ? meta.licence : "",
     orientation: meta.orientation === "portrait" ? "portrait" : meta.orientation === "square" ? "square" : "landscape",
+    durationInMs: getValidNumber(meta.durationInMs, 1000, Number.MAX_SAFE_INTEGER, 4000),
     width: getValidNumber(meta.width, 256, 8192, 1024),
     height: getValidNumber(meta.height, 256, 8192, 576),
     defaultVideoModel:  typeof meta.defaultVideoModel === "string" ? meta.defaultVideoModel : "SVD",
     extraPositivePrompt: Array.isArray(meta.extraPositivePrompt) ? meta.extraPositivePrompt : [],
-    screenplay: typeof meta.screenplay == "string" ? meta.screenplay : "",
-    streamType: (typeof meta.streamType == "string" ? meta.streamType : "static") as ClapStreamType,
+    screenplay: typeof meta.screenplay === "string" ? meta.screenplay : "",
+    isLoop: typeof meta.screenplay === "boolean" ? meta.screenplay : false,
+    isInteractive: typeof meta.isInteractive === "boolean" ? meta.isInteractive : false,
   }
 
   const entries = [

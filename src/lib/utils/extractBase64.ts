@@ -2,8 +2,13 @@
  * break a base64 string into sub-components
  */
 export function extractBase64(base64: string = ""): {
+
+  // file format eg. video/mp4 text/html audio/wave
   mimetype: string;
+
+  // file extension eg. .mp4 .html .wav
   extension: string;
+  
   data: string;
   buffer: Buffer;
   blob: Blob;

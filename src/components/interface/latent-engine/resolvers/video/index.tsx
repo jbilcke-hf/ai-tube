@@ -1,40 +1,47 @@
 "use client"
 
 import { ClapProject, ClapSegment } from "@/lib/clap/types"
-import { generateVideo } from "./generateVideo"
 
-export async function resolve(segment: ClapSegment, clap: ClapProject): Promise<JSX.Element> {
+import { LayerElement } from "../../core/types"
+
+import { generateVideo } from "./generateVideo"
+import { BasicVideo } from "./basic-video"
+import { useStore } from "@/app/state/useStore"
+
+export async function resolve(segment: ClapSegment, clap: ClapProject): Promise<LayerElement> {
 
   const { prompt } = segment
 
-  let assetUrl = ""
+  let src: string = ""
+
   try {
-    // console.log(`resolveVideo: generating video for: ${prompt}`)
-
-    assetUrl = await generateVideo(prompt)
-
+    src = await generateVideo({
+      prompt,
+      width: clap.meta.width,
+      height: clap.meta.height,
+      token: useStore.getState().jwtToken,
+    })
     // console.log(`resolveVideo: generated ${assetUrl}`)
 
   } catch (err) {
-    console.error(`resolveVideo failed (${err})`)
-    return <></>
+    console.error(`resolveVideo failed: ${err}`)
+    return {
+      id: segment.id,
+      element: <></>
+    }
   }
 
   // note: the latent-video class is not used for styling, but to grab the component
   // from JS when we need to segment etc
-  return (
-    <video
-      loop
+  return {
+    id: segment.id,
+    element: <BasicVideo
       className="latent-video object-cover h-full"
+      src={src}
       playsInline
-
-      // muted needs to be enabled for iOS to properly autoplay
       muted
       autoPlay
-
-      // we hide the controls
-      // controls
-      src={assetUrl}>
-    </video>
-  )
+      loop
+    />
+  }
 }

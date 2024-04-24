@@ -4,19 +4,31 @@ import RunCSS, { extendRunCSS } from "runcss"
 
 import { ClapProject, ClapSegment } from "@/lib/clap/types"
 import { generateHtml } from "./generateHtml"
-import { ThisIsAI } from "../../components/disclaimers/this-is-ai"
+import { AIContentDisclaimer } from "../../components/intros/ai-content-disclaimer"
+import { LayerElement } from "../../core/types"
+import { PoweredBy } from "../../components/intros/powered-by"
 
 let state = {
   runCSS: RunCSS({}),
   isWatching: false,
 }
 
-export async function resolve(segment: ClapSegment, clap: ClapProject): Promise<JSX.Element> {
+export async function resolve(segment: ClapSegment, clap: ClapProject): Promise<LayerElement> {
 
   const { prompt } = segment
 
-  if (prompt.toLowerCase() === "<builtin:disclaimer>") {
-    return <ThisIsAI streamType={clap.meta.streamType} />
+  if (prompt.toLowerCase() === "<builtin:powered_by_engine>") {
+    return {
+      id: segment.id,
+      element: <PoweredBy />
+    }
+  }
+
+  if (prompt.toLowerCase() === "<builtin:disclaimer_about_ai>") {
+    return {
+      id: segment.id,
+      element: <AIContentDisclaimer isInteractive={clap.meta.isInteractive} />
+    }
   }
 
   let dangerousHtml = ""
@@ -48,10 +60,11 @@ export async function resolve(segment: ClapSegment, clap: ClapProject): Promise<
     // startWatching(targetNode)
   }
 
-  return (
-    <div
+ return {
+    id: segment.id,
+    element: <div
       className="w-full h-full"
       dangerouslySetInnerHTML={{ __html: dangerousHtml }}
     />
-  )
+  }
 }

@@ -1,7 +1,7 @@
 import YAML from "yaml"
 import { v4 as uuidv4 } from "uuid"
 
-import { ClapHeader, ClapMeta, ClapModel, ClapProject, ClapScene, ClapSegment, ClapStreamType } from "./types"
+import { ClapHeader, ClapMeta, ClapModel, ClapProject, ClapScene, ClapSegment } from "./types"
 import { getValidNumber } from "@/lib/utils/getValidNumber"
 import { dataUriToBlob } from "@/app/api/utils/dataUriToBlob"
 
@@ -23,7 +23,11 @@ type StringOrBlob = string | Blob
 export async function parseClap(src?: ClapProject | string | Blob, debug = false): Promise<ClapProject> {
 
   try {
-    if (typeof src === "object" && Array.isArray(src?.scenes) && Array.isArray(src?.models)) {
+    if (
+      typeof src === "object" &&
+      Array.isArray( (src as any)?.scenes) &&
+      Array.isArray((src as any)?.models)
+    ) {
       if (debug) {
         console.log("parseClap: input is already a Clap file, nothing to do:", src)
       }
@@ -157,12 +161,14 @@ export async function parseClap(src?: ClapProject | string | Blob, debug = false
     synopsis: typeof maybeClapMeta.synopsis === "string" ? maybeClapMeta.synopsis : "",
     licence: typeof maybeClapMeta.licence === "string" ? maybeClapMeta.licence : "",
     orientation: maybeClapMeta.orientation === "portrait" ? "portrait" : maybeClapMeta.orientation === "square" ? "square" : "landscape",
-    width: getValidNumber(maybeClapMeta.width, 256, 8192, 1024),
-    height: getValidNumber(maybeClapMeta.height, 256, 8192, 576),
+    durationInMs: getValidNumber(maybeClapMeta.durationInMs, 1000, Number.MAX_SAFE_INTEGER, 4000),
+    width: getValidNumber(maybeClapMeta.width, 128, 8192, 1024),
+    height: getValidNumber(maybeClapMeta.height, 128, 8192, 576),
     defaultVideoModel: typeof maybeClapMeta.defaultVideoModel === "string" ? maybeClapMeta.defaultVideoModel : "SVD",
     extraPositivePrompt: Array.isArray(maybeClapMeta.extraPositivePrompt) ? maybeClapMeta.extraPositivePrompt : [],
     screenplay: typeof maybeClapMeta.screenplay === "string" ? maybeClapMeta.screenplay : "",
-    streamType: (typeof maybeClapMeta.streamType == "string" ? maybeClapMeta.streamType : "static") as ClapStreamType,
+    isLoop: typeof maybeClapMeta.isLoop === "boolean" ? maybeClapMeta.isLoop : false,
+    isInteractive: typeof maybeClapMeta.isInteractive === "boolean" ? maybeClapMeta.isInteractive : false,
   }
 
   /*

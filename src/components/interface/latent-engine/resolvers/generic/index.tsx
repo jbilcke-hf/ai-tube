@@ -1,11 +1,14 @@
 "use client"
 
+import { v4 as uuidv4 } from "uuid"
+
 import { ClapProject, ClapSegment } from "@/lib/clap/types"
 
-export async function resolve(segment: ClapSegment, clap: ClapProject): Promise<JSX.Element> {
-  return (
-    <div
-      className="w-full h-full"
-    />
-  )
+import { LayerElement } from "../../core/types"
+
+export async function resolve(segment: ClapSegment, clap: ClapProject): Promise<LayerElement> {
+  return {
+    id: uuidv4(),
+    element: <div className="w-full h-full" />
+  }
 }

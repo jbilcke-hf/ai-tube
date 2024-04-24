@@ -39,7 +39,8 @@ export async function generateClap({
       defaultVideoModel: "SDXL",
       extraPositivePrompt: [],
       screenplay: "",
-      streamType: "interactive"
+      isLoop: true,
+      isInteractive: true,
     } 
   })
 
