@@ -1,4 +1,5 @@
 import { blobToDataUri } from "@/app/api/utils/blobToDataUri"
+
 import { serializeClap } from "./serializeClap"
 import { ClapProject } from "./types"
 

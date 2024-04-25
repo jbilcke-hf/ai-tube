@@ -1,5 +1,6 @@
 import { NextResponse, NextRequest } from "next/server"
 import queryString from "query-string"
+
 import { predict } from "../../providers/huggingface/predictWithHuggingFace"
 import { systemPrompt } from "./systemPrompt"
 
