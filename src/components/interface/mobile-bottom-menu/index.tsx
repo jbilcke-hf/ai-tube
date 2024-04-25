@@ -33,6 +33,7 @@ export function MobileBottomMenu() {
           Discover
         </MenuItem>
       </Link>
+
       <Link href="/channels">
         <MenuItem
           icon={<GrChannel className="h-5 w-5" />}
@@ -41,6 +42,10 @@ export function MobileBottomMenu() {
           Channels
         </MenuItem>
       </Link>
+
+      {/*
+      currently disabled using AiTube 2 gets out
+      
       <Link href="/account">
         <MenuItem
             icon={<CgProfile className="h-6 w-6" />}
@@ -49,6 +54,7 @@ export function MobileBottomMenu() {
             Account
         </MenuItem>
       </Link>
+      */}
     </div>
   )
 }
