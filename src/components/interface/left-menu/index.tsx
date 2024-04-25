@@ -103,6 +103,9 @@ export function LeftMenu() {
             Community
           </MenuItem>
         </a>
+           {/*
+      currently disabled using AiTube 2 gets out
+      
         <Link href="/account">
           <MenuItem
             icon={<CgProfile className="h-6 w-6" />}
@@ -111,6 +114,7 @@ export function LeftMenu() {
             Account
           </MenuItem>
         </Link>
+    */}
       </div>
     </div>
     )
