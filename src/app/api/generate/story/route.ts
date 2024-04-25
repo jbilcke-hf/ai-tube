@@ -132,6 +132,16 @@ export async function POST(req: NextRequest) {
       outputType: "audio"
     }))
 
+    // the presence of a camera is mandatory
+    clap.segments.push(newSegment({
+      track: 4,
+      startTimeInMs: currentSegmentDurationInMs,
+      assetDurationInMs: defaultSegmentDurationInMs,
+      category: "camera",
+      prompt: "vertical video",
+      outputType: "text"
+    }))
+
     currentSegmentDurationInMs += defaultSegmentDurationInMs
   }
 

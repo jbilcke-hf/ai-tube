@@ -1,3 +1,5 @@
+import { aitubeApiUrl } from "../../core/config"
+
 export async function generateVideo({
   prompt,
   width,
@@ -9,7 +11,7 @@ export async function generateVideo({
   height: number
   token: string
 }): Promise<string> {
-  const requestUri = `/api/resolvers/video?t=${
+  const requestUri = `${aitubeApiUrl}/api/resolvers/video?t=${
     token
   }&w=${
     width

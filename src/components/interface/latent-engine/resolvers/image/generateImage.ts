@@ -1,3 +1,5 @@
+import { aitubeApiUrl } from "../../core/config"
+
 export async function generateImage({
   prompt,
   width,
@@ -9,7 +11,7 @@ export async function generateImage({
   height: number
   token: string
 }): Promise<string> {
-  const requestUri = `/api/resolvers/image?t=${
+  const requestUri = `${aitubeApiUrl}/api/resolvers/image?t=${
     token
   }&w=${
     width

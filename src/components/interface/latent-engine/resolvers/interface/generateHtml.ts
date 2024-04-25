@@ -1,5 +1,7 @@
+import { aitubeApiUrl } from "../../core/config"
+
 export async function generateHtml(prompt: string): Promise<string> {
-  const requestUri = `/api/resolvers/interface?p=${encodeURIComponent(prompt)}`
+  const requestUri = `${aitubeApiUrl}/api/resolvers/interface?p=${encodeURIComponent(prompt)}`
 
   // console.log(`generateHtml: calling ${requestUri}`)
 
