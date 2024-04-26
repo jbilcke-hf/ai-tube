@@ -5,8 +5,11 @@ import { parseClap } from "@/lib/clap/parseClap"
 import { startOfSegment1IsWithinSegment2 } from "@/lib/utils/startOfSegment1IsWithinSegment2"
 import { getVideoPrompt } from "@/components/interface/latent-engine/core/prompts/getVideoPrompt"
 import { newSegment } from "@/lib/clap/newSegment"
-import { generateImage } from "@/components/interface/latent-engine/resolvers/image/generateImage"
+import { newRender, getRender } from "../../providers/videochain/renderWithVideoChain"
 import { getToken } from "@/app/api/auth/getToken"
+import { generateSeed } from "@/lib/utils/generateSeed"
+import { getPositivePrompt } from "../../utils/imagePrompts"
+import { generateStoryboard } from "./generateStoryboard"
 
 // a helper to generate storyboards for a Clap
 // this is mostly used by external apps such as the Stories Factory
@@ -25,7 +28,7 @@ export async function POST(req: NextRequest) {
 
   if (!clap?.segments) { throw new Error(`no segment found in the provided clap!`) }
   
-  console.log(`[api/generate/storyboards] detected ${clap.segments} segments`)
+  console.log(`[api/generate/storyboards] detected ${clap.segments.length} segments`)
   
   const shotsSegments = clap.segments.filter(s => s.category === "camera")
   console.log(`[api/generate/storyboards] detected ${shotsSegments.length} shots`)
@@ -73,16 +76,18 @@ export async function POST(req: NextRequest) {
     // TASK 3: GENERATE MISSING STORYBOARD BITMAP
     if (!shotStoryboardSegment.assetUrl) {
       console.log(`[api/generate/storyboards] generating image..`)
-      // note this will do a fetch to AiTube API
-      // which is a bit weird since we are already inside the API, but it works
-      //TODO Julian: maybe we could use an internal function call instead?
-      shotStoryboardSegment.assetUrl = await generateImage({
-        prompt: shotStoryboardSegment.prompt,
-         width: clap.meta.width,
-        height: clap.meta.height,
-        token: jwtToken,
-      })
 
+      try {
+        shotStoryboardSegment.assetUrl = await generateStoryboard({
+          prompt: getPositivePrompt(shotStoryboardSegment.prompt),
+          width: clap.meta.width,
+          height: clap.meta.height,
+        })
+      } catch (err) {
+        console.log(`[api/generate/storyboards] failed to generate an image: ${err}`)
+        throw err
+      }
+   
       console.log(`[api/generate/storyboards] generated storyboard image: ${shotStoryboardSegment.assetUrl.slice(0, 50)}...`)
     } else {
       console.log(`[api/generate/storyboards] there is already a storyboard image: ${shotStoryboardSegment.assetUrl.slice(0, 50)}...`)

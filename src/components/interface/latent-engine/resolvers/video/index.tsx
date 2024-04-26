@@ -20,6 +20,7 @@ export async function resolve(segment: ClapSegment, clap: ClapProject): Promise<
       width: clap.meta.width,
       height: clap.meta.height,
       token: useStore.getState().jwtToken,
+      mode: "object-uri" // it's better for videos withing Chrome, apparently
     })
     // console.log(`resolveVideo: generated ${assetUrl}`)
 
