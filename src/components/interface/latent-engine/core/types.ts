@@ -1,4 +1,4 @@
-import { ClapProject, ClapSegment } from "@/lib/clap/types"
+import { ClapProject, ClapSegment } from "@aitube/clap"
 import { InteractiveSegmenterResult } from "@mediapipe/tasks-vision"
 import { MouseEventHandler, ReactNode } from "react"
 

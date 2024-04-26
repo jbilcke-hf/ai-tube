@@ -1,13 +1,10 @@
 "use server"
 
+import { ClapProject, serializeClap } from "@aitube/clap"
 
 import { LatentScenes } from "./types"
 import { addLatentScenesToClap } from "./addLatentScenesToClap"
 import { getLatentScenes } from "./getLatentScenes"
-import { serializeClap } from "@/lib/clap/serializeClap"
-import { newClap } from "@/lib/clap/newClap"
-import { getEmptyClap } from "@/lib/clap/emptyClap"
-import { ClapProject } from "@/lib/clap/types"
 
 /**
  * Imagine the continuity of a Clap file
@@ -60,7 +57,7 @@ export async function continueClap({
   // technically, it could also be transported as text
   // (and gzipped automatically between the HTTP server and browser)
   // but I think it is better to keep the idea of a dedicated file format
-  const archive = await serializeClap(clap)
+  const archive: Blob = await serializeClap(clap)
 
   return archive
 }

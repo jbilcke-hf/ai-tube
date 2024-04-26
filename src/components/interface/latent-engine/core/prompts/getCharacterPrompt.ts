@@ -1,4 +1,4 @@
-import { ClapModel } from "@/lib/clap/types"
+import { ClapModel } from "@aitube/clap"
 
 export function getCharacterPrompt(model: ClapModel): string {
 

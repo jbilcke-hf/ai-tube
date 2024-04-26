@@ -1,12 +1,10 @@
 "use server"
 
-import { serializeClap } from "@/lib/clap/serializeClap"
-import { newClap } from "@/lib/clap/newClap"
-import { getEmptyClap } from "@/lib/clap/emptyClap"
 
 import { LatentScenes } from "./types"
 import { addLatentScenesToClap } from "./addLatentScenesToClap"
 import { getLatentScenes } from "./getLatentScenes"
+import { ClapProject, getEmptyClap, newClap, serializeClap } from "@aitube/clap"
 
 /**
  * Generate a Clap file from scratch using a prompt
@@ -22,13 +20,13 @@ export async function generateClap({
   debug: false,
 }): Promise<Blob> {
 
-  const empty = await getEmptyClap()
+  const empty: Blob = await getEmptyClap()
 
   if (!prompt?.length) { 
     return empty
   }
 
-  let clap = newClap({
+  let clap: ClapProject = newClap({
     meta: {
       title: "Latent content", // TODO "
       description: "",
@@ -56,7 +54,7 @@ export async function generateClap({
     debug,
   })
 
-  const archive = await serializeClap(clap)
+  const archive: Blob = await serializeClap(clap)
 
   return archive
 }

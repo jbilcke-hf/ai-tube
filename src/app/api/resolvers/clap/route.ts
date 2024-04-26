@@ -1,5 +1,6 @@
 import { NextResponse, NextRequest } from "next/server"
 import queryString from "query-string"
+
 import { generateClap } from "../../generators/clap/generateClap"
 
 export async function GET(req: NextRequest) {

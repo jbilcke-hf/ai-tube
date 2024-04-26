@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
+  transpilePackages: [
+    // '@aitube/clap'
+  ],
   experimental: {
     serverActions: {
 

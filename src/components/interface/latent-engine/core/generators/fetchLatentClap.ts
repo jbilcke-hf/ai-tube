@@ -1,5 +1,4 @@
-import { parseClap } from "@/lib/clap/parseClap"
-import { ClapProject } from "@/lib/clap/types"
+import { ClapProject, parseClap } from "@aitube/clap"
 
 export async function fetchLatentClap(prompt: string): Promise<ClapProject> {
 

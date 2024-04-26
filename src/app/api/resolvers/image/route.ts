@@ -1,10 +1,10 @@
 import { NextResponse, NextRequest } from "next/server"
 import { createSecretKey } from "node:crypto"
 
+import { generateSeed } from "@aitube/clap"
 import queryString from "query-string"
 
 import { newRender, getRender } from "../../providers/videochain/renderWithVideoChain"
-import { generateSeed } from "@/lib/utils/generateSeed"
 import { sleep } from "@/lib/utils/sleep"
 import { getNegativePrompt, getPositivePrompt } from "../../utils/imagePrompts"
 import { getContentType } from "@/lib/data/getContentType"

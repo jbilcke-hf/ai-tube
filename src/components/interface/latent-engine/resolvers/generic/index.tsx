@@ -2,7 +2,7 @@
 
 import { v4 as uuidv4 } from "uuid"
 
-import { ClapProject, ClapSegment } from "@/lib/clap/types"
+import { ClapProject, ClapSegment } from "@aitube/clap"
 
 import { LayerElement } from "../../core/types"
 

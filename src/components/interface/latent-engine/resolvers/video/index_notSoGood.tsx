@@ -1,6 +1,6 @@
 "use client"
 
-import { ClapProject, ClapSegment } from "@/lib/clap/types"
+import { ClapProject, ClapSegment } from "@aitube/clap"
 import { PromiseResponseType, waitPromisesUntil } from "@/lib/utils/waitPromisesUntil"
 import { VideoLoop } from "./video-loop"
 import { generateVideo } from "./generateVideo"

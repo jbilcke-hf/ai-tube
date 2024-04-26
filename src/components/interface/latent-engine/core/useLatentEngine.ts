@@ -1,16 +1,12 @@
 
 import { create } from "zustand"
 
-import { ClapModel, ClapProject } from "@/lib/clap/types"
-import { newClap } from "@/lib/clap/newClap"
-import { sleep } from "@/lib/utils/sleep"
-// import { getSegmentationCanvas } from "@/lib/on-device-ai/getSegmentationCanvas"
+import { ClapModel, ClapProject, ClapSegment, newClap, parseClap } from "@aitube/clap"
 
 import { LatentEngineStore } from "./types"
 import { resolveSegments } from "../resolvers/resolveSegments"
 import { fetchLatentClap } from "./generators/fetchLatentClap"
-import { dataUriToBlob } from "@/app/api/utils/dataUriToBlob"
-import { parseClap } from "@/lib/clap/parseClap"
+
 import { InteractiveSegmenterResult, MPMask } from "@mediapipe/tasks-vision"
 import { segmentFrame } from "@/lib/on-device-ai/segmentFrameOnClick"
 import { drawSegmentation } from "../utils/canvas/drawSegmentation"
@@ -396,7 +392,7 @@ export const useLatentEngine = create<LatentEngineStore>((set, get) => ({
       segments: clap.segments
     })
     
-    const prefilterSegmentsForPerformanceReasons = clap.segments.filter(s =>
+    const prefilterSegmentsForPerformanceReasons: ClapSegment[] = clap.segments.filter(s =>
       s.startTimeInMs >= positionInMs &&
       s.startTimeInMs < maxBufferDurationInMs
     )
@@ -424,7 +420,7 @@ export const useLatentEngine = create<LatentEngineStore>((set, get) => ({
       
       // we select the segments in the current shot
 
-      const shotSegmentsToPreload = prefilterSegmentsForPerformanceReasons.filter(s =>
+      const shotSegmentsToPreload: ClapSegment[] = prefilterSegmentsForPerformanceReasons.filter(s =>
         s.startTimeInMs >= bufferAheadOfCurrentPositionInMs &&
         s.startTimeInMs < (bufferAheadOfCurrentPositionInMs + videoDurationInMs)
       )

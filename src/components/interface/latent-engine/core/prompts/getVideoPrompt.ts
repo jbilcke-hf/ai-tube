@@ -1,4 +1,4 @@
-import { ClapModel, ClapSegment } from "@/lib/clap/types"
+import { ClapModel, ClapSegment } from "@aitube/clap"
 
 import { deduplicatePrompt } from "../../utils/prompting/deduplicatePrompt"
 

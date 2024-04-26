@@ -1,4 +1,5 @@
-import { generateSeed } from "@/lib/utils/generateSeed"
+import { generateSeed } from "@aitube/clap"
+
 import { parseString } from "../../utils/parseString"
 import { parseStringArray } from "../../utils/parseStringArray"
 import { LatentSearchResult, LatentSearchResults } from "./types"

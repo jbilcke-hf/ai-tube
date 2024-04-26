@@ -1,4 +1,4 @@
-import { ClapAssetSource } from "@/lib/clap/types"
+import { ClapAssetSource } from "@aitube/clap"
 
 export function getClapAssetSourceSource(input: string = ""): ClapAssetSource {
   

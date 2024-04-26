@@ -2,7 +2,7 @@
 
 import RunCSS, { extendRunCSS } from "runcss"
 
-import { ClapProject, ClapSegment } from "@/lib/clap/types"
+import { ClapProject, ClapSegment } from "@aitube/clap"
 import { generateHtml } from "./generateHtml"
 import { AIContentDisclaimer } from "../../components/intros/ai-content-disclaimer"
 import { LayerElement } from "../../core/types"

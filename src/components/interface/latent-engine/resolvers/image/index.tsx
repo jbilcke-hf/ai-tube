@@ -1,6 +1,6 @@
 "use client"
 
-import { ClapProject, ClapSegment } from "@/lib/clap/types"
+import { ClapProject, ClapSegment } from "@aitube/clap"
 import { generateImage } from "./generateImage"
 import { LayerElement } from "../../core/types"
 import { useStore } from "@/app/state/useStore"

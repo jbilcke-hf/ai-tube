@@ -5,8 +5,6 @@ import { useLocalStorage } from "usehooks-ts"
 
 import { cn } from "@/lib/utils/cn"
 import { MediaInfo } from "@/types/general"
-import { serializeClap } from "@/lib/clap/serializeClap"
-import { generateClapFromSimpleStory } from "@/lib/clap/generateClapFromSimpleStory"
 
 import { useLatentEngine } from "./useLatentEngine"
 import { PlayPauseButton } from "../components/play-pause-button"
@@ -15,6 +13,7 @@ import { ContentLayer } from "../components/content-layer"
 import { localStorageKeys } from "@/app/state/localStorageKeys"
 import { defaultSettings } from "@/app/state/defaultSettings"
 import { useStore } from "@/app/state/useStore"
+import { ClapProject, generateClapFromSimpleStory, serializeClap } from "@aitube/clap"
 
 function LatentEngine({
   media,
@@ -87,8 +86,8 @@ function LatentEngine({
         // there is a bug, we can't unpack the .clap when it's from a data-uri :/
         
         // open(mediaUrl)
-        const mockClap = generateClapFromSimpleStory()
-        const mockArchive = await serializeClap(mockClap)
+        const mockClap: ClapProject = generateClapFromSimpleStory()
+        const mockArchive: Blob = await serializeClap(mockClap)
         // for some reason conversion to data uri doesn't work
         // const mockDataUri = await blobToDataUri(mockArchive, "application/x-gzip")
         // console.log("mockDataUri:", mockDataUri)

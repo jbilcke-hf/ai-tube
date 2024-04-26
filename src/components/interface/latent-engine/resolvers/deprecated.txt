@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import { ClapProject, ClapSegment } from "@/lib/clap/types";
+import { ClapProject, ClapSegment } from "@aitube/clap";
 import { resolveSegment } from "./resolveSegment";
 
 export function LatentComponent({

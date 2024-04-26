@@ -1,13 +1,10 @@
 import { NextResponse, NextRequest } from "next/server"
+import { ClapProject, getValidNumber, newClap, newSegment, serializeClap } from "@aitube/clap"
 
-import { generateClapFromSimpleStory } from "@/lib/clap/generateClapFromSimpleStory"
-import { serializeClap } from "@/lib/clap/serializeClap"
-import { getValidNumber } from "@/lib/utils/getValidNumber"
-import { newClap } from "@/lib/clap/newClap"
 import { predict } from "../../providers/huggingface/predictWithHuggingFace"
-import { systemPrompt } from "./systemPrompt"
 import { parseRawStringToYAML } from "../../utils/parseRawStringToYAML"
-import { newSegment } from "@/lib/clap/newSegment"
+
+import { systemPrompt } from "./systemPrompt"
 
 export type LatentStory = {
   title: string
@@ -61,7 +58,7 @@ export async function POST(req: NextRequest) {
   let currentElapsedTimeInMs = 0
   let currentSegmentDurationInMs = defaultSegmentDurationInMs
 
-  const clap = newClap({
+  const clap: ClapProject = newClap({
     meta: {
       title: "Not needed", // we don't need a title actually
       description: "This video has been generated using AI",

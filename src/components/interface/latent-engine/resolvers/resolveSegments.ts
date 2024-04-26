@@ -1,4 +1,4 @@
-import { ClapProject, ClapSegmentCategory } from "@/lib/clap/types"
+import { ClapProject, ClapSegmentCategory } from "@aitube/clap"
 
 import { resolveSegment } from "./resolveSegment"
 import { LayerElement } from "../core/types"

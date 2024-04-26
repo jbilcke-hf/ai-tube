@@ -1,8 +1,7 @@
 import { LatentQueryProps } from "@/types/general"
+import { clapToDataUri, generateClapFromSimpleStory } from "@aitube/clap"
 
 import { Main } from "../main"
-import { generateClapFromSimpleStory } from "@/lib/clap/generateClapFromSimpleStory"
-import { clapToDataUri } from "@/lib/clap/clapToDataUri"
 import { getNewMediaInfo } from "../api/generators/search/getNewMediaInfo"
 import { getToken } from "../api/auth/getToken"
 

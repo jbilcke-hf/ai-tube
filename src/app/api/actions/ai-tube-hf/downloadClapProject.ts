@@ -1,10 +1,10 @@
 import { v4 as uuidv4 } from "uuid"
 import { Credentials } from "@/lib/huggingface/hub/src"
 
-import { ClapProject } from "@/lib/clap/types"
+import { ClapProject, parseClap } from "@aitube/clap"
+
 import { ChannelInfo, MediaInfo, VideoRequest } from "@/types/general"
 import { defaultVideoModel } from "@/app/config"
-import { parseClap } from "@/lib/clap/parseClap"
 
 import { parseVideoModelName } from "../../utils/parseVideoModelName"
 import { computeOrientationProjectionWidthHeight } from "../../utils/computeOrientationProjectionWidthHeight"
@@ -35,7 +35,7 @@ export async function downloadClapProject({
     expectedMimeType: "application/gzip"
   })
 
-  const clapProject = await parseClap(clapString)
+  const clapProject: ClapProject = await parseClap(clapString)
 
   const id = clapProject.meta.id || uuidv4()
   

@@ -1,12 +1,8 @@
 "use server"
 
-import { newClap } from "@/lib/clap/newClap"
-import { newSegment } from "@/lib/clap/newSegment"
+import { ClapProject, newSegment } from "@aitube/clap"
 
 import { LatentScenes } from "./types"
-import { serializeClap } from "@/lib/clap/serializeClap"
-import { getEmptyClap } from "@/lib/clap/emptyClap"
-import { ClapProject } from "@/lib/clap/types"
 
 let defaultSegmentDurationInMs = 2000
 

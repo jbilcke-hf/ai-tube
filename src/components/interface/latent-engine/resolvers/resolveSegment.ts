@@ -1,4 +1,4 @@
-import { ClapProject, ClapSegment } from "@/lib/clap/types"
+import { ClapProject, ClapSegment } from "@aitube/clap"
 
 import { LatentComponentResolver, LayerElement } from "../core/types"
 

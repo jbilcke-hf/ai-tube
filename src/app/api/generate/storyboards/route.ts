@@ -1,13 +1,12 @@
 import { NextResponse, NextRequest } from "next/server"
 
-import { serializeClap } from "@/lib/clap/serializeClap"
-import { parseClap } from "@/lib/clap/parseClap"
+import { ClapProject, ClapSegment, newSegment, parseClap, serializeClap } from "@aitube/clap"
+
 import { startOfSegment1IsWithinSegment2 } from "@/lib/utils/startOfSegment1IsWithinSegment2"
 import { getVideoPrompt } from "@/components/interface/latent-engine/core/prompts/getVideoPrompt"
-import { newSegment } from "@/lib/clap/newSegment"
-import { newRender, getRender } from "../../providers/videochain/renderWithVideoChain"
 import { getToken } from "@/app/api/auth/getToken"
-import { generateSeed } from "@/lib/utils/generateSeed"
+
+import { newRender, getRender } from "../../providers/videochain/renderWithVideoChain"
 import { getPositivePrompt } from "../../utils/imagePrompts"
 import { generateStoryboard } from "./generateStoryboard"
 
@@ -24,13 +23,13 @@ export async function POST(req: NextRequest) {
 
   const blob = await req.blob()
 
-  const clap = await parseClap(blob)
+  const clap: ClapProject = await parseClap(blob)
 
   if (!clap?.segments) { throw new Error(`no segment found in the provided clap!`) }
   
   console.log(`[api/generate/storyboards] detected ${clap.segments.length} segments`)
   
-  const shotsSegments = clap.segments.filter(s => s.category === "camera")
+  const shotsSegments: ClapSegment[] = clap.segments.filter(s => s.category === "camera")
   console.log(`[api/generate/storyboards] detected ${shotsSegments.length} shots`)
   
   if (shotsSegments.length > 32) {
@@ -39,15 +38,15 @@ export async function POST(req: NextRequest) {
 
   for (const shotSegment of shotsSegments) {
 
-    const shotSegments = clap.segments.filter(s =>
+    const shotSegments: ClapSegment[] = clap.segments.filter(s =>
       startOfSegment1IsWithinSegment2(s, shotSegment)
     )
 
-    const shotStoryboardSegments = shotSegments.filter(s =>
+    const shotStoryboardSegments: ClapSegment[] = shotSegments.filter(s =>
       s.category === "storyboard"
     )
 
-    let shotStoryboardSegment = shotStoryboardSegments.at(0)
+    let shotStoryboardSegment: ClapSegment | undefined = shotStoryboardSegments.at(0)
     
     console.log(`[api/generate/storyboards] shot [${shotSegment.startTimeInMs}:${shotSegment.endTimeInMs}] has ${shotSegments.length} segments (${shotStoryboardSegments.length} storyboards)`)
   
@@ -67,14 +66,14 @@ export async function POST(req: NextRequest) {
     }
 
     // TASK 2: GENERATE MISSING STORYBOARD PROMPT
-    if (!shotStoryboardSegment.prompt) {
+    if (shotStoryboardSegment && !shotStoryboardSegment?.prompt) {
       // storyboard is missing, let's generate it
       shotStoryboardSegment.prompt = getVideoPrompt(shotSegments, {}, [])
       console.log(`[api/generate/storyboards] generating storyboard prompt: ${shotStoryboardSegment.prompt}`)
     }
 
     // TASK 3: GENERATE MISSING STORYBOARD BITMAP
-    if (!shotStoryboardSegment.assetUrl) {
+    if (shotStoryboardSegment && !shotStoryboardSegment.assetUrl) {
       console.log(`[api/generate/storyboards] generating image..`)
 
       try {
@@ -88,9 +87,9 @@ export async function POST(req: NextRequest) {
         throw err
       }
    
-      console.log(`[api/generate/storyboards] generated storyboard image: ${shotStoryboardSegment.assetUrl.slice(0, 50)}...`)
+      console.log(`[api/generate/storyboards] generated storyboard image: ${shotStoryboardSegment?.assetUrl?.slice?.(0, 50)}...`)
     } else {
-      console.log(`[api/generate/storyboards] there is already a storyboard image: ${shotStoryboardSegment.assetUrl.slice(0, 50)}...`)
+      console.log(`[api/generate/storyboards] there is already a storyboard image: ${shotStoryboardSegment?.assetUrl?.slice?.(0, 50)}...`)
     }
   }
 

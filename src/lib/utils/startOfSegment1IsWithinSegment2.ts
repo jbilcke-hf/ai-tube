@@ -1,4 +1,4 @@
-import { ClapSegment } from "../clap/types"
+import { ClapSegment } from "@aitube/clap"
 
 export function startOfSegment1IsWithinSegment2(s1: ClapSegment, s2: ClapSegment) {
   const startOfSegment1 = s1.startTimeInMs 
