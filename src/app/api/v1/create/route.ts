@@ -1,8 +1,8 @@
 import { NextResponse, NextRequest } from "next/server"
 import { ClapProject, getValidNumber, newClap, newSegment, serializeClap } from "@aitube/clap"
 
-import { predict } from "../../providers/huggingface/predictWithHuggingFace"
-import { parseRawStringToYAML } from "../../utils/parseRawStringToYAML"
+import { predict } from "@/app/api/providers/huggingface/predictWithHuggingFace"
+import { parseRawStringToYAML } from "@/app/api/utils/parseRawStringToYAML"
 
 import { systemPrompt } from "./systemPrompt"
 

@@ -1,29 +1,25 @@
+import { generateSeed, getValidNumber } from "@aitube/clap"
 
-import { generateSeed } from "@aitube/clap"
-
+import { newRender, getRender } from "@/app/api/providers/videochain/renderWithVideoChain"
 import { sleep } from "@/lib/utils/sleep"
-import { getValidNumber } from "@/lib/utils/getValidNumber"
+import { getNegativePrompt, getPositivePrompt } from "@/app/api/utils/imagePrompts"
 
-import { newRender, getRender } from "../../providers/videochain/renderWithVideoChain"
-import { getNegativePrompt, getPositivePrompt } from "../../utils/imagePrompts"
-
-export async function generateImageID({
+export async function generateStoryboard({
   prompt,
   // negativePrompt,
+  width,
+  height,
   seed,
 }: {
   prompt: string
   // negativePrompt?: string
+  width?: number
+  height?: number
   seed?: number
 }) {
   
-  // those can be constants for a face ID
-  // also we want something a bit portrait-ish
-  // but this risk creating a lot of variability in poses
-  // so perhaps we should use a controlnet to condition the face scale and position,
-  // to make sure it is uniform in size across all models
-  const width = 1024
-  const height = 768
+  width = getValidNumber(width, 256, 8192, 512)
+  height = getValidNumber(height, 256, 8192, 288)
 
   // console.log("calling await newRender")
   prompt = getPositivePrompt(prompt)
@@ -34,14 +30,10 @@ export async function generateImageID({
     negativePrompt,
     nbFrames: 1,
     nbFPS: 1,
-
-    // note: for the model ID we might want to maximize things here,
-    // and maybe not use the "turbo" - but I'm not sure
+    nbSteps: 8,
     width,
     height,
-    nbSteps: 8,
     turbo: true,
-
     shouldRenewCache: true,
     seed: seed || generateSeed()
   })

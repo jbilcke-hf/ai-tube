@@ -6,8 +6,8 @@ import { startOfSegment1IsWithinSegment2 } from "@/lib/utils/startOfSegment1IsWi
 import { getVideoPrompt } from "@/components/interface/latent-engine/core/prompts/getVideoPrompt"
 import { getToken } from "@/app/api/auth/getToken"
 
-import { newRender, getRender } from "../../providers/videochain/renderWithVideoChain"
-import { getPositivePrompt } from "../../utils/imagePrompts"
+import { newRender, getRender } from "@/app/api/providers/videochain/renderWithVideoChain"
+import { getPositivePrompt } from "@/app/api/utils/imagePrompts"
 import { generateStoryboard } from "./generateStoryboard"
 
 // a helper to generate storyboards for a Clap
