@@ -18,20 +18,16 @@ export async function POST(req: NextRequest, res: NextResponse) {
     }
   } catch (err) {}
 
-  return NextResponse.redirect(`${
-    process.env.AI_TUBE_CLAP_EXPORTER_URL || "http://localhost:7860"
-  }?f=${format}`)
-}
-/*
-Alternative solution (in case the redirect doesn't work):
-
-We could also grab the blob and forward it, like this:
-
-  const data = fetch(
-    "https://jbilcke-hf-ai-tube-clap-exporter.hf.space",
+  // let's call our micro-service, which is currently open bar.
+  const result = await fetch(
+    `https://jbilcke-hf-ai-tube-clap-exporter.hf.space?f=${format}`,
     { method: "POST", body: await req.blob() }
   )
-  const blob = data.blob()
 
-Then return the blob with the right Content-Type using NextResponse
-*/
+  const blob = await result.blob()
+
+  return new NextResponse(blob, {
+    status: 200,
+    headers: new Headers({ "content-type": `video/${format}` }),
+  })
+}
