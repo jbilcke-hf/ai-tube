@@ -18,7 +18,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
     }
   } catch (err) {}
 
-  NextResponse.redirect(`${
+  return NextResponse.redirect(`${
     process.env.AI_TUBE_CLAP_EXPORTER_URL || "http://localhost:7860"
   }?f=${format}`)
 }
