@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
   const rawString = await predict({
     systemPrompt,
     userPrompt,
-    nbMaxNewTokens: 1200,
+    nbMaxNewTokens: 1400,
     prefix: "```yaml\n",
   })
 
@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
   console.log(`[api/generate/story] generated ${shots.length} shots`)
 
   // this is approximate - TTS generation will determine the final duration of each shot
-  const defaultSegmentDurationInMs = 5000
+  const defaultSegmentDurationInMs = 7000
 
   let currentElapsedTimeInMs = 0
   let currentSegmentDurationInMs = defaultSegmentDurationInMs
