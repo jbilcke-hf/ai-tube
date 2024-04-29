@@ -46,6 +46,7 @@ export async function POST(req: NextRequest) {
       // console.log(`[api/generate/dialogues] generating audio..`)
 
       try {
+        // this generates a mp3
         shotDialogueSegment.assetUrl = await generateSpeechWithParlerTTS({
           text: shotDialogueSegment.prompt,
           audioId: getSpeechBackgroundAudioPrompt(shotSegments, clap.entityIndex, ["high quality", "crisp", "detailed"]),

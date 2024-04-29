@@ -5,6 +5,12 @@ const gradioSpaceApiUrl = `https://jbilcke-hf-ai-tube-model-parler-tts-mini.hf.s
 const huggingFaceSpace = "jbilcke-hf/ai-tube-model-parler-tts-mini"
 const apiKey = `${process.env.MICROSERVICE_API_SECRET_TOKEN || ""}`
 
+/**
+ * Note: this generates a MP3 file
+ * 
+ * @param param0 
+ * @returns 
+ */
 export async function generateSpeechWithParlerTTS({
   text,
   audioId,
@@ -16,7 +22,6 @@ export async function generateSpeechWithParlerTTS({
   debug?: boolean
   neverThrow?: boolean
 }): Promise<string> {
-
 
   const actualFunction = async () => {
 
@@ -58,7 +63,7 @@ export async function generateSpeechWithParlerTTS({
       throw new Error(`the returned audio was empty`)
     }
   
-    return addBase64Header(data[0] as string, "wav")
+    return addBase64Header(data[0] as string, "mp3")
   }
 
   try {

@@ -1,35 +1,37 @@
+import { addBase64Header } from "@/lib/data/addBase64Header"
+import { tryApiCalls } from "../../utils/tryApiCall"
 
-import { StoryLine } from "../../types/structures.mts"
-import { tryApiCalls } from "../../utils/tryApiCalls.mts"
-import { promptToGenerateAudioStory } from "../prompts/prompts.mts"
-import { microserviceApiKey } from "../../config.mts"
-import { addBase64Header } from "../../base64/addBase64.mts"
+export type StoryLine = {
+  text: string
+  audio: string // in base64
+}
 
 // TODO delete this? we don't need an env var for this I think?
-const aiStoryServerApiUrl = `https://jbilcke-hf-ai-story-server.hf.space`
+const gradioSpaceApiUrl = `https://jbilcke-hf-ai-story-server.hf.space`
 const huggingFaceSpace = "jbilcke-hf/ai-story-server"
+const apiKey = `${process.env.MICROSERVICE_API_SECRET_TOKEN || ""}`
 
-export async function generateAudioStory({
-  prompt,
-  voice,
-  // maxLines,
-  neverThrow,
-  debug,
+export async function generateSpeechWithParlerTTS({
+  text,
+  audioId,
+  debug = false,
+  neverThrow = false,
 }: {
-  prompt: string
-  voice?: string
-  // maxLines: number
-  neverThrow?: boolean
+  text: string
+  audioId: string
   debug?: boolean
-}): Promise<StoryLine[]> {
+  neverThrow?: boolean
+}): Promise<string> {
   const actualFunction = async () => {
 
-    const cropped = prompt.slice(0, 30)
+    const prompt = text.slice(0, 30)
     // console.log(`user requested "${cropped}${cropped !== prompt ? "..." : ""}"`)
 
     // positivePrompt = filterOutBadWords(positivePrompt)
 
-    const res = await fetch(aiStoryServerApiUrl + (aiStoryServerApiUrl.endsWith("/") ? "" : "/") + "api/predict", {
+    const promptToGenerateAudioStory = ``
+
+    const res = await fetch(gradioSpaceApiUrl + (gradioSpaceApiUrl.endsWith("/") ? "" : "/") + "api/predict", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -38,12 +40,13 @@ export async function generateAudioStory({
       body: JSON.stringify({
         fn_index: 0, // <- important!
         data: [
-          microserviceApiKey,
+          apiKey,
           promptToGenerateAudioStory,
           prompt,
 
           // TODO: add support for custom wav
-          voice === "Julian" ? "Julian" : "Cloée",
+          // voice === "Julian" ? "Julian" : "Cloée",
+          "Julian",
 
           // maxLines,
         ],
@@ -65,7 +68,7 @@ export async function generateAudioStory({
 
     return stories.map(line => ({
       text: line.text.replaceAll(" .", ".").replaceAll(" ?", "?").replaceAll(" !", "!").trim(),
-      audio: addBase64Header(line.audio, "mp4")
+      audio: addBase64Header(line.audio, "mp3")
     }))
   }
 
@@ -80,11 +83,11 @@ export async function generateAudioStory({
       debug,
       failureMessage: "failed to generate the audio story"
     })
-    return result
+    return BROKEN
   } catch (err) {
     if (neverThrow) {
       console.error(`generateAudioStory():`, err)
-      return []
+      return ""
     } else {
       throw err
     }
