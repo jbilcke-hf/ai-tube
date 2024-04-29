@@ -26,35 +26,21 @@ export function getVideoPrompt(
         return false
       }
 
-      if (category === "music" ||
-          category === "sound") {
-        return false
-      }
-
-      if (category === "event" ||
-          category === "interface" ||
-          category === "phenomenon"
+      if (
+        category === "character" ||
+        category === "location" ||
+        category === "time" ||
+        category === "era" ||
+        category === "lighting" ||
+        category === "weather" ||
+        category === "action" ||
+        category === "style" ||
+        category === "camera" ||
+        category === "generic"
       ) {
-        return false
+        return true
       }
-      
-      if (category === "splat" ||
-          category === "mesh" ||
-          category === "depth"
-      ) {
-        return false
-      }
-
-      if (category === "storyboard" ||
-          category === "video") {
-        return false
-      }
-
-      if (category === "transition") {
-        return false
-      }
-
-      return true
+      return false
     })
 
   tmp.sort((a, b) => b.label.localeCompare(a.label))
