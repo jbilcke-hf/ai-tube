@@ -1,11 +1,10 @@
 import { NextResponse, NextRequest } from "next/server"
 
-import { ClapProject, ClapSegment, getClapAssetSourceType, parseClap, serializeClap } from "@aitube/clap"
+import { ClapProject, ClapSegment, parseClap, serializeClap } from "@aitube/clap"
 
-import { startOfSegment1IsWithinSegment2 } from "@/lib/utils/startOfSegment1IsWithinSegment2"
 import { getToken } from "@/app/api/auth/getToken"
-import { generateSpeechWithParlerTTS } from "@/app/api/generators/speech/generateVoiceWithParlerTTS"
-import { getSpeechBackgroundAudioPrompt } from "@aitube/engine"
+
+import { processShot } from "./processShot"
 
 // a helper to generate speech for a Clap
 export async function POST(req: NextRequest) {
@@ -27,43 +26,13 @@ export async function POST(req: NextRequest) {
     throw new Error(`Error, this endpoint being synchronous, it is designed for short stories only (max 32 shots).`)
   }
 
-  
-  for (const shotSegment of shotsSegments) {
-
-    const shotSegments: ClapSegment[] = clap.segments.filter(s =>
-      startOfSegment1IsWithinSegment2(s, shotSegment)
-    )
-
-    const shotDialogueSegments: ClapSegment[] = shotSegments.filter(s =>
-      s.category === "dialogue"
-    )
-
-    let shotDialogueSegment: ClapSegment | undefined = shotDialogueSegments.at(0)
-    
-    console.log(`[api/generate/dialogues] shot [${shotSegment.startTimeInMs}:${shotSegment.endTimeInMs}] has ${shotSegments.length} segments (${shotDialogueSegments.length} dialogues)`)
-
-    if (shotDialogueSegment && !shotDialogueSegment.assetUrl) {
-      // console.log(`[api/generate/dialogues] generating audio..`)
-
-      try {
-        // this generates a mp3
-        shotDialogueSegment.assetUrl = await generateSpeechWithParlerTTS({
-          text: shotDialogueSegment.prompt,
-          audioId: getSpeechBackgroundAudioPrompt(shotSegments, clap.entityIndex, ["high quality", "crisp", "detailed"]),
-          debug: true,
-        })
-        shotDialogueSegment.assetSourceType = getClapAssetSourceType(shotDialogueSegment.assetUrl)
-
-      } catch (err) {
-        console.log(`[api/generate/dialogues] failed to generate audio: ${err}`)
-        throw err
-      }
-   
-      console.log(`[api/generate/dialogues] generated dialogue audio: ${shotDialogueSegment?.assetUrl?.slice?.(0, 50)}...`)
-    } else {
-      console.log(`[api/generate/dialogues] there is already a dialogue audio: ${shotDialogueSegment?.assetUrl?.slice?.(0, 50)}...`)
-    }
-  }
+  // we process the shots in parallel (this will increase the queue size in the Gradio spaces)
+  await Promise.all(shotsSegments.map(shotSegment =>
+    processShot({
+      shotSegment,
+      clap
+    })
+  ))
 
   // console.log(`[api/generate/dialogues] returning the clap augmented with dialogues`)
 

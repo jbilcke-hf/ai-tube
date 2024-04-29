@@ -1,13 +1,10 @@
 import { NextResponse, NextRequest } from "next/server"
 
-import { ClapProject, ClapSegment, getClapAssetSourceType, newSegment, parseClap, serializeClap } from "@aitube/clap"
-import { getVideoPrompt } from "@aitube/engine"
+import { ClapProject, ClapSegment, parseClap, serializeClap } from "@aitube/clap"
 
-import { startOfSegment1IsWithinSegment2 } from "@/lib/utils/startOfSegment1IsWithinSegment2"
 import { getToken } from "@/app/api/auth/getToken"
-import { getPositivePrompt } from "@/app/api/utils/imagePrompts"
 
-import { generateVideo } from "./generateVideo"
+import { processShot } from "./processShot"
 
 
 // a helper to generate videos for a Clap
@@ -36,63 +33,13 @@ export async function POST(req: NextRequest) {
     throw new Error(`Error, this endpoint being synchronous, it is designed for short stories only (max 32 shots).`)
   }
 
-  for (const shotSegment of shotsSegments) {
-
-    const shotSegments: ClapSegment[] = clap.segments.filter(s =>
-      startOfSegment1IsWithinSegment2(s, shotSegment)
-    )
-
-    const shotVideoSegments: ClapSegment[] = shotSegments.filter(s =>
-      s.category === "video"
-    )
-
-    let shotVideoSegment: ClapSegment | undefined = shotVideoSegments.at(0)
-    
-    console.log(`[api/generate/videos] shot [${shotSegment.startTimeInMs}:${shotSegment.endTimeInMs}] has ${shotSegments.length} segments (${shotVideoSegments.length} videos)`)
-  
-    // TASK 1: GENERATE MISSING VIDEO SEGMENT
-    if (!shotVideoSegment) {
-      shotVideoSegment = newSegment({
-        track: 1,
-        startTimeInMs: shotSegment.startTimeInMs,
-        endTimeInMs: shotSegment.endTimeInMs,
-        assetDurationInMs: shotSegment.assetDurationInMs,
-        category: "video",
-        prompt: "",
-        assetUrl: "",
-        outputType: "video"
-      })
-      console.log(`[api/generate/videos] generated video segment [${shotSegment.startTimeInMs}:${shotSegment.endTimeInMs}]`)
-    }
-
-    // TASK 2: GENERATE MISSING VIDEO PROMPT
-    if (shotVideoSegment && !shotVideoSegment?.prompt) {
-      // video is missing, let's generate it
-      shotVideoSegment.prompt = getVideoPrompt(shotSegments, clap.entityIndex, ["high quality", "crisp", "detailed"])
-      console.log(`[api/generate/videos] generating video prompt: ${shotVideoSegment.prompt}`)
-    }
-
-    // TASK 3: GENERATE MISSING VIDEO FILE
-    if (shotVideoSegment && !shotVideoSegment.assetUrl) {
-      console.log(`[api/generate/videos] generating video file..`)
-
-      try {
-        shotVideoSegment.assetUrl = await generateVideo({
-          prompt: getPositivePrompt(shotVideoSegment.prompt),
-          width: clap.meta.width,
-          height: clap.meta.height,
-        })
-        shotVideoSegment.assetSourceType = getClapAssetSourceType(shotVideoSegment.assetUrl)
-      } catch (err) {
-        console.log(`[api/generate/videos] failed to generate a video file: ${err}`)
-        throw err
-      }
-   
-      console.log(`[api/generate/videos] generated video files: ${shotVideoSegment?.assetUrl?.slice?.(0, 50)}...`)
-    } else {
-      console.log(`[api/generate/videos] there is already a video file: ${shotVideoSegment?.assetUrl?.slice?.(0, 50)}...`)
-    }
-  }
+  // we process the shots in parallel (this will increase the queue size in the Gradio spaces)
+  await Promise.all(shotsSegments.map(shotSegment =>
+    processShot({
+      shotSegment,
+      clap
+    })
+  ))
 
   console.log(`[api/generate/videos] returning the clap augmented with videos`)
 

@@ -1,13 +1,10 @@
 import { NextResponse, NextRequest } from "next/server"
 
-import { ClapProject, ClapSegment, getClapAssetSourceType, newSegment, parseClap, serializeClap } from "@aitube/clap"
-import { getVideoPrompt } from "@aitube/engine"
+import { ClapProject, ClapSegment, parseClap, serializeClap } from "@aitube/clap"
 
-import { startOfSegment1IsWithinSegment2 } from "@/lib/utils/startOfSegment1IsWithinSegment2"
 import { getToken } from "@/app/api/auth/getToken"
 
-import { getPositivePrompt } from "@/app/api/utils/imagePrompts"
-import { generateStoryboard } from "./generateStoryboard"
+import { processShot } from "./processShot"
 
 // a helper to generate storyboards for a Clap
 // this is mostly used by external apps such as the Stories Factory
@@ -35,63 +32,13 @@ export async function POST(req: NextRequest) {
     throw new Error(`Error, this endpoint being synchronous, it is designed for short stories only (max 32 shots).`)
   }
 
-  for (const shotSegment of shotsSegments) {
-
-    const shotSegments: ClapSegment[] = clap.segments.filter(s =>
-      startOfSegment1IsWithinSegment2(s, shotSegment)
-    )
-
-    const shotStoryboardSegments: ClapSegment[] = shotSegments.filter(s =>
-      s.category === "storyboard"
-    )
-
-    let shotStoryboardSegment: ClapSegment | undefined = shotStoryboardSegments.at(0)
-    
-    console.log(`[api/generate/storyboards] shot [${shotSegment.startTimeInMs}:${shotSegment.endTimeInMs}] has ${shotSegments.length} segments (${shotStoryboardSegments.length} storyboards)`)
-  
-    // TASK 1: GENERATE MISSING STORYBOARD SEGMENT
-    if (!shotStoryboardSegment) {
-      shotStoryboardSegment = newSegment({
-        track: 1,
-        startTimeInMs: shotSegment.startTimeInMs,
-        endTimeInMs: shotSegment.endTimeInMs,
-        assetDurationInMs: shotSegment.assetDurationInMs,
-        category: "storyboard",
-        prompt: "",
-        assetUrl: "",
-        outputType: "image"
-      })
-      console.log(`[api/generate/storyboards] generated storyboard segment [${shotSegment.startTimeInMs}:${shotSegment.endTimeInMs}]`)
-    }
-
-    // TASK 2: GENERATE MISSING STORYBOARD PROMPT
-    if (shotStoryboardSegment && !shotStoryboardSegment?.prompt) {
-      // storyboard is missing, let's generate it
-      shotStoryboardSegment.prompt = getVideoPrompt(shotSegments, clap.entityIndex, ["high quality", "crisp", "detailed"])
-      console.log(`[api/generate/storyboards] generating storyboard prompt: ${shotStoryboardSegment.prompt}`)
-    }
-
-    // TASK 3: GENERATE MISSING STORYBOARD BITMAP
-    if (shotStoryboardSegment && !shotStoryboardSegment.assetUrl) {
-      // console.log(`[api/generate/storyboards] generating image..`)
-
-      try {
-        shotStoryboardSegment.assetUrl = await generateStoryboard({
-          prompt: getPositivePrompt(shotStoryboardSegment.prompt),
-          width: clap.meta.width,
-          height: clap.meta.height,
-        })
-        shotStoryboardSegment.assetSourceType = getClapAssetSourceType(shotStoryboardSegment.assetUrl)
-      } catch (err) {
-        console.log(`[api/generate/storyboards] failed to generate an image: ${err}`)
-        throw err
-      }
-   
-      console.log(`[api/generate/storyboards] generated storyboard image: ${shotStoryboardSegment?.assetUrl?.slice?.(0, 50)}...`)
-    } else {
-      console.log(`[api/generate/storyboards] there is already a storyboard image: ${shotStoryboardSegment?.assetUrl?.slice?.(0, 50)}...`)
-    }
-  }
+  // we process the shots in parallel (this will increase the queue size in the Gradio spaces)
+  await Promise.all(shotsSegments.map(shotSegment =>
+    processShot({
+      shotSegment,
+      clap
+    })
+  ))
 
   // console.log(`[api/generate/storyboards] returning the clap augmented with storyboards`)
 
