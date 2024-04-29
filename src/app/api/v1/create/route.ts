@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
 
   const shots = parseRawStringToYAML<LatentStory[]>(rawString, [])
 
-  console.log("[api/generate/story] generated shots: ", shots)
+  console.log(`[api/generate/story] generated ${shots.length} shots`)
 
   // this is approximate - TTS generation will determine the final duration of each shot
   const defaultSegmentDurationInMs = 5000
