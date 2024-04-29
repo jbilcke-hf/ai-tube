@@ -4,7 +4,7 @@ import { newRender, getRender } from "@/app/api/providers/videochain/renderWithV
 import { sleep } from "@/lib/utils/sleep"
 import { getNegativePrompt, getPositivePrompt } from "@/app/api/utils/imagePrompts"
 
-export async function generateStoryboard({
+export async function generateVideo({
   prompt,
   // negativePrompt,
   width,
@@ -18,8 +18,9 @@ export async function generateStoryboard({
   seed?: number
 }): Promise<string> {
   
-  width = getValidNumber(width, 256, 8192, 512)
-  height = getValidNumber(height, 256, 8192, 288)
+  // we want to keep it vertical
+  width = getValidNumber(width, 256, 8192, 288)
+  height = getValidNumber(height, 256, 8192, 512)
 
   // console.log("calling await newRender")
   prompt = getPositivePrompt(prompt)
@@ -28,9 +29,9 @@ export async function generateStoryboard({
   let render = await newRender({
     prompt,
     negativePrompt,
-    nbFrames: 1,
-    nbFPS: 1,
-    nbSteps: 8,
+    nbFrames: 80,
+    nbFPS: 24,
+    nbSteps: 4,
     width,
     height,
     turbo: true,
@@ -47,7 +48,7 @@ export async function generateStoryboard({
 
     if (render.status === "error") {
       console.error(render.error)
-      throw new Error(`failed to generate the image ${render.error}`)
+      throw new Error(`failed to generate the video file ${render.error}`)
     }
 
     await sleep(2000) // minimum wait time
@@ -56,5 +57,5 @@ export async function generateStoryboard({
     render = await getRender(render.renderId)
   }
 
-  throw new Error(`failed to generate the image`)
+  throw new Error(`failed to generate the video file`)
 }

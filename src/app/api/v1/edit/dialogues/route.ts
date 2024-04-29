@@ -1,13 +1,11 @@
 import { NextResponse, NextRequest } from "next/server"
 
-import { ClapEntity, ClapProject, ClapSegment, getClapAssetSourceType, newSegment, parseClap, serializeClap } from "@aitube/clap"
+import { ClapProject, ClapSegment, getClapAssetSourceType, parseClap, serializeClap } from "@aitube/clap"
 
 import { startOfSegment1IsWithinSegment2 } from "@/lib/utils/startOfSegment1IsWithinSegment2"
 import { getToken } from "@/app/api/auth/getToken"
-
-import { getSpeechBackgroundAudioPrompt } from "@/components/interface/latent-engine/core/prompts/getSpeechBackgroundAudioPrompt"
-import { getSpeechForegroundAudioPrompt } from "@/components/interface/latent-engine/core/prompts/getSpeechForegroundAudioPrompt"
 import { generateSpeechWithParlerTTS } from "@/app/api/generators/speech/generateVoiceWithParlerTTS"
+import { getSpeechBackgroundAudioPrompt } from "@aitube/engine"
 
 // a helper to generate speech for a Clap
 export async function POST(req: NextRequest) {

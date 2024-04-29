@@ -12,7 +12,7 @@ This endpoint will generate a .clap (story only) from a prompt
 
 ## /edit
 
-This endpoint will edit a .clap to change models or storyboards
+This endpoint will edit a .clap to change entities, storyboards, videos etc
 
 ## /export
 

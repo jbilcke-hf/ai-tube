@@ -1,7 +1,8 @@
 
 import { create } from "zustand"
 
-import { ClapEntity, ClapProject, ClapSegment, newClap, parseClap } from "@aitube/clap"
+import { ClapProject, ClapSegment, newClap, parseClap } from "@aitube/clap"
+import { getVideoPrompt } from "@aitube/engine"
 
 import { LatentEngineStore } from "./types"
 import { resolveSegments } from "../resolvers/resolveSegments"
@@ -10,13 +11,10 @@ import { fetchLatentClap } from "./generators/fetchLatentClap"
 import { InteractiveSegmenterResult, MPMask } from "@mediapipe/tasks-vision"
 import { segmentFrame } from "@/lib/on-device-ai/segmentFrameOnClick"
 import { drawSegmentation } from "../utils/canvas/drawSegmentation"
-import { filterImage } from "@/lib/on-device-ai/filterImage"
 import { getZIndexDepth } from "../utils/data/getZIndexDepth"
 import { getSegmentStartAt } from "../utils/data/getSegmentStartAt"
-import { getSegmentId } from "../utils/data/getSegmentId"
 import { getElementsSortedByStartAt } from "../utils/data/getElementsSortedByStartAt"
 import { getSegmentEndAt } from "../utils/data/getSegmentEndAt"
-import { getVideoPrompt } from "./prompts/getVideoPrompt"
 import { setZIndexDepthId } from "../utils/data/setZIndexDepth"
 import { setSegmentStartAt } from "../utils/data/setSegmentStartAt"
 import { setSegmentEndAt } from "../utils/data/setSegmentEndAt"

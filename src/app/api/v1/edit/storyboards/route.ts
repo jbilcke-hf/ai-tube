@@ -1,9 +1,9 @@
 import { NextResponse, NextRequest } from "next/server"
 
-import { ClapProject, ClapSegment, newSegment, parseClap, serializeClap } from "@aitube/clap"
+import { ClapProject, ClapSegment, getClapAssetSourceType, newSegment, parseClap, serializeClap } from "@aitube/clap"
+import { getVideoPrompt } from "@aitube/engine"
 
 import { startOfSegment1IsWithinSegment2 } from "@/lib/utils/startOfSegment1IsWithinSegment2"
-import { getVideoPrompt } from "@/components/interface/latent-engine/core/prompts/getVideoPrompt"
 import { getToken } from "@/app/api/auth/getToken"
 
 import { getPositivePrompt } from "@/app/api/utils/imagePrompts"
@@ -81,6 +81,7 @@ export async function POST(req: NextRequest) {
           width: clap.meta.width,
           height: clap.meta.height,
         })
+        shotStoryboardSegment.assetSourceType = getClapAssetSourceType(shotStoryboardSegment.assetUrl)
       } catch (err) {
         console.log(`[api/generate/storyboards] failed to generate an image: ${err}`)
         throw err
