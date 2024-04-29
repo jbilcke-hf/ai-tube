@@ -14,7 +14,7 @@ export function extractBase64(base64: string = ""): {
   blob: Blob;
 } {
   // Regular expression to extract the MIME type and the base64 data
-  const matches = base64.match(/^data:([A-Za-z-+/]+);base64,(.+)$/)
+  const matches = base64.match(/^data:([A-Za-z-+0-9/]+);base64,(.+)$/)
 
   if (!matches || matches.length !== 3) {
     throw new Error("Invalid base64 string")
