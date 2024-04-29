@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
     console.log(`[api/generate/dialogues] shot [${shotSegment.startTimeInMs}:${shotSegment.endTimeInMs}] has ${shotSegments.length} segments (${shotDialogueSegments.length} dialogues)`)
 
     if (shotDialogueSegment && !shotDialogueSegment.assetUrl) {
-      console.log(`[api/generate/dialogues] generating audio..`)
+      // console.log(`[api/generate/dialogues] generating audio..`)
 
       try {
         shotDialogueSegment.assetUrl = await generateSpeechWithParlerTTS({
@@ -52,8 +52,6 @@ export async function POST(req: NextRequest) {
           debug: true,
         })
         shotDialogueSegment.assetSourceType = getClapAssetSourceType(shotDialogueSegment.assetUrl)
-
-        console.log("TODO julian: properly set the asset type format")
 
       } catch (err) {
         console.log(`[api/generate/dialogues] failed to generate audio: ${err}`)
@@ -66,7 +64,7 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  console.log(`[api/generate/dialogues] returning the clap augmented with dialogues`)
+  // console.log(`[api/generate/dialogues] returning the clap augmented with dialogues`)
 
   return new NextResponse(await serializeClap(clap), {
     status: 200,

@@ -73,7 +73,7 @@ export async function POST(req: NextRequest) {
 
     // TASK 3: GENERATE MISSING STORYBOARD BITMAP
     if (shotStoryboardSegment && !shotStoryboardSegment.assetUrl) {
-      console.log(`[api/generate/storyboards] generating image..`)
+      // console.log(`[api/generate/storyboards] generating image..`)
 
       try {
         shotStoryboardSegment.assetUrl = await generateStoryboard({
@@ -93,7 +93,7 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  console.log(`[api/generate/storyboards] returning the clap augmented with storyboards`)
+  // console.log(`[api/generate/storyboards] returning the clap augmented with storyboards`)
 
   return new NextResponse(await serializeClap(clap), {
     status: 200,

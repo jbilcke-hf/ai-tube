@@ -17,15 +17,6 @@ export async function generateSpeechWithParlerTTS({
   neverThrow?: boolean
 }): Promise<string> {
 
-  const result = {
-    filePath: "",
-    fileName: "",
-    format: "mp3",
-    base64: "",
-    durationInSec: 5,
-    durationInMs: 5000
-  }
-  
 
   const actualFunction = async () => {
 
