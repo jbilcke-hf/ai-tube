@@ -1,7 +1,7 @@
 
 import { create } from "zustand"
 
-import { ClapModel, ClapProject, ClapSegment, newClap, parseClap } from "@aitube/clap"
+import { ClapEntity, ClapProject, ClapSegment, newClap, parseClap } from "@aitube/clap"
 
 import { LatentEngineStore } from "./types"
 import { resolveSegments } from "../resolvers/resolveSegments"
@@ -409,9 +409,7 @@ export const useLatentEngine = create<LatentEngineStore>((set, get) => ({
     //
     // yes: I know the code is complex and not intuitive - sorry about that
 
-    // TODO Julian: use the Clap project to fill in those
-    const modelsById: Record<string, ClapModel> = {}
-    const extraPositivePrompt: string[] = []
+    const extraPositivePrompt: string[] = ["high quality", "crisp", "detailed"]
 
     let bufferAheadOfCurrentPositionInMs = positionInMs
 
@@ -427,7 +425,7 @@ export const useLatentEngine = create<LatentEngineStore>((set, get) => ({
       
       bufferAheadOfCurrentPositionInMs += videoDurationInMs
 
-      const prompt = getVideoPrompt(shotSegmentsToPreload, modelsById, extraPositivePrompt)
+      const prompt = getVideoPrompt(shotSegmentsToPreload, clap.entityIndex, extraPositivePrompt)
 
       console.log(`video prompt: ${prompt}`)
       // could also be the camera

@@ -6,7 +6,6 @@ import { startOfSegment1IsWithinSegment2 } from "@/lib/utils/startOfSegment1IsWi
 import { getVideoPrompt } from "@/components/interface/latent-engine/core/prompts/getVideoPrompt"
 import { getToken } from "@/app/api/auth/getToken"
 
-import { newRender, getRender } from "@/app/api/providers/videochain/renderWithVideoChain"
 import { getPositivePrompt } from "@/app/api/utils/imagePrompts"
 import { generateStoryboard } from "./generateStoryboard"
 
@@ -68,7 +67,7 @@ export async function POST(req: NextRequest) {
     // TASK 2: GENERATE MISSING STORYBOARD PROMPT
     if (shotStoryboardSegment && !shotStoryboardSegment?.prompt) {
       // storyboard is missing, let's generate it
-      shotStoryboardSegment.prompt = getVideoPrompt(shotSegments, {}, [])
+      shotStoryboardSegment.prompt = getVideoPrompt(shotSegments, clap.entityIndex, ["high quality", "crisp", "detailed"])
       console.log(`[api/generate/storyboards] generating storyboard prompt: ${shotStoryboardSegment.prompt}`)
     }
 

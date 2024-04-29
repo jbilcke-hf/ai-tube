@@ -1,0 +1,84 @@
+import { addBase64Header } from "@/lib/data/addBase64Header"
+import { tryApiCalls } from "../../utils/tryApiCall"
+
+const gradioSpaceApiUrl = `https://jbilcke-hf-ai-tube-model-parler-tts-mini.hf.space`
+const huggingFaceSpace = "jbilcke-hf/ai-tube-model-parler-tts-mini"
+const apiKey = `${process.env.MICROSERVICE_API_SECRET_TOKEN || ""}`
+
+export async function generateSpeechWithParlerTTS({
+  text,
+  audioId,
+  debug = false,
+  neverThrow = false,
+}: {
+  text: string
+  audioId: string
+  debug?: boolean
+  neverThrow?: boolean
+}): Promise<string> {
+
+  const result = {
+    filePath: "",
+    fileName: "",
+    format: "mp3",
+    base64: "",
+    durationInSec: 5,
+    durationInMs: 5000
+  }
+  
+
+  const actualFunction = async () => {
+
+    const res = await fetch(gradioSpaceApiUrl + (gradioSpaceApiUrl.endsWith("/") ? "" : "/") + "api/predict", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        // Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        fn_index: 0, // <- important!
+        data: [
+          apiKey,
+          text,
+          audioId,
+        ],
+      }),
+      cache: "no-store",
+      // we can also use this (see https://vercel.com/blog/vercel-cache-api-nextjs-cache)
+      // next: { revalidate: 1 }
+    })
+
+    if (res.status !== 200) {
+      throw new Error('Failed to fetch data')
+    }
+
+    const rawJson = await res.json()
+    
+    console.log("rawJson:", rawJson)
+
+    // TODO: addBAse64 with the right header type
+
+    return ""
+  }
+
+  try {
+    if (!text?.length) {
+      throw new Error(`text is too short!`)
+    }
+
+    const result = await tryApiCalls({
+      func: actualFunction,
+      huggingFaceSpace,
+      debug,
+      failureMessage: "failed to generate the audio"
+    })
+    return result
+  } catch (err) {
+    if (neverThrow) {
+      console.error(`generateVoiceWithParlerTTS():`, err)
+      return ""
+    } else {
+      throw err
+    }
+  }
+}

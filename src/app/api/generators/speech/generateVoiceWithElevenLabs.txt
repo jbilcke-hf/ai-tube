@@ -1,0 +1,55 @@
+import { getMediaInfo } from "../../utils/getMediaInfo"
+import { readMp3FileToBase64 } from "../../utils/readMp3FileToBase64"
+
+export async function generateSpeechWithElevenLabs({
+  text,
+  audioId,
+  debug = false,
+}: {
+  text: string
+  audioId: string
+  debug?: boolean
+}): Promise<{
+  filePath: string
+  fileName: string
+  format: string // "mp3"
+  base64: string // data uri
+  durationInSec: number
+  durationInMs: number
+}> {
+  const api = await ElevenLabs()
+
+  // Converts text to speech, saves the file to the output folder and returns the relative path to the file.
+  // Output file is in the following format: TTS_date-time.mp3
+  // Returns an object with the following structure: { code: CODE, message: "STATUS_MESSAGE" }
+  const result = await api.tts(
+    text,
+    audioId
+  )
+
+  // ...really? that's the API?
+  let relativeOutputPath = result.message.split("File written successfully:").pop().trim()
+
+  // we remove the ./ at the beginning, so we get something like:
+  // "/../../../../var/folders/x4/2w7-------------------"
+  // then we remove relative navifation to only keep this:
+  // "/var/folders/x4/2w7-------------------"
+  const filePath = relativeOutputPath.slice(1).replaceAll("/..", "")
+
+  const fileName = filePath.split("/").pop()
+
+  const format = fileName.split(".").pop()
+
+  const { durationInSec, durationInMs } = await getMediaInfo(filePath)
+  
+  const base64 = await readMp3FileToBase64(filePath)
+  
+  return {
+    filePath,
+    fileName,
+    format,
+    base64,
+    durationInSec,
+    durationInMs,
+  }
+}

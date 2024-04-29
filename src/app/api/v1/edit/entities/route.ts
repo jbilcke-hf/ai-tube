@@ -1,7 +1,7 @@
 import { NextResponse, NextRequest } from "next/server"
 import queryString from "query-string"
 
-import { parseClap, serializeClap, ClapModel } from "@aitube/clap"
+import { getClapAssetSourceType, parseClap, serializeClap } from "@aitube/clap"
 import { getToken } from "@/app/api/auth/getToken"
 
 import { generateImageID } from "./generateImageID"
@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
   if (!prompt.length) { throw new Error(`please provide a prompt`) }
   */
 
-  console.log("[api/generate/models] request:", prompt)
+  console.log("[api/generate/entities] request:", prompt)
 
   const jwtToken = await getToken({ user: "anonymous" })
 
@@ -33,40 +33,42 @@ export async function POST(req: NextRequest) {
 
   const clap = await parseClap(blob)
 
-  if (!clap.models.length) { throw new Error(`please provide at least one model`) }
+  if (!clap.entities.length) { throw new Error(`please provide at least one entity`) }
 
-  for (const model of clap.models) {
+  for (const entity of clap.entities) {
 
     // TASK 1: GENERATE THE IMAGE PROMPT IF MISSING
-    if (!model.imagePrompt) {
-      model.imagePrompt = "a man with a beard"
+    if (!entity.imagePrompt) {
+      entity.imagePrompt = "a man with a beard"
     }
 
     // TASK 2: GENERATE THE IMAGE ID IF MISSING
-    if (!model.imageId) {
-      model.imageId = await generateImageID({
-        prompt: model.imagePrompt,
-        seed: model.seed
+    if (!entity.imageId) {
+      entity.imageId = await generateImageID({
+        prompt: entity.imagePrompt,
+        seed: entity.seed
       })
+      entity.imageSourceType = getClapAssetSourceType(entity.imageId)
     }
 
     // TASK 3: GENERATE THE AUDIO PROMPT IF MISSING
-    if (!model.audioPrompt) {
-      model.audioPrompt = "a man with a beard"
+    if (!entity.audioPrompt) {
+      entity.audioPrompt = "a man with a beard"
     }
 
     // TASK 4: GENERATE THE AUDIO ID IF MISSING
 
     // TODO here: call Parler-TTS or a generic audio generator
-    if (!model.audioId) {
-      model.audioId = await generateAudioID({
-        prompt: model.audioPrompt,
-        seed: model.seed
+    if (!entity.audioId) {
+      entity.audioId = await generateAudioID({
+        prompt: entity.audioPrompt,
+        seed: entity.seed
       })
+      entity.audioSourceType = getClapAssetSourceType(entity.audioId)
     }
   }
 
-  console.log(`[api/generate/models] returning the clap extended with the model`)
+  console.log(`[api/generate/entities] returning the clap extended with the entities`)
 
   return new NextResponse(await serializeClap(clap), {
     status: 200,

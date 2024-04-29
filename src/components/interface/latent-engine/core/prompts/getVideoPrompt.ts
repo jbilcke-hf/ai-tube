@@ -1,4 +1,4 @@
-import { ClapModel, ClapSegment } from "@aitube/clap"
+import { ClapEntity, ClapSegment } from "@aitube/clap"
 
 import { deduplicatePrompt } from "../../utils/prompting/deduplicatePrompt"
 
@@ -11,12 +11,12 @@ import { getCharacterPrompt } from "./getCharacterPrompt"
  * @returns 
  */
 export function getVideoPrompt(
-  segments: ClapSegment[],
-  modelsById: Record<string, ClapModel>,
-  extraPositivePrompt: string[]
+  segments: ClapSegment[] = [],
+  entitiesIndex: Record<string, ClapEntity> = {},
+  extraPositivePrompt: string[] = []
 ): string {
 
-  // console.log("modelsById:", modelsById)
+  // console.log("entitiesIndex:", entitiesIndex)
 
   // to construct the video we need to collect all the segments describing it
   // we ignore unrelated categories (music, dialogue) or non-prompt items (eg. an audio sample)
@@ -60,23 +60,23 @@ export function getVideoPrompt(
   tmp.sort((a, b) => b.label.localeCompare(a.label))
 
   let videoPrompt = tmp.map(segment => {
-    const model: ClapModel | undefined = modelsById[segment?.modelId || ""] || undefined
+    const entity: ClapEntity | undefined = entitiesIndex[segment?.entityId || ""] || undefined
     
     if (segment.category === "dialogue") {
 
-      // if we can't find the model, then we are unable
+      // if we can't find the entity, then we are unable
       // to make any assumption about the gender, age or appearance
-      if (!model) {
-        console.log("ERROR: this is a dialogue, but couldn't find the model!")
+      if (!entity) {
+        console.log("ERROR: this is a dialogue, but couldn't find the entity!")
         return `portrait of a person speaking, blurry background, bokeh`
       }
 
-      const characterTrigger = model?.triggerName || ""
-      const characterLabel = model?.label || ""
-      const characterDescription = model?.description || ""
+      const characterTrigger = entity?.triggerName || ""
+      const characterLabel = entity?.label || ""
+      const characterDescription = entity?.description || ""
       const dialogueLine = segment?.prompt || ""
      
-      const characterPrompt = getCharacterPrompt(model)
+      const characterPrompt = getCharacterPrompt(entity)
 
       // in the context of a video, we some something additional:
       // we create a "bokeh" style
@@ -84,13 +84,13 @@ export function getVideoPrompt(
       
     } else if (segment.category === "location") {
   
-      // if we can't find the location's model, we default to returning the prompt
-      if (!model) {
-        console.log("ERROR: this is a location, but couldn't find the model!")
+      // if we can't find the location's entity, we default to returning the prompt
+      if (!entity) {
+        console.log("ERROR: this is a location, but couldn't find the entity!")
         return segment.prompt
       }
 
-      return model.description
+      return entity.description
     } else {
       return segment.prompt
     }
