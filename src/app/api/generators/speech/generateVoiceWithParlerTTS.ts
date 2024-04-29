@@ -52,13 +52,22 @@ export async function generateSpeechWithParlerTTS({
       throw new Error('Failed to fetch data')
     }
 
-    const rawJson = await res.json()
-    
-    console.log("rawJson:", rawJson)
+ 
+    const { data } = await res.json()
 
-    // TODO: addBAse64 with the right header type
-
-    return ""
+    // console.log("data:", data)
+    // Recommendation: handle errors
+    if (res.status !== 200 || !Array.isArray(data)) {
+      // This will activate the closest `error.js` Error Boundary
+      throw new Error(`Failed to fetch data (status: ${res.status})`)
+    }
+    // console.log("data:", data.slice(0, 50))
+  
+    if (!data[0]) {
+      throw new Error(`the returned audio was empty`)
+    }
+  
+    return addBase64Header(data[0] as string, "wav")
   }
 
   try {
@@ -72,6 +81,7 @@ export async function generateSpeechWithParlerTTS({
       debug,
       failureMessage: "failed to generate the audio"
     })
+
     return result
   } catch (err) {
     if (neverThrow) {
