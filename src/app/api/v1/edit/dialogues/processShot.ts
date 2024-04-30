@@ -4,6 +4,7 @@ import { getSpeechBackgroundAudioPrompt } from "@aitube/engine"
 
 import { startOfSegment1IsWithinSegment2 } from "@/lib/utils/startOfSegment1IsWithinSegment2"
 import { generateSpeechWithParlerTTS } from "@/app/api/generators/speech/generateVoiceWithParlerTTS"
+import { getMediaInfo } from "@/app/api/utils/getMediaInfo"
 
 export async function processShot({
   shotSegment,
@@ -36,6 +37,17 @@ export async function processShot({
         debug: true,
       })
       shotDialogueSegment.assetSourceType = getClapAssetSourceType(shotDialogueSegment.assetUrl)
+
+      const { durationInMs, durationInSec, hasAudio } = await getMediaInfo(shotDialogueSegment.assetUrl)
+      
+      shotDialogueSegment.assetDurationInMs = durationInMs
+      shotSegment.assetDurationInMs = durationInMs
+
+      // we update the duration of all the segments for this shot
+      // (it is possible that this makes the two previous lines redundant)
+      clap.segments.filter(s => {
+        s.assetDurationInMs = durationInMs
+      })
 
     } catch (err) {
       console.log(`[api/generate/dialogues] processShot: failed to generate audio: ${err}`)
