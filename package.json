@@ -5,7 +5,7 @@
   "scripts": {
     "patch": "cp -f patch.js node_modules/fluent-ffmpeg/index.js",
     "dev": "next dev",
-    "build": "bun run patch && next build",
+    "build": "npm run patch && next build",
     "start": "next start",
     "lint": "next lint"
   },
