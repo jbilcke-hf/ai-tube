@@ -1,7 +1,6 @@
-import { ClapProject, ClapSegment, getClapAssetSourceType, newSegment, parseClap, serializeClap } from "@aitube/clap"
-import { getVideoPrompt } from "@aitube/engine"
+import { ClapProject, ClapSegment, getClapAssetSourceType, newSegment, filterSegments, ClapSegmentFilteringMode } from "@aitube/clap"
 
-import { startOfSegment1IsWithinSegment2 } from "@/lib/utils/startOfSegment1IsWithinSegment2"
+import { getVideoPrompt } from "@aitube/engine"
 
 import { getPositivePrompt } from "@/app/api/utils/imagePrompts"
 import { generateStoryboard } from "./generateStoryboard"
@@ -14,8 +13,10 @@ export async function processShot({
   clap: ClapProject
 }): Promise<void> {
 
-  const shotSegments: ClapSegment[] = clap.segments.filter(s =>
-    startOfSegment1IsWithinSegment2(s, shotSegment)
+  const shotSegments: ClapSegment[] = filterSegments(
+    ClapSegmentFilteringMode.START,
+    shotSegment,
+    clap.segments
   )
 
   const shotStoryboardSegments: ClapSegment[] = shotSegments.filter(s =>

@@ -17,10 +17,10 @@ export async function POST(req: NextRequest) {
 
   if (!clap?.segments) { throw new Error(`no segment found in the provided clap!`) }
   
-  console.log(`[api/generate/dialogues] detected ${clap.segments.length} segments`)
+  console.log(`[api/edit/dialogues] detected ${clap.segments.length} segments`)
   
   const shotsSegments: ClapSegment[] = clap.segments.filter(s => s.category === "camera")
-  console.log(`[api/generate/dialogues] detected ${shotsSegments.length} shots`)
+  console.log(`[api/edit/dialogues] detected ${shotsSegments.length} shots`)
   
   if (shotsSegments.length > 32) {
     throw new Error(`Error, this endpoint being synchronous, it is designed for short stories only (max 32 shots).`)
@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
     })
   ))
 
-  // console.log(`[api/generate/dialogues] returning the clap augmented with dialogues`)
+  // console.log(`[api/edit/dialogues] returning the clap augmented with dialogues`)
 
   return new NextResponse(await serializeClap(clap), {
     status: 200,

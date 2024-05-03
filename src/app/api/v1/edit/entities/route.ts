@@ -6,6 +6,9 @@ import { getToken } from "@/app/api/auth/getToken"
 
 import { generateImageID } from "./generateImageID"
 import { generateAudioID } from "./generateAudioID"
+import { ClapCompletionMode } from "../types"
+
+const defaultMode: ClapCompletionMode = "full"
 
 export async function POST(req: NextRequest) {
 
@@ -25,7 +28,14 @@ export async function POST(req: NextRequest) {
   if (!prompt.length) { throw new Error(`please provide a prompt`) }
   */
 
-  console.log("[api/generate/entities] request:", prompt)
+
+  let mode = defaultMode
+  try {
+    let maybeMode = decodeURIComponent(query?.mode?.toString() || defaultMode).trim()
+    mode = ["partial", "full"].includes(maybeMode) ? (maybeMode as ClapCompletionMode) : "full"
+  } catch (err) {}
+
+  console.log("[api/edit/entities] request:", prompt)
 
   const jwtToken = await getToken({ user: "anonymous" })
 
@@ -68,7 +78,7 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  console.log(`[api/generate/entities] returning the clap extended with the entities`)
+  console.log(`[api/edit/entities] returning the clap extended with the entities`)
 
   return new NextResponse(await serializeClap(clap), {
     status: 200,

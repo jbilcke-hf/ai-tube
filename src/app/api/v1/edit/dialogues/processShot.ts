@@ -1,8 +1,7 @@
 
-import { ClapProject, ClapSegment, getClapAssetSourceType } from "@aitube/clap"
+import { ClapProject, ClapSegment, getClapAssetSourceType, filterSegments, ClapSegmentFilteringMode } from "@aitube/clap"
 import { getSpeechBackgroundAudioPrompt } from "@aitube/engine"
 
-import { startOfSegment1IsWithinSegment2 } from "@/lib/utils/startOfSegment1IsWithinSegment2"
 import { generateSpeechWithParlerTTS } from "@/app/api/generators/speech/generateVoiceWithParlerTTS"
 import { getMediaInfo } from "@/app/api/utils/getMediaInfo"
 
@@ -14,20 +13,22 @@ export async function processShot({
   clap: ClapProject
 }): Promise<void> {
 
-  const shotSegments: ClapSegment[] = clap.segments.filter(s =>
-    startOfSegment1IsWithinSegment2(s, shotSegment)
+  const shotSegments: ClapSegment[] = filterSegments(
+    ClapSegmentFilteringMode.START,
+    shotSegment,
+    clap.segments
   )
-
+  
   const shotDialogueSegments: ClapSegment[] = shotSegments.filter(s =>
     s.category === "dialogue"
   )
 
   let shotDialogueSegment: ClapSegment | undefined = shotDialogueSegments.at(0)
   
-  console.log(`[api/generate/dialogues] processShot: shot [${shotSegment.startTimeInMs}:${shotSegment.endTimeInMs}] has ${shotSegments.length} segments (${shotDialogueSegments.length} dialogues)`)
+  console.log(`[api/edit/dialogues] processShot: shot [${shotSegment.startTimeInMs}:${shotSegment.endTimeInMs}] has ${shotSegments.length} segments (${shotDialogueSegments.length} dialogues)`)
 
   if (shotDialogueSegment && !shotDialogueSegment.assetUrl) {
-    // console.log(`[api/generate/dialogues] generating audio..`)
+    // console.log(`[api/edit/dialogues] generating audio..`)
 
     try {
       // this generates a mp3
@@ -52,12 +53,12 @@ export async function processShot({
       }
 
     } catch (err) {
-      console.log(`[api/generate/dialogues] processShot: failed to generate audio: ${err}`)
+      console.log(`[api/edit/dialogues] processShot: failed to generate audio: ${err}`)
       throw err
     }
 
-    console.log(`[api/generate/dialogues] processShot: generated dialogue audio: ${shotDialogueSegment?.assetUrl?.slice?.(0, 50)}...`)
+    console.log(`[api/edit/dialogues] processShot: generated dialogue audio: ${shotDialogueSegment?.assetUrl?.slice?.(0, 50)}...`)
   } else {
-    console.log(`[api/generate/dialogues] processShot: there is already a dialogue audio: ${shotDialogueSegment?.assetUrl?.slice?.(0, 50)}...`)
+    console.log(`[api/edit/dialogues] processShot: there is already a dialogue audio: ${shotDialogueSegment?.assetUrl?.slice?.(0, 50)}...`)
   }
 }
