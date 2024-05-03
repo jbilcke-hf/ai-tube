@@ -3,8 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "patch": "cp -f patch.js node_modules/fluent-ffmpeg/index.js",
     "dev": "next dev",
-    "build": "next build",
+    "build": "bun run patch && next build",
     "start": "next start",
     "lint": "next lint"
   },
