@@ -53,7 +53,6 @@ export async function create(request: {
   const defaultSegmentDurationInMs = 7000
 
   let currentElapsedTimeInMs = 0
-  let currentSegmentDurationInMs = defaultSegmentDurationInMs
 
   const clap: ClapProject = newClap({
     meta: {
@@ -99,7 +98,7 @@ export async function create(request: {
 
     clap.segments.push(newSegment({
       track: 1,
-      startTimeInMs: currentSegmentDurationInMs,
+      startTimeInMs: currentElapsedTimeInMs,
       assetDurationInMs: defaultSegmentDurationInMs,
       category: "storyboard",
       prompt: image,
@@ -108,7 +107,7 @@ export async function create(request: {
 
     clap.segments.push(newSegment({
       track: 2,
-      startTimeInMs: currentSegmentDurationInMs,
+      startTimeInMs: currentElapsedTimeInMs,
       assetDurationInMs: defaultSegmentDurationInMs,
       category: "interface",
       prompt: title,
@@ -119,7 +118,7 @@ export async function create(request: {
 
     clap.segments.push(newSegment({
       track: 3,
-      startTimeInMs: currentSegmentDurationInMs,
+      startTimeInMs: currentElapsedTimeInMs,
       assetDurationInMs: defaultSegmentDurationInMs,
       category: "dialogue",
       prompt: voice,
@@ -129,14 +128,14 @@ export async function create(request: {
     // the presence of a camera is mandatory
     clap.segments.push(newSegment({
       track: 4,
-      startTimeInMs: currentSegmentDurationInMs,
+      startTimeInMs: currentElapsedTimeInMs,
       assetDurationInMs: defaultSegmentDurationInMs,
       category: "camera",
       prompt: "vertical video",
       outputType: "text"
     }))
 
-    currentSegmentDurationInMs += defaultSegmentDurationInMs
+    currentElapsedTimeInMs += defaultSegmentDurationInMs
   }
 
   return clap
