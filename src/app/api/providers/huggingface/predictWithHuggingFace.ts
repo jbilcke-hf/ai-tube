@@ -31,7 +31,7 @@ export async function predict({
       }
     })) {
       instructions += output.token.text
-      // process.stdout.write(output.token.text)
+      process.stdout.write(output.token.text)
       if (
         instructions.includes("</s>") || 
         instructions.includes("<s>") ||

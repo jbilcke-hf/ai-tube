@@ -636,6 +636,7 @@ export type InterfaceView =
   | "public_media" // public view of an individual media (video, gaussian splat, clap video)
   | "public_media_embed" // for integration into twitter etc
   | "public_music_videos" // public music videos - it's a special category, because music is *cool*
+  | "public_latent_search" // public view of latent search results
   | "public_latent_media" // public view of an individual dream (a latent media, so it's not a "real" file)
   | "public_latent_media_embed" // for integration into twitter etc (which would be hardcore for our server load.. so maybe not)
   | "public_gaming" // for AiTube Gaming
@@ -712,7 +713,7 @@ export type AppQueryProps = {
 export type LatentQueryProps = {
   params: { jwtToken: string }
   searchParams: {
-    l?: string | string[], // latent content (serialized to a base64 json)
+    p?: string | string[], // search result content (serialized to a base64 json)
     [key: string]: string | string[] | undefined
   }
 }

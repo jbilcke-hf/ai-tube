@@ -8,8 +8,9 @@ export function parseRawStringToYAML<T>(input: any, defaultValue: T) {
     .replaceAll("```yaml\n", "")
     .replaceAll("```yaml", "")
 
-    // we remove everything after the last ```
-    rawString = rawString.split('```')[0].trim()
+    // we remove everything after the last ``` (or ``)
+    rawString = rawString.split(/```?/)[0].trim()
+
 
     const something: any = YAML.parse(rawString)
 

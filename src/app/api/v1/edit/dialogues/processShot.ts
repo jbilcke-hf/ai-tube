@@ -40,14 +40,16 @@ export async function processShot({
 
       const { durationInMs, durationInSec, hasAudio } = await getMediaInfo(shotDialogueSegment.assetUrl)
       
-      shotDialogueSegment.assetDurationInMs = durationInMs
-      shotSegment.assetDurationInMs = durationInMs
+      if (hasAudio && durationInMs > 1000) {
+        shotDialogueSegment.assetDurationInMs = durationInMs
+        shotSegment.assetDurationInMs = durationInMs
 
-      // we update the duration of all the segments for this shot
-      // (it is possible that this makes the two previous lines redundant)
-      clap.segments.filter(s => {
-        s.assetDurationInMs = durationInMs
-      })
+        // we update the duration of all the segments for this shot
+        // (it is possible that this makes the two previous lines redundant)
+        clap.segments.filter(s => {
+          s.assetDurationInMs = durationInMs
+        })
+      }
 
     } catch (err) {
       console.log(`[api/generate/dialogues] processShot: failed to generate audio: ${err}`)

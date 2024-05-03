@@ -1,13 +1,15 @@
-import { LatentQueryProps } from "@/types/general"
+import { encode, decode } from 'js-base64'
 import { clapToDataUri, generateClapFromSimpleStory } from "@aitube/clap"
 
-import { Main } from "../main"
-import { getNewMediaInfo } from "../api/generators/search/getNewMediaInfo"
-import { getToken } from "../api/auth/getToken"
+import { LatentQueryProps } from "@/types/general"
+
+import { Main } from "../../main"
+import { getNewMediaInfo } from "../../api/generators/search/getNewMediaInfo"
+import { getToken } from "../../api/auth/getToken"
 
 // https://jmswrnr.com/blog/protecting-next-js-api-routes-query-parameters
 
-export default async function DreamPage({
+export default async function LatentSearchPage({
   searchParams: {
     l: latentContent,
   },
@@ -15,7 +17,8 @@ export default async function DreamPage({
 }: LatentQueryProps) {
   const jwtToken = await getToken({ user: "anonymous" })
 
-  // const latentSearchResult = JSON.parse(atob(`${latentContent}`)) as LatentSearchResult
+
+  // const latentSearchResult = JSON.parse(decodee(`${latentContent}`)) as LatentSearchResult
 
   // this will hallucinate the thumbnail on the fly - maybe we should cache it
   // const latentMedia = await searchResultToMediaInfo(latentSearchResult)

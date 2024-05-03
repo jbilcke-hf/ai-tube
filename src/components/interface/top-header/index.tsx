@@ -11,6 +11,7 @@ import Link from 'next/link'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { SearchInput } from '../search-input'
+import { LatentSearchInput } from '../latent-search-input'
 import { pathway } from '@/lib/fonts'
 
 export function TopHeader() {
@@ -122,7 +123,11 @@ export function TopHeader() {
           `px-4 py-2 w-max-64`,
           `text-neutral-400 text-2xs sm:text-xs lg:text-sm italic`
         )}>
-          <SearchInput />
+          {view === "public_latent_search" ||
+          view === "public_latent_media" ||
+          view === "public_latent_media_embed" 
+          ? <LatentSearchInput />
+          : <SearchInput />}
         </div>
         <div className={cn("w-32 xl:w-42")}>
           <span>

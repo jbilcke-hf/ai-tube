@@ -80,11 +80,9 @@ export function getNewMediaInfo(params: Partial<MediaInfo> = {}): MediaInfo {
     updatedAt: new Date().toISOString(),
 
     /**
-     * Arbotrary string tags to label the content
+     * Arbitrary string tags to label the content
      */
-    tags: Array.isArray(params.tags) ? [
-      ...params.tags,
-    ] : [],
+    tags: [],
 
     /**
      * Model name
@@ -139,7 +137,9 @@ export function getNewMediaInfo(params: Partial<MediaInfo> = {}): MediaInfo {
     /**
      * Media projection (cartesian by default)
      */
-    projection: "latent"
+    projection: "latent",
+
+    ...params,
   }
 
   return mediaInfo

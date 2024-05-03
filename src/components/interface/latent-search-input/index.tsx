@@ -9,9 +9,10 @@ import { useStore } from "@/app/state/useStore"
 import { cn } from "@/lib/utils/cn"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { getVideos } from "@/app/api/actions/ai-tube-hf/getVideos"
+import { MediaInfo } from "@/types/general"
+import { search } from "@/app/api/v1/search"
 
-export function SearchInput() {
+export function LatentSearchInput() {
   const [_pending, startTransition] = useTransition()
 
   const setSearchAutocompleteQuery = useStore(s => s.setSearchAutocompleteQuery)
@@ -31,25 +32,24 @@ export function SearchInput() {
   // called when pressing enter or clicking on search
   const debouncedSearch = debounce((query: string) => {
     startTransition(async () => {
-      console.log(`searching for "${query}"..`)
+      console.log(`searching the latent space for "${query}"..`)
 
-      const medias = await getVideos({
-        query,
-        sortBy: "match",
-        maxNbMedias: 8,
-        neverThrow: true,
-        renewCache: false, // bit of optimization
+      if (query.length < 2) { console.log("search term is too short") }
+      
+      console.log("imaginating medias..")
+      
+      const imaginedMedias = await search({
+        prompt: query,
+        nbResults: 4
       })
 
-      console.log(`got ${medias.length} results!`)
-      setSearchAutocompleteResults(medias.map(item => ({
-        id: item.id,
-        title: item.label,
+      console.log(`imagined ${imaginedMedias.length} results:`, imaginedMedias)
+
+      setSearchAutocompleteResults(imaginedMedias.map(item => ({
+        title: item.title,
         tags: item.tags,
       })))
       
-
-
       // TODO: only close the show autocomplete box if we found something
       // setShowAutocompleteBox(false)
     })
@@ -69,7 +69,7 @@ export function SearchInput() {
       <div className="flex flex-row w-full">
         <Input
           ref={ref}
-          placeholder="Search"
+          placeholder="Search the latent space"
           className={cn(
             `bg-neutral-900 text-neutral-200 dark:bg-neutral-900 dark:text-neutral-200`,
             `rounded-l-full rounded-r-none`,

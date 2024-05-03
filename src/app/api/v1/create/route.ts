@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
   
   const prompt = `${request?.prompt || ""}`.trim()
 
-  console.log("[api/generate/story] request:", request)
+  console.log("[api/v1/create] request:", request)
 
   if (!prompt.length) { throw new Error(`please provide a prompt`) }
 
@@ -46,11 +46,11 @@ export async function POST(req: NextRequest) {
     prefix: "```yaml\n",
   })
 
-  console.log("[api/generate/story] rawString: ", rawString)
+  console.log("[api/v1/create] rawString: ", rawString)
 
   const shots = parseRawStringToYAML<LatentStory[]>(rawString, [])
 
-  console.log(`[api/generate/story] generated ${shots.length} shots`)
+  console.log(`[api/v1/create] generated ${shots.length} shots`)
 
   // this is approximate - TTS generation will determine the final duration of each shot
   const defaultSegmentDurationInMs = 7000
@@ -76,7 +76,7 @@ export async function POST(req: NextRequest) {
 
   for (const { title, image, voice } of shots) {
 
-    console.log(`[api/generate/story]  - ${title}`)
+    console.log(`[api/v1/create]  - ${title}`)
 
     // note: it would be nice if we could have a convention saying that
     // track 0 is for videos and track 1 storyboards

@@ -25,7 +25,6 @@ export function MediaPlayer({
   console.log("MediaPlayer called for \"" + media?.label + "\"")
   
   if (!media) { return null }
-  if (!media?.assetUrl && !media?.clapUrl) { return null }
 
   // uncomment one of those to forcefully test the .clap player from an external .clap file
   // media.assetUrlHd = "https://huggingface.co/datasets/jbilcke/ai-tube-cinema/tree/main/404.clap"
@@ -47,6 +46,8 @@ export function MediaPlayer({
       </div>
     )
   }
+
+  if (!media?.assetUrl && !media?.assetUrlHd) { return null }
 
   if (projectionType === "gaussian") {
     // note: for AutoSizer to work properly it needs to be inside a normal div with no display: "flex"

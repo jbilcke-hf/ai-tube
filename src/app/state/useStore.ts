@@ -3,6 +3,7 @@
 import { create } from "zustand"
 
 import { ChannelInfo, MediaInfo, InterfaceDisplayMode, InterfaceView, InterfaceMenuMode, InterfaceHeaderMode, CommentInfo, UserInfo } from "@/types/general"
+import { BasicSearchResult } from "../api/v1/search/types"
 
 export const useStore = create<{
   displayMode: InterfaceDisplayMode
@@ -31,8 +32,8 @@ export const useStore = create<{
   searchAutocompleteQuery: string
   setSearchAutocompleteQuery: (searchAutocompleteQuery?: string) => void
 
-  searchAutocompleteResults: MediaInfo[]
-  setSearchAutocompleteResults: (searchAutocompleteResults: MediaInfo[]) => void
+  searchAutocompleteResults: BasicSearchResult[]
+  setSearchAutocompleteResults: (searchAutocompleteResults: BasicSearchResult[]) => void
 
   searchResults: MediaInfo[]
   setSearchResults: (searchResults: MediaInfo[]) => void
@@ -118,8 +119,9 @@ export const useStore = create<{
       "/embed": "public_media_embed",
       "/music": "public_music_videos",
       "/channels": "public_channels",
-      "/dream": "public_latent_media",
-      "/dream/embed": "public_latent_media_embed",
+      "/latent/search": "public_latent_search",
+      "/latent/watch": "public_latent_media",
+      "/latent/embed": "public_latent_media_embed",
       "/channel": "public_channel",
 
       // those are reserved for future use
@@ -149,8 +151,8 @@ export const useStore = create<{
     set({ showAutocompleteBox })
   },
 
-  searchAutocompleteResults: [] as MediaInfo[],
-  setSearchAutocompleteResults: (searchAutocompleteResults: MediaInfo[]) => {
+  searchAutocompleteResults: [] as BasicSearchResult[],
+  setSearchAutocompleteResults: (searchAutocompleteResults: BasicSearchResult[]) => {
     set({ searchAutocompleteResults })
   },
 

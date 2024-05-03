@@ -2,8 +2,20 @@ FROM node:20-alpine AS base
 
 # Install dependencies only when needed
 FROM base AS deps
+
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
+
+# for dev mode
+RUN apk add git git-lfs procps htop vim nano
+
+RUN apk add alpine-sdk pkgconfig
+
+# For FFMPEG and gl concat
+RUN apk add curl python3 python3-dev libx11-dev libsm-dev libxrender libxext-dev mesa-dev xvfb libxi-dev glew-dev
+
+RUN apk add ffmpeg
+
 WORKDIR /app
 
 # Install dependencies based on the preferred package manager

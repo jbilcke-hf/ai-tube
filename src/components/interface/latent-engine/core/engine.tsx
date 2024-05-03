@@ -14,7 +14,7 @@ import { localStorageKeys } from "@/app/state/localStorageKeys"
 import { defaultSettings } from "@/app/state/defaultSettings"
 import { useStore } from "@/app/state/useStore"
 import { ClapProject, generateClapFromSimpleStory, serializeClap } from "@aitube/clap"
-import { theSimps } from "@/app/dream/samples"
+import { theSimps } from "@/app/latent/samples"
 
 function LatentEngine({
   media,
@@ -76,29 +76,27 @@ function LatentEngine({
   const videoLayerRef = useRef<HTMLDivElement>(null)
   const segmentationLayerRef = useRef<HTMLDivElement>(null)
 
-  const mediaUrl = media.clapUrl || media.assetUrlHd || media.assetUrl
-
   useEffect(() => {
-    if (!stateRef.current.isInitialized && mediaUrl) {
+    if (!stateRef.current.isInitialized) {
       stateRef.current.isInitialized = true
 
       const fn = async () => {
-        // TODO julian
-        // there is a bug, we can't unpack the .clap when it's from a data-uri :/
+        // if we have a clapUrl (eg. from the database) then we use that
+        // otherwise we generate it ourselves, chunk by chunk (since we're live)
+
+        // TODO Julian work on the chunk mechanism
         
-        // open(mediaUrl)
         const mockClap: ClapProject = generateClapFromSimpleStory({
-          story: theSimps
+          story: theSimps,
+          showIntroPoweredByEngine: false,
+          showIntroDisclaimerAboutAI: false
         })
-        const mockArchive: Blob = await serializeClap(mockClap)
-        // for some reason conversion to data uri doesn't work
-        // const mockDataUri = await blobToDataUri(mockArchive, "application/x-gzip")
-        // console.log("mockDataUri:", mockDataUri)
-        open(mockArchive)
+
+        open(mockClap)
       }
       fn()
     }
-  }, [mediaUrl])
+  }, [media.id])
 
   const isPlayingRef = useRef(isPlaying)
   isPlayingRef.current = isPlaying

@@ -41,7 +41,7 @@ export async function processShot({
       clap.segments.push(shotStoryboardSegment)
     }
 
-    console.log(`[api/generate/storyboards] processShot: generated storyboard segment [${shotSegment.startTimeInMs}:${shotSegment.endTimeInMs}]`)
+    console.log(`[api/v1/edit/storyboards] processShot: generated storyboard segment [${shotSegment.startTimeInMs}:${shotSegment.endTimeInMs}]`)
   }
   if (!shotStoryboardSegment) { throw new Error(`failed to generate a newSegment`) }
 
@@ -49,12 +49,12 @@ export async function processShot({
   if (!shotStoryboardSegment?.prompt) {
     // storyboard is missing, let's generate it
     shotStoryboardSegment.prompt = getVideoPrompt(shotSegments, clap.entityIndex, ["high quality", "crisp", "detailed"])
-    console.log(`[api/generate/storyboards] processShot: generating storyboard prompt: ${shotStoryboardSegment.prompt}`)
+    console.log(`[api/v1/edit/storyboards] processShot: generating storyboard prompt: ${shotStoryboardSegment.prompt}`)
   }
 
   // TASK 3: GENERATE MISSING STORYBOARD BITMAP
   if (!shotStoryboardSegment.assetUrl) {
-    // console.log(`[api/generate/storyboards] generating image..`)
+    // console.log(`[api/v1/edit/storyboards] generating image..`)
 
     try {
       shotStoryboardSegment.assetUrl = await generateStoryboard({
@@ -64,13 +64,13 @@ export async function processShot({
       })
       shotStoryboardSegment.assetSourceType = getClapAssetSourceType(shotStoryboardSegment.assetUrl)
     } catch (err) {
-      console.log(`[api/generate/storyboards] processShot: failed to generate an image: ${err}`)
+      console.log(`[api/v1/edit/storyboards] processShot: failed to generate an image: ${err}`)
       throw err
     }
   
-    console.log(`[api/generate/storyboards] processShot: generated storyboard image: ${shotStoryboardSegment?.assetUrl?.slice?.(0, 50)}...`)
+    console.log(`[api/v1/edit/storyboards] processShot: generated storyboard image: ${shotStoryboardSegment?.assetUrl?.slice?.(0, 50)}...`)
   } else {
-    console.log(`[api/generate/storyboards] processShot: there is already a storyboard image: ${shotStoryboardSegment?.assetUrl?.slice?.(0, 50)}...`)
+    console.log(`[api/v1/edit/storyboards] processShot: there is already a storyboard image: ${shotStoryboardSegment?.assetUrl?.slice?.(0, 50)}...`)
   }
 
 }

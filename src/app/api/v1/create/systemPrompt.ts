@@ -35,5 +35,5 @@ but if the user asks for large numbers, it should be ignored (our limit is 32).
   voice: "Now my dog is eating my birtday cake. Please send help."
 \`\`\
 
-# You turn!
+# Your turn:
 `
