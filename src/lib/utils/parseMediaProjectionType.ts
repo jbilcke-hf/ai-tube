@@ -1,4 +1,4 @@
-import { parseProjectionFromLoRA } from "@/app/api/utils/parseProjectionFromLoRA"
+import { parseProjectionFromLoRA } from "@/app/api/parsers/parseProjectionFromLoRA"
 import { MediaInfo, MediaProjection } from "@/types/general"
 
 import { parseAssetToCheckIfGaussian } from "./parseAssetToCheckIfGaussian"

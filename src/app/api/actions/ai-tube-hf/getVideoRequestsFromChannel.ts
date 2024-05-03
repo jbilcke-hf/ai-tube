@@ -3,9 +3,9 @@
 import { ChannelInfo, VideoRequest } from "@/types/general"
 import { getCredentials } from "./getCredentials"
 import { listFiles } from "@/lib/huggingface/hub/src"
-import { parsePromptFileName } from "../../utils/parsePromptFileName"
+import { parsePromptFileName } from "../../parsers/parsePromptFileName"
 import { downloadFileAsText } from "./downloadFileAsText"
-import { parseDatasetPrompt } from "../../utils/parseDatasetPrompt"
+import { parseDatasetPrompt } from "../../parsers/parseDatasetPrompt"
 import { computeOrientationProjectionWidthHeight } from "../../utils/computeOrientationProjectionWidthHeight"
 import { downloadClapProject } from "./downloadClapProject"
 

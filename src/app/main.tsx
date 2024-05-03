@@ -81,7 +81,7 @@ export function Main({
   const setPublicTracks = useStore(s => s.setPublicTracks)
   const setPublicTrack = useStore(s => s.setPublicTrack)
 
-  console.log("[main.tsx] latentMedia = ", latentMedia)
+  // console.log("[main.tsx] latentMedia = ", latentMedia)
   
   useEffect(() => {
     if (typeof jwtToken !== "string" && !jwtToken) { return }

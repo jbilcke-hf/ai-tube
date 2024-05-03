@@ -5,18 +5,23 @@ import { getVideoPrompt } from "@aitube/engine"
 import { getPositivePrompt } from "@/app/api/utils/imagePrompts"
 
 import { generateVideo } from "./generateVideo"
+import { ClapCompletionMode } from "../types"
 
 export async function processShot({
   shotSegment,
-  clap
+  existingClap,
+  newerClap,
+  mode
 }: {
   shotSegment: ClapSegment
-  clap: ClapProject
+  existingClap: ClapProject
+  newerClap: ClapProject
+  mode: ClapCompletionMode
 }): Promise<void> {
   const shotSegments: ClapSegment[] = filterSegments(
     ClapSegmentFilteringMode.START,
     shotSegment,
-    clap.segments
+    existingClap.segments
   )
 
   const shotVideoSegments: ClapSegment[] = shotSegments.filter(s =>
@@ -40,8 +45,9 @@ export async function processShot({
       outputType: "video"
     })
 
+    // we fix the existing clap
     if (shotVideoSegment) {
-      clap.segments.push(shotVideoSegment)
+      existingClap.segments.push(shotSegment)
     }
 
     console.log(`[api/edit/videos] processShot: generated video segment [${shotSegment.startTimeInMs}:${shotSegment.endTimeInMs}]`)
@@ -51,10 +57,15 @@ export async function processShot({
     throw new Error(`failed to generate a new segment`)
   }
 
+
   // TASK 2: GENERATE MISSING VIDEO PROMPT
   if (!shotVideoSegment?.prompt) {
     // video is missing, let's generate it
-    shotVideoSegment.prompt = getVideoPrompt(shotSegments, clap.entityIndex, ["high quality", "crisp", "detailed"])
+    shotVideoSegment.prompt = getVideoPrompt(
+      shotSegments,
+      existingClap.entityIndex,
+      ["high quality", "crisp", "detailed"]
+    )
     console.log(`[api/edit/videos] processShot: generating video prompt: ${shotVideoSegment.prompt}`)
   }
 
@@ -65,8 +76,8 @@ export async function processShot({
     try {
       shotVideoSegment.assetUrl = await generateVideo({
         prompt: getPositivePrompt(shotVideoSegment.prompt),
-        width: clap.meta.width,
-        height: clap.meta.height,
+        width: existingClap.meta.width,
+        height: existingClap.meta.height,
       })
       shotVideoSegment.assetSourceType = getClapAssetSourceType(shotVideoSegment.assetUrl)
     } catch (err) {
@@ -75,6 +86,13 @@ export async function processShot({
     }
   
     console.log(`[api/edit/videos] processShot: generated video files: ${shotVideoSegment?.assetUrl?.slice?.(0, 50)}...`)
+
+    // if mode is full, newerClap already contains the ference to shotVideoSegment
+    // but if it's partial, we need to manually add it
+    if (mode === "partial") {
+      newerClap.segments.push(shotVideoSegment)
+    }
+    
   } else {
     console.log(`[api/edit/videos] processShot: there is already a video file: ${shotVideoSegment?.assetUrl?.slice?.(0, 50)}...`)
   }

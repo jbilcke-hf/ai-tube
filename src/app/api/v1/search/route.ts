@@ -2,6 +2,9 @@ import { NextResponse, NextRequest } from "next/server"
 import queryString from "query-string"
 import { BasicSearchResult, ExtendedSearchResult } from "./types"
 import { extend, search } from "."
+import { parsePrompt } from "../../parsers/parsePrompt"
+import { parseLatentSearchMode } from "../../parsers/parseLatentSearchMode"
+import { parseBasicSearchResult } from "../../parsers/parseBasicSearchResults"
 
 export type LatentSearchMode =
   | "basic"
@@ -13,18 +16,11 @@ export async function GET(req: NextRequest, res: NextResponse) {
   const qs = queryString.parseUrl(req.url || "")
   const query = (qs || {}).query
 
-  let mode: LatentSearchMode = "basic"
-  try {
-    mode = decodeURIComponent(query?.m?.toString() || "basic").trim() as LatentSearchMode
-  } catch (err) {}
-
+  const mode = parseLatentSearchMode(query?.m)
 
   if (mode === "basic") {
-    let prompt = ""
-    try {
-      prompt = decodeURIComponent(query?.p?.toString() || "").trim() as string
-    } catch (err) {}
-    
+    const prompt = parsePrompt(query?.p)
+
     const basicSearchResults: BasicSearchResult[] = await search({
       prompt,
       nbResults: 4
@@ -39,14 +35,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
     })
   } else if (mode === "extended") {
 
-    let basicResults: BasicSearchResult[] = []
-    try {
-      const rawString = decodeURIComponent(query?.e?.toString() || "").trim() as string
-      const maybeExistingResults = JSON.parse(rawString)
-      if (Array.isArray(maybeExistingResults)) {
-        basicResults = maybeExistingResults
-      }
-    } catch (err) {}
+    const basicResults = parseBasicSearchResult(query?.e)
 
     const extendedSearchResults: ExtendedSearchResult[] = await extend({
       basicResults

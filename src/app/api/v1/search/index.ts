@@ -3,7 +3,7 @@
 import YAML from "yaml"
 
 import { predict } from "@/app/api/providers/huggingface/predictWithHuggingFace"
-import { parseRawStringToYAML } from "@/app/api/utils/parseRawStringToYAML"
+import { parseRawStringToYAML } from "@/app/api/parsers/parseRawStringToYAML"
 
 import { systemPromptForBasicSearchResults, systemPromptForExtendedSearchResults } from "./systemPrompt"
 import type { BasicSearchResult, ExtendedSearchResult } from "./types"

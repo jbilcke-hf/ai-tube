@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@aitube/clap": "0.0.10",
-    "@aitube/client": "0.0.11",
+    "@aitube/client": "0.0.12",
     "@aitube/engine": "0.0.2",
     "@huggingface/hub": "0.12.3-oauth",
     "@huggingface/inference": "^2.6.7",

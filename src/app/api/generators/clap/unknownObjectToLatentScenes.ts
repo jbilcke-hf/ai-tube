@@ -1,4 +1,4 @@
-import { parseStringArray } from "../../utils/parseStringArray"
+import { parseStringArray } from "../../parsers/parseStringArray"
 import { LatentScene, LatentScenes } from "./types"
 
 /**

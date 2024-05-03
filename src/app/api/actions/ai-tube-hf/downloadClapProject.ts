@@ -6,7 +6,7 @@ import { ClapProject, parseClap } from "@aitube/clap"
 import { ChannelInfo, MediaInfo, VideoRequest } from "@/types/general"
 import { defaultVideoModel } from "@/app/config"
 
-import { parseVideoModelName } from "../../utils/parseVideoModelName"
+import { parseVideoModelName } from "../../parsers/parseVideoModelName"
 import { computeOrientationProjectionWidthHeight } from "../../utils/computeOrientationProjectionWidthHeight"
 
 import { downloadFileAsBlob } from "./downloadFileAsBlob"

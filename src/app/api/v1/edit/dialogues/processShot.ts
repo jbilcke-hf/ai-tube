@@ -5,18 +5,24 @@ import { getSpeechBackgroundAudioPrompt } from "@aitube/engine"
 import { generateSpeechWithParlerTTS } from "@/app/api/generators/speech/generateVoiceWithParlerTTS"
 import { getMediaInfo } from "@/app/api/utils/getMediaInfo"
 
+import { ClapCompletionMode } from "../types"
+
 export async function processShot({
   shotSegment,
-  clap
+  existingClap,
+  newerClap,
+  mode
 }: {
   shotSegment: ClapSegment
-  clap: ClapProject
+  existingClap: ClapProject
+  newerClap: ClapProject
+  mode: ClapCompletionMode
 }): Promise<void> {
 
   const shotSegments: ClapSegment[] = filterSegments(
     ClapSegmentFilteringMode.START,
     shotSegment,
-    clap.segments
+    existingClap.segments
   )
   
   const shotDialogueSegments: ClapSegment[] = shotSegments.filter(s =>
@@ -34,7 +40,11 @@ export async function processShot({
       // this generates a mp3
       shotDialogueSegment.assetUrl = await generateSpeechWithParlerTTS({
         text: shotDialogueSegment.prompt,
-        audioId: getSpeechBackgroundAudioPrompt(shotSegments, clap.entityIndex, ["high quality", "crisp", "detailed"]),
+        audioId: getSpeechBackgroundAudioPrompt(
+          shotSegments,
+          existingClap.entityIndex,
+          ["high quality", "crisp", "detailed"]
+        ),
         debug: true,
       })
       shotDialogueSegment.assetSourceType = getClapAssetSourceType(shotDialogueSegment.assetUrl)
@@ -47,7 +57,7 @@ export async function processShot({
 
         // we update the duration of all the segments for this shot
         // (it is possible that this makes the two previous lines redundant)
-        clap.segments.filter(s => {
+        existingClap.segments.forEach(s => {
           s.assetDurationInMs = durationInMs
         })
       }
@@ -58,6 +68,11 @@ export async function processShot({
     }
 
     console.log(`[api/edit/dialogues] processShot: generated dialogue audio: ${shotDialogueSegment?.assetUrl?.slice?.(0, 50)}...`)
+
+  // if it's partial, we need to manually add it
+  if (mode === "partial") {
+      newerClap.segments.push(shotDialogueSegment)
+    }
   } else {
     console.log(`[api/edit/dialogues] processShot: there is already a dialogue audio: ${shotDialogueSegment?.assetUrl?.slice?.(0, 50)}...`)
   }

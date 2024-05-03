@@ -1,86 +1,37 @@
 import { NextResponse, NextRequest } from "next/server"
 import queryString from "query-string"
+import { newClap, parseClap, serializeClap } from "@aitube/clap"
 
-import { getClapAssetSourceType, parseClap, serializeClap } from "@aitube/clap"
 import { getToken } from "@/app/api/auth/getToken"
+import { parseCompletionMode } from "@/app/api/parsers/parseCompletionMode"
 
-import { generateImageID } from "./generateImageID"
-import { generateAudioID } from "./generateAudioID"
-import { ClapCompletionMode } from "../types"
-
-const defaultMode: ClapCompletionMode = "full"
+import { editEntities } from "."
 
 export async function POST(req: NextRequest) {
 
   const qs = queryString.parseUrl(req.url || "")
   const query = (qs || {}).query
 
-  // TODO: use query parameters to determine *what* to generate:
-  /*
-  let prompt = ""
-  try {
-    prompt = decodeURIComponent(query?.p?.toString() || "").trim()
-  } catch (err) {}
-  if (!prompt) {
-    return NextResponse.json({ error: 'no prompt provided' }, { status: 400 });
-  }
-
-  if (!prompt.length) { throw new Error(`please provide a prompt`) }
-  */
-
-
-  let mode = defaultMode
-  try {
-    let maybeMode = decodeURIComponent(query?.mode?.toString() || defaultMode).trim()
-    mode = ["partial", "full"].includes(maybeMode) ? (maybeMode as ClapCompletionMode) : "full"
-  } catch (err) {}
-
-  console.log("[api/edit/entities] request:", prompt)
+  const mode = parseCompletionMode(query?.c)
+  // const prompt = parsePrompt(query?.p)
 
   const jwtToken = await getToken({ user: "anonymous" })
 
   const blob = await req.blob()
 
-  const clap = await parseClap(blob)
+  const existingClap = await parseClap(blob)
 
-  if (!clap.entities.length) { throw new Error(`please provide at least one entity`) }
+  const newerClap = mode === "full" ? existingClap : newClap()
 
-  for (const entity of clap.entities) {
+  await editEntities({
+    existingClap,
+    newerClap,
+    mode
+  })
+  
+  console.log(`[api/edit/entities] returning the newer clap extended with the entities`)
 
-    // TASK 1: GENERATE THE IMAGE PROMPT IF MISSING
-    if (!entity.imagePrompt) {
-      entity.imagePrompt = "a man with a beard"
-    }
-
-    // TASK 2: GENERATE THE IMAGE ID IF MISSING
-    if (!entity.imageId) {
-      entity.imageId = await generateImageID({
-        prompt: entity.imagePrompt,
-        seed: entity.seed
-      })
-      entity.imageSourceType = getClapAssetSourceType(entity.imageId)
-    }
-
-    // TASK 3: GENERATE THE AUDIO PROMPT IF MISSING
-    if (!entity.audioPrompt) {
-      entity.audioPrompt = "a man with a beard"
-    }
-
-    // TASK 4: GENERATE THE AUDIO ID IF MISSING
-
-    // TODO here: call Parler-TTS or a generic audio generator
-    if (!entity.audioId) {
-      entity.audioId = await generateAudioID({
-        prompt: entity.audioPrompt,
-        seed: entity.seed
-      })
-      entity.audioSourceType = getClapAssetSourceType(entity.audioId)
-    }
-  }
-
-  console.log(`[api/edit/entities] returning the clap extended with the entities`)
-
-  return new NextResponse(await serializeClap(clap), {
+  return new NextResponse(await serializeClap(newerClap), {
     status: 200,
     headers: new Headers({ "content-type": "application/x-gzip" }),
   })

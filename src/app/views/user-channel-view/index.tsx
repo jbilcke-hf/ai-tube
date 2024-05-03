@@ -15,10 +15,10 @@ import { Button } from "@/components/ui/button"
 import { submitVideoRequest } from "@/app/api/actions/submitVideoRequest"
 import { PendingVideoList } from "@/components/interface/pending-video-list"
 import { getChannelVideos } from "@/app/api/actions/ai-tube-hf/getChannelVideos"
-import { parseVideoModelName } from "@/app/api/utils/parseVideoModelName"
+import { parseVideoModelName } from "@/app/api/parsers/parseVideoModelName"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { defaultVideoModel, defaultVideoOrientation, defaultVoice } from "@/app/config"
-import { parseVideoOrientation } from "@/app/api/utils/parseVideoOrientation"
+import { parseVideoOrientation } from "@/app/api/parsers/parseVideoOrientation"
 
 export function UserChannelView() {
   const [_isPending, startTransition] = useTransition()

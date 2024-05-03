@@ -1,13 +1,12 @@
-import { encode, decode } from 'js-base64'
-
 import { LatentQueryProps } from "@/types/general"
-import { BasicSearchResult, ExtendedSearchResult } from "@/app/api/v1/search/types"
+import { ExtendedSearchResult } from "@/app/api/v1/search/types"
+import { extend } from "@/app/api/v1/search"
+import { parseBasicSearchResult } from '@/app/api/parsers/parseBasicSearchResult'
+
 
 import { Main } from "../../main"
 import { getNewMediaInfo } from "../../api/generators/search/getNewMediaInfo"
 import { getToken } from "../../api/auth/getToken"
-
-import { extend } from "@/app/api/v1/search"
 
 // https://jmswrnr.com/blog/protecting-next-js-api-routes-query-parameters
 
@@ -19,8 +18,8 @@ export default async function DreamPage({
 }: LatentQueryProps) {
   const jwtToken = await getToken({ user: "anonymous" })
   console.log(`[/latent/watch] prompt =`, prompt)
-  let basicResult = JSON.parse(decode(`${prompt || ""}`)) as BasicSearchResult
-  
+  const basicResult = parseBasicSearchResult(prompt)
+
   console.log("[/latent/watch] basicResult:", basicResult)
 
   // note that we should generate a longer synopsis from the autocomplete result

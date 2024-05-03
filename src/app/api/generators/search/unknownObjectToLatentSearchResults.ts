@@ -1,7 +1,7 @@
 import { generateSeed } from "@aitube/clap"
 
-import { parseString } from "../../utils/parseString"
-import { parseStringArray } from "../../utils/parseStringArray"
+import { parseString } from "../../parsers/parseString"
+import { parseStringArray } from "../../parsers/parseStringArray"
 import { LatentSearchResult, LatentSearchResults } from "./types"
 
 export function unknownObjectToLatentSearchResults(something: any): LatentSearchResults {

@@ -6,7 +6,7 @@ import { predict as predictWithHuggingFace } from "@/app/api/providers/huggingfa
 import { predict as predictWithOpenAI } from "@/app/api/providers/openai/predictWithOpenAI"
 import { LatentSearchResults } from "./types"
 import { getSystemPrompt } from "./getSystemPrompt"
-import { parseRawStringToYAML } from "../../utils/parseRawStringToYAML"
+import { parseRawStringToYAML } from "../../parsers/parseRawStringToYAML"
 import { unknownObjectToLatentSearchResults } from "./unknownObjectToLatentSearchResults"
 
 export async function getLatentSearchResults({

@@ -8,7 +8,7 @@ import { predict as predictWithOpenAI } from "@/app/api/providers/openai/predict
 import { LatentScenes } from "./types"
 import { getSystemPrompt } from "./getSystemPrompt"
 import { unknownObjectToLatentScenes } from "./unknownObjectToLatentScenes"
-import { parseRawStringToYAML } from "../../utils/parseRawStringToYAML"
+import { parseRawStringToYAML } from "../../parsers/parseRawStringToYAML"
 
 export async function getLatentScenes({
   prompt = "",
