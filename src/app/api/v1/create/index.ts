@@ -4,6 +4,7 @@ import { ClapProject, getValidNumber, newClap, newSegment } from "@aitube/clap"
 
 import { predict } from "@/app/api/providers/huggingface/predictWithHuggingFace"
 import { parseRawStringToYAML } from "@/app/api/parsers/parseRawStringToYAML"
+import { sleep } from "@/lib/utils/sleep"
 
 import { systemPrompt } from "./systemPrompt"
 import { LatentStory } from "./types"
@@ -31,22 +32,50 @@ export async function create(request: {
 
   const userPrompt = `Video story to generate: ${prompt}`
 
+  const prefix = "```yaml\n"
+  const nbMaxNewTokens = 1400
+
   // TODO use streaming for the Hugging Face prediction
   //
   // note that a Clap file is actually a YAML stream of documents
   // so technically we could stream everything from end-to-end
   // (but I haven't coded the helpers to do this yet)
-  const rawString = await predict({
+  let rawString = await predict({
     systemPrompt,
     userPrompt,
-    nbMaxNewTokens: 1400,
-    prefix: "```yaml\n",
+    nbMaxNewTokens,
+    prefix,
   })
 
   console.log("api/v1/create(): rawString: ", rawString)
 
-  const shots = parseRawStringToYAML<LatentStory[]>(rawString, [])
+  let shots: LatentStory[] = []
+  
+  let maybeShots = parseRawStringToYAML<LatentStory[]>(rawString, [])
 
+  if (!Array.isArray(maybeShots) || maybeShots.length === 0) {
+    console.log(`api/v1/create(): failed to generate shots.. trying again`)
+    
+    await sleep(2000)
+
+    rawString = await predict({
+      systemPrompt,
+      userPrompt: userPrompt + ".", // we trick the Hugging Face cache
+      nbMaxNewTokens,
+      prefix,
+    })
+  
+    console.log("api/v1/create(): rawString: ", rawString)
+  
+    maybeShots = parseRawStringToYAML<LatentStory[]>(rawString, [])
+    if (!Array.isArray(maybeShots) || maybeShots.length === 0) {
+      console.log(`api/v1/create(): failed to generate shots for the second time, which indicates an issue with the Hugging Face API`)
+    } else {
+      shots = maybeShots
+    }  
+  } else {
+    shots = maybeShots
+  }
   console.log(`api/v1/create(): generated ${shots.length} shots`)
 
   // this is approximate - TTS generation will determine the final duration of each shot
