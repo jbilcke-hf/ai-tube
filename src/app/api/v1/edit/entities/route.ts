@@ -10,8 +10,9 @@ import { editEntities } from "."
 import { ClapCompletionMode } from "@aitube/client"
 
 export async function POST(req: NextRequest) {
+  console.log("Hello!")
   await throwIfInvalidToken(req.headers.get("Authorization"))
-
+  console.log("world!")
   const qs = queryString.parseUrl(req.url || "")
   const query = (qs || {}).query
 

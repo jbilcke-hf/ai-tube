@@ -30,14 +30,17 @@ export async function editEntities({
   // if we don't have existing entities, and user passed none,
   // then we need to hallucinate them
   if (existingClap.entities.length === 0 && entityPrompts.length === 0) {
+
     const entityPromptsWithShots = await generateEntityPrompts({
       prompt: existingClap.meta.description,
       latentStory: await clapToLatentStory(existingClap)
     })
 
+    const allShots = existingClap.segments.filter(s => s.category === "camera")
+
     for (const {
       entityPrompt: { name, category, age, variant, region, identityImage, identityVoice },
-      shots
+      shots: entityShots
     } of entityPromptsWithShots) {
       const newEnt = newEntity({
         category,
@@ -68,6 +71,18 @@ export async function editEntities({
       })
       
       existingClap.entities.push(newEnt)
+
+      // now let's assign our entity to shots!
+      //
+      // warning: the shot assignment is the responsibility of the LLM.
+      // if the LLM hallucinates non-existing shot ids, it will cause trouble!
+      for (const shotId of entityShots) {
+        if (allShots[shotId]) {
+          allShots[shotId].entityId = newEnt.id
+        } else {
+          console.log(`[api/v1/edit/entities] warning: the LLM generated a non-existing shot (shot "${shotId}", but we only have ${allShots.length} shots)`)
+        }
+      }
     }
   }
 
