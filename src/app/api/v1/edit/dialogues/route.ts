@@ -2,16 +2,16 @@ import { NextResponse, NextRequest } from "next/server"
 
 import { ClapProject, ClapSegment, newClap, parseClap, serializeClap } from "@aitube/clap"
 
-import { getToken } from "@/app/api/auth/getToken"
 
 import { processShot } from "./processShot"
 import queryString from "query-string"
 import { parseCompletionMode } from "@/app/api/parsers/parseCompletionMode"
+import { throwIfInvalidToken } from "@/app/api/v1/auth/throwIfInvalidToken"
+import { ClapCompletionMode } from "@aitube/client"
 
 // a helper to generate speech for a Clap
 export async function POST(req: NextRequest) {
-
-  const jwtToken = await getToken({ user: "anonymous" })
+  await throwIfInvalidToken(req.headers.get("Authorization"))
 
   const qs = queryString.parseUrl(req.url || "")
   const query = (qs || {}).query
@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
     throw new Error(`Error, this endpoint being synchronous, it is designed for short stories only (max 32 shots).`)
   }
 
-  const newerClap = mode === "full" ? existingClap : newClap()
+  const newerClap = mode === ClapCompletionMode.FULL ? existingClap : newClap()
   
   // we process the shots in parallel (this will increase the queue size in the Gradio spaces)
   await Promise.all(shotsSegments.map(shotSegment =>

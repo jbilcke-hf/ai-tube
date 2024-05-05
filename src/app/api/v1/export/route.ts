@@ -1,22 +1,17 @@
 import { NextResponse, NextRequest } from "next/server"
 import queryString from "query-string"
 
-type SupportedExportFormat = "mp4" | "webm"
-const defaultExportFormat = "mp4"
+import { parseSupportedExportFormat } from "@/app/api/parsers/parseSupportedExportFormat"
+import { throwIfInvalidToken } from "@/app/api/v1/auth/throwIfInvalidToken"
 
 // we hide/wrap the micro-service under a unified AiTube API
 export async function POST(req: NextRequest, res: NextResponse) {
+  await throwIfInvalidToken(req.headers.get("Authorization"))
 
   const qs = queryString.parseUrl(req.url || "")
   const query = (qs || {}).query
 
-  let format: SupportedExportFormat = defaultExportFormat
-  try {
-    format = decodeURIComponent(query?.f?.toString() || defaultExportFormat).trim() as SupportedExportFormat
-    if (format !== "mp4" && format !== "webm") {
-      format = defaultExportFormat
-    }
-  } catch (err) {}
+  const format = parseSupportedExportFormat(query?.f)
 
   // let's call our micro-service, which is currently open bar.
   const result = await fetch(

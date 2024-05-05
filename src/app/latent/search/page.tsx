@@ -5,7 +5,7 @@ import { LatentQueryProps } from "@/types/general"
 
 import { Main } from "../../main"
 import { getNewMediaInfo } from "../../api/generators/search/getNewMediaInfo"
-import { getToken } from "../../api/auth/getToken"
+import { getToken } from "../../api/v1/auth/getToken"
 
 // https://jmswrnr.com/blog/protecting-next-js-api-routes-query-parameters
 

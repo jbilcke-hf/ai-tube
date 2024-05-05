@@ -1,11 +1,16 @@
 
-import { ClapProject, ClapSegment, getClapAssetSourceType, filterSegments, ClapSegmentFilteringMode } from "@aitube/clap"
+import {
+  ClapProject,
+  ClapSegment,
+  getClapAssetSourceType,
+  filterSegments,
+  ClapSegmentFilteringMode
+} from "@aitube/clap"
+import { ClapCompletionMode } from "@aitube/client"
 import { getSpeechBackgroundAudioPrompt } from "@aitube/engine"
 
 import { generateSpeechWithParlerTTS } from "@/app/api/generators/speech/generateVoiceWithParlerTTS"
 import { getMediaInfo } from "@/app/api/utils/getMediaInfo"
-
-import { ClapCompletionMode } from "../types"
 
 export async function processShot({
   shotSegment,
@@ -70,7 +75,7 @@ export async function processShot({
     console.log(`[api/edit/dialogues] processShot: generated dialogue audio: ${shotDialogueSegment?.assetUrl?.slice?.(0, 50)}...`)
 
   // if it's partial, we need to manually add it
-  if (mode === "partial") {
+  if (mode !== ClapCompletionMode.FULL) {
       newerClap.segments.push(shotDialogueSegment)
     }
   } else {

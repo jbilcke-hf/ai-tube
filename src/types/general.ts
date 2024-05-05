@@ -54,6 +54,8 @@ export interface RenderRequest {
   wait: boolean // wait until the job is completed
 
   analyze: boolean // analyze the image to generate a caption (optional)
+
+  identityImage: string // reference image for the main entity
 }
 
 export interface ImageSegment {

@@ -1,22 +1,112 @@
 
-import { ClapProject, getClapAssetSourceType, newClap } from "@aitube/clap"
+import { ClapProject, getClapAssetSourceType, getValidNumber, newEntity } from "@aitube/clap"
+import { ClapCompletionMode, ClapEntityPrompt } from "@aitube/client"
 
 import { generateImageID } from "./generateImageID"
 import { generateAudioID } from "./generateAudioID"
-
-import { ClapCompletionMode } from "../types"
+import { generateEntityPrompts } from "./generateEntityPrompts"
+import { clapToLatentStory } from "./clapToLatentStory"
 
 export async function editEntities({
   existingClap,
   newerClap,
-  mode
+  entityPrompts = [],
+  mode = ClapCompletionMode.PARTIAL
 }: {
   existingClap: ClapProject
   newerClap: ClapProject
-  mode: ClapCompletionMode
+  entityPrompts?: ClapEntityPrompt[]
+  mode?: ClapCompletionMode
 }) {
 
+  // note that we can only handle either FULL or PARTIAL
+  // other modes such as MERGE, REPLACE.. are irrelevant since those are client-side modes
+  // so from a server point of view those correspond to PARTIAL
+  //
+  // it is also worth noting that the use of FULL should be discouraged
+  const isFull = mode === ClapCompletionMode.FULL
+  const isPartial = !isFull
+
+  // if we don't have existing entities, and user passed none,
+  // then we need to hallucinate them
+  if (existingClap.entities.length === 0 && entityPrompts.length === 0) {
+    const entityPromptsWithShots = await generateEntityPrompts({
+      prompt: existingClap.meta.description,
+      latentStory: await clapToLatentStory(existingClap)
+    })
+
+    for (const {
+      entityPrompt: { name, category, age, variant, region, identityImage, identityVoice },
+      shots
+    } of entityPromptsWithShots) {
+      const newEnt = newEntity({
+        category,
+        triggerName: name,
+        label: name,
+        description: name,
+        author: "auto",
+        thumbnailUrl: "",
+  
+        imagePrompt: "",
+        imageSourceType: getClapAssetSourceType(identityImage),
+        imageEngine: "SDXL Lightning", 
+        imageId: identityImage,
+        audioPrompt: "",
+        audioSourceType: getClapAssetSourceType(identityVoice),
+        audioEngine: "Parler-TTS", // <- TODO: use OpenVoice 2, that way it can be personalized
+        audioId: identityVoice,
+  
+        // note: using a numeric age should be deprecated,
+        // instead we should be able to specify things using text,
+        // eg. "8 months", "25 years old", "12th century"
+        age: getValidNumber(age, 0, 120, 25),
+   
+        // TODO: delete gender and appearance, replace by a single concept of "variant"
+        gender: "",
+        appearance: variant,
+        region: region,
+      })
+      
+      existingClap.entities.push(newEnt)
+    }
+  }
+
+  // otherwise try to add what's new
+  for (const { name, category, age, variant, region, identityImage, identityVoice } of entityPrompts) {
+    const newEnt = newEntity({
+      category,
+      triggerName: name,
+      label: name,
+      description: name,
+      author: "auto",
+      thumbnailUrl: "",
+
+      imagePrompt: "",
+      imageSourceType: getClapAssetSourceType(identityImage),
+      imageEngine: "SDXL Lightning", 
+      imageId: identityImage,
+      audioPrompt: "",
+      audioSourceType: getClapAssetSourceType(identityVoice),
+      audioEngine: "Parler-TTS", // <- TODO: use OpenVoice 2, that way it can be personalized
+      audioId: identityVoice,
+
+      // note: using a numeric age should be deprecated,
+      // instead we should be able to specify things using text,
+      // eg. "8 months", "25 years old", "12th century"
+      age: getValidNumber(age, 0, 120, 25),
+ 
+      // TODO: delete gender and appearance, replace by a single concept of "variant"
+      gender: "",
+      appearance: variant,
+      region: region,
+    })
+    
+    existingClap.entities.push(newEnt)
+  }
+
   if (!existingClap.entities.length) { throw new Error(`please provide at least one entity`) }
+
+  // then we try to automatically repair, edit, complete.. all the existing entities
 
   for (const entity of existingClap.entities) {
 
@@ -57,13 +147,13 @@ export async function editEntities({
     }
 
     // in case we are doing a partial update
-    if (mode === "partial" && entityHasBeenModified && !newerClap.entityIndex[entity.id]) {
+    if (mode !== ClapCompletionMode.FULL && entityHasBeenModified && !newerClap.entityIndex[entity.id]) {
       newerClap.entities.push(entity)
       newerClap.entityIndex[entity.id] = entity
     }
   }
 
-  console.log(`[api/edit/entities] returning the newerClap`)
+  console.log(`api/edit/entities(): returning the newerClap`)
 
   return newerClap
 }

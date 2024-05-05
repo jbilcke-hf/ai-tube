@@ -2,7 +2,6 @@
 import { generateSeed } from "@aitube/clap"
 
 import { sleep } from "@/lib/utils/sleep"
-import { getValidNumber } from "@/lib/utils/getValidNumber"
 
 import { newRender, getRender } from "@/app/api/providers/videochain/renderWithVideoChain"
 import { getNegativePrompt, getPositivePrompt } from "@/app/api/utils/imagePrompts"

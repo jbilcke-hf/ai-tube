@@ -1,11 +1,19 @@
 
-import { ClapProject, ClapSegment, getClapAssetSourceType, newSegment,filterSegments, ClapSegmentFilteringMode } from "@aitube/clap"
+import {
+  ClapProject,
+  ClapSegment,
+  getClapAssetSourceType,
+  newSegment,
+  filterSegments,
+  ClapSegmentFilteringMode
+} from "@aitube/clap"
+import { ClapCompletionMode } from "@aitube/client"
 import { getVideoPrompt } from "@aitube/engine"
 
 import { getPositivePrompt } from "@/app/api/utils/imagePrompts"
 
 import { generateVideo } from "./generateVideo"
-import { ClapCompletionMode } from "../types"
+
 
 export async function processShot({
   shotSegment,
@@ -89,7 +97,7 @@ export async function processShot({
 
     // if mode is full, newerClap already contains the ference to shotVideoSegment
     // but if it's partial, we need to manually add it
-    if (mode === "partial") {
+    if (mode !== ClapCompletionMode.FULL) {
       newerClap.segments.push(shotVideoSegment)
     }
     

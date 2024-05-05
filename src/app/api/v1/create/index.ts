@@ -2,12 +2,12 @@
 
 import { ClapProject, getValidNumber, newClap, newSegment } from "@aitube/clap"
 
+import { sleep } from "@/lib/utils/sleep"
 import { predict } from "@/app/api/providers/huggingface/predictWithHuggingFace"
 import { parseRawStringToYAML } from "@/app/api/parsers/parseRawStringToYAML"
-import { sleep } from "@/lib/utils/sleep"
+import { LatentStory } from "@/app/api/v1/types"
 
 import { systemPrompt } from "./systemPrompt"
-import { LatentStory } from "./types"
 
 // a helper to generate Clap stories from a few sentences
 // this is mostly used by external apps such as the Stories Factory
@@ -20,7 +20,6 @@ export async function create(request: {
   width: 1024,
   height: 576,
 }): Promise<ClapProject> {
-
   const prompt = `${request?.prompt || ""}`.trim()
 
   console.log("api/v1/create(): request:", request)
@@ -30,7 +29,9 @@ export async function create(request: {
   const width = getValidNumber(request?.width, 256, 8192, 1024)
   const height = getValidNumber(request?.height, 256, 8192, 576)
 
-  const userPrompt = `Video story to generate: ${prompt}`
+  const userPrompt = `Movie story to generate: ${prompt}
+
+Output: `
 
   const prefix = "```yaml\n"
   const nbMaxNewTokens = 1400
@@ -70,12 +71,15 @@ export async function create(request: {
     maybeShots = parseRawStringToYAML<LatentStory[]>(rawString, [])
     if (!Array.isArray(maybeShots) || maybeShots.length === 0) {
       console.log(`api/v1/create(): failed to generate shots for the second time, which indicates an issue with the Hugging Face API`)
-    } else {
-      shots = maybeShots
-    }  
-  } else {
-    shots = maybeShots
+    }
   }
+
+  if (maybeShots.length) {
+    shots = maybeShots
+  } else {
+    throw new Error(`Hugging Face Inference API failure (the model failed to generate the shots)`)
+  }
+
   console.log(`api/v1/create(): generated ${shots.length} shots`)
 
   // this is approximate - TTS generation will determine the final duration of each shot
@@ -88,8 +92,8 @@ export async function create(request: {
       title: "Not needed", // we don't need a title actually
       description: "This video has been generated using AI",
       synopsis: "",
-      licence: "Non Commercial",
-      orientation: "vertical",
+      licence: "",
+      orientation: width > height ? "landscape" : height > width ? "portrait" : "square",
       width,
       height,
       isInteractive: false,
@@ -160,7 +164,7 @@ export async function create(request: {
       startTimeInMs: currentElapsedTimeInMs,
       assetDurationInMs: defaultSegmentDurationInMs,
       category: "camera",
-      prompt: "vertical video",
+      prompt: "video",
       outputType: "text"
     }))
 

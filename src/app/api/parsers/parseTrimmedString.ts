@@ -1,4 +1,4 @@
-export function parseString(something: any): string {
+export function parseTrimmedString(something: any): string {
   let result: string = ""
   if (typeof something === "string") {
     result = `${something}`.trim()

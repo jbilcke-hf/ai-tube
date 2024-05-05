@@ -10,6 +10,7 @@ const apiKey = `${process.env.VIDEOCHAIN_API_KEY || ""}`
 export async function newRender({
   prompt,
   negativePrompt,
+  identityImage,
   nbFrames,
   nbSteps,
   width,
@@ -20,6 +21,7 @@ export async function newRender({
 }: {
   prompt: string
   negativePrompt: string
+  identityImage: string
   nbFrames: number
   nbSteps: number
   width: number
@@ -61,6 +63,7 @@ export async function newRender({
         body: JSON.stringify({
           prompt,
           negativePrompt,
+          identityImage,
           // nbFrames: 8 and nbSteps: 15 --> ~10 sec generation
           nbFrames, // when nbFrames is 1, we will only generate static images
           nbSteps, // 20 = fast, 30 = better, 50 = best
@@ -72,7 +75,7 @@ export async function newRender({
           upscalingFactor: 1, // let's disable upscaling right now
           turbo, // always use turbo mode (it's for images only anyway)
           // also what could be done iw that we could use the width and height to control this
-          cache: shouldRenewCache ? "renew" : "use"
+          cache: shouldRenewCache ? "renew" : "use",
         } as Partial<RenderRequest>),
         cache: 'no-store',
       // we can also use this (see https://vercel.com/blog/vercel-cache-api-nextjs-cache)

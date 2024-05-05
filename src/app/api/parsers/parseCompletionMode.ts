@@ -1,10 +1,25 @@
-import { ClapCompletionMode } from "../v1/edit/types"
+import { ClapCompletionMode } from "@aitube/client"
 
-export function parseCompletionMode(input?: any, defaultMode: ClapCompletionMode = "partial"): ClapCompletionMode {
+export function parseCompletionMode(
+  input?: any,
+  defaultMode: ClapCompletionMode = ClapCompletionMode.PARTIAL
+): ClapCompletionMode {
   let mode = defaultMode
+  
   try {
-    let maybeMode = decodeURIComponent(`${input || ""}` || defaultMode).trim()
-    mode = ["partial", "full"].includes(maybeMode) ? (maybeMode as ClapCompletionMode) : defaultMode
+    let maybeMode = decodeURIComponent(`${input || ""}`).trim()
+
+    if (!maybeMode) {
+      maybeMode = defaultMode
+    }
+
+    mode = maybeMode as ClapCompletionMode
+    
   } catch (err) {}
+
+  if (!Object.values(ClapCompletionMode).includes(mode)) {
+    throw new Error(`Invalid clap completion mode: "${mode}"`)
+  }
+
   return mode
 }
