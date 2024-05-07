@@ -2,6 +2,8 @@
 
 import { useEffect } from "react"
 import { usePathname, useRouter } from "next/navigation"
+import { ConsentBanner, ConsentProvider } from 'react-hook-consent'
+import 'react-hook-consent/dist/styles/style.css'
 
 import { ChannelInfo, MediaInfo } from "@/types/general"
 import { getCollectionKey } from "@/lib/business/getCollectionKey"
@@ -193,6 +195,30 @@ export function Main({
 
   const view = useStore(s => s.view)
   return (
+    <ConsentProvider
+        options={{
+          services: [
+            {
+              id: 'gtm',
+              name: 'Google Tag Manager (for Google analytics)',
+              scripts: [
+                  { id: 'inline-code', code: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+                  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+                  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+                  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+                  })(window,document,'script','dataLayer','GTM-5ZGS5FDG');` },
+              ],
+              // cookies: [ { pattern: 'cookie-name' }, { pattern: /regex/ }
+             //  ],
+              // localStorage: ['local-storage-key'],
+              // sessionStorage: ['session-storage-key'],
+              mandatory: true,
+            },
+          ],
+          // customHash: 'my-custom-hash', // optional, e.g. when changing the options based on language
+          theme: 'dark',
+        }}
+      >
     <TubeLayout>
       {view === "home" && <HomeView />}
       {view === "public_media_embed" && <PublicMediaEmbedView />}
@@ -211,5 +237,15 @@ export function Main({
       {view === "user_account" && <UserAccountView />}
       {view === "not_found" && <NotFoundView />}
     </TubeLayout>
+    <ConsentBanner
+      settings={{ hidden: false, label: 'More', modal: { title: 'AiTube Analytics' } }}
+      decline={{ hidden: false, label: 'No' }}
+      approve={{ label: 'Yes' }}
+        >
+          <>
+            Do you allow AiTube to use cookies and external services? This is used to improve the user experience, by analyzing which features and content are liked the most.
+          </>
+        </ConsentBanner>
+        </ConsentProvider>
   )
 }
