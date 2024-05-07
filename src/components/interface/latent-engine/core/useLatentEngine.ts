@@ -1,7 +1,7 @@
 
 import { create } from "zustand"
 
-import { ClapProject, ClapSegment, newClap, parseClap } from "@aitube/clap"
+import { ClapProject, ClapSegment, ClapSegmentCategory, newClap, parseClap } from "@aitube/clap"
 import { getVideoPrompt } from "@aitube/engine"
 
 import { LatentEngineStore } from "./types"
@@ -518,7 +518,7 @@ export const useLatentEngine = create<LatentEngineStore>((set, get) => ({
         // note: for now we only display one panel at a time,
         // later we can try to see if we should handle more
         // for nice gradient transition,
-        const interfaceLayers = await resolveSegments(clap, "interface", 1)
+        const interfaceLayers = await resolveSegments(clap, ClapSegmentCategory.INTERFACE, 1)
 
         if (get().isPlaying) {
           set({

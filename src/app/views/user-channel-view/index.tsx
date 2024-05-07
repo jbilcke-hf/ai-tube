@@ -2,11 +2,12 @@
 
 import { useEffect, useState, useTransition } from "react"
 
+import { defaultMediaOrientation, parseMediaOrientation } from "@aitube/clap"
+import { useLocalStorage } from "usehooks-ts"
+
 import { useStore } from "@/app/state/useStore"
 import { cn } from "@/lib/utils/cn"
 import { VideoGenerationModel, MediaInfo } from "@/types/general"
-
-import { useLocalStorage } from "usehooks-ts"
 import { localStorageKeys } from "@/app/state/localStorageKeys"
 import { defaultSettings } from "@/app/state/defaultSettings"
 import { Input } from "@/components/ui/input"
@@ -17,8 +18,7 @@ import { PendingVideoList } from "@/components/interface/pending-video-list"
 import { getChannelVideos } from "@/app/api/actions/ai-tube-hf/getChannelVideos"
 import { parseVideoModelName } from "@/app/api/parsers/parseVideoModelName"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { defaultVideoModel, defaultVideoOrientation, defaultVoice } from "@/app/config"
-import { parseVideoOrientation } from "@/app/api/parsers/parseVideoOrientation"
+import { defaultVideoModel, defaultVoice } from "@/app/config"
 
 export function UserChannelView() {
   const [_isPending, startTransition] = useTransition()
@@ -37,7 +37,7 @@ export function UserChannelView() {
   const [voice, setVoice] = useState(defaultVoice)
   const [music, setMusic] = useState("")
   const [duration, setDuration] = useState(0)
-  const [orientation, setOrientation] = useState(defaultVideoOrientation)
+  const [orientation, setOrientation] = useState(defaultMediaOrientation)
 
   // we do not include the tags in the list of required fields
   const missingFields = !title || !description || !prompt
@@ -243,9 +243,9 @@ export function UserChannelView() {
           <div className="flex flex-col space-y-2 flex-grow">
             <Select
               onValueChange={(value: string) => {
-                setOrientation(parseVideoOrientation(value, defaultVideoOrientation))
+                setOrientation(parseMediaOrientation(value, defaultMediaOrientation))
               }}
-              defaultValue={defaultVideoOrientation}>
+              defaultValue={defaultMediaOrientation}>
               <SelectTrigger className="">
                 <SelectValue placeholder="Video orientation" />
               </SelectTrigger>

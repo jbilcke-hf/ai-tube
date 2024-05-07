@@ -1,4 +1,4 @@
-import { ClapProject, ClapSegmentFilteringMode, filterSegments } from "@aitube/clap"
+import { ClapProject, ClapSegmentCategory, ClapSegmentFilteringMode, filterSegments } from "@aitube/clap"
 
 import { LatentStory } from "@/app/api/v1/types"
 
@@ -20,21 +20,21 @@ export async function clapToLatentStory(clap: ClapProject): Promise<LatentStory[
       ClapSegmentFilteringMode.START,
       shot,
       clap.segments,
-      "storyboard"
+      ClapSegmentCategory.STORYBOARD
     ).at(0)
 
     const title = filterSegments(
       ClapSegmentFilteringMode.START,
       shot,
       clap.segments,
-      "interface"
+      ClapSegmentCategory.INTERFACE
     ).at(0)
 
     const voice = filterSegments(
       ClapSegmentFilteringMode.START,
       shot,
       clap.segments,
-      "dialogue"
+      ClapSegmentCategory.DIALOGUE
     ).at(0)
 
     const latentStory: LatentStory = {

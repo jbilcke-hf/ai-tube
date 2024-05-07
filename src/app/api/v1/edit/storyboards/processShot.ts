@@ -4,7 +4,9 @@ import {
   getClapAssetSourceType,
   newSegment,
   filterSegments,
-  ClapSegmentFilteringMode
+  ClapSegmentFilteringMode,
+  ClapSegmentCategory,
+  ClapOutputType
 } from "@aitube/clap"
 import { ClapCompletionMode } from "@aitube/client"
 import { getVideoPrompt } from "@aitube/engine"
@@ -32,7 +34,7 @@ export async function processShot({
   )
 
   const shotStoryboardSegments: ClapSegment[] = shotSegments.filter(s =>
-    s.category === "storyboard"
+    s.category === ClapSegmentCategory.STORYBOARD
   )
 
   let shotStoryboardSegment: ClapSegment | undefined = shotStoryboardSegments.at(0)
@@ -44,10 +46,10 @@ export async function processShot({
       startTimeInMs: shotSegment.startTimeInMs,
       endTimeInMs: shotSegment.endTimeInMs,
       assetDurationInMs: shotSegment.assetDurationInMs,
-      category: "storyboard",
+      category: ClapSegmentCategory.STORYBOARD,
       prompt: "",
       assetUrl: "",
-      outputType: "image"
+      outputType: ClapOutputType.IMAGE,
     })
 
     // we fix the existing clap

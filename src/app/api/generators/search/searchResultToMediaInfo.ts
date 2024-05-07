@@ -3,14 +3,12 @@ import { v4 as uuidv4 } from "uuid"
 import {
   ChannelInfo,
   MediaInfo,
-  VideoStatus,
-  VideoGenerationModel,
-  MediaProjection,
-  VideoOrientation
 } from "@/types/general"
 
-import { LatentSearchResult, LatentSearchResults } from "./types"
 import { newRender } from "../../providers/videochain/renderWithVideoChain"
+
+import { LatentSearchResult } from "./types"
+import { defaultMediaOrientation } from "@aitube/clap"
 
 const channel: ChannelInfo = {
  /**
@@ -78,7 +76,7 @@ const channel: ChannelInfo = {
  /**
   * Default video orientation
   */
- orientation: "landscape"
+ orientation: defaultMediaOrientation
 }
 
 export async function searchResultToMediaInfo(searchResult: LatentSearchResult): Promise<MediaInfo> {
@@ -220,7 +218,7 @@ export async function searchResultToMediaInfo(searchResult: LatentSearchResult):
     /**
      * General media aspect ratio
      */
-    orientation: "landscape",
+    orientation: defaultMediaOrientation,
 
     /**
      * Media projection (cartesian by default)

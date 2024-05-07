@@ -2,8 +2,11 @@
 
 import { Blob } from "buffer"
 
+import { ClapMediaOrientation } from "@aitube/clap"
+
 import { Credentials, uploadFile, whoAmI } from "@/lib/huggingface/hub/src"
-import { ChannelInfo, VideoGenerationModel, MediaInfo, VideoOrientation, VideoRequest } from "@/types/general"
+import { ChannelInfo, VideoGenerationModel, MediaInfo, VideoRequest } from "@/types/general"
+
 import { formatPromptFileName } from "../../utils/formatPromptFileName"
 import { computeOrientationProjectionWidthHeight } from "../../utils/computeOrientationProjectionWidthHeight"
 
@@ -38,7 +41,7 @@ export async function uploadVideoRequestToDataset({
   music: string
   tags: string[]
   duration: number
-  orientation: VideoOrientation
+  orientation: ClapMediaOrientation
 }): Promise<{
   videoRequest: VideoRequest
   videoInfo: MediaInfo

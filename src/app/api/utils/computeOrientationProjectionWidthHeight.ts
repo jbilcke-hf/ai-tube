@@ -1,7 +1,7 @@
-import { VideoOrientation, MediaProjection } from "@/types/general"
+import { MediaProjection } from "@/types/general"
 
-import { parseVideoOrientation } from "../parsers/parseVideoOrientation"
 import { parseProjectionFromLoRA } from "../parsers/parseProjectionFromLoRA"
+import { ClapMediaOrientation, parseMediaOrientation } from "@aitube/clap"
 
 export function computeOrientationProjectionWidthHeight({
   lora: maybeLora,
@@ -12,14 +12,14 @@ export function computeOrientationProjectionWidthHeight({
   projection?: any
   orientation?: any
 }): {
-  orientation: VideoOrientation
+  orientation: ClapMediaOrientation
   projection: MediaProjection
   width: number
   height: number
 } {
 
   const lora = `${maybeLora || ""}`
-  const orientation = parseVideoOrientation(maybeOrientation)
+  const orientation = parseMediaOrientation(maybeOrientation)
   const projection = maybeProjection ? maybeProjection : parseProjectionFromLoRA(lora)
 
   let width = 1024

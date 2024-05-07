@@ -1,6 +1,6 @@
 "use server"
 
-import { ClapProject, getValidNumber, newClap, newSegment } from "@aitube/clap"
+import { ClapProject, getValidNumber, newClap, newSegment, ClapSegmentCategory, ClapOutputType } from "@aitube/clap"
 
 import { sleep } from "@/lib/utils/sleep"
 import { predict } from "@/app/api/providers/huggingface/predictWithHuggingFace"
@@ -133,9 +133,9 @@ Output: `
       track: 1,
       startTimeInMs: currentElapsedTimeInMs,
       assetDurationInMs: defaultSegmentDurationInMs,
-      category: "storyboard",
+      category: ClapSegmentCategory.STORYBOARD,
       prompt: image,
-      outputType: "image"
+      outputType: ClapOutputType.IMAGE,
     }))
 
     clap.segments.push(newSegment({

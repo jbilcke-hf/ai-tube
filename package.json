@@ -10,9 +10,9 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@aitube/clap": "0.0.10",
-    "@aitube/client": "0.0.15",
-    "@aitube/engine": "0.0.2",
+    "@aitube/clap": "0.0.14",
+    "@aitube/client": "0.0.17",
+    "@aitube/engine": "0.0.4",
     "@huggingface/hub": "0.12.3-oauth",
     "@huggingface/inference": "^2.6.7",
     "@jcoreio/async-throttle": "^1.6.0",

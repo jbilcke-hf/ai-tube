@@ -1,4 +1,4 @@
-import { ClapProject, ClapSegment } from "@aitube/clap"
+import { ClapProject, ClapSegment, ClapSegmentCategory } from "@aitube/clap"
 
 import { LatentComponentResolver, LayerElement } from "../core/types"
 
@@ -10,11 +10,11 @@ import { resolve as imageResolver } from "./image"
 export async function resolveSegment(segment: ClapSegment, clap: ClapProject): Promise<LayerElement> {
   let latentComponentResolver: LatentComponentResolver = genericResolver
   
-  if (segment.category === "interface") {
+  if (segment.category === ClapSegmentCategory.INTERFACE) {
     latentComponentResolver = interfaceResolver
-  } else if (segment.category === "video") {
+  } else if (segment.category === ClapSegmentCategory.VIDEO) {
     latentComponentResolver = videoResolver
-  } else if (segment.category === "storyboard") {
+  } else if (segment.category === ClapSegmentCategory.STORYBOARD) {
     latentComponentResolver = imageResolver
   }
 
