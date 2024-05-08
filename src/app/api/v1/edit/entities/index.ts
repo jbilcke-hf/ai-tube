@@ -11,12 +11,14 @@ export async function editEntities({
   existingClap,
   newerClap,
   entityPrompts = [],
-  mode = ClapCompletionMode.PARTIAL
+  mode = ClapCompletionMode.PARTIAL,
+  turbo = false,
 }: {
   existingClap: ClapProject
   newerClap: ClapProject
   entityPrompts?: ClapEntityPrompt[]
   mode?: ClapCompletionMode
+  turbo?: boolean
 }) {
 
   // note that we can only handle either FULL or PARTIAL
@@ -33,7 +35,8 @@ export async function editEntities({
 
     const entityPromptsWithShots = await generateEntityPrompts({
       prompt: existingClap.meta.description,
-      latentStory: await clapToLatentStory(existingClap)
+      latentStory: await clapToLatentStory(existingClap),
+      turbo,
     })
 
     const allShots = existingClap.segments.filter(s => s.category === "camera")
@@ -137,7 +140,8 @@ export async function editEntities({
     if (!entity.imageId) {
       entity.imageId = await generateImageID({
         prompt: entity.imagePrompt,
-        seed: entity.seed
+        seed: entity.seed,
+        turbo,
       })
       entity.imageSourceType = getClapAssetSourceType(entity.imageId)
       entityHasBeenModified = true

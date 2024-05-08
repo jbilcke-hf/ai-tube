@@ -19,12 +19,14 @@ export async function processShot({
   shotSegment,
   existingClap,
   newerClap,
-  mode
+  mode,
+  turbo,
 }: {
   shotSegment: ClapSegment
   existingClap: ClapProject
   newerClap: ClapProject
   mode: ClapCompletionMode
+  turbo: boolean
 }): Promise<void> {
 
   const shotSegments: ClapSegment[] = filterSegments(
@@ -82,6 +84,7 @@ export async function processShot({
         prompt: getPositivePrompt(shotStoryboardSegment.prompt),
         width: existingClap.meta.width,
         height: existingClap.meta.height,
+        turbo,
       })
       shotStoryboardSegment.assetSourceType = getClapAssetSourceType(shotStoryboardSegment.assetUrl)
     } catch (err) {

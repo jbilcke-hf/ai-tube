@@ -8,6 +8,7 @@ import queryString from "query-string"
 import { parseCompletionMode } from "@/app/api/parsers/parseCompletionMode"
 import { throwIfInvalidToken } from "@/app/api/v1/auth/throwIfInvalidToken"
 import { ClapCompletionMode } from "@aitube/client"
+import { parseTurbo } from "@/app/api/parsers/parseTurbo"
 
 // a helper to generate speech for a Clap
 export async function POST(req: NextRequest) {
@@ -17,6 +18,7 @@ export async function POST(req: NextRequest) {
   const query = (qs || {}).query
   
   const mode = parseCompletionMode(query?.c)
+  const turbo = parseTurbo(query?.t)
   
   const blob = await req.blob()
 
@@ -41,7 +43,8 @@ export async function POST(req: NextRequest) {
       shotSegment,
       existingClap,
       newerClap,
-      mode
+      mode,
+      turbo,
     })
   ))
 

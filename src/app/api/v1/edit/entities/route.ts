@@ -8,6 +8,7 @@ import { throwIfInvalidToken } from "@/app/api/v1/auth/throwIfInvalidToken"
 
 import { editEntities } from "."
 import { ClapCompletionMode } from "@aitube/client"
+import { parseTurbo } from "@/app/api/parsers/parseTurbo"
 
 export async function POST(req: NextRequest) {
   console.log("Hello!")
@@ -17,6 +18,8 @@ export async function POST(req: NextRequest) {
   const query = (qs || {}).query
 
   const mode = parseCompletionMode(query?.c)
+  const turbo = parseTurbo(query?.t)
+  
   // const prompt = parsePrompt(query?.p)
 
   const entityPrompts = parseClapEntityPrompts(query?.e)
@@ -31,7 +34,8 @@ export async function POST(req: NextRequest) {
     existingClap,
     newerClap,
     entityPrompts,
-    mode
+    mode,
+    turbo,
   })
   
   console.log(`[api/edit/entities] returning the newer clap extended with the entities`)

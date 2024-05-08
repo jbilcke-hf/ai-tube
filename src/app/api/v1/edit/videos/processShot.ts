@@ -19,12 +19,14 @@ export async function processShot({
   shotSegment,
   existingClap,
   newerClap,
-  mode
+  mode,
+  turbo,
 }: {
   shotSegment: ClapSegment
   existingClap: ClapProject
   newerClap: ClapProject
   mode: ClapCompletionMode
+  turbo: boolean
 }): Promise<void> {
   const shotSegments: ClapSegment[] = filterSegments(
     ClapSegmentFilteringMode.START,
@@ -85,7 +87,8 @@ export async function processShot({
       shotVideoSegment.assetUrl = await generateVideo({
         prompt: getPositivePrompt(shotVideoSegment.prompt),
         width: existingClap.meta.width,
-        height: existingClap.meta.height,
+        height: existingClap.meta.height,,
+        turbo,
       })
       shotVideoSegment.assetSourceType = getClapAssetSourceType(shotVideoSegment.assetUrl)
     } catch (err) {

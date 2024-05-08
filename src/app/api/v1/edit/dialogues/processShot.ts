@@ -16,12 +16,14 @@ export async function processShot({
   shotSegment,
   existingClap,
   newerClap,
-  mode
+  mode,
+  turbo,
 }: {
   shotSegment: ClapSegment
   existingClap: ClapProject
   newerClap: ClapProject
   mode: ClapCompletionMode
+  turbo: boolean
 }): Promise<void> {
 
   const shotSegments: ClapSegment[] = filterSegments(

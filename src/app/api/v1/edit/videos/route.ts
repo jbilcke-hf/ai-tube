@@ -7,6 +7,7 @@ import { parseCompletionMode } from "@/app/api/parsers/parseCompletionMode"
 import { throwIfInvalidToken } from "@/app/api/v1/auth/throwIfInvalidToken"
 
 import { processShot } from "./processShot"
+import { parseTurbo } from "@/app/api/parsers/parseTurbo"
 
 // a helper to generate videos for a Clap
 // this is mostly used by external apps such as the Stories Factory
@@ -22,7 +23,8 @@ export async function POST(req: NextRequest) {
   const query = (qs || {}).query
   
   const mode = parseCompletionMode(query?.c)
-  
+  const turbo = parseTurbo(query?.t)
+
   const blob = await req.blob()
 
   const existingClap: ClapProject = await parseClap(blob)
@@ -46,7 +48,8 @@ export async function POST(req: NextRequest) {
       shotSegment,
       existingClap,
       newerClap,
-      mode
+      mode,
+      turbo,
     })
   ))
 

@@ -10,12 +10,14 @@ export async function generateStoryboard({
   width,
   height,
   seed,
+  turbo = false,
 }: {
   prompt: string
   // negativePrompt?: string
   width?: number
   height?: number
   seed?: number
+  turbo?: boolean
 }): Promise<string> {
   
   width = getValidNumber(width, 256, 8192, 512)
@@ -30,10 +32,10 @@ export async function generateStoryboard({
     negativePrompt,
     nbFrames: 1,
     nbFPS: 1,
-    nbSteps: 8,
+    nbSteps: turbo ? 8 : 25,
     width,
     height,
-    turbo: true,
+    turbo,
     shouldRenewCache: true,
     seed: seed || generateSeed()
   })

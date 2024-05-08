@@ -10,12 +10,14 @@ export async function generateVideo({
   width,
   height,
   seed,
+  turbo = false,
 }: {
   prompt: string
   // negativePrompt?: string
   width?: number
   height?: number
   seed?: number
+  turbo?: boolean
 }): Promise<string> {
   
   // we want to keep it vertical
@@ -31,10 +33,10 @@ export async function generateVideo({
     negativePrompt,
     nbFrames: 80,
     nbFPS: 24,
-    nbSteps: 4,
+    nbSteps: turbo ? 4 : 8,
     width,
     height,
-    turbo: true,
+    turbo,
     shouldRenewCache: true,
     seed: seed || generateSeed()
   })

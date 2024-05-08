@@ -9,10 +9,12 @@ import { getNegativePrompt, getPositivePrompt } from "@/app/api/utils/imagePromp
 export async function generateImageID({
   prompt,
   // negativePrompt,
+  turbo = false,
   seed,
 }: {
   prompt: string
   // negativePrompt?: string
+  turbo?: boolean
   seed?: number
 }) {
   
@@ -38,8 +40,8 @@ export async function generateImageID({
     // and maybe not use the "turbo" - but I'm not sure
     width,
     height,
-    nbSteps: 8,
-    turbo: true,
+    nbSteps: turbo ? 8 : 25,
+    turbo,
 
     shouldRenewCache: true,
     seed: seed || generateSeed()
