@@ -28,7 +28,9 @@ export async function POST(req: NextRequest) {
 
   const existingClap = await parseClap(blob)
 
-  const newerClap = mode === ClapCompletionMode.FULL ? existingClap : newClap()
+  const newerClap = mode === ClapCompletionMode.FULL ? existingClap : newClap({
+    meta: existingClap.meta
+  })
 
   await editEntities({
     existingClap,

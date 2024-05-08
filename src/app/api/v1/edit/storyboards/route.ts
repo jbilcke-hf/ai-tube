@@ -40,7 +40,9 @@ export async function POST(req: NextRequest) {
     throw new Error(`Error, this endpoint being synchronous, it is designed for short stories only (max 32 shots).`)
   }
 
-  const newerClap = mode === ClapCompletionMode.FULL ? existingClap : newClap()
+  const newerClap = mode === ClapCompletionMode.FULL ? existingClap : newClap({
+    meta: existingClap.meta
+  })
 
   // we process the shots in parallel (this will increase the queue size in the Gradio spaces)
   await Promise.all(shotsSegments.map(shotSegment =>
