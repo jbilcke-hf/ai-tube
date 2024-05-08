@@ -9,6 +9,7 @@ export async function predict({
   systemPrompt,
   userPrompt,
   nbMaxNewTokens,
+  turbo,
   prefix,
 }: LLMPredictionFunctionParams): Promise<string> {
 
@@ -18,7 +19,10 @@ export async function predict({
   try {
     for await (const output of hf.textGenerationStream({
       // model: "mistralai/Mixtral-8x7B-v0.1",
-      model: "mistralai/Mixtral-8x7B-Instruct-v0.1",
+      model: 
+        turbo
+          ? "HuggingFaceH4/zephyr-7b-beta"
+          : "mistralai/Mixtral-8x7B-Instruct-v0.1",
       inputs: createZephyrPrompt([
         { role: "system", content: systemPrompt },
         { role: "user", content: userPrompt }

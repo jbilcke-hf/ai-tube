@@ -16,6 +16,7 @@ export type LLMPredictionFunctionParams = {
   systemPrompt: string
   userPrompt: string
   nbMaxNewTokens: number
+  turbo?: boolean
   prefix?: string
   // llmVendorConfig: LLMVendorConfig
 }

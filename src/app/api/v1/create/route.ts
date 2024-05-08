@@ -14,6 +14,7 @@ export async function POST(req: NextRequest) {
     prompt: string
     width: number
     height: number
+    turbo: boolean
     // can add more stuff for the V2 of Stories Factory
   }
   
@@ -22,7 +23,8 @@ export async function POST(req: NextRequest) {
   const clap = await create({
     prompt: `${request?.prompt || ""}`.trim(),
     width: getValidNumber(request?.width, 256, 8192, 1024),
-    height: getValidNumber(request?.height, 256, 8192, 576)
+    height: getValidNumber(request?.height, 256, 8192, 576),
+    turbo: request?.turbo ? true : false,
   })
 
   // TODO replace by Clap file streaming

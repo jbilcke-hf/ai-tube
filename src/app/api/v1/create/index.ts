@@ -15,10 +15,12 @@ export async function create(request: {
   prompt?: string
   width?: number
   height?: number
+  turbo?: boolean
 }= {
   prompt: "",
   width: 1024,
   height: 576,
+  turbo: false,
 }): Promise<ClapProject> {
   const prompt = `${request?.prompt || ""}`.trim()
 
@@ -28,7 +30,8 @@ export async function create(request: {
 
   const width = getValidNumber(request?.width, 256, 8192, 1024)
   const height = getValidNumber(request?.height, 256, 8192, 576)
-
+  const turbo = request?.turbo ? true : false
+  
   const userPrompt = `Movie story to generate: ${prompt}
 
 Output: `
@@ -46,6 +49,7 @@ Output: `
     userPrompt,
     nbMaxNewTokens,
     prefix,
+    turbo,
   })
 
   console.log("api/v1/create(): rawString: ", rawString)
@@ -64,6 +68,7 @@ Output: `
       userPrompt: userPrompt + ".", // we trick the Hugging Face cache
       nbMaxNewTokens,
       prefix,
+      turbo,
     })
   
     console.log("api/v1/create(): rawString: ", rawString)
