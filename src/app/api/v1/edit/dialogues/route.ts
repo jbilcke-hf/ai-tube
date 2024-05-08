@@ -1,6 +1,6 @@
 import { NextResponse, NextRequest } from "next/server"
 
-import { ClapProject, ClapSegment, newClap, parseClap, serializeClap } from "@aitube/clap"
+import { ClapProject, ClapSegment, ClapSegmentCategory, newClap, parseClap, serializeClap } from "@aitube/clap"
 
 
 import { processShot } from "./processShot"
@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
   
   console.log(`[api/edit/dialogues] detected ${existingClap.segments.length} segments`)
   
-  const shotsSegments: ClapSegment[] = existingClap.segments.filter(s => s.category === "camera")
+  const shotsSegments: ClapSegment[] = existingClap.segments.filter(s => s.category === ClapSegmentCategory.CAMERA)
   console.log(`[api/edit/dialogues] detected ${shotsSegments.length} shots`)
   
   if (shotsSegments.length > 32) {

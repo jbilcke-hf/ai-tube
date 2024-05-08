@@ -87,7 +87,7 @@ export async function processShot({
       shotVideoSegment.assetUrl = await generateVideo({
         prompt: getPositivePrompt(shotVideoSegment.prompt),
         width: existingClap.meta.width,
-        height: existingClap.meta.height,,
+        height: existingClap.meta.height,
         turbo,
       })
       shotVideoSegment.assetSourceType = getClapAssetSourceType(shotVideoSegment.assetUrl)

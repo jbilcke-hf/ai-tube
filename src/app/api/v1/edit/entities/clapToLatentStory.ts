@@ -11,7 +11,7 @@ import { LatentStory } from "@/app/api/v1/types"
  * @returns 
  */
 export async function clapToLatentStory(clap: ClapProject): Promise<LatentStory[]> {
-  const shots = clap.segments.filter(s => s.category === "camera")
+  const shots = clap.segments.filter(s => s.category === ClapSegmentCategory.CAMERA)
 
   const latentStories: LatentStory[] = []
 

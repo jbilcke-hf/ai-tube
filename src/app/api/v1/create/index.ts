@@ -147,20 +147,20 @@ Output: `
       track: 2,
       startTimeInMs: currentElapsedTimeInMs,
       assetDurationInMs: defaultSegmentDurationInMs,
-      category: "interface",
+      category: ClapSegmentCategory.INTERFACE,
       prompt: title,
       // assetUrl: `data:text/plain;base64,${btoa(title)}`,
       assetUrl: title,
-      outputType: "text"
+      outputType: ClapOutputType.TEXT,
     }))
 
     clap.segments.push(newSegment({
       track: 3,
       startTimeInMs: currentElapsedTimeInMs,
       assetDurationInMs: defaultSegmentDurationInMs,
-      category: "dialogue",
+      category: ClapSegmentCategory.DIALOGUE,
       prompt: voice,
-      outputType: "audio"
+      outputType: ClapOutputType.AUDIO,
     }))
 
     // the presence of a camera is mandatory
@@ -168,9 +168,9 @@ Output: `
       track: 4,
       startTimeInMs: currentElapsedTimeInMs,
       assetDurationInMs: defaultSegmentDurationInMs,
-      category: "camera",
+      category: ClapSegmentCategory.CAMERA,
       prompt: "video",
-      outputType: "text"
+      outputType: ClapOutputType.TEXT,
     }))
 
     currentElapsedTimeInMs += defaultSegmentDurationInMs

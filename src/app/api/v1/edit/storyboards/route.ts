@@ -1,6 +1,6 @@
 import { NextResponse, NextRequest } from "next/server"
 import queryString from "query-string"
-import { ClapProject, ClapSegment, newClap, parseClap, serializeClap } from "@aitube/clap"
+import { ClapProject, ClapSegment, ClapSegmentCategory, newClap, parseClap, serializeClap } from "@aitube/clap"
 
 import { parseCompletionMode } from "@/app/api/parsers/parseCompletionMode"
 import { throwIfInvalidToken } from "@/app/api/v1/auth/throwIfInvalidToken"
@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
   
   console.log(`api/v1/edit/storyboards(): detected ${existingClap.segments.length} segments`)
   
-  const shotsSegments: ClapSegment[] = existingClap.segments.filter(s => s.category === "camera")
+  const shotsSegments: ClapSegment[] = existingClap.segments.filter(s => s.category === ClapSegmentCategory.CAMERA)
   console.log(`api/v1/edit/storyboards(): detected ${shotsSegments.length} shots`)
   
   if (shotsSegments.length > 32) {

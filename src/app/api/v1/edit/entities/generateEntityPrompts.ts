@@ -21,13 +21,16 @@ export type EntityPromptResult = {
 // this is mostly used by external apps such as the Stories Factory
 export async function generateEntityPrompts({
   prompt = "",
-  latentStory = []
+  latentStory = [],
+  turbo = false,
 }: {
   prompt?: string
   latentStory?: LatentStory[]
+  turbo?: boolean
 } = {
   prompt: "",
-  latentStory: []
+  latentStory: [],
+  turbo: false
 }): Promise<EntityPromptResult[]> {
 
   if (!prompt.length) { throw new Error(`please provide a prompt`) }
@@ -66,6 +69,7 @@ Now please generate the output entities:`
     userPrompt,
     nbMaxNewTokens,
     prefix,
+    turbo,
   })
 
   console.log("generateEntityPrompts(): rawString: ", rawString)
@@ -84,6 +88,7 @@ Now please generate the output entities:`
       userPrompt: userPrompt + ".", // we trick the Hugging Face cache
       nbMaxNewTokens,
       prefix,
+      turbo,
     })
   
     console.log("generateEntityPrompts(): rawString: ", rawString)
@@ -111,7 +116,8 @@ Now please generate the output entities:`
         region: "",
         identityImage: await generateImageID({
           prompt: image,
-          seed: generateSeed()
+          seed: generateSeed(),
+          turbo,
         }),
 
         // TODO later 

@@ -1,5 +1,5 @@
 
-import { ClapProject, getClapAssetSourceType, getValidNumber, newEntity } from "@aitube/clap"
+import { ClapProject, ClapSegmentCategory, getClapAssetSourceType, getValidNumber, newEntity } from "@aitube/clap"
 import { ClapCompletionMode, ClapEntityPrompt } from "@aitube/client"
 
 import { generateImageID } from "./generateImageID"
@@ -39,7 +39,7 @@ export async function editEntities({
       turbo,
     })
 
-    const allShots = existingClap.segments.filter(s => s.category === "camera")
+    const allShots = existingClap.segments.filter(s => s.category === ClapSegmentCategory.CAMERA)
 
     for (const {
       entityPrompt: { name, category, age, variant, region, identityImage, identityVoice },
