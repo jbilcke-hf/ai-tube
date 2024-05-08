@@ -148,22 +148,24 @@ export function useCurrentUser({
       console.log("no pending oauth flow to finish")
     }
 
-    console.log("useCurrentUser()")
+    // console.log("useCurrentUser()")
     const searchParams = new URLSearchParams(window.location.search);
 
+    /*
     console.log("debug:", {
       "window.location.search:": window.location.search,
       searchParams,
     })
+    */
  
     const fn = async () => {
       try {
         const res = await oauthHandleRedirectIfPresent()
-        console.log("result of oauthHandleRedirectIfPresent:", res)
+        // console.log("result of oauthHandleRedirectIfPresent:", res)
         if (res) {
-          console.log("oauthHandleRedirectIfPresent returned something!", res)
+          // console.log("oauthHandleRedirectIfPresent returned something!", res)
           setOauthResult(res)
-          console.log("debug:", { accessToken: res.accessToken })
+          // console.log("debug:", { accessToken: res.accessToken })
           setHuggingfaceTemporaryApiKey(res.accessToken)
           startTransition(async () => {
             console.log("TODO julian do something, eg. reload the page, remove the things in the URL etc")

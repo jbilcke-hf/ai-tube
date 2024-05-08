@@ -10,11 +10,14 @@ export function dataUriToBlob(dataURI = "", defaultContentType = ""): Blob {
   for (let i = 0; i < base64.length; i++) {
     typedArray[i] = base64.charCodeAt(i);
   }
+
+  /*
   console.log("dataUriToBlob DEBUG:", {
     type,
     base64: base64.slice(0, 80),
     arrayBuffer
   })
+  */
 
   return new Blob([arrayBuffer], { type });
 }

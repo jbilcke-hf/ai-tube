@@ -381,6 +381,8 @@ export const useLatentEngine = create<LatentEngineStore>((set, get) => ({
     // TODO julian: this is an approximation
     // to grab the max number of segments
     const maxBufferDurationInMs = positionInMs + (videoDurationInMs * 4)
+    
+    
     console.log(`DEBUG: `, {
       positionInMs,
       videoModelDurationInSec,

@@ -1,7 +1,7 @@
 "use server"
 
 import YAML from "yaml"
-import { generateSeed } from "@aitube/clap"
+import { ClapSegmentCategory, generateSeed } from "@aitube/clap"
 import { ClapEntityPrompt } from "@aitube/client"
 
 import { sleep } from "@/lib/utils/sleep"
@@ -100,7 +100,14 @@ Now please generate the output entities:`
   }
 
   if (maybeEntities.length) {
-    results = await Promise.all(maybeEntities.map(async ({
+    results = await Promise.all(
+      maybeEntities
+
+      // the LLM generates unrelated catrgories unfortunately,
+      // that we still turn into image.. so we fix that by filtering
+      .filter(({ category }) => category !== ClapSegmentCategory.CHARACTER)
+
+      .map(async ({
       name,
       category,
       image,

@@ -55,6 +55,8 @@ export async function POST(req: NextRequest) {
     })
   ))
 
+  // console.log("DEBUG:", newerClap.segments)
+
   // console.log(`[api/v1/edit/storyboards] returning the clap augmented with storyboards`)
 
   return new NextResponse(await serializeClap(newerClap), {
