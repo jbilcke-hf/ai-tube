@@ -26,7 +26,7 @@ export async function getSegmentationCanvas({
         height: `${height}px`,
       };
 
-      console.log("canvas:", canvas)
+      // console.log("canvas:", canvas)
       const CanvasComponent = () => (
         <canvas
           ref={(node) => {

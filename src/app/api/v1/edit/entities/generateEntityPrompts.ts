@@ -72,7 +72,7 @@ Now please generate the output entities:`
     turbo,
   })
 
-  console.log("generateEntityPrompts(): rawString: ", rawString)
+  // console.log("generateEntityPrompts(): rawString: ", rawString)
 
   let results: EntityPromptResult[] = []
   
@@ -91,7 +91,7 @@ Now please generate the output entities:`
       turbo,
     })
   
-    console.log("generateEntityPrompts(): rawString: ", rawString)
+    // console.log("generateEntityPrompts(): rawString: ", rawString)
   
     maybeEntities = parseRawStringToYAML<LatentEntity[]>(rawString, [])
     if (!Array.isArray(maybeEntities) || maybeEntities.length === 0) {
@@ -142,7 +142,7 @@ Now please generate the output entities:`
     throw new Error(`Hugging Face Inference API failure (the model failed to generate the entities)`)
   }
 
-  console.log(`generateEntityPrompts(): generated ${results.length} entities with their images and voice ids`)
+  // console.log(`generateEntityPrompts(): generated ${results.length} entities with their images and voice ids`)
 
   return results
 }

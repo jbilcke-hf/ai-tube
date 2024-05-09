@@ -15,8 +15,8 @@ export async function throwIfInvalidToken(input?: any): Promise<boolean> {
   })
 
   // log values to console
-  console.log(payload)
-  console.log(protectedHeader)
+  // console.log(payload)
+  // console.log(protectedHeader)
 
   return true
 }

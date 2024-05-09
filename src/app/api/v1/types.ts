@@ -9,7 +9,7 @@ export type LatentEntity = {
 } 
 
 export type LatentStory = {
-  title: string
+  comment: string
   image: string
   voice: string
 }

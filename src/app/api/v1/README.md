@@ -26,3 +26,11 @@ Example:
 
 `POST <some_clap> /api/v1/export?f=webm`
 
+## /render
+
+To render frames as fast as possible
+
+## /search
+
+To hallucinate search results
+

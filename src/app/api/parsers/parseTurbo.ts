@@ -5,11 +5,14 @@ export function parseTurbo(
   let value = defaultValue
   
   try {
-    let maybeTurbo = decodeURIComponent(`${input || value}`).trim()
+    let maybeTurbo = decodeURIComponent(`${input || value}`).trim().toLowerCase()
 
-    value = !!maybeTurbo
+    if (maybeTurbo === "true" || maybeTurbo === "1") { return false }
 
+    if (maybeTurbo === "false") { return false }
+
+    return false
   } catch (err) {}
 
-  return value
+  return false
 }

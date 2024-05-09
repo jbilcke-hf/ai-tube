@@ -29,7 +29,7 @@ export async function search({
     prefix: "```yaml\n",
   })
 
-  console.log("rawString: ", rawString)
+  // console.log("rawString: ", rawString)
 
   const results = parseRawStringToYAML<BasicSearchResult[]>(rawString, [])
 
@@ -52,7 +52,7 @@ export async function extend({
     prefix: "```yaml\n",
   })
 
-  console.log("rawString: ", rawString)
+  // console.log("rawString: ", rawString)
 
   const results = parseRawStringToYAML<ExtendedSearchResult[]>(rawString, [])
 

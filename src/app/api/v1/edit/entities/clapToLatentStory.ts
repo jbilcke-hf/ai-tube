@@ -23,7 +23,7 @@ export async function clapToLatentStory(clap: ClapProject): Promise<LatentStory[
       ClapSegmentCategory.STORYBOARD
     ).at(0)
 
-    const title = filterSegments(
+    const comment = filterSegments(
       ClapSegmentFilteringMode.START,
       shot,
       clap.segments,
@@ -38,7 +38,7 @@ export async function clapToLatentStory(clap: ClapProject): Promise<LatentStory[
     ).at(0)
 
     const latentStory: LatentStory = {
-      title: title.prompt,
+      comment: comment.prompt,
       image: image.prompt,
       voice: voice.prompt,
     }

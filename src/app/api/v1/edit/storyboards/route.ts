@@ -31,10 +31,10 @@ export async function POST(req: NextRequest) {
 
   if (!existingClap?.segments) { throw new Error(`no segment found in the provided clap!`) }
   
-  console.log(`api/v1/edit/storyboards(): detected ${existingClap.segments.length} segments`)
+  // console.log(`api/v1/edit/storyboards(): detected ${existingClap.segments.length} segments`)
   
   const shotsSegments: ClapSegment[] = existingClap.segments.filter(s => s.category === ClapSegmentCategory.CAMERA)
-  console.log(`api/v1/edit/storyboards(): detected ${shotsSegments.length} shots`)
+  // console.log(`api/v1/edit/storyboards(): detected ${shotsSegments.length} shots`)
   
   if (shotsSegments.length > 32) {
     throw new Error(`Error, this endpoint being synchronous, it is designed for short stories only (max 32 shots).`)

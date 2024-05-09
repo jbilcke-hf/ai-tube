@@ -8,6 +8,7 @@ import { throwIfInvalidToken } from "@/app/api/v1/auth/throwIfInvalidToken"
 
 import { processShot } from "./processShot"
 import { parseTurbo } from "@/app/api/parsers/parseTurbo"
+import { sleep } from "@/lib/utils/sleep"
 
 // a helper to generate videos for a Clap
 // this is mostly used by external apps such as the Stories Factory
@@ -31,11 +32,13 @@ export async function POST(req: NextRequest) {
 
   if (!existingClap?.segments) { throw new Error(`no segment found in the provided clap!`) }
   
-  console.log(`api/edit/videos(): detected ${existingClap.segments.length} segments`)
+  // console.log(`api/edit/videos(): detected ${existingClap.segments.length} segments`)
   
   const shotsSegments: ClapSegment[] = existingClap.segments.filter(s => s.category === ClapSegmentCategory.CAMERA)
-  console.log(`api/edit/videos(): detected ${shotsSegments.length} shots`)
-  
+    
+  // console.log(`api/edit/videos(): detected ${shotsSegments.length} shots`)
+
+
   if (shotsSegments.length > 32) {
     throw new Error(`Error, this endpoint being synchronous, it is designed for short stories only (max 32 shots).`)
   }
@@ -55,7 +58,21 @@ export async function POST(req: NextRequest) {
     })
   ))
 
-  console.log(`api/edit/videos(): returning the clap augmented with videos`)
+  // we currently have some parallelism issues..
+  /*
+  for (const shotSegment of shotsSegments) {
+    await processShot({
+      shotSegment,
+      existingClap,
+      newerClap,
+      mode,
+      turbo,
+    })
+    await sleep(500)
+  }
+  */
+
+  // `api/edit/videos(): returning the clap augmented with videos`)
 
   return new NextResponse(await serializeClap(newerClap), {
     status: 200,

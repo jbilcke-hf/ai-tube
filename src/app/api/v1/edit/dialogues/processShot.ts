@@ -4,7 +4,8 @@ import {
   ClapSegment,
   getClapAssetSourceType,
   filterSegments,
-  ClapSegmentFilteringMode
+  ClapSegmentFilteringMode,
+  ClapSegmentCategory
 } from "@aitube/clap"
 import { ClapCompletionMode } from "@aitube/client"
 import { getSpeechBackgroundAudioPrompt } from "@aitube/engine"
@@ -27,13 +28,13 @@ export async function processShot({
 }): Promise<void> {
 
   const shotSegments: ClapSegment[] = filterSegments(
-    ClapSegmentFilteringMode.START,
+    ClapSegmentFilteringMode.BOTH,
     shotSegment,
     existingClap.segments
   )
   
   const shotDialogueSegments: ClapSegment[] = shotSegments.filter(s =>
-    s.category === "dialogue"
+    s.category === ClapSegmentCategory.DIALOGUE
   )
 
   let shotDialogueSegment: ClapSegment | undefined = shotDialogueSegments.at(0)
@@ -50,6 +51,7 @@ export async function processShot({
         audioId: getSpeechBackgroundAudioPrompt(
           shotSegments,
           existingClap.entityIndex,
+          // TODO: use the entity description if it exists
           ["high quality", "crisp", "detailed"]
         ),
         debug: true,

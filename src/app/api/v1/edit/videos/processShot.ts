@@ -5,15 +5,17 @@ import {
   getClapAssetSourceType,
   newSegment,
   filterSegments,
-  ClapSegmentFilteringMode
+  ClapSegmentFilteringMode,
+  ClapOutputType,
+  ClapSegmentCategory,
+  parseMediaOrientation
 } from "@aitube/clap"
 import { ClapCompletionMode } from "@aitube/client"
 import { getVideoPrompt } from "@aitube/engine"
 
 import { getPositivePrompt } from "@/app/api/utils/imagePrompts"
 
-import { generateVideo } from "./generateVideo"
-
+import { render } from "@/app/api/v1/render"
 
 export async function processShot({
   shotSegment,
@@ -29,17 +31,19 @@ export async function processShot({
   turbo: boolean
 }): Promise<void> {
   const shotSegments: ClapSegment[] = filterSegments(
-    ClapSegmentFilteringMode.START,
+    ClapSegmentFilteringMode.BOTH,
     shotSegment,
     existingClap.segments
   )
 
   const shotVideoSegments: ClapSegment[] = shotSegments.filter(s =>
-    s.category === "video"
+    s.category === ClapSegmentCategory.VIDEO
   )
 
   let shotVideoSegment: ClapSegment | undefined = shotVideoSegments.at(0)
   
+  // console.log("bug here?", turbo)
+
   console.log(`[api/edit/videos] processShot: shot [${shotSegment.startTimeInMs}:${shotSegment.endTimeInMs}] has ${shotSegments.length} segments (${shotVideoSegments.length} videos)`)
 
   // TASK 1: GENERATE MISSING VIDEO SEGMENT
@@ -49,10 +53,10 @@ export async function processShot({
       startTimeInMs: shotSegment.startTimeInMs,
       endTimeInMs: shotSegment.endTimeInMs,
       assetDurationInMs: shotSegment.assetDurationInMs,
-      category: "video",
+      category: ClapSegmentCategory.VIDEO,
       prompt: "",
       assetUrl: "",
-      outputType: "video"
+      outputType: ClapOutputType.VIDEO
     })
 
     // we fix the existing clap
@@ -81,14 +85,38 @@ export async function processShot({
 
   // TASK 3: GENERATE MISSING VIDEO FILE
   if (!shotVideoSegment.assetUrl) {
-    console.log(`[api/edit/videos] processShot: generating video file..`)
+    // console.log(`[api/edit/videos] processShot: generating video file..`)
 
+    const debug = true
+
+    let width = existingClap.meta.width
+    let height = existingClap.meta.height
+
+    // if (turbo) {
+    // width = Math.round(width / 2)
+    // height = Math.round(height / 2)
+    // }
+
+    if (width > height) {
+      width = 512
+      height = 288
+    } else if (width < height) {
+      width = 288
+      height = 512
+    } else {
+      width = 512
+      height = 512
+    }
     try {
-      shotVideoSegment.assetUrl = await generateVideo({
+      shotVideoSegment.assetUrl = await render({
         prompt: getPositivePrompt(shotVideoSegment.prompt),
-        width: existingClap.meta.width,
-        height: existingClap.meta.height,
-        turbo,
+        seed: shotSegment.seed,
+        width,
+        height,
+        nbFrames: 80,
+        nbFPS: 24,
+        nbSteps: 4, // turbo ? 4 : 8,
+        debug,
       })
       shotVideoSegment.assetSourceType = getClapAssetSourceType(shotVideoSegment.assetUrl)
     } catch (err) {

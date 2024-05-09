@@ -37,6 +37,8 @@ export async function predict({
       instructions += output.token.text
       process.stdout.write(output.token.text)
       if (
+        instructions.includes("# Final") || 
+        instructions.includes("# Guidelines") || 
         instructions.includes("</s>") || 
         instructions.includes("<s>") ||
         instructions.includes("/s>") ||
@@ -66,6 +68,8 @@ export async function predict({
   // need to do some cleanup of the garbage the LLM might have gave us
   let result = 
     instructions
+    .replaceAll("# Final", "")
+    .replaceAll("# Guidelines", "")
     .replaceAll("<|end|>", "")
     .replaceAll("<s>", "")
     .replaceAll("</s>", "")

@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
     // can add more stuff for the V2 of Stories Factory
   }
   
-  console.log("[api/v1/create] request:", request)
+  // console.log("[api/v1/create] request:", request)
 
   const clap = await create({
     prompt: `${request?.prompt || ""}`.trim(),

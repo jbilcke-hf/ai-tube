@@ -55,7 +55,7 @@ export async function editEntities({
   
         imagePrompt: "",
         imageSourceType: getClapAssetSourceType(identityImage),
-        imageEngine: "SDXL Lightning", 
+        imageEngine: "SD Lightning", 
         imageId: identityImage,
         audioPrompt: "",
         audioSourceType: getClapAssetSourceType(identityVoice),
@@ -101,7 +101,7 @@ export async function editEntities({
 
       imagePrompt: "",
       imageSourceType: getClapAssetSourceType(identityImage),
-      imageEngine: "SDXL Lightning", 
+      imageEngine: "SD Lightning", 
       imageId: identityImage,
       audioPrompt: "",
       audioSourceType: getClapAssetSourceType(identityVoice),
@@ -172,7 +172,7 @@ export async function editEntities({
     }
   }
 
-  console.log(`api/edit/entities(): returning the newerClap`)
+  // console.log(`api/edit/entities(): returning the newerClap`)
 
   return newerClap
 }

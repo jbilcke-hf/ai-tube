@@ -30,7 +30,7 @@ export async function processShot({
 }): Promise<void> {
 
   const shotSegments: ClapSegment[] = filterSegments(
-    ClapSegmentFilteringMode.START,
+    ClapSegmentFilteringMode.BOTH,
     shotSegment,
     existingClap.segments
   )
@@ -72,7 +72,7 @@ export async function processShot({
       existingClap.entityIndex,
       ["high quality", "crisp", "detailed"]
     )
-    console.log(`[api/v1/edit/storyboards] processShot: generating storyboard prompt: ${shotStoryboardSegment.prompt}`)
+    // console.log(`[api/v1/edit/storyboards] processShot: generating storyboard prompt: ${shotStoryboardSegment.prompt}`)
   }
 
   // TASK 3: GENERATE MISSING STORYBOARD BITMAP

@@ -38,10 +38,10 @@ const globalState: { classifier?: InteractiveImageClassifier } = {};
 })();
 
 export async function classifyFrame(frame: TexImageSource, x: number, y: number): Promise<ImageClassifierResult> {
-  console.log("classifyFrame: loading classifier..")
+  // console.log("classifyFrame: loading classifier..")
   globalState.classifier = globalState.classifier || (await getInteractiveImageClassifier())
 
-  console.log("classifyFrame: segmenting..")
+  // console.log("classifyFrame: segmenting..")
   return globalState.classifier(frame, x, y)
 }
 

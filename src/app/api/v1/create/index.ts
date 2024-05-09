@@ -1,6 +1,6 @@
 "use server"
 
-import { ClapProject, getValidNumber, newClap, newSegment, ClapSegmentCategory, ClapOutputType } from "@aitube/clap"
+import { ClapProject, getValidNumber, newClap, newSegment, ClapSegmentCategory, ClapOutputType, ClapMediaOrientation } from "@aitube/clap"
 
 import { sleep } from "@/lib/utils/sleep"
 import { predict } from "@/app/api/providers/huggingface/predictWithHuggingFace"
@@ -52,7 +52,7 @@ Output: `
     turbo,
   })
 
-  console.log("api/v1/create(): rawString: ", rawString)
+  // console.log("api/v1/create(): rawString: ", rawString)
 
   let shots: LatentStory[] = []
   
@@ -71,7 +71,7 @@ Output: `
       turbo,
     })
   
-    console.log("api/v1/create(): rawString: ", rawString)
+    // console.log("api/v1/create(): rawString: ", rawString)
   
     maybeShots = parseRawStringToYAML<LatentStory[]>(rawString, [])
     if (!Array.isArray(maybeShots) || maybeShots.length === 0) {
@@ -94,11 +94,14 @@ Output: `
 
   const clap: ClapProject = newClap({
     meta: {
-      title: "Not needed", // we don't need a title actually
-      description: "This video has been generated using AI",
+      title: prompt.split(",").shift() || "",
+      description: prompt,
       synopsis: "",
       licence: "",
-      orientation: width > height ? "landscape" : height > width ? "portrait" : "square",
+      orientation:
+        width > height ? ClapMediaOrientation.LANDSCAPE :
+        height > width ? ClapMediaOrientation.PORTRAIT :
+        ClapMediaOrientation.SQUARE,
       width,
       height,
       isInteractive: false,
@@ -108,9 +111,9 @@ Output: `
     }
   })
 
-  for (const { title, image, voice } of shots) {
+  for (const { comment, image, voice } of shots) {
 
-    console.log(`api/v1/create():  - ${title}`)
+    console.log(`api/v1/create():  - ${comment}`)
 
     // note: it would be nice if we could have a convention saying that
     // track 0 is for videos and track 1 storyboards
@@ -123,16 +126,14 @@ Output: `
     // we should fix the Clap file editor to make it able to react videos
     // from any track number
 
-
-    /*
-    we disable it, because we don't generate animated videos yet
     clap.segments.push(newSegment({
       track: 0,
-      category: "video",
+      startTimeInMs: currentElapsedTimeInMs,
+      assetDurationInMs: defaultSegmentDurationInMs,
+      category: ClapSegmentCategory.VIDEO,
       prompt: image,
-      outputType: "video"
+      outputType: ClapOutputType.VIDEO,
     }))
-    */
 
     clap.segments.push(newSegment({
       track: 1,
@@ -148,9 +149,9 @@ Output: `
       startTimeInMs: currentElapsedTimeInMs,
       assetDurationInMs: defaultSegmentDurationInMs,
       category: ClapSegmentCategory.INTERFACE,
-      prompt: title,
-      // assetUrl: `data:text/plain;base64,${btoa(title)}`,
-      assetUrl: title,
+      prompt: comment,
+      // assetUrl: `data:text/plain;base64,${btoa(comment)}`,
+      assetUrl: comment,
       outputType: ClapOutputType.TEXT,
     }))
 

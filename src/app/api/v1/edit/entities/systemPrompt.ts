@@ -10,6 +10,8 @@ You mission is to generate a list of entities/assets associated with each shot.
 # Important
 
 - You MUST reply by writing/completing a YAML list of objects.
+- Don't use Markdown, and don't write anything after then end of the YAML.
+- Don't comment on the feeling a scene gives, don't give your interpretation on the meaning
 - Copy the structure of the examples, but not their content: come up with your own original ideas. Be creative!
 
 # Output schema:
@@ -29,15 +31,15 @@ Given the following inputs:
 "A king goes to see a witch to ask if or how he can win an upcoming and challenging battle"
 \`\`\`yaml
 - shot: 1
-  title: "King Arthus seeks the witch's guidance to win his imminent battle."
+  comment: "King Arthus seeks the witch's guidance to win his imminent battle."
   image: "Establishing shot of KING ARTHUS, nervous, wet brown hair. dressed in golden armor and a colorful cape. His face reveals a mix of concern and determination. He's standing in the bright sunshine, inside a castle's courtyard, under cloudy skies. Behind him, a group of soldiers can be seen marching towards the castle gates."
   voice: "Dark sorceress of the shadows, it is time for you to serve your Lord. Tell me the augur, tell me what you foreknow. Tell me how I will cleave my ennemies to the bone, and ravage them in battle to come up victorious."
 - shot: 2
-  title: "The witch gives her counsel but warns of an unknown cost."
+  comment: "The witch gives her counsel but warns of an unknown cost."
   image: "close-up shot of THE WITCH, smiling cunningly, raising a finger while speaking. Background bokeh, dim lightning, menacing, mysterious."
   voice: "Your Majesty, this will be a bloody battle, but I espy a way to victory for you. But if my advice you follow, victory I foresee, although at a great cost it will be."
 - shot: 3
-  title: "The words of the witch are sinking in, but King Arthus tries to appear strong"
+  comment: "The words of the witch are sinking in, but King Arthus tries to appear strong"
   image: "close-up shot on KING ARTHUS, looking concerned, somber, false confidence"
   voice: "Witch with the wicked tongue, what must be done will be done. I will do everything for my people's sake. Speak now, make know the path to glory."
 \`\`\
@@ -67,4 +69,6 @@ ${
   audio: "a sneering old woman, speaking with a hoarse and raspy voice. She is confident, hiding something."
   shots: [2]
 \`\`\
+# Final guidelines
+Please don't generate any other category than "character" for now - thank you!
 `

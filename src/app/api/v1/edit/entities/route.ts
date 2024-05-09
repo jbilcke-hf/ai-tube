@@ -11,9 +11,7 @@ import { ClapCompletionMode } from "@aitube/client"
 import { parseTurbo } from "@/app/api/parsers/parseTurbo"
 
 export async function POST(req: NextRequest) {
-  console.log("Hello!")
   await throwIfInvalidToken(req.headers.get("Authorization"))
-  console.log("world!")
   const qs = queryString.parseUrl(req.url || "")
   const query = (qs || {}).query
 
@@ -40,7 +38,7 @@ export async function POST(req: NextRequest) {
     turbo,
   })
   
-  console.log(`[api/edit/entities] returning the newer clap extended with the entities`)
+  // console.log(`[api/edit/entities] returning the newer clap extended with the entities`)
 
   return new NextResponse(await serializeClap(newerClap), {
     status: 200,
