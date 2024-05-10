@@ -1,8 +1,8 @@
-import ffmpeg from "fluent-ffmpeg";
+import { tmpdir } from "node:os"
+import { writeFile, rm } from "node:fs/promises"
+import { join } from "node:path"
 
-import { tmpdir } from "node:os";
-import { promises as fs } from "node:fs";
-import { join } from "node:path";
+import ffmpeg from "fluent-ffmpeg"
 
 export type MediaMetadata = {
   durationInSec: number;
@@ -19,10 +19,11 @@ export async function getMediaInfo(input: string): Promise<MediaMetadata> {
   // If the input is a base64 string
   if (input.startsWith("data:")) {
     // Extract the base64 content
-    const [head, tail] = input.split(";base64,")
-    if (!tail) {
-      throw new Error("Invalid base64 data");
-    }
+      // Extract the base64 content
+      const [head, tail] = input.split(";base64,")
+      if (!tail) {
+        throw new Error("Invalid base64 data");
+      }
 
     const extension = head.split("/").pop() || ""
     const base64Content = tail || ""
@@ -31,16 +32,17 @@ export async function getMediaInfo(input: string): Promise<MediaMetadata> {
     const buffer = Buffer.from(base64Content, 'base64')
 
     // Generate a temporary file name
-    const tempFileName = join(tmpdir(), `temp-media-${Date.now()}`);
+    const tempFileName = join(tmpdir(), `temp-media-${Date.now()}.${extension}`);
+
 
     // Write the buffer to a temporary file
-    await fs.writeFile(tempFileName, buffer);
+    await writeFile(tempFileName, buffer);
 
     // Get metadata from the temporary file then delete the file
     try {
       return await getMetaDataFromPath(tempFileName);
     } finally {
-      await fs.rm(tempFileName);
+      await rm(tempFileName);
     }
   }
 
@@ -59,7 +61,7 @@ async function getMetaDataFromPath(filePath: string): Promise<MediaMetadata> {
       }
 
       if (err) {
-        console.error("getMediaInfo(): failed to analyze the source (might happen with empty files)", err)
+        console.error("getMediaInfo(): failed to analyze the source (might happen with empty files)")
         // reject(err);
         resolve(results);
         return;
@@ -71,7 +73,7 @@ async function getMetaDataFromPath(filePath: string): Promise<MediaMetadata> {
         results.hasAudio = (metadata?.streams || []).some((stream) => stream.codec_type === 'audio');
 
       } catch (err) {
-        console.error(`getMediaInfo(): failed to analyze the source (might happen with empty files)`, err)
+        console.error(`getMediaInfo(): failed to analyze the source (might happen with empty files)`)
         results.durationInSec = 0
         results.durationInMs = 0
         results.hasAudio = false
