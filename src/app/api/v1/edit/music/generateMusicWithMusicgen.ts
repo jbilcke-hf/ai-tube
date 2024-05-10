@@ -2,8 +2,6 @@ import { addBase64Header } from "@/lib/data/addBase64Header"
 import { MusicGenerationParams } from "./types"
 import { getClusterMachine } from "./cluster"
 
-const gradioSpaceApiUrl = `https://jbilcke-hf-ai-tube-model-musicgen.hf.space`
-const huggingFaceSpace = "jbilcke-hf/ai-tube-model-musicgen"
 const microserviceApiKey = `${process.env.MICROSERVICE_API_SECRET_TOKEN || ""}`
 
 /**

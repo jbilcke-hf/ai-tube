@@ -31,7 +31,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
   const nbFrames = 80
   const nbFPS = 24
   const nbSteps = turbo ? 4 : 8
-  const debug = true
+  const debug = false
 
   const assetUrl = await render({
     prompt,

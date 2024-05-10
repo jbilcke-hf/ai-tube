@@ -19,13 +19,16 @@ export async function getMediaInfo(input: string): Promise<MediaMetadata> {
   // If the input is a base64 string
   if (input.startsWith("data:")) {
     // Extract the base64 content
-    const base64Content = input.split(";base64,").pop();
-    if (!base64Content) {
+    const [head, tail] = input.split(";base64,")
+    if (!tail) {
       throw new Error("Invalid base64 data");
     }
 
+    const extension = head.split("/").pop() || ""
+    const base64Content = tail || ""
+
     // Decode the base64 content to a buffer
-    const buffer = Buffer.from(base64Content, 'base64');
+    const buffer = Buffer.from(base64Content, 'base64')
 
     // Generate a temporary file name
     const tempFileName = join(tmpdir(), `temp-media-${Date.now()}`);
@@ -56,7 +59,7 @@ async function getMetaDataFromPath(filePath: string): Promise<MediaMetadata> {
       }
 
       if (err) {
-        console.error("getMediaInfo(): failed to analyze the source (might happen with empty files)")
+        console.error("getMediaInfo(): failed to analyze the source (might happen with empty files)", err)
         // reject(err);
         resolve(results);
         return;
@@ -68,7 +71,7 @@ async function getMetaDataFromPath(filePath: string): Promise<MediaMetadata> {
         results.hasAudio = (metadata?.streams || []).some((stream) => stream.codec_type === 'audio');
 
       } catch (err) {
-        console.error(`getMediaInfo(): failed to analyze the source (might happen with empty files)`)
+        console.error(`getMediaInfo(): failed to analyze the source (might happen with empty files)`, err)
         results.durationInSec = 0
         results.durationInMs = 0
         results.hasAudio = false

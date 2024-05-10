@@ -87,7 +87,7 @@ export async function processShot({
   if (!shotVideoSegment.assetUrl) {
     // console.log(`[api/edit/videos] processShot: generating video file..`)
 
-    const debug = true
+    const debug = false
 
     let width = existingClap.meta.width
     let height = existingClap.meta.height
@@ -124,7 +124,7 @@ export async function processShot({
       throw err
     }
   
-    console.log(`[api/edit/videos] processShot: generated video files: ${shotVideoSegment?.assetUrl?.slice?.(0, 50)}...`)
+    // console.log(`[api/edit/videos] processShot: generated video files: ${shotVideoSegment?.assetUrl?.slice?.(0, 50)}...`)
 
     // if mode is full, newerClap already contains the ference to shotVideoSegment
     // but if it's partial, we need to manually add it
