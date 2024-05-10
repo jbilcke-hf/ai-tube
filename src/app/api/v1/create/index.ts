@@ -200,7 +200,7 @@ Output: `
     const musicPrompt = musicPrompts.at(0)
     if (!musicPrompt) { throw new Error(`not enough music prompts`) }
 
-    console.log("musicPrompt:", musicPrompt)
+    // console.log("musicPrompt:", musicPrompt)
 
     clap.segments.push(newSegment({
       track: 5,
