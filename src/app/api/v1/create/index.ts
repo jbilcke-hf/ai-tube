@@ -131,49 +131,59 @@ Output: `
     clap.segments.push(newSegment({
       track: 0,
       startTimeInMs: currentElapsedTimeInMs,
+      endTimeInMs: currentElapsedTimeInMs + defaultSegmentDurationInMs,
       assetDurationInMs: defaultSegmentDurationInMs,
       category: ClapSegmentCategory.VIDEO,
       prompt: image,
       outputType: ClapOutputType.VIDEO,
+      status: "to_generate",
     }))
 
     clap.segments.push(newSegment({
       track: 1,
       startTimeInMs: currentElapsedTimeInMs,
+      endTimeInMs: currentElapsedTimeInMs + defaultSegmentDurationInMs,
       assetDurationInMs: defaultSegmentDurationInMs,
       category: ClapSegmentCategory.STORYBOARD,
       prompt: image,
       outputType: ClapOutputType.IMAGE,
+      status: "to_generate",
     }))
 
     clap.segments.push(newSegment({
       track: 2,
       startTimeInMs: currentElapsedTimeInMs,
+      endTimeInMs: currentElapsedTimeInMs + defaultSegmentDurationInMs,
       assetDurationInMs: defaultSegmentDurationInMs,
       category: ClapSegmentCategory.INTERFACE,
       prompt: comment,
       // assetUrl: `data:text/plain;base64,${btoa(comment)}`,
       assetUrl: comment,
       outputType: ClapOutputType.TEXT,
+      status: "to_generate",
     }))
 
     clap.segments.push(newSegment({
       track: 3,
       startTimeInMs: currentElapsedTimeInMs,
+      endTimeInMs: currentElapsedTimeInMs + defaultSegmentDurationInMs,
       assetDurationInMs: defaultSegmentDurationInMs,
       category: ClapSegmentCategory.DIALOGUE,
       prompt: voice,
       outputType: ClapOutputType.AUDIO,
+      status: "to_generate",
     }))
 
     // the presence of a camera is mandatory
     clap.segments.push(newSegment({
       track: 4,
       startTimeInMs: currentElapsedTimeInMs,
+      endTimeInMs: currentElapsedTimeInMs + defaultSegmentDurationInMs,
       assetDurationInMs: defaultSegmentDurationInMs,
       category: ClapSegmentCategory.CAMERA,
       prompt: "video",
       outputType: ClapOutputType.TEXT,
+      status: "to_generate",
     }))
 
     currentElapsedTimeInMs += defaultSegmentDurationInMs
@@ -187,6 +197,21 @@ Output: `
       prompt,
       latentStory: await clapToLatentStory(clap)
     })
+    const musicPrompt = musicPrompts.at(0)
+    if (!musicPrompt) { throw new Error(`not enough music prompts`) }
+
+    console.log("musicPrompt:", musicPrompt)
+
+    clap.segments.push(newSegment({
+      track: 5,
+      startTimeInMs: 0,
+      endTimeInMs: currentElapsedTimeInMs,
+      assetDurationInMs: currentElapsedTimeInMs,
+      category: ClapSegmentCategory.MUSIC,
+      prompt: musicPrompt,
+      outputType: ClapOutputType.AUDIO,
+      status: "to_generate",
+    }))
   } catch (err) {
     console.error(`[api/v1/create] failed to generate music prompts`)
     musicPrompts.push("lofi hiphop loop")

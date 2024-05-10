@@ -23,6 +23,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
   // console.log("[api/v1/export] sending blob to ai-tube-clap-exporter.hf.space")
 
   const result = await fetch(
+    // `http://localhost:7860?f=${format}`,
     `https://jbilcke-hf-ai-tube-clap-exporter.hf.space?f=${format}`,
     { method: "POST", body: await req.blob() }
   )

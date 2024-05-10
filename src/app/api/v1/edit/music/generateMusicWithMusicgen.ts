@@ -1,7 +1,6 @@
 import { addBase64Header } from "@/lib/data/addBase64Header"
-
-import { tryApiCalls } from "../../utils/tryApiCall"
 import { MusicGenerationParams } from "./types"
+import { getClusterMachine } from "./cluster"
 
 const gradioSpaceApiUrl = `https://jbilcke-hf-ai-tube-model-musicgen.hf.space`
 const huggingFaceSpace = "jbilcke-hf/ai-tube-model-musicgen"
@@ -18,16 +17,21 @@ export async function generateMusicWithMusicgen({
   neverThrow = false,
 }: MusicGenerationParams): Promise<string> {
 
-  const actualFunction = async () => {
+  if (!prompt?.length) {
+    throw new Error(`prompt is too short!`)
+  }
 
-    const res = await fetch(gradioSpaceApiUrl + (gradioSpaceApiUrl.endsWith("/") ? "" : "/") + "api/predict", {
+  const machine = await getClusterMachine()
+
+  try {
+    const res = await fetch(machine.url + (machine.url.endsWith("/") ? "" : "/") + "api/predict", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         // Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        fn_index: 0, // <- important!
+        fn_index: 1, // <- important!
         data: [
           microserviceApiKey, // string  in 'Secret Token' Textbox component		
           "facebook/musicgen-stereo-large", // string  in 'Model' Radio component		
@@ -55,8 +59,7 @@ export async function generateMusicWithMusicgen({
     if (res.status !== 200) {
       throw new Error('Failed to fetch data')
     }
-
- 
+  
     const { data } = await res.json()
 
     // console.log("data:", data)
@@ -66,34 +69,17 @@ export async function generateMusicWithMusicgen({
       throw new Error(`Failed to fetch data (status: ${res.status})`)
     }
     // console.log("data:", data.slice(0, 50))
-  
+
     if (!data[0]) {
       throw new Error(`the returned music was empty`)
     }
-  
-    console.log("data:", data[0].slice(0, 60))
+
+    // console.log("data:", data[0].slice(0, 60))
     return addBase64Header(data[0] as string, "mp3")
-  }
-
-  try {
-    if (!prompt?.length) {
-      throw new Error(`prompt is too short!`)
-    }
-
-    const result = await tryApiCalls({
-      func: actualFunction,
-      huggingFaceSpace,
-      debug,
-      failureMessage: "failed to generate the music"
-    })
-
-    return result
   } catch (err) {
-    if (neverThrow) {
-      console.error(`generateVoiceWithMusicgen():`, err)
-      return ""
-    } else {
-      throw err
-    }
+    throw err
+  } finally {
+    // important: we need to free up the machine!
+    machine.busy = false
   }
 }

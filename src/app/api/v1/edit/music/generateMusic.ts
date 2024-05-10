@@ -13,7 +13,7 @@ import { getSpeechBackgroundAudioPrompt } from "@aitube/engine"
 
 import { generateSpeechWithParlerTTS } from "@/app/api/generators/speech/generateVoiceWithParlerTTS"
 import { getMediaInfo } from "@/app/api/utils/getMediaInfo"
-import { generateMusicWithMusicgen } from "@/app/api/generators/music/generateMusicWithMusicgen"
+import { generateMusicWithMusicgen } from "@/app/api/v1/edit/music/generateMusicWithMusicgen"
 
 export async function generateMusic({
   musicSegment,
@@ -32,6 +32,14 @@ export async function generateMusic({
     console.log(`generateMusic(): music segment is empty, so skipping music generation.`)
     return
   }
+
+    // for now we do something very basic
+
+  if (musicSegment.status === "completed") {
+    console.log(`generateMusic(): music segment is already generated, skipping doing it twice.`)
+    return
+  }
+  
   // for now we do something very basic
   const prompt = musicSegment.prompt
   if (!prompt) {
@@ -39,28 +47,47 @@ export async function generateMusic({
     return
   }
 
+  const durationInSec = 10 // musicSegment.assetDurationInMs / 1000
+
+  console.log(`generateMusic(): generating a music with:\n  duration: ${durationInSec} sec\n  prompt: ${prompt}`)
+
   const assetUrl = await generateMusicWithMusicgen({
     prompt,
-    durationInSec: 10,
+    durationInSec,
     hd: false,
     debug: true,
     neverThrow: true,
   })
 
+
   if (!assetUrl || assetUrl?.length < 30) {
-    console.log(`generateMusic(): generated assetUrl is empty, so music generation failed.`)
+    console.log(`generateMusic(): the generated assetUrl is empty, so music generation failed.`)
     return
+  }
+
+  const { durationInMs, hasAudio } = await getMediaInfo(assetUrl)
+  
+  if (!hasAudio) {
+    console.log(`generateMusic(): the generated music waveform is silent, so music generation failed.`)
+    return
+  }
+
+  const newProperties: Partial<ClapSegment> = {
+    assetUrl,
+    assetDurationInMs: durationInMs,
+    outputGain: 1.0,
+    status: "completed"
   }
 
   if (mode !== ClapCompletionMode.FULL) {
     console.log(`generateMusic(): adding music to a new clap file`)
     newerClap.segments.push(newSegment({
       ...musicSegment,
-      assetUrl,
+      ...newProperties,
     }))
   } else {
     console.log(`generateMusic(): overwriting the music inside the existing clap file`)
-    // this will replace the existing clap (normally)
-    musicSegment.assetUrl = assetUrl
+    // this will update the existing clap (normally)
+    Object.assign(musicSegment, newProperties)
   }
 }

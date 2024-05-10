@@ -26,7 +26,7 @@ export async function generateMusicPrompts({
 
   if (!latentStory.length) { throw new Error(`please provide a story`) }
 
-  console.log("generateMusicPrompts(): latentStory:", latentStory)
+  // console.log("generateMusicPrompts(): latentStory:", latentStory)
 
   const userPrompt = `The input story is about: ${prompt}.
 

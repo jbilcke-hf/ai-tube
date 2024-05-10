@@ -37,7 +37,7 @@ export async function generateEntityPrompts({
 
   if (!latentStory.length) { throw new Error(`please provide a story`) }
 
-  console.log("generateEntityPrompts(): latentStory:", latentStory)
+  // console.log("generateEntityPrompts(): latentStory:", latentStory)
 
   const userPrompt = `The input story is about: ${prompt}.
 
