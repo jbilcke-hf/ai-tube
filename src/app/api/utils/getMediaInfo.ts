@@ -34,7 +34,6 @@ export async function getMediaInfo(input: string): Promise<MediaMetadata> {
     // Generate a temporary file name
     const tempFileName = join(tmpdir(), `temp-media-${Date.now()}.${extension}`);
 
-
     // Write the buffer to a temporary file
     await writeFile(tempFileName, buffer);
 
@@ -61,7 +60,7 @@ async function getMetaDataFromPath(filePath: string): Promise<MediaMetadata> {
       }
 
       if (err) {
-        console.error("getMediaInfo(): failed to analyze the source (might happen with empty files)")
+        console.error("getMediaInfo(): failed to analyze the source (might happen with empty files)", err)
         // reject(err);
         resolve(results);
         return;
@@ -73,7 +72,7 @@ async function getMetaDataFromPath(filePath: string): Promise<MediaMetadata> {
         results.hasAudio = (metadata?.streams || []).some((stream) => stream.codec_type === 'audio');
 
       } catch (err) {
-        console.error(`getMediaInfo(): failed to analyze the source (might happen with empty files)`)
+        console.error(`getMediaInfo(): failed to analyze the source (might happen with empty files)`, err)
         results.durationInSec = 0
         results.durationInMs = 0
         results.hasAudio = false

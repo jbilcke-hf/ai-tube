@@ -66,18 +66,24 @@ export async function generateMusic({
     return
   }
 
-  const { durationInMs, hasAudio } = await getMediaInfo(assetUrl)
-  
-  if (!hasAudio) {
-    console.warn(`generateMusic(): the generated music waveform appears to be silent (might be a ffprobe malfunction)`)
-   // return
-  }
+  let { durationInMs, hasAudio } = await getMediaInfo(assetUrl)
 
   const newProperties: Partial<ClapSegment> = {
     assetUrl,
     assetDurationInMs: durationInMs,
     outputGain: 1.0,
     status: "completed"
+  }
+
+
+  if (!hasAudio) {
+    console.warn(`generateMusic(): the generated music waveform appears to be silent (might be a ffprobe malfunction)`)
+    // return
+    // we have a bug on AiTube, basically the ffmpeg probe isn't working,
+    // because it doesn't find ffmpeg
+    // if think the issue is how the Dockerfile is formed
+    // so until this is fixed, we need to fake a "correct" result
+    newProperties.assetDurationInMs = musicSegment.assetDurationInMs
   }
 
   if (mode !== ClapCompletionMode.FULL) {
