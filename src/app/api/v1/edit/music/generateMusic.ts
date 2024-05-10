@@ -70,7 +70,7 @@ export async function generateMusic({
   
   if (!hasAudio) {
     console.warn(`generateMusic(): the generated music waveform appears to be silent (might be a ffprobe malfunction)`)
-    return
+   // return
   }
 
   const newProperties: Partial<ClapSegment> = {
