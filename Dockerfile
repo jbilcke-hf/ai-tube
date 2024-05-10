@@ -14,7 +14,7 @@ RUN apk add alpine-sdk pkgconfig
 # For FFMPEG and gl concat
 RUN apk add curl python3 python3-dev libx11-dev libsm-dev libxrender libxext-dev mesa-dev xvfb libxi-dev glew-dev
 
-RUN apk add ffmpeg
+RUN apk add --no-cache ffmpeg
 
 WORKDIR /app
 
