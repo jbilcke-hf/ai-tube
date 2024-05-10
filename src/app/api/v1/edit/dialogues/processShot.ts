@@ -58,8 +58,8 @@ export async function processShot({
       })
       shotDialogueSegment.assetSourceType = getClapAssetSourceType(shotDialogueSegment.assetUrl)
 
-      const { durationInMs, durationInSec, hasAudio } = await getMediaInfo(shotDialogueSegment.assetUrl)
-      
+      const { durationInMs, hasAudio } = await getMediaInfo(shotDialogueSegment.assetUrl)
+  
       if (hasAudio && durationInMs > 1000) {
         shotDialogueSegment.assetDurationInMs = durationInMs
         shotSegment.assetDurationInMs = durationInMs

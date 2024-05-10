@@ -1,12 +1,13 @@
 import { sleep } from "@/lib/utils/sleep"
 import { ClusterMachine } from "../../types"
 
-export const nbClusterMachines = 3
+export const nbClusterMachines = 4
 // make sure the machines are running!!
 
 // https://huggingface.co/spaces/jbilcke-hf/ai-tube-model-musicgen-1/settings
 // https://huggingface.co/spaces/jbilcke-hf/ai-tube-model-musicgen-2/settings
 // https://huggingface.co/spaces/jbilcke-hf/ai-tube-model-musicgen-3/settings
+// https://huggingface.co/spaces/jbilcke-hf/ai-tube-model-musicgen-4/settings
 
 // we maintain a global cluster state
 

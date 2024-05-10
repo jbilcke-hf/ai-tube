@@ -69,7 +69,7 @@ export async function generateMusic({
   const { durationInMs, hasAudio } = await getMediaInfo(assetUrl)
   
   if (!hasAudio) {
-    console.log(`generateMusic(): the generated music waveform is silent, so music generation failed.`)
+    console.warn(`generateMusic(): the generated music waveform appears to be silent (might be a ffprobe malfunction)`)
     return
   }
 
