@@ -3,7 +3,7 @@ import { tryApiCalls } from "../../utils/tryApiCall"
 
 const gradioSpaceApiUrl = `https://jbilcke-hf-ai-tube-model-parler-tts-mini.hf.space`
 const huggingFaceSpace = "jbilcke-hf/ai-tube-model-parler-tts-mini"
-const apiKey = `${process.env.MICROSERVICE_API_SECRET_TOKEN || ""}`
+const microserviceApiKey = `${process.env.MICROSERVICE_API_SECRET_TOKEN || ""}`
 
 /**
  * Note: this generates a MP3 file
@@ -34,7 +34,7 @@ export async function generateSpeechWithParlerTTS({
       body: JSON.stringify({
         fn_index: 0, // <- important!
         data: [
-          apiKey,
+          microserviceApiKey,
           text,
           audioId,
         ],

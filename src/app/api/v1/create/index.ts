@@ -8,6 +8,8 @@ import { parseRawStringToYAML } from "@/app/api/parsers/parseRawStringToYAML"
 import { LatentStory } from "@/app/api/v1/types"
 
 import { systemPrompt } from "./systemPrompt"
+import { generateMusicPrompts } from "../edit/music/generateMusicPrompt"
+import { clapToLatentStory } from "../edit/entities/clapToLatentStory"
 
 // a helper to generate Clap stories from a few sentences
 // this is mostly used by external apps such as the Stories Factory
@@ -175,6 +177,19 @@ Output: `
     }))
 
     currentElapsedTimeInMs += defaultSegmentDurationInMs
+  }
+
+  // one more thing: music!
+  let musicPrompts: string[] = []
+  
+  try {
+    musicPrompts = await generateMusicPrompts({
+      prompt,
+      latentStory: await clapToLatentStory(clap)
+    })
+  } catch (err) {
+    console.error(`[api/v1/create] failed to generate music prompts`)
+    musicPrompts.push("lofi hiphop loop")
   }
 
   return clap

@@ -1,5 +1,3 @@
-"use server"
-
 import YAML from "yaml"
 import { ClapSegmentCategory, generateSeed } from "@aitube/clap"
 import { ClapEntityPrompt } from "@aitube/client"

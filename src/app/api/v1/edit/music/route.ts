@@ -7,7 +7,8 @@ import { parseCompletionMode } from "@/app/api/parsers/parseCompletionMode"
 import { throwIfInvalidToken } from "@/app/api/v1/auth/throwIfInvalidToken"
 import { parseTurbo } from "@/app/api/parsers/parseTurbo"
 
-import { processShot } from "./processShot"
+import { generateMusic } from "./generateMusic"
+
 // a helper to generate speech for a Clap
 export async function POST(req: NextRequest) {
   await throwIfInvalidToken(req.headers.get("Authorization"))
@@ -26,27 +27,26 @@ export async function POST(req: NextRequest) {
   
   // console.log(`[api/edit/dialogues] detected ${existingClap.segments.length} segments`)
   
-  const shotsSegments: ClapSegment[] = existingClap.segments.filter(s => s.category === ClapSegmentCategory.CAMERA)
+  const musicSegments: ClapSegment[] = existingClap.segments.filter(s => s.category === ClapSegmentCategory.MUSIC)
   // console.log(`[api/edit/dialogues] detected ${shotsSegments.length} shots`)
-  
-  if (shotsSegments.length > 32) {
-    throw new Error(`Error, this endpoint being synchronous, it is designed for short stories only (max 32 shots).`)
-  }
 
   const newerClap = mode === ClapCompletionMode.FULL ? existingClap : newClap({
     meta: existingClap.meta
   })
+    
+  if (musicSegments.length > 1) {
+    throw new Error(`Error, only one music track can be generated with the V1 of the AiTube API`)
+  }
 
-  // we process the shots in parallel (this will increase the queue size in the Gradio spaces)
-  await Promise.all(shotsSegments.map(shotSegment =>
-    processShot({
-      shotSegment,
-      existingClap,
-      newerClap,
-      mode,
-      turbo,
-    })
-  ))
+  const musicSegment = musicSegments.at(0)
+
+  await generateMusic({
+    musicSegment,
+    existingClap,
+    newerClap,
+    mode,
+    turbo,
+  })
 
   // console.log(`[api/edit/dialogues] returning the clap augmented with dialogues`)
 
