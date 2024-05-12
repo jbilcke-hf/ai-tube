@@ -16,6 +16,7 @@ import { getVideoPrompt } from "@aitube/engine"
 import { getPositivePrompt } from "@/app/api/utils/imagePrompts"
 
 import { render } from "@/app/api/v1/render"
+import { extractFirstFrame } from "@/app/api/utils/extractFirstFrame"
 
 export async function processShot({
   shotSegment,
@@ -42,7 +43,11 @@ export async function processShot({
 
   let shotVideoSegment: ClapSegment | undefined = shotVideoSegments.at(0)
   
-  // console.log("bug here?", turbo)
+  const shotStoryboardSegments: ClapSegment[] = shotSegments.filter(s =>
+    s.category === ClapSegmentCategory.STORYBOARD
+  )
+
+  let shotStoryboardSegment: ClapSegment | undefined = shotStoryboardSegments.at(0)
 
   console.log(`[api/edit/videos] processShot: shot [${shotSegment.startTimeInMs}:${shotSegment.endTimeInMs}] has ${shotSegments.length} segments (${shotVideoSegments.length} videos)`)
 
@@ -85,7 +90,7 @@ export async function processShot({
 
   // TASK 3: GENERATE MISSING VIDEO FILE
   if (!shotVideoSegment.assetUrl) {
-    // console.log(`[api/edit/videos] processShot: generating video file..`)
+    console.log(`[api/edit/videos] processShot: generating video file..`)
 
     const debug = false
 
@@ -135,4 +140,56 @@ export async function processShot({
   } else {
     console.log(`[api/edit/videos] processShot: there is already a video file: ${shotVideoSegment?.assetUrl?.slice?.(0, 50)}...`)
   }
+
+  if (!shotVideoSegment.assetUrl) {
+    return
+  }
+
+  if (!shotStoryboardSegment) {
+    console.log(`[api/edit/videos] processShot: adding the missing storyboard segment`)
+
+    shotStoryboardSegment = newSegment({
+      track: 1,
+      startTimeInMs: shotSegment.startTimeInMs,
+      endTimeInMs: shotSegment.endTimeInMs,
+      assetDurationInMs: shotSegment.assetDurationInMs,
+      category: ClapSegmentCategory.STORYBOARD,
+      prompt: shotVideoSegment.prompt,
+      outputType: ClapOutputType.IMAGE,
+      status: "to_generate",
+    })
+
+    if (shotStoryboardSegment) {
+      existingClap.segments.push(shotStoryboardSegment)
+    }
+  }
+
+
+  //----------
+  if (
+    shotStoryboardSegment && 
+    (!shotStoryboardSegment.assetUrl || shotStoryboardSegment.status === "to_generate")
+  ) {
+    console.log(`[api/edit/videos] processShot: generating a missing storyboard asset`)
+
+    try {
+      shotStoryboardSegment.assetUrl = await extractFirstFrame({
+        inputVideo: shotVideoSegment.assetUrl,
+        outputFormat: "jpeg"
+      })
+      if (!shotStoryboardSegment.assetUrl) { throw new Error(`failed to extract the first frame`) }
+      console.warn(`[api/edit/videos] processShot: successfully fixed the missing storyboard`)
+      
+      shotStoryboardSegment.status = "completed"
+    } catch (err) {
+      console.warn(`[api/edit/videos] processShot: couldn't generate the missing storyboard (probably an error with the ffmpeg config). Message:`, err)
+      shotStoryboardSegment.status = "to_generate"
+    }
+
+
+    if (shotStoryboardSegment && mode !== ClapCompletionMode.FULL) {
+      newerClap.segments.push(shotStoryboardSegment)
+    }
+  }
+
 }
