@@ -24,7 +24,9 @@ export async function create(request: {
   height: 576,
   turbo: false,
 }): Promise<ClapProject> {
-  const prompt = `${request?.prompt || ""}`.trim()
+
+  // we limit to 512 characters
+  const prompt = `${request?.prompt || ""}`.trim().slice(0, 512)
 
   console.log("api/v1/create(): request:", request)
 
