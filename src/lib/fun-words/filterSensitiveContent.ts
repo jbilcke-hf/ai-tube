@@ -65,6 +65,7 @@ export const sensitiveTopics = [
   "hatchet",
   "beggar",
   "indian",
+  "japanese",
   "corrupted",
   "russian",
   "italian",
@@ -77,5 +78,5 @@ export const sensitiveTopics = [
 ]
 
 export function filterSensitiveContent(words: string[], badWords: string[] = sensitiveTopics): string[] {
-  return words.filter(x => !badWords.includes(x.toLowerCase().trim()))
+  return words.filter(x => !badWords.some(y => y.toLowerCase().startsWith(x.toLowerCase().trim())))
 }
