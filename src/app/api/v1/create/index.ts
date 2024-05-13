@@ -7,9 +7,10 @@ import { predict } from "@/app/api/providers/huggingface/predictWithHuggingFace"
 import { parseRawStringToYAML } from "@/app/api/parsers/parseRawStringToYAML"
 import { LatentStory } from "@/app/api/v1/types"
 
-import { systemPrompt } from "./systemPrompt"
+import { systemPromptCompleteStory } from "./systemPromptCompleteStory"
 import { generateMusicPrompts } from "../edit/music/generateMusicPrompt"
 import { clapToLatentStory } from "../edit/entities/clapToLatentStory"
+import { generateRandomStory } from "./generateRandomStory"
 
 // a helper to generate Clap stories from a few sentences
 // this is mostly used by external apps such as the Stories Factory
@@ -26,11 +27,14 @@ export async function create(request: {
 }): Promise<ClapProject> {
 
   // we limit to 512 characters
-  const prompt = `${request?.prompt || ""}`.trim().slice(0, 512)
+  let prompt = `${request?.prompt || ""}`.trim().slice(0, 512)
 
   console.log("api/v1/create(): request:", request)
 
-  if (!prompt.length) { throw new Error(`please provide a prompt`) }
+  if (!prompt.length) {
+    // throw new Error(`please provide a prompt`)
+    prompt = generateRandomStory()
+  }
 
   const width = getValidNumber(request?.width, 256, 8192, 1024)
   const height = getValidNumber(request?.height, 256, 8192, 576)
@@ -49,7 +53,7 @@ Output: `
   // so technically we could stream everything from end-to-end
   // (but I haven't coded the helpers to do this yet)
   let rawString = await predict({
-    systemPrompt,
+    systemPrompt: systemPromptCompleteStory,
     userPrompt,
     nbMaxNewTokens,
     prefix,
@@ -68,7 +72,7 @@ Output: `
     await sleep(2000)
 
     rawString = await predict({
-      systemPrompt,
+      systemPrompt: systemPromptCompleteStory,
       userPrompt: userPrompt + ".", // we trick the Hugging Face cache
       nbMaxNewTokens,
       prefix,

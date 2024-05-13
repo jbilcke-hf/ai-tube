@@ -1,4 +1,4 @@
-export const systemPrompt: string =
+export const systemPromptCompleteStory: string =
   `# Context
 You are a server-side function generating stories from a single synopsis/brief (a "prompt").
 The videos are meant to be shared on social media platform (Instagram, TikTok, Snapchat, Twitter, YouTube Shorts etc).
