@@ -39,7 +39,7 @@ export async function processShot({
 
   let shotDialogueSegment: ClapSegment | undefined = shotDialogueSegments.at(0)
   
-  console.log(`[api/edit/dialogues] processShot: shot [${shotSegment.startTimeInMs}:${shotSegment.endTimeInMs}] has ${shotSegments.length} segments (${shotDialogueSegments.length} dialogues)`)
+  // console.log(`[api/edit/dialogues] processShot: shot [${shotSegment.startTimeInMs}:${shotSegment.endTimeInMs}] has ${shotSegments.length} segments (${shotDialogueSegments.length} dialogues)`)
 
   if (shotDialogueSegment && !shotDialogueSegment.assetUrl) {
     // console.log(`[api/edit/dialogues] generating audio..`)
@@ -58,6 +58,8 @@ export async function processShot({
       })
       shotDialogueSegment.assetSourceType = getClapAssetSourceType(shotDialogueSegment.assetUrl)
 
+      shotDialogueSegment.status = "completed"
+      
       const { durationInMs, hasAudio } = await getMediaInfo(shotDialogueSegment.assetUrl)
   
       if (hasAudio && durationInMs > 1000) {

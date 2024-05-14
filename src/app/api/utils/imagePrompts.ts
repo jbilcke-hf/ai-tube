@@ -13,6 +13,7 @@ export function addWordsIfNotPartOfThePrompt(prompt: string = "", words: string[
 
  export function getPositivePrompt(prompt: string = "", triggerWord = "") {
   return addWordsIfNotPartOfThePrompt(prompt, [
+    "cinematic photo",
     triggerWord,
     "sublime",
     "pro quality",

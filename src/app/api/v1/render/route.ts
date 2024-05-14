@@ -1,11 +1,12 @@
 import { NextResponse, NextRequest } from "next/server"
 import queryString from "query-string"
-import { ClapMediaOrientation, getValidNumber } from "@aitube/clap"
+import { getValidNumber } from "@aitube/clap"
 
 import { throwIfInvalidToken } from "@/app/api/v1/auth/throwIfInvalidToken"
 import { getContentType } from "@/lib/data/getContentType"
 
-import { render } from "."
+// import { render } from "./animatediff-lcm-svd"
+import { render } from "./animatediff-lightning"
 
 export async function POST(req: NextRequest, res: NextResponse) {
   await throwIfInvalidToken(req.headers.get("Authorization"))
@@ -31,7 +32,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
   const nbFrames = 80
   const nbFPS = 24
   const nbSteps = turbo ? 4 : 8
-  const debug = false
+  const debug = true
 
   const assetUrl = await render({
     prompt,

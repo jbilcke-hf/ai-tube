@@ -6,7 +6,7 @@ import { LatentStory } from "@/app/api/v1/types"
 
 import { systemPrompt } from "./systemPrompt"
 
-export async function generateMusicPrompts({
+export async function generateSoundPrompts({
   prompt = "",
   latentStory = [],
   turbo = false,
@@ -21,15 +21,22 @@ export async function generateMusicPrompts({
 }): Promise<string[]> {
 
   if (!prompt.length) { throw new Error(`please provide a prompt`) }
-  console.log("generateMusicPrompts(): prompt:", prompt)
+  console.log("generateSoundPrompts(): prompt:", prompt)
 
 
   if (!latentStory.length) { throw new Error(`please provide a story`) }
 
-  // console.log("generateMusicPrompts(): latentStory:", latentStory)
+  // console.log("generateSoundPrompts(): latentStory:", latentStory)
+
 
   const userPrompt = `The input story is about: ${prompt}.
-  
+
+  # Output`
+  /*
+  NOTE Julian: maybe later we can use this:
+
+  const userPrompt = `The input story is about: ${prompt}.
+
 \`\`\`yaml
 ${YAML.stringify(
   // we need to help the LLM by marking the shots with a simple numeric ID
@@ -41,6 +48,7 @@ ${YAML.stringify(
 \`\`\`
 
 # Output`
+*/
 
   const prefix = "\""
 

@@ -87,12 +87,14 @@ export async function processShot({
         turbo,
       })
       shotStoryboardSegment.assetSourceType = getClapAssetSourceType(shotStoryboardSegment.assetUrl)
+      shotStoryboardSegment.status = "completed"
     } catch (err) {
       console.log(`[api/v1/edit/storyboards] processShot: failed to generate an image: ${err}`)
+      shotStoryboardSegment.status = "to_generate"
       throw err
     }
   
-    console.log(`[api/v1/edit/storyboards] processShot: generated storyboard image: ${shotStoryboardSegment?.assetUrl?.slice?.(0, 50)}...`)  
+    // console.log(`[api/v1/edit/storyboards] processShot: generated storyboard image: ${shotStoryboardSegment?.assetUrl?.slice?.(0, 50)}...`)  
 
     // if mode is full, newerClap already contains the ference to shotStoryboardSegment
     // but if it's partial, we need to manually add it

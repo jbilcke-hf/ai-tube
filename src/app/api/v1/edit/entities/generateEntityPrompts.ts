@@ -93,7 +93,7 @@ Now please generate the output entities:`
   
     maybeEntities = parseRawStringToYAML<LatentEntity[]>(rawString, [])
     if (!Array.isArray(maybeEntities) || maybeEntities.length === 0) {
-      console.log(`generateEntityPrompts(): failed to generate shots for the second time, which indicates an issue with the Hugging Face API`)
+      console.log(`generateEntityPrompts(): failed to generate entities for the second time, which indicates an issue with the Hugging Face API`)
     }
   }
 

@@ -15,7 +15,8 @@ import { getVideoPrompt } from "@aitube/engine"
 
 import { getPositivePrompt } from "@/app/api/utils/imagePrompts"
 
-import { render } from "@/app/api/v1/render"
+import { render } from "@/app/api/v1/render/animatediff-lcm-svd"
+// import { render } from "@/app/api/v1/render/animatediff-lightning"
 import { extractFirstFrame } from "@/app/api/utils/extractFirstFrame"
 
 export async function processShot({
@@ -49,7 +50,7 @@ export async function processShot({
 
   let shotStoryboardSegment: ClapSegment | undefined = shotStoryboardSegments.at(0)
 
-  console.log(`[api/edit/videos] processShot: shot [${shotSegment.startTimeInMs}:${shotSegment.endTimeInMs}] has ${shotSegments.length} segments (${shotVideoSegments.length} videos)`)
+  // console.log(`[api/edit/videos] processShot: shot [${shotSegment.startTimeInMs}:${shotSegment.endTimeInMs}] has ${shotSegments.length} segments (${shotVideoSegments.length} videos)`)
 
   // TASK 1: GENERATE MISSING VIDEO SEGMENT
   if (!shotVideoSegment) {
@@ -90,7 +91,7 @@ export async function processShot({
 
   // TASK 3: GENERATE MISSING VIDEO FILE
   if (!shotVideoSegment.assetUrl) {
-    console.log(`[api/edit/videos] processShot: generating video file..`)
+    // console.log(`[api/edit/videos] processShot: generating video file..`)
 
     const debug = false
 
@@ -102,30 +103,44 @@ export async function processShot({
     // height = Math.round(height / 2)
     // }
 
+    /*
     if (width > height) {
-      width = 512
-      height = 288
+      width = 768
+      height = 384
     } else if (width < height) {
-      width = 288
-      height = 512
+      width = 384
+      height = 768
     } else {
       width = 512
       height = 512
     }
+    */
+
+    if (!shotStoryboardSegment?.assetUrl) {
+      const error = `cannot generate a video without a storyboard! (at least not with AnimateDiff-LCM SVD)`
+      console.error(error)
+      throw new Error(error)
+    }
+
     try {
       shotVideoSegment.assetUrl = await render({
-        prompt: getPositivePrompt(shotVideoSegment.prompt),
+        // prompt: getPositivePrompt(shotVideoSegment.prompt),
+        imageInputBase64: shotStoryboardSegment.assetUrl,
         seed: shotSegment.seed,
         width,
         height,
+        // by default we do 1 second of 24 fps
+        // but it would look better if we had 2 seconds of 24 fps
         nbFrames: 80,
         nbFPS: 24,
         nbSteps: 4, // turbo ? 4 : 8,
         debug,
       })
       shotVideoSegment.assetSourceType = getClapAssetSourceType(shotVideoSegment.assetUrl)
+      shotStoryboardSegment.status = "completed"
     } catch (err) {
       console.log(`[api/edit/videos] processShot: failed to generate a video file: ${err}`)
+      shotStoryboardSegment.status = "to_generate"
       throw err
     }
   
@@ -182,7 +197,7 @@ export async function processShot({
       
       shotStoryboardSegment.status = "completed"
     } catch (err) {
-      console.warn(`[api/edit/videos] processShot: couldn't generate the missing storyboard (probably an error with the ffmpeg config). Message:`, err)
+      console.warn(`[api/edit/videos] processShot: couldn't generate the missing storyboard (probably an error with the ffmpeg not being found)`)
       shotStoryboardSegment.status = "to_generate"
     }
 

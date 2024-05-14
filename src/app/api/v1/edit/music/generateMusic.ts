@@ -48,7 +48,7 @@ export async function generateMusic({
   }
 
 
-  const durationInSec = 12 // musicSegment.assetDurationInMs / 1000
+  const durationInSec = 14 // musicSegment.assetDurationInMs / 1000
 
   console.log(`generateMusic(): generating a music with:\n  duration: ${durationInSec} sec\n  prompt: ${prompt}`)
 
