@@ -20,7 +20,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
   // or rather, the non-turbo mode could be the one where we upscale
 
   // let's call our micro-service, which is currently open bar.
-  // console.log("[api/v1/export] sending blob to ai-tube-clap-exporter.hf.space")
+  console.log("[api/v1/export] sending clap to ai-tube-clap-exporter.hf.space")
 
   const result = await fetch(
     // `http://localhost:7860?f=${format}`,
@@ -29,6 +29,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
   )
 
   const blob = await result.blob()
+
+  console.log(`[api/v1/export] got a response (result: ${result.status} ${result.statusText})`)
 
   return new NextResponse(blob, {
     status: 200,
