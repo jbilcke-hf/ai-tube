@@ -57,7 +57,7 @@ export async function generateMusic({
   // it is also possible that it was because I tried to generate on the prod,
   // while users where already using the musicgen cluster
 
-  const durationInSec = 12 // musicSegment.assetDurationInMs / 1000
+  const durationInSec = 16 // musicSegment.assetDurationInMs / 1000
 
   console.log(`generateMusic(): generating a music with:\n  duration: ${durationInSec} sec\n  prompt: ${prompt}`)
 
