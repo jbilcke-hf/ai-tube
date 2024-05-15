@@ -28,9 +28,27 @@ export async function POST(req: NextRequest, res: NextResponse) {
     { method: "POST", body: await req.blob() }
   )
 
-  const blob = await result.blob()
+  console.log(`[api/v1/export] API responded: ${result.status} ${result.statusText}`)
+  
+  if (result.status !== 200) {
+    let errorMessage = "unknown 500 error"
+    try {
+      let resp = await req.json()
+      if (resp?.error) {
+        errorMessage = resp?.error
+      }
+    } catch (err) {}
 
-  console.log(`[api/v1/export] got a response (result: ${result.status} ${result.statusText})`)
+    console.log(`[api/v1/export] failed to generate the video (${errorMessage})`)
+   
+    return NextResponse.json({
+      "error": errorMessage
+    }, {
+      status: 500,
+    })
+  }
+
+  const blob = await result.blob()
 
   return new NextResponse(blob, {
     status: 200,
