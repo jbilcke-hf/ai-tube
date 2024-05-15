@@ -23,6 +23,8 @@ export async function clapToLatentStory(clap: ClapProject): Promise<LatentStory[
       ClapSegmentCategory.STORYBOARD
     ).at(0)
 
+    // note: the comment might be missing, that's on purpose
+    // this can happen if the user asked for no captions or no commentary
     const comment = filterSegments(
       ClapSegmentFilteringMode.START,
       shot,
@@ -38,9 +40,9 @@ export async function clapToLatentStory(clap: ClapProject): Promise<LatentStory[
     ).at(0)
 
     const latentStory: LatentStory = {
-      comment: comment.prompt,
-      image: image.prompt,
-      voice: voice.prompt,
+      comment: comment?.prompt || "",
+      image: image?.prompt || "",
+      voice: voice?.prompt || "",
     }
     
     latentStories.push(latentStory)

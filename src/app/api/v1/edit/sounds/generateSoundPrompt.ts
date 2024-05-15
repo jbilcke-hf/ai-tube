@@ -21,7 +21,7 @@ export async function generateSoundPrompts({
 }): Promise<string[]> {
 
   if (!prompt.length) { throw new Error(`please provide a prompt`) }
-  console.log("generateSoundPrompts(): prompt:", prompt)
+  // console.log("generateSoundPrompts(): prompt:", prompt)
 
 
   if (!latentStory.length) { throw new Error(`please provide a story`) }
@@ -53,7 +53,7 @@ ${YAML.stringify(
   const prefix = "\""
 
   // we don't need a lot here!
-  const nbMaxNewTokens = 120
+  const nbMaxNewTokens = 80
 
   // TODO use streaming for the Hugging Face prediction
   //

@@ -11,6 +11,8 @@ import { systemPromptCompleteStory } from "./systemPromptCompleteStory"
 import { generateMusicPrompts } from "../edit/music/generateMusicPrompt"
 import { clapToLatentStory } from "../edit/entities/clapToLatentStory"
 import { generateRandomStory } from "./generateRandomStory"
+import { generateSoundPrompts } from "../edit/sounds/generateSoundPrompt"
+import { checkCaptions } from "./checkCaptions"
 
 // a helper to generate Clap stories from a few sentences
 // this is mostly used by external apps such as the Stories Factory
@@ -27,9 +29,9 @@ export async function create(request: {
 }): Promise<ClapProject> {
 
   // we limit to 512 characters
-  let prompt = `${request?.prompt || ""}`.trim().slice(0, 512)
+  let { prompt, hasCaptions } = checkCaptions(`${request?.prompt || ""}`.trim().slice(0, 512))
 
-  console.log("api/v1/create(): request:", request)
+  // console.log("api/v1/create(): request:", request)
 
   if (!prompt.length) {
     // throw new Error(`please provide a prompt`)
@@ -96,7 +98,7 @@ Output: `
   console.log(`api/v1/create(): generated ${shots.length} shots`)
 
   // this is approximate - TTS generation will determine the final duration of each shot
-  const defaultSegmentDurationInMs = 7000
+  const defaultSegmentDurationInMs = 3000
 
   let currentElapsedTimeInMs = 0
 
@@ -121,7 +123,7 @@ Output: `
 
   for (const { comment, image, voice } of shots) {
 
-    console.log(`api/v1/create():  - ${comment}`)
+    // console.log(`api/v1/create():  - ${comment}`)
 
     // note: it would be nice if we could have a convention saying that
     // track 0 is for videos and track 1 storyboards
@@ -156,6 +158,7 @@ Output: `
       status: "to_generate",
     }))
 
+    if (hasCaptions) {
     clap.segments.push(newSegment({
       track: 2,
       startTimeInMs: currentElapsedTimeInMs,
@@ -168,6 +171,7 @@ Output: `
       outputType: ClapOutputType.TEXT,
       status: "to_generate",
     }))
+  }
 
     clap.segments.push(newSegment({
       track: 3,
@@ -195,21 +199,52 @@ Output: `
     currentElapsedTimeInMs += defaultSegmentDurationInMs
   }
 
-  // one more thing: music!
-  let musicPrompts: string[] = []
-  
+  const latentStory = await clapToLatentStory(clap)
+
+  let soundPrompts: string[] = []
+
   try {
-    musicPrompts = await generateMusicPrompts({
+    soundPrompts = await generateSoundPrompts({
       prompt,
-      latentStory: await clapToLatentStory(clap)
+      latentStory,
+      turbo,
     })
-    const musicPrompt = musicPrompts.at(0)
-    if (!musicPrompt) { throw new Error(`not enough music prompts`) }
+    const soundPrompt = soundPrompts.at(0)
+    if (!soundPrompt) { throw new Error(`not enough sound prompts`) }
 
     // console.log("musicPrompt:", musicPrompt)
 
     clap.segments.push(newSegment({
       track: 5,
+      startTimeInMs: 0,
+      endTimeInMs: currentElapsedTimeInMs,
+      assetDurationInMs: currentElapsedTimeInMs,
+      category: ClapSegmentCategory.SOUND,
+      prompt: soundPrompt,
+      outputType: ClapOutputType.AUDIO,
+      status: "to_generate",
+    }))
+  } catch (err) {
+    console.error(`[api/v1/create] failed to generate sound prompts`)
+    // soundPrompts.push("lofi hiphop loop")
+  }
+
+
+  let musicPrompts: string[] = []
+
+  try {
+    musicPrompts = await generateMusicPrompts({
+      prompt,
+      latentStory,
+      turbo,
+    })
+    const musicPrompt = musicPrompts.at(0)
+    if (!musicPrompt) { throw new Error(`not enough music prompts`) }
+  
+    // console.log("musicPrompt:", musicPrompt)
+
+    clap.segments.push(newSegment({
+      track: 6,
       startTimeInMs: 0,
       endTimeInMs: currentElapsedTimeInMs,
       assetDurationInMs: currentElapsedTimeInMs,

@@ -2,7 +2,9 @@ import { sleep } from "@/lib/utils/sleep"
 import { ClusterMachine } from "../../types"
 
 
-
+// 8 allows us to support about 1 request per minute
+// we are still gonna need to add a hugging face login wall,
+// to limit further the amount of requests people do
 export const nbClusterMachines = 8
 // make sure the machines are running!!
 
@@ -17,17 +19,27 @@ export const nbClusterMachines = 8
 
 // we maintain a global cluster state
 
-export const clusterMachines: ClusterMachine[] = []
+export const clusterMachines: ClusterMachine[] = [
+
+    // careful when trying this one (check number of Gradio parameters, fps etc):
+    // url: `https://jbilcke-hf-ai-tube-model-als-experimental.hf.space`,
+
+  // { id: 0, url: `https://jbilcke-hf-ai-tube-model-als-1.hf.space`, busy: false },
+  // { id: 1, url: `https://jbilcke-hf-ai-tube-model-als-2.hf.space`, busy: false },
+  // { id: 2, url: `https://jbilcke-hf-ai-tube-model-als-3.hf.space`, busy: false },
+  // { id: 3, url: `https://jbilcke-hf-ai-tube-model-als-4.hf.space`, busy: false },
+  // { id: 4, url: `https://jbilcke-hf-ai-tube-model-als-5.hf.space`, busy: false },
+  // { id: 5, url: `https://jbilcke-hf-ai-tube-model-als-6.hf.space`, busy: false },
+]
+
 for (let i = 0; i < nbClusterMachines; i++) {
   clusterMachines.push({
     id: i,
     url: `https://jbilcke-hf-ai-tube-model-als-${i + 1}.hf.space`,
-
-    // careful when trying this one (check number of Gradio parameters, fps etc):
-    // url: `https://jbilcke-hf-ai-tube-model-als-experimental.hf.space`,
     busy: false
   })
 }
+
 
 export async function getClusterMachine(maxWaitTimeInMs: number = 10000): Promise<ClusterMachine> {
   let clusterMachine: ClusterMachine | undefined = undefined

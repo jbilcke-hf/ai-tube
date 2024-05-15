@@ -48,7 +48,16 @@ export async function generateMusic({
   }
 
 
-  const durationInSec = 14 // musicSegment.assetDurationInMs / 1000
+  // unconfirmed, I think some durations might make musicgen crash
+  // File "/home/user/app/audiocraft/modules/transformer.py", line 394, in forward
+  //   k, v = self._complete_kv(k, v)
+  // File "/home/user/app/audiocraft/modules/transformer.py", line 286, in _complete_kv
+  // assert nk.shape[time_dim] == nv.shape[time_dim]
+  //
+  // it is also possible that it was because I tried to generate on the prod,
+  // while users where already using the musicgen cluster
+
+  const durationInSec = 12 // musicSegment.assetDurationInMs / 1000
 
   console.log(`generateMusic(): generating a music with:\n  duration: ${durationInSec} sec\n  prompt: ${prompt}`)
 

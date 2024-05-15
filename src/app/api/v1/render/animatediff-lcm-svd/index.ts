@@ -48,6 +48,9 @@ export async function render(request: {
   const durationInSec = Math.round(nbFrames / nbFPS)
   const framesPerSec = nbFPS
 
+  // I never how how to pick this
+  const motionBucketId = 30
+
   // vital step: image size must match the output video size
   const resizedImageBase64 = await resizeImage({
     input: imageInputBase64,
@@ -75,6 +78,7 @@ export async function render(request: {
       })
     }
 
+
     const res = await fetch(machine.url + (machine.url.endsWith("/") ? "" : "/") + "api/predict", {
       method: "POST",
       headers: {
@@ -88,7 +92,7 @@ export async function render(request: {
           resizedImageBase64,
           0, // seed,
           true,
-          33, // motion_bucket_id,
+          motionBucketId, // motion_bucket_id,
 
           // attention: we are experimenting with ffmpeg to change the speed,
           // on the server "als-2"
@@ -103,7 +107,7 @@ export async function render(request: {
           1.0, // min_guidance_scale,
           width,
           height,
-          nbSteps,
+          4, // I don't see a lot of diff between 4 and 6, // nbSteps,
         ],
       }),
 
