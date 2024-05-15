@@ -1,10 +1,9 @@
-FROM node:20-alpine AS base
+# And Node 20
+FROM node:20-alpine
 
-# Install dependencies only when needed
-FROM base AS deps
+ARG DEBIAN_FRONTEND=noninteractive
 
-# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
-RUN apk add --no-cache libc6-compat
+RUN apk update
 
 # for dev mode
 RUN apk add git git-lfs procps htop vim nano
@@ -14,66 +13,45 @@ RUN apk add alpine-sdk pkgconfig
 # For FFMPEG and gl concat
 RUN apk add curl python3 python3-dev libx11-dev libsm-dev libxrender libxext-dev mesa-dev xvfb libxi-dev glew-dev
 
-RUN apk add --no-cache ffmpeg
+# For fonts, emojis etc
+RUN apk add font-terminus font-noto font-noto-cjk font-noto-extra font-noto-emoji
+RUN apk add font-arabic-misc font-inconsolata font-dejavu font-awesome 
+RUN apk add ttf-opensans
 
-WORKDIR /app
-
-# Install dependencies based on the preferred package manager
-COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
-RUN \
-  if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
-  elif [ -f package-lock.json ]; then npm ci --force; \
-  elif [ -f pnpm-lock.yaml ]; then yarn global add pnpm && pnpm i --frozen-lockfile; \
-  else echo "Lockfile not found." && exit 1; \
-  fi
-
-# Uncomment the following lines if you want to use a secret at buildtime, 
-# for example to access your private npm packages
-# RUN --mount=type=secret,id=HF_EXAMPLE_SECRET,mode=0444,required=true \
-#     $(cat /run/secrets/HF_EXAMPLE_SECRET)
-
-# Rebuild the source code only when needed
-FROM base AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
-COPY . .
-
-# Next.js collects completely anonymous telemetry data about general usage.
-# Learn more here: https://nextjs.org/telemetry
-# Uncomment the following line in case you want to disable telemetry during the build.
-# ENV NEXT_TELEMETRY_DISABLED 1
-
-# RUN yarn build
-
-# For FFMPEG and gl concat
-RUN apk add curl python3 python3-dev libx11-dev libsm-dev libxrender libxext-dev mesa-dev xvfb libxi-dev glew-dev
+# For Puppeteer
+RUN apk add build-base gcompat udev chromium
 
 RUN apk add --no-cache ffmpeg
 
-# If you use yarn, comment out this line and use the line above
-RUN npm run build
-
-# Production image, copy all the files and run next
-FROM base AS runner
-WORKDIR /app
-
-ENV NODE_ENV production
-# Uncomment the following line in case you want to disable telemetry during runtime.
-# ENV NEXT_TELEMETRY_DISABLED 1
-
-RUN addgroup --system --gid 1001 nodejs
+# Set up a new user named "user" with user ID 1000
+RUN adduser --disabled-password --uid 1001 user
 RUN adduser --system --uid 1001 nextjs
 
-COPY --from=builder /app/public ./public
+# Switch to the "user" user
+USER user
 
-# Automatically leverage output traces to reduce image size
-# https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-COPY --from=builder --chown=nextjs:nodejs /app/.next/cache ./.next/cache
-# COPY --from=builder --chown=nextjs:nodejs /app/.next/cache/fetch-cache ./.next/cache/fetch-cache
+# Set home to the user's home directory
+ENV  PATH=.local/bin:$PATH
 
-USER nextjs
+# Set the working directory to the user's home directory
+WORKDIR /app
+
+# Install app dependencies
+# A wildcard is used to ensure both package.json AND package-lock.json are copied
+# where available (npm@5+)
+COPY --chown=user package*.json /app
+
+# make sure the .env is copied as well
+COPY --chown=user .env /app
+
+RUN ffmpeg -version
+
+# Copy the current directory contents into the container at /app setting the owner to the user
+COPY --chown=user . /app
+
+RUN npm ci
+
+RUN npm run build
 
 EXPOSE 3000
 

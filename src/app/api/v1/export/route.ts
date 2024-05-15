@@ -20,7 +20,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
   // or rather, the non-turbo mode could be the one where we upscale
 
   // let's call our micro-service, which is currently open bar.
-  console.log("[api/v1/export] sending clap to ai-tube-clap-exporter.hf.space")
+  console.log(`[api/v1/export] sending clap to https://jbilcke-hf-ai-tube-clap-exporter.hf.space?f=${format}`)
 
   const result = await fetch(
     // `http://localhost:7860?f=${format}`,
