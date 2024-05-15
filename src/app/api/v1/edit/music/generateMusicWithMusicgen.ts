@@ -21,6 +21,9 @@ export async function generateMusicWithMusicgen({
 
   const machine = await getClusterMachine()
 
+  // should we add things in here?
+  const finalPrompt = `${prompt}`
+
   try {
     const res = await fetch(machine.url + (machine.url.endsWith("/") ? "" : "/") + "api/predict", {
       method: "POST",
@@ -40,7 +43,7 @@ export async function generateMusicWithMusicgen({
           // we can afford to use the MultiBand Decoder
           hd ? "MultiBand_Diffusion" : "Default",
 
-          prompt, // string  in 'Input Text' Textbox component
+          finalPrompt, // string  in 'Input Text' Textbox component
           null, 	// blob in 'File' Audio component		
           durationInSec, // number (numeric value between 1 and 300) in 'Duration' Slider component		
           250, // number  in 'Top-k' Number component		
