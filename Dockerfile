@@ -25,7 +25,6 @@ RUN apk add --no-cache ffmpeg
 
 # Set up a new user named "user" with user ID 1000
 RUN adduser --disabled-password --uid 1001 user
-RUN adduser --system --uid 1001 nextjs
 
 # Switch to the "user" user
 USER user
