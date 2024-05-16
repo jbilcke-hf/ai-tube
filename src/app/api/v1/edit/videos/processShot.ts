@@ -137,10 +137,10 @@ export async function processShot({
         debug,
       })
       shotVideoSegment.assetSourceType = getClapAssetSourceType(shotVideoSegment.assetUrl)
-      shotStoryboardSegment.status = "completed"
+      shotVideoSegment.status = "completed"
     } catch (err) {
       console.log(`[api/edit/videos] processShot: failed to generate a video file: ${err}`)
-      shotStoryboardSegment.status = "to_generate"
+      shotVideoSegment.status = "to_generate"
       throw err
     }
   

@@ -80,10 +80,10 @@ export async function generateMusic({
   const newProperties: Partial<ClapSegment> = {
     assetUrl,
     assetDurationInMs: durationInMs,
+    assetSourceType: getClapAssetSourceType(assetUrl),
     outputGain: 1.0,
     status: "completed"
   }
-
 
   if (!hasAudio) {
     console.warn(`generateMusic(): the generated music waveform appears to be silent (might be a ffprobe malfunction)`)
