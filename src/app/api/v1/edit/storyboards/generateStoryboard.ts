@@ -7,6 +7,7 @@ import { getNegativePrompt, getPositivePrompt } from "@/app/api/utils/imagePromp
 export async function generateStoryboard({
   prompt,
   // negativePrompt,
+  identityImage,
   width,
   height,
   seed,
@@ -14,6 +15,7 @@ export async function generateStoryboard({
 }: {
   prompt: string
   // negativePrompt?: string
+  identityImage?: string
   width?: number
   height?: number
   seed?: number
@@ -23,13 +25,14 @@ export async function generateStoryboard({
   width = getValidNumber(width, 256, 8192, 512)
   height = getValidNumber(height, 256, 8192, 288)
 
-  // console.log("calling await newRender")
+
   prompt = getPositivePrompt(prompt)
   const negativePrompt = getNegativePrompt()
 
   let render = await newRender({
     prompt,
     negativePrompt,
+    identityImage,
     nbFrames: 1,
     nbFPS: 1,
     nbSteps: turbo ? 8 : 25,

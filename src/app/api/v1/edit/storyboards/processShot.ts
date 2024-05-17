@@ -79,12 +79,22 @@ export async function processShot({
   if (!shotStoryboardSegment.assetUrl) {
     // console.log(`[api/v1/edit/storyboards] generating image..`)
 
+    // console.log(`we have ${existingClap.entities.length} entities`)
+    // check if we have an entity image we can use
+    const identityImage = existingClap.entities.find(e => e.id === shotStoryboardSegment.entityId)?.imageId
+    if (identityImage) {
+      // console.log(`[api/v1/edit/storyboards] processShot: using an entity to generate the storyboard..`)
+    }
     try {
       shotStoryboardSegment.assetUrl = await generateStoryboard({
         prompt: getPositivePrompt(shotStoryboardSegment.prompt),
+        identityImage,
         width: existingClap.meta.width,
         height: existingClap.meta.height,
-        turbo,
+
+        // turbo mode is mandatory if we have an identity image
+        // that's because it will use PuLID instead of SDXL
+        turbo: !!identityImage,
       })
       shotStoryboardSegment.assetSourceType = getClapAssetSourceType(shotStoryboardSegment.assetUrl)
       shotStoryboardSegment.status = "completed"

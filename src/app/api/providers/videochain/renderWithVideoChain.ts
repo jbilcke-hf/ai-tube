@@ -10,6 +10,7 @@ const apiKey = `${process.env.VIDEOCHAIN_API_KEY || ""}`
 export async function newRender({
   prompt,
   negativePrompt,
+  identityImage,
   nbFrames,
   nbFPS,
   nbSteps,
@@ -21,6 +22,7 @@ export async function newRender({
 }: {
   prompt: string
   negativePrompt: string
+  identityImage?: string
   nbFrames: number
   nbFPS: number
   nbSteps: number
@@ -64,6 +66,7 @@ export async function newRender({
         body: JSON.stringify({
           prompt,
           negativePrompt,
+          identityImage,
           // nbFrames: 8 and nbSteps: 15 --> ~10 sec generation
           nbFrames, // when nbFrames is 1, we will only generate static images
           nbFPS,

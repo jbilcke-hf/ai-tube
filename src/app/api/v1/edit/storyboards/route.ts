@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
   
   const mode = parseCompletionMode(query?.c)
   const turbo = parseTurbo(query?.t)
-  
+
   const blob = await req.blob()
 
   const existingClap: ClapProject = await parseClap(blob)

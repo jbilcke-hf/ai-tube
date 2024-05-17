@@ -7,7 +7,8 @@ export function parseTurbo(
   try {
     let maybeTurbo = decodeURIComponent(`${input || value}`).trim().toLowerCase()
 
-    if (maybeTurbo === "true" || maybeTurbo === "1") { return false }
+    
+    if (maybeTurbo === "true" || maybeTurbo === "1") { return true }
 
     if (maybeTurbo === "false") { return false }
 
