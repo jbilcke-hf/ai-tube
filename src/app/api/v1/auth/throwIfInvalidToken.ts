@@ -4,19 +4,21 @@ import { secretKey } from "./config"
 import { parseToken } from "./parseToken"
 
 export async function throwIfInvalidToken(input?: any): Promise<boolean> {
+  try {
+    // note: this performs a decodeURI, but I'm not sure we need to
+    const token = parseToken(input)
 
-  // note: this performs a decodeURI, but I'm not sure we need to
-  const token = parseToken(input)
+    // verify token
+    const { payload, protectedHeader } = await jwtVerify(token, secretKey, {
+      issuer: `${process.env.API_SECRET_JWT_ISSUER || ""}`, // issuer
+      audience: `${process.env.API_SECRET_JWT_AUDIENCE || ""}`, // audience
+    })
 
-  // verify token
-  const { payload, protectedHeader } = await jwtVerify(token, secretKey, {
-    issuer: `${process.env.API_SECRET_JWT_ISSUER || ""}`, // issuer
-    audience: `${process.env.API_SECRET_JWT_AUDIENCE || ""}`, // audience
-  })
-
-  // log values to console
-  // console.log(payload)
-  // console.log(protectedHeader)
-
-  return true
+    // log values to console
+    // console.log(payload)
+    // console.log(protectedHeader)
+    return true
+  } catch (err) {
+    throw new Error(`Access Denied`)
+  }
 }

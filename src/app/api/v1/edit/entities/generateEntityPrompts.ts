@@ -55,7 +55,7 @@ ${YAML.stringify(
 Now please generate the output entities:`
 
   const prefix = "```yaml\n"
-  const nbMaxNewTokens = 1400
+  const nbMaxNewTokens = 800
 
   // TODO use streaming for the Hugging Face prediction
   //
@@ -103,7 +103,7 @@ Now please generate the output entities:`
 
       // the LLM generates unrelated catrgories unfortunately,
       // that we still turn into image.. so we fix that by filtering
-      .filter(({ category }) => category !== ClapSegmentCategory.CHARACTER)
+      .filter(({ category }) => category === ClapSegmentCategory.CHARACTER)
 
       .map(async ({
       name,
@@ -140,7 +140,8 @@ Now please generate the output entities:`
     throw new Error(`Hugging Face Inference API failure (the model failed to generate the entities)`)
   }
 
-  // console.log(`generateEntityPrompts(): generated ${results.length} entities with their images and voice ids`)
+  console.log(`generateEntityPrompts(): generated ${results.length} entities with their images and voice ids`)
+  // console.log(`generateEntityPrompts():`, results)
 
   return results
 }

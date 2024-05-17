@@ -39,12 +39,14 @@ export async function editEntities({
       turbo,
     })
 
+    // console.log(`generated ${entityPromptsWithShots.length} entityPromptsWithShots`)
     const allShots = existingClap.segments.filter(s => s.category === ClapSegmentCategory.CAMERA)
 
     for (const {
       entityPrompt: { name, category, age, variant, region, identityImage, identityVoice },
       shots: entityShots
     } of entityPromptsWithShots) {
+      // console.log(`generating entity ${name}`)
       const newEnt = newEntity({
         category,
         triggerName: name,
@@ -122,7 +124,7 @@ export async function editEntities({
     existingClap.entities.push(newEnt)
   }
 
-  if (!existingClap.entities.length) { throw new Error(`please provide at least one entity`) }
+  if (!existingClap.entities.length) { throw new Error(`we need at least one entity`) }
 
   // then we try to automatically repair, edit, complete.. all the existing entities
 

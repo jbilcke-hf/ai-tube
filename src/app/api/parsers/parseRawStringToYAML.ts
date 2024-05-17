@@ -14,6 +14,8 @@ export function parseRawStringToYAML<T>(input: any, defaultValue: T) {
 
     const something: any = YAML.parse(rawString)
 
+    // console.log("something:", JSON.stringify(something))
+
     return something as T
   } catch (err) {
     return defaultValue
