@@ -5,7 +5,8 @@ import {
   getClapAssetSourceType,
   filterSegments,
   ClapSegmentFilteringMode,
-  ClapSegmentCategory
+  ClapSegmentCategory,
+  ClapSegmentStatus
 } from "@aitube/clap"
 import { ClapCompletionMode } from "@aitube/client"
 
@@ -54,7 +55,7 @@ export async function processShot({
       })
       shotSoundSegment.assetSourceType = getClapAssetSourceType(shotSoundSegment.assetUrl)
       
-      shotSoundSegment.status = "completed"
+      shotSoundSegment.status = ClapSegmentStatus.COMPLETED
 
       const { durationInMs, hasAudio } = await getMediaInfo(shotSoundSegment.assetUrl)
   

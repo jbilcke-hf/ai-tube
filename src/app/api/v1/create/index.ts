@@ -1,6 +1,6 @@
 "use server"
 
-import { ClapProject, getValidNumber, newClap, newSegment, ClapSegmentCategory, ClapOutputType, ClapMediaOrientation } from "@aitube/clap"
+import { ClapProject, getValidNumber, newClap, newSegment, ClapSegmentCategory, ClapOutputType, ClapMediaOrientation, ClapSegmentStatus } from "@aitube/clap"
 
 import { sleep } from "@/lib/utils/sleep"
 import { predict } from "@/app/api/providers/huggingface/predictWithHuggingFace"
@@ -144,7 +144,7 @@ Output: `
       category: ClapSegmentCategory.VIDEO,
       prompt: image,
       outputType: ClapOutputType.VIDEO,
-      status: "to_generate",
+      status: ClapSegmentStatus.TO_GENERATE,
     }))
 
     clap.segments.push(newSegment({
@@ -155,7 +155,7 @@ Output: `
       category: ClapSegmentCategory.STORYBOARD,
       prompt: image,
       outputType: ClapOutputType.IMAGE,
-      status: "to_generate",
+      status: ClapSegmentStatus.TO_GENERATE,
     }))
 
     if (hasCaptions) {
@@ -169,7 +169,7 @@ Output: `
       // assetUrl: `data:text/plain;base64,${btoa(comment)}`,
       assetUrl: comment,
       outputType: ClapOutputType.TEXT,
-      status: "to_generate",
+      status: ClapSegmentStatus.TO_GENERATE,
     }))
   }
 
@@ -181,7 +181,7 @@ Output: `
       category: ClapSegmentCategory.DIALOGUE,
       prompt: voice,
       outputType: ClapOutputType.AUDIO,
-      status: "to_generate",
+      status: ClapSegmentStatus.TO_GENERATE,
     }))
 
     // the presence of a camera is mandatory
@@ -193,7 +193,7 @@ Output: `
       category: ClapSegmentCategory.CAMERA,
       prompt: "video",
       outputType: ClapOutputType.TEXT,
-      status: "to_generate",
+      status: ClapSegmentStatus.TO_GENERATE,
     }))
 
     currentElapsedTimeInMs += defaultSegmentDurationInMs
@@ -222,7 +222,7 @@ Output: `
       category: ClapSegmentCategory.SOUND,
       prompt: soundPrompt,
       outputType: ClapOutputType.AUDIO,
-      status: "to_generate",
+      status: ClapSegmentStatus.TO_GENERATE,
     }))
   } catch (err) {
     console.error(`[api/v1/create] failed to generate sound prompts`)
@@ -251,7 +251,7 @@ Output: `
       category: ClapSegmentCategory.MUSIC,
       prompt: musicPrompt,
       outputType: ClapOutputType.AUDIO,
-      status: "to_generate",
+      status: ClapSegmentStatus.TO_GENERATE,
     }))
   } catch (err) {
     console.error(`[api/v1/create] failed to generate music prompts`)

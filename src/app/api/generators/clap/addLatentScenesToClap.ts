@@ -3,8 +3,8 @@
 import { ClapProject, newSegment } from "@aitube/clap"
 
 import { LatentScenes } from "./types"
+import { defaultSegmentDurationInMs } from "./constants"
 
-let defaultSegmentDurationInMs = 2000
 
 /**
  * This generates a fully valid Clap blob (compressed archive)

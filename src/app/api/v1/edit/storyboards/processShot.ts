@@ -6,7 +6,8 @@ import {
   filterSegments,
   ClapSegmentFilteringMode,
   ClapSegmentCategory,
-  ClapOutputType
+  ClapOutputType,
+  ClapSegmentStatus
 } from "@aitube/clap"
 import { ClapCompletionMode } from "@aitube/client"
 import { getVideoPrompt } from "@aitube/engine"
@@ -97,10 +98,10 @@ export async function processShot({
         turbo: !!identityImage,
       })
       shotStoryboardSegment.assetSourceType = getClapAssetSourceType(shotStoryboardSegment.assetUrl)
-      shotStoryboardSegment.status = "completed"
+      shotStoryboardSegment.status = ClapSegmentStatus.COMPLETED
     } catch (err) {
       console.log(`[api/v1/edit/storyboards] processShot: failed to generate an image: ${err}`)
-      shotStoryboardSegment.status = "to_generate"
+      shotStoryboardSegment.status = ClapSegmentStatus.TO_GENERATE
       throw err
     }
   

@@ -6,6 +6,7 @@ import {
   filterSegments,
   ClapSegmentFilteringMode,
   ClapSegmentCategory,
+  ClapSegmentStatus,
   newSegment
 } from "@aitube/clap"
 import { ClapCompletionMode } from "@aitube/client"
@@ -82,7 +83,7 @@ export async function generateMusic({
     assetDurationInMs: durationInMs,
     assetSourceType: getClapAssetSourceType(assetUrl),
     outputGain: 1.0,
-    status: "completed"
+    status: ClapSegmentStatus.COMPLETED,
   }
 
   if (!hasAudio) {

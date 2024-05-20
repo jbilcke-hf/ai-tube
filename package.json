@@ -10,13 +10,13 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@aitube/clap": "0.0.17",
-    "@aitube/client": "0.0.25",
-    "@aitube/engine": "0.0.7",
+    "@aitube/clap": "0.0.19",
+    "@aitube/client": "0.0.28",
+    "@aitube/engine": "0.0.10",
     "@huggingface/hub": "0.12.3-oauth",
-    "@huggingface/inference": "^2.6.7",
+    "@huggingface/inference": "^2.7.0",
     "@jcoreio/async-throttle": "^1.6.0",
-    "@mediapipe/tasks-vision": "^0.10.13-rc.20240419",
+    "@mediapipe/tasks-vision": "^0.10.14",
     "@photo-sphere-viewer/core": "^5.7.2",
     "@photo-sphere-viewer/equirectangular-video-adapter": "^5.7.2",
     "@photo-sphere-viewer/gyroscope-plugin": "^5.7.2",

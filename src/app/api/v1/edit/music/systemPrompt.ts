@@ -29,7 +29,7 @@ Given the following input story, provided as YAML:
 - shot: 2
   comment: "The witch gives her counsel but warns of an unknown cost."
   image: "close-up shot of THE WITCH, smiling cunningly, raising a finger while speaking. Background bokeh, dim lightning, menacing, mysterious."
-  voice: "Your Majesty, this will be a bloody battle, but I espy a way to victory for you. But if my advice you follow, victory I foresee, although at a great cost it will be."
+  voice: "Your Majesty, this will be a bloody battle, but I espy a way to victory for you. If my advice you follow, victory I foresee, although at a great cost it will be."
 - shot: 3
   comment: "The words of the witch are sinking in, but King Arthus tries to appear strong"
   image: "close-up shot on KING ARTHUS, looking concerned, somber, false confidence"

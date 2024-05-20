@@ -5,7 +5,8 @@ import {
   getClapAssetSourceType,
   filterSegments,
   ClapSegmentFilteringMode,
-  ClapSegmentCategory
+  ClapSegmentCategory,
+  ClapSegmentStatus
 } from "@aitube/clap"
 import { ClapCompletionMode } from "@aitube/client"
 import { getSpeechBackgroundAudioPrompt } from "@aitube/engine"
@@ -58,7 +59,7 @@ export async function processShot({
       })
       shotDialogueSegment.assetSourceType = getClapAssetSourceType(shotDialogueSegment.assetUrl)
 
-      shotDialogueSegment.status = "completed"
+      shotDialogueSegment.status = ClapSegmentStatus.COMPLETED
       
       const { durationInMs, hasAudio } = await getMediaInfo(shotDialogueSegment.assetUrl)
   

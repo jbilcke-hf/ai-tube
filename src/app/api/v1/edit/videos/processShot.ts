@@ -8,6 +8,7 @@ import {
   ClapSegmentFilteringMode,
   ClapOutputType,
   ClapSegmentCategory,
+  ClapSegmentStatus,
   parseMediaOrientation
 } from "@aitube/clap"
 import { ClapCompletionMode } from "@aitube/client"
@@ -137,10 +138,10 @@ export async function processShot({
         debug,
       })
       shotVideoSegment.assetSourceType = getClapAssetSourceType(shotVideoSegment.assetUrl)
-      shotVideoSegment.status = "completed"
+      shotVideoSegment.status = ClapSegmentStatus.COMPLETED
     } catch (err) {
       console.log(`[api/edit/videos] processShot: failed to generate a video file: ${err}`)
-      shotVideoSegment.status = "to_generate"
+      shotVideoSegment.status = ClapSegmentStatus.TO_GENERATE
       throw err
     }
   
@@ -171,7 +172,7 @@ export async function processShot({
       category: ClapSegmentCategory.STORYBOARD,
       prompt: shotVideoSegment.prompt,
       outputType: ClapOutputType.IMAGE,
-      status: "to_generate",
+      status: ClapSegmentStatus.TO_GENERATE,
     })
 
     if (shotStoryboardSegment) {
@@ -195,10 +196,10 @@ export async function processShot({
       if (!shotStoryboardSegment.assetUrl) { throw new Error(`failed to extract the first frame`) }
       console.warn(`[api/edit/videos] processShot: successfully fixed the missing storyboard`)
       
-      shotStoryboardSegment.status = "completed"
+      shotStoryboardSegment.status = ClapSegmentStatus.COMPLETED
     } catch (err) {
       console.warn(`[api/edit/videos] processShot: couldn't generate the missing storyboard (probably an error with the ffmpeg not being found)`)
-      shotStoryboardSegment.status = "to_generate"
+      shotStoryboardSegment.status = ClapSegmentStatus.TO_GENERATE
     }
 
 
