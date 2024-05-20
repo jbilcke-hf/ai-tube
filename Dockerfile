@@ -50,7 +50,12 @@ COPY --chown=user . /app
 
 RUN npm ci --force
 
-RUN npm run build
+# expose our secrets during build
+RUN --mount=type=secret,id=UPSTASH_REDIS_REST_TOKEN,mode=0444,required=true \
+    --mount=type=secret,id=UPSTASH_REDIS_REST_URL,mode=0444,required=true \
+  UPSTASH_REDIS_REST_TOKEN=$(cat /run/secrets/UPSTASH_REDIS_REST_TOKEN) \
+  UPSTASH_REDIS_REST_URL=$(cat /run/secrets/UPSTASH_REDIS_REST_URL) \
+  npm run build
 
 EXPOSE 3000
 
