@@ -4,6 +4,6 @@ export function parsePrompt(input?: any) {
     res = decodeURIComponent(`${input || ""}` || "").trim()
   } catch (err) {}
 
-  if (!prompt.length) { throw new Error(`please provide a prompt`) }
+  if (!res.length) { throw new Error(`please provide a prompt`) }
   return res
 }

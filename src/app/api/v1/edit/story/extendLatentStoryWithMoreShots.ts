@@ -38,10 +38,13 @@ export async function extendLatentStoryWithMoreShots({
 
   let initialStory = YAML.stringify(
     // we need to help the LLM by marking the shots with a simple numeric ID
-    latentStory.map((shot, i) => ({
-      shot: i,
-      ...shot,
-    }))
+    // latentStory.map((shot, i) => ({
+    //   shot: i,
+    //   ...shot,
+    // }))
+
+    // ..well no, actually we don't!
+    latentStory
   )
 
   let compressedStory = initialStory

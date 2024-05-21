@@ -28,7 +28,7 @@ number of shots to extend: 3
 
 \`\`\`yaml
 - comment: "A messenger comes to the royal court, with an urgent message."
-  image: "Establishing shot of ROYAL MESSENGER dressed in medieval horse rider and light scout attire, entering the royal court, kneeling in from of KING ARTHUS, a majestic king, dressed in golden armor and a purple cape."
+  image: "Establishing shot of ROYAL MESSENGER dressed in medieval horse rider and light scout attire, entering the royal court, kneeling in front of KING ARTHUS, a majestic king, dressed in golden armor and a purple cape."
   voice: "Sire, enemy troups will be here by sunrise. What thou you order?"
 \`\`\
 

@@ -50,7 +50,8 @@ COPY --chown=user . /app
 
 RUN npm ci --force
 
-# expose our secrets during build
+# expose our secrets during the static build
+# otherwise Upstash becomes unhappy
 RUN --mount=type=secret,id=UPSTASH_REDIS_REST_TOKEN,mode=0444,required=true \
     --mount=type=secret,id=UPSTASH_REDIS_REST_URL,mode=0444,required=true \
   UPSTASH_REDIS_REST_TOKEN=$(cat /run/secrets/UPSTASH_REDIS_REST_TOKEN) \
