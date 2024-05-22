@@ -13,6 +13,7 @@ import { clapToLatentStory } from "../edit/entities/clapToLatentStory"
 import { generateRandomStory } from "./generateRandomStory"
 import { generateSoundPrompts } from "../edit/sounds/generateSoundPrompt"
 import { checkCaptions } from "./checkCaptions"
+import { MAX_PROMPT_LENGTH_IN_CHARS } from "../../generators/clap/constants"
 
 // a helper to generate Clap stories from a few sentences
 // this is mostly used by external apps such as the Stories Factory
@@ -29,7 +30,8 @@ export async function create(request: {
 }): Promise<ClapProject> {
 
   // we limit to 512 characters
-  let { prompt, hasCaptions } = checkCaptions(`${request?.prompt || ""}`.trim().slice(0, 512))
+  let { prompt, hasCaptions } = checkCaptions(`${request?.prompt || ""}`.trim().slice(0, MAX_PROMPT_LENGTH_IN_CHARS))
+
 
   // console.log("api/v1/create(): request:", request)
 
@@ -159,19 +161,19 @@ Output: `
     }))
 
     if (hasCaptions) {
-    clap.segments.push(newSegment({
-      track: 2,
-      startTimeInMs: currentElapsedTimeInMs,
-      endTimeInMs: currentElapsedTimeInMs + defaultSegmentDurationInMs,
-      assetDurationInMs: defaultSegmentDurationInMs,
-      category: ClapSegmentCategory.INTERFACE,
-      prompt: comment,
-      // assetUrl: `data:text/plain;base64,${btoa(comment)}`,
-      assetUrl: comment,
-      outputType: ClapOutputType.TEXT,
-      status: ClapSegmentStatus.TO_GENERATE,
-    }))
-  }
+      clap.segments.push(newSegment({
+        track: 2,
+        startTimeInMs: currentElapsedTimeInMs,
+        endTimeInMs: currentElapsedTimeInMs + defaultSegmentDurationInMs,
+        assetDurationInMs: defaultSegmentDurationInMs,
+        category: ClapSegmentCategory.INTERFACE,
+        prompt: comment,
+        // assetUrl: `data:text/plain;base64,${btoa(comment)}`,
+        assetUrl: comment,
+        outputType: ClapOutputType.TEXT,
+        status: ClapSegmentStatus.TO_GENERATE,
+      }))
+    }
 
     clap.segments.push(newSegment({
       track: 3,

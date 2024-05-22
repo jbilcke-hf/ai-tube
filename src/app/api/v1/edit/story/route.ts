@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
   const qs = queryString.parseUrl(req.url || "")
   const query = (qs || {}).query
 
-  const prompt = parsePrompt(query?.p, false)
+  const prompt = parsePrompt(query?.p, false) // <- false, to make it non-mandatory
   const mode = parseCompletionMode(query?.c)
   const turbo = parseTurbo(query?.t)
   
@@ -38,10 +38,10 @@ export async function POST(req: NextRequest) {
     meta: existingClap.meta
   })
 
-    // console.log(`api/v1/edit/storyboards(): detected ${existingClap.segments.length} segments`)
+    // console.log(`api/v1/edit/story(): detected ${existingClap.segments.length} segments`)
   
     const allShotsSegments: ClapSegment[] = existingClap.segments.filter(s => s.category === ClapSegmentCategory.CAMERA)
-    console.log(`api/v1/edit/storyboards(): detected ${allShotsSegments.length} shots`)
+    console.log(`api/v1/edit/story(): detected ${allShotsSegments.length} shots`)
   
     await extendClapStory({
       prompt,

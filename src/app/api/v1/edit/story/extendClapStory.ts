@@ -11,6 +11,8 @@ import { ClapCompletionMode } from "@aitube/client"
 import { clapToLatentStory } from "../entities/clapToLatentStory"
 import { LatentStory } from "../../types"
 import { extendLatentStoryWithMoreShots } from "./extendLatentStoryWithMoreShots"
+import { MAX_PROMPT_LENGTH_IN_CHARS } from "@/app/api/generators/clap/constants"
+import { checkCaptions } from "../../create/checkCaptions"
 
 export async function extendClapStory({
   prompt: maybePrompt,
@@ -30,9 +32,26 @@ export async function extendClapStory({
   turbo: boolean
 }): Promise<void> {
 
-  const prompt = typeof maybePrompt === "string" && maybePrompt.length > 0
-    ? maybePrompt
-    : existingClap.meta.description
+  let hasCaptions = false
+
+  let currentElapsedTimeInMs = 0
+  for (const s of existingClap.segments) {
+    if (s.category === ClapSegmentCategory.INTERFACE) { hasCaptions = true }
+    if (s.endTimeInMs > currentElapsedTimeInMs) { currentElapsedTimeInMs = s.endTimeInMs }
+  }
+
+  const { prompt, hasCaptions: hasCaptionInNewPrompt } = checkCaptions(
+    (
+      typeof maybePrompt === "string" && maybePrompt.length > 0
+      ? maybePrompt
+      : existingClap.meta.description
+    ).trim().slice(0, MAX_PROMPT_LENGTH_IN_CHARS)
+  )
+
+  // if the video already contains captions but the user asks for none for the subsequent scenes
+  if (!hasCaptionInNewPrompt && hasCaptions) {
+    hasCaptions = false
+  }
 
   const latentStory: LatentStory[] = await clapToLatentStory(existingClap)
   
@@ -43,16 +62,12 @@ export async function extendClapStory({
     turbo,
   })
 
-  let hasCaptions = false
-
-  let currentElapsedTimeInMs = 0
-  for (const s of existingClap.segments) {
-    if (s.category === ClapSegmentCategory.INTERFACE) { hasCaptions = true }
-    if (s.endTimeInMs > currentElapsedTimeInMs) { currentElapsedTimeInMs = s.endTimeInMs }
-  }
+  // console.log(`extendClapStory: going to extend, starting at ${currentElapsedTimeInMs}`)
 
   // this is approximate - TTS generation will determine the final duration of each shot
+
   const defaultSegmentDurationInMs = 3000
+  // const defaultSegmentDurationInMs = 2916
 
   for (const { comment, image, voice } of shots) {
 
