@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
   const qs = queryString.parseUrl(req.url || "")
   const query = (qs || {}).query
 
-  const prompt = parsePrompt(query?.p)
+  const prompt = parsePrompt(query?.p, false)
   const mode = parseCompletionMode(query?.c)
   const turbo = parseTurbo(query?.t)
   

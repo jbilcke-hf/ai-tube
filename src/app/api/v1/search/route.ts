@@ -19,7 +19,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
   const mode = parseLatentSearchMode(query?.m)
 
   if (mode === "basic") {
-    const prompt = parsePrompt(query?.p)
+    const prompt = parsePrompt(query?.p, true)
 
     const basicSearchResults: BasicSearchResult[] = await search({
       prompt,

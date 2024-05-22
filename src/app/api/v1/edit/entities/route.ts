@@ -18,7 +18,6 @@ export async function POST(req: NextRequest) {
   const mode = parseCompletionMode(query?.c)
   const turbo = parseTurbo(query?.t)
   
-  // const prompt = parsePrompt(query?.p)
 
   const entityPrompts = parseClapEntityPrompts(query?.e)
 
