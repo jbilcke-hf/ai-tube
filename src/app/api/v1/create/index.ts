@@ -231,34 +231,28 @@ Output: `
     // soundPrompts.push("lofi hiphop loop")
   }
 
-
   let musicPrompts: string[] = []
-
   try {
     musicPrompts = await generateMusicPrompts({
       prompt,
       latentStory,
       turbo,
     })
-    const musicPrompt = musicPrompts.at(0)
-    if (!musicPrompt) { throw new Error(`not enough music prompts`) }
-  
-    // console.log("musicPrompt:", musicPrompt)
-
-    clap.segments.push(newSegment({
-      track: 6,
-      startTimeInMs: 0,
-      endTimeInMs: currentElapsedTimeInMs,
-      assetDurationInMs: currentElapsedTimeInMs,
-      category: ClapSegmentCategory.MUSIC,
-      prompt: musicPrompt,
-      outputType: ClapOutputType.AUDIO,
-      status: ClapSegmentStatus.TO_GENERATE,
-    }))
   } catch (err) {
     console.error(`[api/v1/create] failed to generate music prompts`)
     musicPrompts.push("lofi hiphop loop")
   }
+
+  clap.segments.push(newSegment({
+    track: 6,
+    startTimeInMs: 0,
+    endTimeInMs: currentElapsedTimeInMs,
+    assetDurationInMs: currentElapsedTimeInMs,
+    category: ClapSegmentCategory.MUSIC,
+    prompt: `${musicPrompts.at(0) || ""}`,
+    outputType: ClapOutputType.AUDIO,
+    status: ClapSegmentStatus.TO_GENERATE,
+  }))
 
   return clap
 }

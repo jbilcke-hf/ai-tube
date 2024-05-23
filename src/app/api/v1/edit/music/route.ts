@@ -1,6 +1,6 @@
 import { NextResponse, NextRequest } from "next/server"
 import queryString from "query-string"
-import { ClapProject, ClapSegment, ClapSegmentCategory, newClap, parseClap, serializeClap } from "@aitube/clap"
+import { ClapProject, ClapSegment, ClapSegmentCategory, ClapSegmentStatus, newClap, parseClap, serializeClap } from "@aitube/clap"
 import { ClapCompletionMode } from "@aitube/client"
 
 import { parseCompletionMode } from "@/app/api/parsers/parseCompletionMode"
@@ -33,12 +33,16 @@ export async function POST(req: NextRequest) {
   const newerClap = mode === ClapCompletionMode.FULL ? existingClap : newClap({
     meta: existingClap.meta
   })
-    
-  if (musicSegments.length > 1) {
-    throw new Error(`Error, only one music track can be generated with the V1 of the AiTube API`)
+  
+  const pendingMusicSegments = musicSegments.filter(s =>
+    s.status === ClapSegmentStatus.TO_GENERATE
+  )
+
+  if (pendingMusicSegments.length > 1) {
+    throw new Error(`Error, only one music track at a time can be generated with the V1 of the AiTube API`)
   }
 
-  const musicSegment = musicSegments.at(0)
+  const musicSegment = pendingMusicSegments.at(0)
 
   await generateMusic({
     musicSegment,
