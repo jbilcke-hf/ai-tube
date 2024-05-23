@@ -3,7 +3,7 @@ export function checkCaptions(input: string): {
   hasCaptions: boolean
 } {
 
-  const prompt = input.replaceAll(/,? ?(?:no|without|skip|hide|empty|remove|delete) (?:(?:the|any|all) )?(?:comment|caption|commentary|sub|subtitle|title|subtext|commentarie)s?(?: (?:pls|plz|please|thanks?))?/gi, "")
+  const prompt = input.replaceAll(/,? ?(?:no|without|skip|hide|empty|remove|delete) (?:(?:the|any|all) )?(?:commentary|comment|caption|subtitle|subtext|sub|title|commentarie)(?: (?:pls|plz|please|thanks?))?/gi, "")
 
   return {
     prompt,

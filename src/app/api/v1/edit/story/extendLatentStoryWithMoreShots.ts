@@ -61,9 +61,10 @@ export async function extendLatentStoryWithMoreShots({
     console.log("extendLatentStoryWithMoreShots(): WARNING: we hit the max character limit (${nbMaxCharacters} chars)")
   }
 
-  const userPrompt = `General description of the whole video: ${prompt}
-
+  const userPrompt = `
 number of shots to extend: ${nbShots}
+
+Guidelines for what to generate in the following scenes: ${prompt}
 
 \`\`\`yaml
 ${compressedStory}
