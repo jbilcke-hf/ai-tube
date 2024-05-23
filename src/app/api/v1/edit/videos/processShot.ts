@@ -118,9 +118,15 @@ export async function processShot({
     */
 
     if (!shotStoryboardSegment?.assetUrl) {
-      const error = `cannot generate a video without a storyboard! (at least not with AnimateDiff-LCM SVD)`
-      console.error(error)
-      throw new Error(error)
+      // it is normal for some storyboards to be empty,
+      // it only means that we cannot generate or are not interested in generating the video,
+      // for instance if we have already the video
+      // console.log(`skipping video generation for the shot..`)
+      return
+
+      // const error = `cannot generate a video without a storyboard! (at least not with AnimateDiff-LCM SVD)`
+      // console.error(error)
+      // throw new Error(error)
     }
 
     try {
