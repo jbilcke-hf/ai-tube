@@ -10,9 +10,9 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@aitube/clap": "0.0.22",
-    "@aitube/client": "0.0.31",
-    "@aitube/engine": "0.0.12",
+    "@aitube/clap": "0.0.23",
+    "@aitube/client": "0.0.32",
+    "@aitube/engine": "0.0.14",
     "@huggingface/hub": "0.12.3-oauth",
     "@huggingface/inference": "^2.7.0",
     "@jcoreio/async-throttle": "^1.6.0",
@@ -107,7 +107,7 @@
     "typescript": "^5.4.5",
     "usehooks-ts": "^2.9.1",
     "uuid": "^9.0.1",
-    "yaml": "^2.3.4",
+    "yaml": "^2.4.2",
     "zustand": "^4.4.7"
   },
   "devDependencies": {

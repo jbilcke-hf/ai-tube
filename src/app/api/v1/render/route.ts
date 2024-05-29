@@ -29,7 +29,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
   const prompt = `${request?.prompt || ""}`.trim()
   const width = getValidNumber(request?.width, 256, 8192, 1024)
   const height = getValidNumber(request?.height, 256, 8192, 576)
-  const nbFrames = 80
+  const nbFrames = 80 // I think we are capped to 70? that would explain the 2.9166 (70/24)
   const nbFPS = 24
   const nbSteps = turbo ? 4 : 8
   const debug = true
