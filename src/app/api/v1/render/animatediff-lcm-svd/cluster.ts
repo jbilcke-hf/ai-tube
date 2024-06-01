@@ -5,7 +5,7 @@ import { ClusterMachine } from "../../types"
 // 8 allows us to support about 1 request per minute
 // we are still gonna need to add a hugging face login wall,
 // to limit further the amount of requests people do
-export const nbClusterMachines = 8
+export const nbClusterMachines = 10
 // make sure the machines are running!!
 
 // https://huggingface.co/spaces/jbilcke-hf/ai-tube-model-als-1/settings
@@ -16,6 +16,8 @@ export const nbClusterMachines = 8
 // https://huggingface.co/spaces/jbilcke-hf/ai-tube-model-als-6/settings
 // https://huggingface.co/spaces/jbilcke-hf/ai-tube-model-als-7/settings
 // https://huggingface.co/spaces/jbilcke-hf/ai-tube-model-als-8/settings
+// https://huggingface.co/spaces/jbilcke-hf/ai-tube-model-als-9/settings
+// https://huggingface.co/spaces/jbilcke-hf/ai-tube-model-als-10/settings
 
 // we maintain a global cluster state
 
