@@ -8,7 +8,7 @@ import {
   ClapSegmentCategory,
   ClapSegmentStatus
 } from "@aitube/clap"
-import { ClapCompletionMode } from "@aitube/client"
+import { ClapCompletionMode } from "@aitube/clap"
 
 import { generateSoundWithMagnet } from "./generateSourceWithMagnet"
 import { getMediaInfo } from "@/app/api/utils/getMediaInfo"

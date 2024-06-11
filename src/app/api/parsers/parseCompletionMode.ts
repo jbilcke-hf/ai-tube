@@ -1,4 +1,4 @@
-import { ClapCompletionMode } from "@aitube/client"
+import { ClapCompletionMode } from "@aitube/clap"
 
 export function parseCompletionMode(
   input?: any,

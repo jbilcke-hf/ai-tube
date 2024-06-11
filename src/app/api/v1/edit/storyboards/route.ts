@@ -6,7 +6,7 @@ import { parseCompletionMode } from "@/app/api/parsers/parseCompletionMode"
 import { throwIfInvalidToken } from "@/app/api/v1/auth/throwIfInvalidToken"
 
 import { processShot } from "./processShot"
-import { ClapCompletionMode } from "@aitube/client"
+import { ClapCompletionMode } from "@aitube/clap"
 import { parseTurbo } from "@/app/api/parsers/parseTurbo"
 
 // a helper to generate storyboards for a Clap

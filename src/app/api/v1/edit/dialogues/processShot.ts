@@ -8,7 +8,7 @@ import {
   ClapSegmentCategory,
   ClapSegmentStatus
 } from "@aitube/clap"
-import { ClapCompletionMode } from "@aitube/client"
+import { ClapCompletionMode } from "@aitube/clap"
 import { getSpeechBackgroundAudioPrompt } from "@aitube/engine"
 
 import { generateSpeechWithParlerTTS } from "@/app/api/generators/speech/generateVoiceWithParlerTTS"

@@ -1,6 +1,6 @@
 
-import { ClapProject, ClapSegmentCategory, getClapAssetSourceType, getValidNumber, newEntity } from "@aitube/clap"
-import { ClapCompletionMode, ClapEntityPrompt } from "@aitube/client"
+import { ClapProject, ClapCompletionMode, ClapSegmentCategory, getClapAssetSourceType, getValidNumber, newEntity } from "@aitube/clap"
+import { ClapEntityPrompt } from "@aitube/client"
 
 import { generateImageID } from "./generateImageID"
 import { generateAudioID } from "./generateAudioID"

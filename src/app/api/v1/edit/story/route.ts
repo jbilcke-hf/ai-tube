@@ -5,7 +5,7 @@ import { ClapProject, ClapSegment, ClapSegmentCategory, newClap, parseClap, seri
 import { parseCompletionMode } from "@/app/api/parsers/parseCompletionMode"
 import { throwIfInvalidToken } from "@/app/api/v1/auth/throwIfInvalidToken"
 
-import { ClapCompletionMode } from "@aitube/client"
+import { ClapCompletionMode } from "@aitube/clap"
 import { parseTurbo } from "@/app/api/parsers/parseTurbo"
 import { parsePrompt } from "@/app/api/parsers/parsePrompt"
 import { extendClapStory } from "./extendClapStory"

@@ -1,7 +1,7 @@
 import { NextResponse, NextRequest } from "next/server"
 import queryString from "query-string"
 import { ClapProject, ClapSegment, ClapSegmentCategory, ClapSegmentStatus, newClap, parseClap, serializeClap } from "@aitube/clap"
-import { ClapCompletionMode } from "@aitube/client"
+import { ClapCompletionMode } from "@aitube/clap"
 
 import { parseCompletionMode } from "@/app/api/parsers/parseCompletionMode"
 import { throwIfInvalidToken } from "@/app/api/v1/auth/throwIfInvalidToken"

@@ -7,7 +7,7 @@ import { parseClapEntityPrompts } from "@/app/api/parsers/parseEntityPrompts"
 import { throwIfInvalidToken } from "@/app/api/v1/auth/throwIfInvalidToken"
 
 import { editEntities } from "."
-import { ClapCompletionMode } from "@aitube/client"
+import { ClapCompletionMode } from "@aitube/clap"
 import { parseTurbo } from "@/app/api/parsers/parseTurbo"
 
 export async function POST(req: NextRequest) {

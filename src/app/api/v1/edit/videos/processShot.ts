@@ -11,7 +11,7 @@ import {
   ClapSegmentStatus,
   parseMediaOrientation
 } from "@aitube/clap"
-import { ClapCompletionMode } from "@aitube/client"
+import { ClapCompletionMode } from "@aitube/clap"
 import { getVideoPrompt } from "@aitube/engine"
 
 import { getPositivePrompt } from "@/app/api/utils/imagePrompts"

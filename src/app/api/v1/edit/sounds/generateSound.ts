@@ -9,7 +9,7 @@ import {
   ClapSegmentStatus,
   newSegment
 } from "@aitube/clap"
-import { ClapCompletionMode } from "@aitube/client"
+import { ClapCompletionMode } from "@aitube/clap"
 import { getMediaInfo } from "@/app/api/utils/getMediaInfo"
 import { generateSoundWithMagnet } from "./generateSourceWithMagnet"
 

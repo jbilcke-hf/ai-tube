@@ -6,7 +6,7 @@ import {
   ClapOutputType,
   ClapSegmentStatus
 } from "@aitube/clap"
-import { ClapCompletionMode } from "@aitube/client"
+import { ClapCompletionMode } from "@aitube/clap"
 
 import { clapToLatentStory } from "../entities/clapToLatentStory"
 import { LatentStory } from "../../types"
