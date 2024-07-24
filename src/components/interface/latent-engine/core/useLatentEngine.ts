@@ -431,7 +431,7 @@ export const useLatentEngine = create<LatentEngineStore>((set, get) => ({
       // could also be the camera
       // after all, we don't necessarily have a shot,
       // this could also be a gaussian splat
-      const shotData = shotSegmentsToPreload.find(s => s.category === "video")
+      const shotData = shotSegmentsToPreload.find(s => s.category === ClapSegmentCategory.VIDEO)
 
       console.log(`shotData:`, shotData)
 

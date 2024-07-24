@@ -36,7 +36,7 @@ export async function generateMusic({
 
     // for now we do something very basic
 
-  if (musicSegment.status === "completed") {
+  if (musicSegment.status === ClapSegmentStatus.COMPLETED) {
     console.log(`generateMusic(): music segment is already generated, skipping doing it twice.`)
     return
   }

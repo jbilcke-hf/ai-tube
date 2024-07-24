@@ -190,7 +190,7 @@ export async function processShot({
   //----------
   if (
     shotStoryboardSegment && 
-    (!shotStoryboardSegment.assetUrl || shotStoryboardSegment.status === "to_generate")
+    (!shotStoryboardSegment.assetUrl || shotStoryboardSegment.status === ClapSegmentStatus.TO_GENERATE)
   ) {
     console.log(`[api/edit/videos] processShot: generating a missing storyboard asset`)
 

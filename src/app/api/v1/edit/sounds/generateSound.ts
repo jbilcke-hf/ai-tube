@@ -33,7 +33,7 @@ export async function generateSound({
 
     // for now we do something very basic
 
-  if (soundSegment.status === "completed") {
+  if (soundSegment.status === ClapSegmentStatus.COMPLETED) {
     console.log(`generateSound(): sound segment is already generated, skipping doing it twice.`)
     return
   }
