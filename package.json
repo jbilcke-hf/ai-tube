@@ -1,6 +1,6 @@
 {
   "name": "@aitube/website",
-  "version": "0.1.2",
+  "version": "0.1.2-0",
   "private": true,
   "scripts": {
     "patch": "cp -f patch.js node_modules/fluent-ffmpeg/index.js",

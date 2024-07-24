@@ -7,7 +7,7 @@ export function parseCompletionMode(
   let mode = defaultMode
   
   try {
-    let maybeMode = decodeURIComponent(`${input || ""}`).trim()
+    let maybeMode = decodeURIComponent(`${input || ""}`).trim().toUpperCase()
 
     if (!maybeMode) {
       maybeMode = defaultMode
