@@ -85,7 +85,7 @@ export default async function Page({ searchParams: { v: videoId } }: AppQueryPro
     <div className="flex flex-col items-center justify-center h-screen v-screen bg-stone-900">
       <div className="flex flex-col items-center justify-center text-center w-2/3 h-2/3">
       <h1 className="text-5xl">AiTube is being re-imagined.</h1>
-      <p className="text-2xl mt-8">Please come back in 2025.</p>
+      <p className="text-2xl mt-8">We will be back once better AI tech is available.</p>
       </div>
     </div>
   )
