@@ -74,11 +74,11 @@ export function ChannelCard({
               onError={handleBadChannelThumbnail}
             />
           : <DefaultAvatar
-            username={channel.datasetUser}
-            bgColor="#fde047"
-            textColor="#1c1917"
-            width={104}
-            roundShape
+            name={channel.datasetUser}
+            color="#fde047"
+            fgColor="#1c1917"
+            size="104"
+            round
           />}
         </div>
 

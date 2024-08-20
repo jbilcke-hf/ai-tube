@@ -82,11 +82,6 @@ export default async function Page({ searchParams: { v: videoId } }: AppQueryPro
     neverThrow: true
   })
   return (
-    <div className="flex flex-col items-center justify-center h-screen v-screen bg-stone-900">
-      <div className="flex flex-col items-center justify-center text-center w-2/3 h-2/3">
-      <h1 className="text-5xl">AiTube is being re-imagined.</h1>
-      <p className="text-2xl mt-8">Please come back in 2025.</p>
-      </div>
-    </div>
+    <Main publicMedia={publicMedia} />
   )
 }

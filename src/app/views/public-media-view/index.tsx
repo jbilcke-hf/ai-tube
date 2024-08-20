@@ -255,11 +255,11 @@ export function PublicMediaView() {
                   </div>
                 </div>
                 : <DefaultAvatar
-                    username={media.channel.datasetUser}
-                    bgColor="#fde047"
-                    textColor="#1c1917"
-                    width={36}
-                    roundShape
+                    name={media.channel.datasetUser}
+                    color="#fde047"
+                    fgColor="#1c1917"
+                    size="36"
+                    round
                   />}
               </div>
             </a>
@@ -423,11 +423,11 @@ export function PublicMediaView() {
                   />
               </div>
               : <DefaultAvatar
-                  username={user?.userName}
-                  bgColor="#fde047"
-                  textColor="#1c1917"
-                  width={36}
-                  roundShape
+                  name={user?.userName}
+                  color="#fde047"
+                  fgColor="#1c1917"
+                  size="36"
+                  round
                 />}
             </div>
 

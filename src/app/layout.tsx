@@ -1,6 +1,4 @@
 import type { Metadata } from 'next'
-import Head from 'next/head'
-import Script from "next/script"
 import { Roboto } from 'next/font/google'
 import './globals.css'
 
@@ -25,7 +23,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <Head>
+      <head>
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
         <meta name="viewport" content="width=device-width, initial-scale=0.86, maximum-scale=5.0, minimum-scale=0.86" />
@@ -36,7 +34,7 @@ export default function RootLayout({
           type="image/<generated>"
           sizes="<generated>"
         />
-      </Head>
+      </head>
       <body className={cn(
         `h-full w-full overflow-auto`,
         `dark text-neutral-100 bg-neutral-950`,

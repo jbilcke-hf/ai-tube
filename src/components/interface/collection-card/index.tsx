@@ -134,11 +134,11 @@ export function CollectionCard({
             </div>
           </div>
           : <DefaultAvatar
-              username={collection.channel.datasetUser}
-              bgColor="#fde047"
-              textColor="#1c1917"
-              width={36}
-              roundShape
+              name={collection.channel.datasetUser}
+              color="#fde047"
+              fgColor="#1c1917"
+              size="36"
+              round
             />}
           <div className={cn(
             `flex flex-col`,

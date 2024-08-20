@@ -68,11 +68,11 @@ export function PublicChannelView() {
             className="w-full h-full overflow-hidden object-cover"
           />
         : <DefaultAvatar
-            username={publicChannel.datasetUser}
-            bgColor="#fde047"
-            textColor="#1c1917"
-            width={160}
-            roundShape
+            name={publicChannel.datasetUser}
+            color="#fde047"
+            fgColor="#1c1917"
+            size="160"
+            round
           />}
       </div>
 
@@ -92,11 +92,11 @@ export function PublicChannelView() {
                 className="w-40 h-40 overflow-hidden"
               />
             : <DefaultAvatar
-                username={publicChannel.datasetUser}
-                bgColor="#fde047"
-                textColor="#1c1917"
-                width={160}
-                roundShape
+                name={publicChannel.datasetUser}
+                color="#fde047"
+                fgColor="#1c1917"
+                size="160"
+                round
               />}
         </div>
 

@@ -199,11 +199,11 @@ export function TrackCard({
             </div>
           </div>
           : <DefaultAvatar
-              username={media.channel.datasetUser}
-              bgColor="#fde047"
-              textColor="#1c1917"
-              width={36}
-              roundShape
+              name={media.channel.datasetUser}
+              color="#fde047"
+              fgColor="#1c1917"
+              size="36"
+              round
             />}
           <div className={cn(
             `flex`,

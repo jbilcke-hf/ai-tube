@@ -58,11 +58,11 @@ export function CommentCard({
                 />
             </div>
             : <DefaultAvatar
-                username={comment?.userInfo?.userName}
-                bgColor="#fde047"
-                textColor="#1c1917"
-                width={36}
-                roundShape
+                name={comment?.userInfo?.userName}
+                color="#fde047"
+                fgColor="#1c1917"
+                size="36"
+                round
               />}
         </div>
 

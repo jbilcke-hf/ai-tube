@@ -4,7 +4,7 @@ import { ClusterMachine } from "../../types"
 
 // video generation requires A100s so we need to be parcimonous here,
 // we shouldn't burn too many GPUs
-export const nbClusterMachines = 3
+export const nbClusterMachines = 2
 // make sure the machines are running!!
 
 // https://huggingface.co/spaces/jbilcke-hf/ai-tube-model-adl-1/settings
