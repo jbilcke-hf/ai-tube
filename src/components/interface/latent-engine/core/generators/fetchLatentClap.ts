@@ -4,7 +4,7 @@ export async function fetchLatentClap(prompt: string): Promise<ClapProject> {
 
   const requestUri = `/api/resolvers/clap?p=${encodeURIComponent(prompt)}`
 
-  console.log(`fetchLatentClap: calling ${requestUri}`)
+  // console.log(`fetchLatentClap: calling ${requestUri}`)
 
   const res = await fetch(requestUri)
 
@@ -12,7 +12,7 @@ export async function fetchLatentClap(prompt: string): Promise<ClapProject> {
 
   const clap = await parseClap(blob)
 
-  console.log(`fetchLatentClap: received = `, clap)
+  // console.log(`fetchLatentClap: received = `, clap)
 
   return clap
 }

@@ -39,6 +39,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: `access denied ${err}` }, { status: 400 });
   }
   */
+  console.log("[API] /api/resolvers/video")
 
   let prompt = ""
   try {
@@ -71,8 +72,13 @@ export async function GET(req: NextRequest) {
   prompt = getPositivePrompt(prompt)
   const negativePrompt = getNegativePrompt()
 
-  // console.log("calling await newRender")
 
+  console.log("calling await newRender with", {
+    prompt,
+    negativePrompt,
+  })
+
+  throw new Error("no! use render()!")
   let render = await newRender({
     prompt,
     negativePrompt,

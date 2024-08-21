@@ -2,6 +2,7 @@
 
 import React, { MouseEventHandler, useEffect, useRef, useState } from "react"
 import { useLocalStorage } from "usehooks-ts"
+import { ClapProject } from "@aitube/clap"
 
 import { cn } from "@/lib/utils/cn"
 import { MediaInfo } from "@/types/general"
@@ -13,8 +14,8 @@ import { ContentLayer } from "../components/content-layer"
 import { localStorageKeys } from "@/app/state/localStorageKeys"
 import { defaultSettings } from "@/app/state/defaultSettings"
 import { useStore } from "@/app/state/useStore"
-import { ClapProject, generateClapFromSimpleStory, serializeClap } from "@aitube/clap"
 import { theSimps } from "@/app/latent/samples"
+import { generateClapFromPrompt } from "./generateClapFromPrompt"
 
 function LatentEngine({
   media,
@@ -86,7 +87,7 @@ function LatentEngine({
 
         // TODO Julian work on the chunk mechanism
         
-        const mockClap: ClapProject = generateClapFromSimpleStory({
+        const mockClap: ClapProject = generateClapFromPrompt({
           story: theSimps,
           showIntroPoweredByEngine: false,
           showIntroDisclaimerAboutAI: false

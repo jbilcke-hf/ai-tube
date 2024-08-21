@@ -5,7 +5,6 @@ import { getValidNumber } from "@aitube/clap"
 import { throwIfInvalidToken } from "@/app/api/v1/auth/throwIfInvalidToken"
 import { getContentType } from "@/lib/data/getContentType"
 
-// import { render } from "./animatediff-lcm-svd"
 import { render } from "./animatediff-lightning"
 
 export async function POST(req: NextRequest, res: NextResponse) {

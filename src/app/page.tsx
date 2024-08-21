@@ -83,9 +83,13 @@ export default async function Page({ searchParams: { v: videoId } }: AppQueryPro
   })
   return (
     <div className="flex flex-col items-center justify-center h-screen v-screen bg-stone-900">
-      <div className="flex flex-col items-center justify-center text-center w-2/3 h-2/3">
-      <h1 className="text-5xl">AiTube is being re-imagined.</h1>
-      <p className="text-2xl mt-8">We will be back once better AI tech is available.</p>
+      <div className="
+      flex flex-col items-center justify-center text-center
+      w-3/4 h-full
+   
+      ">
+      <h1 className="text-stone-200 text-6xl font-thin">Say goodbye to static videos.</h1>
+      <p className="mt-12 text-stone-400 text-xl font-thin">Beta planned for Winter 2024. Follow <a href="x.com/@flngr" className="font-normal font-mono text-stone-400 hover:text-stone-300 hover:underline hover:underline-offset-2" target="_blank">@flngr</a> for updates.</p>
       </div>
     </div>
   )

@@ -17,7 +17,6 @@ import { getVideoPrompt } from "@aitube/engine"
 import { getPositivePrompt } from "@/app/api/utils/imagePrompts"
 
 import { render } from "@/app/api/v1/render/animatediff-lcm-svd"
-// import { render } from "@/app/api/v1/render/animatediff-lightning"
 import { extractFirstFrame } from "@/app/api/utils/extractFirstFrame"
 
 export async function processShot({
@@ -33,6 +32,7 @@ export async function processShot({
   mode: ClapCompletionMode
   turbo: boolean
 }): Promise<void> {
+  // console.log(`processShot()`)
   const shotSegments: ClapSegment[] = filterSegments(
     ClapSegmentFilteringMode.BOTH,
     shotSegment,

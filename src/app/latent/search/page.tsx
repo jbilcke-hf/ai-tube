@@ -1,11 +1,12 @@
 import { encode, decode } from 'js-base64'
-import { clapToDataUri, generateClapFromSimpleStory } from "@aitube/clap"
+import { clapToDataUri } from "@aitube/clap"
 
 import { LatentQueryProps } from "@/types/general"
 
 import { Main } from "../../main"
 import { getNewMediaInfo } from "../../api/generators/search/getNewMediaInfo"
 import { getToken } from "../../api/v1/auth/getToken"
+import { generateClapFromPrompt } from '@/components/interface/latent-engine/core/generateClapFromPrompt'
 
 // https://jmswrnr.com/blog/protecting-next-js-api-routes-query-parameters
 
@@ -28,7 +29,7 @@ export default async function LatentSearchPage({
   const latentMedia = getNewMediaInfo()
 
   latentMedia.clapUrl = await clapToDataUri(
-    generateClapFromSimpleStory({
+    generateClapFromPrompt({
       showIntroPoweredByEngine: false,
       showIntroDisclaimerAboutAI: false
     })

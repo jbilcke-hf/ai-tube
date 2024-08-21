@@ -3,7 +3,7 @@ import { ClusterMachine } from "../../types"
 
 
 // video generation requires A100s so we need to be parcimonous here,
-// we shouldn't burn too many GPUs
+// we shouldn't burn too many GPUs - 3 seems like a good number
 export const nbClusterMachines = 2
 // make sure the machines are running!!
 

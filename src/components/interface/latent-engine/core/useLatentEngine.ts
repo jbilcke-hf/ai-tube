@@ -356,21 +356,36 @@ export const useLatentEngine = create<LatentEngineStore>((set, get) => ({
     let toPlay: HTMLVideoElement[] = []
     let toPreload: HTMLVideoElement[] = []
     
+    console.log("clap: ", clap)
+
+    ;(window as any).debugJuju = clap;
+
     for (let i = 0; i < videosSortedByStartAt.length; i++) {
       const video = videosSortedByStartAt[i]
       
       const segmentStartAt = getSegmentStartAt(video)
       const segmentEndAt = getSegmentEndAt(video)
 
+      console.log(`segs: `, {
+        segmentStartAt,
+        segmentEndAt
+      })
       // this segment has been spent, it should be discared
       if (segmentEndAt < positionInMs) {
+        console.log("A")
         toRecycle.push(video)
       } else if (segmentStartAt < positionInMs) {
+        console.log("B")
         toPlay.push(video)
         video.play()
         setZIndexDepthId(video, 10)
       } else {
+        console.log("C")
         toPreload.push(video)
+
+        // Julian: I'm adding that to see if it's the problem
+        //toRecycle.push(video)
+
         video.pause()
         setZIndexDepthId(video, 0)
       }
@@ -382,22 +397,29 @@ export const useLatentEngine = create<LatentEngineStore>((set, get) => ({
     // to grab the max number of segments
     const maxBufferDurationInMs = positionInMs + (videoDurationInMs * 4)
     
-    
-    console.log(`DEBUG: `, {
-      positionInMs,
-      videoModelDurationInSec,
-      videoDurationInMs,
-      "(videoDurationInMs * 4)":  (videoDurationInMs * 4),
-      maxBufferDurationInMs,
-      segments: clap.segments
-    })
+
     
     const prefilterSegmentsForPerformanceReasons: ClapSegment[] = clap.segments.filter(s =>
       s.startTimeInMs >= positionInMs &&
       s.startTimeInMs < maxBufferDurationInMs
     )
 
-    console.log(`prefilterSegmentsForPerformanceReasons: `, prefilterSegmentsForPerformanceReasons)
+ 
+    console.log(`runVideoSimulationLoop: `, {
+      positionInMs,
+      videoModelDurationInSec,
+      videoDurationInMs,
+      "(videoDurationInMs * 4)":  (videoDurationInMs * 4),
+      maxBufferDurationInMs,
+      segments: clap.segments,
+      prefilterSegmentsForPerformanceReasons,
+      videosSortedByStartAt,
+      toPlay,
+      toPreload,
+      toRecycle
+    })
+
+    // console.log(`prefilterSegmentsForPerformanceReasons: `, prefilterSegmentsForPerformanceReasons)
 
     // this tells us how much time is left
     let remainingTimeInMs = Math.max(0, clap.meta.durationInMs - positionInMs)
@@ -414,7 +436,7 @@ export const useLatentEngine = create<LatentEngineStore>((set, get) => ({
     let bufferAheadOfCurrentPositionInMs = positionInMs
 
     for (let i = 0; i < toRecycle.length; i++) {
-      console.log(`got a spent video to recycle`)
+      // console.log(`got a spent video to recycle`)
       
       // we select the segments in the current shot
 
@@ -515,7 +537,7 @@ export const useLatentEngine = create<LatentEngineStore>((set, get) => ({
  
     try {
       if (get().isPlaying) {
-        // console.log(`runSimulationLoop: rendering UI layer..`)
+        console.log(`runSimulationLoop: rendering UI layer..`)
 
         // note: for now we only display one panel at a time,
         // later we can try to see if we should handle more
@@ -577,8 +599,12 @@ export const useLatentEngine = create<LatentEngineStore>((set, get) => ({
   // list to put into the buffer the one that should be displayed
   runRenderingLoop: () => {
     const {
+      clap,
       isLoaded,
       isPlaying,
+      isInteractive,
+      isLive,
+      isLoop,
       renderingIntervalId,
       renderingIntervalDelayInMs,
       renderingLastRenderAt,
@@ -597,12 +623,30 @@ export const useLatentEngine = create<LatentEngineStore>((set, get) => ({
       document.querySelectorAll('.video-buffer')
     ) as HTMLVideoElement[]
  
+    // ------------ TIMELINE CURSOR PROGRESSION CYCLE -------------
+    // the following implements the mechanism of moving the cursor
+    // within the timeline
+
     const newRenderingLastRenderAt = performance.now()
     const elapsedInMs = newRenderingLastRenderAt - renderingLastRenderAt
 
-    // let's move inside the Clap file timeline
-    const newPositionInMs = positionInMs + elapsedInMs
+    let newPositionInMs = positionInMs
+    // this is were we decide what to do based on the current mode
+    if (isInteractive) {
+      console.log("interactive mode: nothing to do")
+      
+    } else {
+     
+      newPositionInMs += elapsedInMs
 
+      if (isLoop) {
+        if (newPositionInMs > 5000) {
+          console.log("end of loop detected! going back")
+          newPositionInMs = 0
+        }
+      }
+    }
+ 
     clearInterval(renderingIntervalId)
 
     set({
