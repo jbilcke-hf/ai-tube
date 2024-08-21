@@ -25,3 +25,7 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+@keyframes staticnoise {
+  100% {background-position: 50% 0, 60% 50%}
+}
