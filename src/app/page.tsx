@@ -104,7 +104,7 @@ export default async function Page({ searchParams: { v: videoId } }: AppQueryPro
    
       ">
       <h1 className="text-yellow-400/90 text-6xl font-thin">Say goodbye to static videos.</h1>
-      <p className="mt-6 text-white/80 text-xl font-thin">Beta planned for Winter 2024. Follow <a href="x.com/@flngr" className="font-normal font-mono text-stone-50/60 hover:text-stone-50/80 hover:underline hover:underline-offset-2" target="_blank">@flngr</a> for updates.</p>
+      <p className="mt-6 text-white/80 text-xl font-thin">Coming in 2025. Follow <a href="https://x.com/@flngr" className="font-normal font-mono text-stone-50/60 hover:text-stone-50/80 hover:underline hover:underline-offset-2" target="_blank">@flngr</a> for updates.</p>
       </div>
     </div>
   )

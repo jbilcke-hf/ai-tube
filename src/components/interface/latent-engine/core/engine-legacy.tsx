@@ -17,7 +17,7 @@ import { useStore } from "@/app/state/useStore"
 import { theSimps } from "@/app/latent/samples"
 import { generateClapFromPrompt } from "./generateClapFromPrompt"
 
-function LatentEngine({
+function LatentEngineLegacy({
   media,
   width,
   height,
@@ -291,4 +291,4 @@ function LatentEngine({
   );
 }
 
-export default LatentEngine
+export default LatentEngineLegacy

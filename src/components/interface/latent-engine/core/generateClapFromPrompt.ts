@@ -85,7 +85,7 @@ export function generateClapFromPrompt({
  
 
   for (let prompt of story) {
-
+    /*
     clap.segments.push(newSegment({
       track: 0,
       startTimeInMs,
@@ -94,6 +94,16 @@ export function generateClapFromPrompt({
       prompt: "",
       label: "video",
       outputType: ClapOutputType.VIDEO,
+    }))
+      */
+    clap.segments.push(newSegment({
+      track: 0,
+      startTimeInMs,
+      endTimeInMs,
+      category: ClapSegmentCategory.STORYBOARD,
+      prompt: "",
+      label: "movie screencap",
+      outputType: ClapOutputType.IMAGE,
     }))
     clap.segments.push(newSegment({
       track: 1,

@@ -2,6 +2,6 @@
 
 import dynamic from "next/dynamic"
 
-export const LatentEngine = dynamic(() => import("./core/engine"), {
+export const LatentEngine = dynamic(() => import("./core/engine-clapper"), {
   loading: () => null,
 })
