@@ -11,7 +11,7 @@ export function useSetupIframeOnce() {
   const setDomElement = useChildController(s => s.setDomElement)
   const canUseBellhop = useChildController((s) => s.canUseBellhop)
   const setCanUseBellhop = useChildController((s) => s.setCanUseBellhop)
-  const isConnectedToChild = useChildController((s) => s.isConnectedToChild)
+  const hasLoadedBellhop = useChildController((s) => s.hasLoadedBellhop)
   const setHasLoadedBellhop = useChildController((s) => s.setHasLoadedBellhop)
   const onMessage = useChildController((s) => s.onMessage)
   const sendMessage = useChildController((s) => s.sendMessage)
@@ -24,7 +24,7 @@ export function useSetupIframeOnce() {
   const domElement = ref.current
 
   useEffect(() => {
-    if (!domElement || !isConnectedToChild) {
+    if (!domElement || !hasLoadedBellhop) {
       // when we are detecting that we are not in an iframe
 
       if (canUseBellhop) {
@@ -37,7 +37,7 @@ export function useSetupIframeOnce() {
       setCanUseBellhop(true)
     }
 
-    if (isConnectedToChild) {
+    if (hasLoadedBellhop) {
       // no need to connect twice
       return
     } else {
@@ -59,7 +59,7 @@ export function useSetupIframeOnce() {
         setCanUseBellhop(false)
       }
     }
-  }, [domElement, canUseBellhop, isConnectedToChild])
+  }, [domElement, canUseBellhop, hasLoadedBellhop, setHasLoadedBellhop, setCanUseBellhop])
 
   return useChildController
 }
