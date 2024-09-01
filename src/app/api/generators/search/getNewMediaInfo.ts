@@ -5,7 +5,7 @@ import {
   MediaInfo,
 } from "@/types/general"
 import { defaultChannel } from "./defaultChannel"
-import { defaultMediaOrientation } from "@aitube/clap"
+import { defaultImageRatio } from "@aitube/clap"
 
 export function getNewMediaInfo(params: Partial<MediaInfo> = {}): MediaInfo {
 
@@ -133,7 +133,7 @@ export function getNewMediaInfo(params: Partial<MediaInfo> = {}): MediaInfo {
     /**
      * General media aspect ratio
      */
-    orientation: defaultMediaOrientation,
+    orientation: defaultImageRatio,
 
     /**
      * Media projection (cartesian by default)

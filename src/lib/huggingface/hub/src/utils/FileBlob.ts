@@ -78,7 +78,7 @@ export class FileBlob extends Blob {
 	 * Read the part of the file delimited by the FileBlob and returns it as an ArrayBuffer.
 	 */
 	override async arrayBuffer(): Promise<ArrayBuffer> {
-		const slice = await this.execute((file) => file.read(Buffer.alloc(this.size), 0, this.size, this.start));
+		const slice = await this.execute((file) => file.read(Buffer.alloc(this.size) as any, 0, this.size, this.start));
 
 		return slice.buffer;
 	}
@@ -87,7 +87,7 @@ export class FileBlob extends Blob {
 	 * Read the part of the file delimited by the FileBlob and returns it as a string.
 	 */
 	override async text(): Promise<string> {
-		const buffer = (await this.arrayBuffer()) as Buffer;
+		const buffer = (await this.arrayBuffer()) as unknown as Buffer;
 
 		return buffer.toString("utf8");
 	}
@@ -96,7 +96,7 @@ export class FileBlob extends Blob {
 	 * Returns a stream around the part of the file delimited by the FileBlob.
 	 */
 	override stream(): ReturnType<Blob["stream"]> {
-		return Readable.toWeb(createReadStream(this.path, { start: this.start, end: this.end - 1 })) as ReturnType<
+		return Readable.toWeb(createReadStream(this.path, { start: this.start, end: this.end - 1 })) as unknown as ReturnType<
 			Blob["stream"]
 		>;
 	}

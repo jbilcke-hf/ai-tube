@@ -1,6 +1,6 @@
 "use server"
 
-import { ClapMediaOrientation, defaultMediaOrientation } from "@aitube/clap"
+import { ClapImageRatio, defaultImageRatio } from "@aitube/clap"
 import { Credentials, downloadFile, whoAmI } from "@/lib/huggingface/hub/src"
 import { parseDatasetReadme } from "@/app/api/parsers/parseDatasetReadme"
 import { ChannelInfo, VideoGenerationModel } from "@/types/general"
@@ -79,7 +79,7 @@ export async function parseChannel(options: {
   let voice = ""
   let music = ""
   let tags: string[] = []
-  let orientation: ClapMediaOrientation = defaultMediaOrientation
+  let orientation: ClapImageRatio = defaultImageRatio
 
   // console.log(`going to read datasets/${name}`)
   try {
@@ -103,7 +103,7 @@ export async function parseChannel(options: {
     style = parsedDatasetReadme.style || ""
     voice = parsedDatasetReadme.voice || ""
     music = parsedDatasetReadme.music || ""
-    orientation = parsedDatasetReadme.orientation || defaultMediaOrientation
+    orientation = parsedDatasetReadme.orientation || defaultImageRatio
 
     thumbnail =
       thumbnail.startsWith("http")

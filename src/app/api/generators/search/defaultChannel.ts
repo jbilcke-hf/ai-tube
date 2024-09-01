@@ -1,5 +1,5 @@
 import { ChannelInfo } from "@/types/general"
-import { defaultMediaOrientation } from "@aitube/clap"
+import { defaultImageRatio } from "@aitube/clap"
 
 export const defaultChannel: ChannelInfo = {
  /**
@@ -67,5 +67,5 @@ export const defaultChannel: ChannelInfo = {
  /**
   * Default video orientation
   */
- orientation: defaultMediaOrientation
+ orientation: defaultImageRatio
 }

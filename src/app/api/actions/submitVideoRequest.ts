@@ -1,6 +1,6 @@
 "use server"
 
-import { ClapMediaOrientation } from "@aitube/clap"
+import { ClapImageRatio } from "@aitube/clap"
 
 import { ChannelInfo, VideoGenerationModel, MediaInfo } from "@/types/general"
 
@@ -33,7 +33,7 @@ export async function submitVideoRequest({
   music: string
   tags: string[]
   duration: number
-  orientation: ClapMediaOrientation
+  orientation: ClapImageRatio
 }): Promise<MediaInfo> {
   if (!apiKey) {
     throw new Error(`the apiKey is required`)

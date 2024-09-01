@@ -1,6 +1,6 @@
 
 import metadataParser from "markdown-yaml-metadata-parser"
-import { defaultMediaOrientation, parseMediaOrientation } from "@aitube/clap"
+import { defaultImageRatio, parseImageRatio } from "@aitube/clap"
 
 import { ParsedDatasetReadme, ParsedMetadataAndContent } from "@/types/general"
 import { defaultVideoModel } from "@/app/config"
@@ -31,7 +31,7 @@ export function parseDatasetReadme(markdown: string = ""): ParsedDatasetReadme {
       music,
       description,
       prompt,
-      orientation: parseMediaOrientation(orientation, defaultMediaOrientation),
+      orientation: parseImageRatio(orientation, defaultImageRatio),
     }
   } catch (err) {
     return {
@@ -47,7 +47,7 @@ export function parseDatasetReadme(markdown: string = ""): ParsedDatasetReadme {
       music: "",
       description: "",
       prompt: "",
-      orientation: defaultMediaOrientation,
+      orientation: defaultImageRatio,
     }
   }
 }
