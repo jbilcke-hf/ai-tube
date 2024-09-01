@@ -44,7 +44,8 @@ export async function downloadClapProject({
     label: clapProject.meta.title || "Untitled",
     description: clapProject.meta.description || "",
     prompt: "", // there is no prompt - instead we use segments
-    model: parseVideoModelName(clapProject.meta.defaultVideoModel, channel.model),
+    // model: parseVideoModelName(clapProject.meta.defaultVideoModel, channel.model),
+    model: parseVideoModelName(channel.model, channel.model),
     style: channel.style,
     lora: channel.lora,
     voice: channel.voice,
@@ -57,7 +58,7 @@ export async function downloadClapProject({
     duration: 0, // will be computed automatically
     ...computeOrientationProjectionWidthHeight({
       lora: "",
-      orientation: clapProject.meta.orientation,
+      orientation: clapProject.meta.imageRatio,
       // projection, // <- will be extrapolated from the LoRA for now
     }),
   }

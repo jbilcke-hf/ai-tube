@@ -1,4 +1,4 @@
-import { parseMediaOrientation, defaultMediaOrientation } from "@aitube/clap"
+import { parseImageRatio, defaultImageRatio } from "@aitube/clap"
 
 import { ChannelInfo, ParsedDatasetPrompt } from "@/types/general"
 import { parseVideoModelName } from "./parseVideoModelName"
@@ -36,7 +36,7 @@ export function parseDatasetPrompt(markdown: string, channel: ChannelInfo): Pars
       thumbnail: typeof thumbnail === "string" && thumbnail ? thumbnail : "",
       voice: typeof voice === "string" && voice ? voice : (channel.voice || ""),
       music: typeof music === "string" && music ? music : (channel.music || ""),
-      orientation: parseMediaOrientation(orientation, channel.orientation),
+      orientation: parseImageRatio(orientation, channel.orientation),
     }
   } catch (err) {
     return {
@@ -50,7 +50,7 @@ export function parseDatasetPrompt(markdown: string, channel: ChannelInfo): Pars
       thumbnail: "",
       voice: channel.voice || "",
       music: channel.music || "",
-      orientation: channel.orientation || defaultMediaOrientation,
+      orientation: channel.orientation || defaultImageRatio,
     }
   }
 }

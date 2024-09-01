@@ -1,6 +1,6 @@
 "use server"
 
-import { ClapProject, getValidNumber, newClap, newSegment, ClapSegmentCategory, ClapOutputType, ClapMediaOrientation, ClapSegmentStatus } from "@aitube/clap"
+import { ClapProject, getValidNumber, newClap, newSegment, ClapSegmentCategory, ClapOutputType, ClapImageRatio, ClapSegmentStatus } from "@aitube/clap"
 
 import { sleep } from "@/lib/utils/sleep"
 import { predict } from "@/app/api/providers/huggingface/predictWithHuggingFace"
@@ -110,16 +110,20 @@ Output: `
       description: prompt,
       synopsis: "",
       licence: "",
-      orientation:
-        width > height ? ClapMediaOrientation.LANDSCAPE :
-        height > width ? ClapMediaOrientation.PORTRAIT :
-        ClapMediaOrientation.SQUARE,
+      imageRatio:
+        width > height ? ClapImageRatio.LANDSCAPE :
+        height > width ? ClapImageRatio.PORTRAIT :
+        ClapImageRatio.SQUARE,
+      storyPrompt: prompt,
+      imagePrompt: "",
+      systemPrompt: "",
       width,
       height,
       isInteractive: false,
       isLoop: false,
       durationInMs: shots.length * defaultSegmentDurationInMs,
-      defaultVideoModel: "AnimateDiff-Lightning",
+      bpm: 120,
+      frameRate: 24,
     }
   })
 
@@ -154,7 +158,7 @@ Output: `
       startTimeInMs: currentElapsedTimeInMs,
       endTimeInMs: currentElapsedTimeInMs + defaultSegmentDurationInMs,
       assetDurationInMs: defaultSegmentDurationInMs,
-      category: ClapSegmentCategory.STORYBOARD,
+      category: ClapSegmentCategory.IMAGE,
       prompt: image,
       outputType: ClapOutputType.IMAGE,
       status: ClapSegmentStatus.TO_GENERATE,

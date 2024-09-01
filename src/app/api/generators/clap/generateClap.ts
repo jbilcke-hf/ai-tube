@@ -4,7 +4,7 @@
 import { LatentScenes } from "./types"
 import { addLatentScenesToClap } from "./addLatentScenesToClap"
 import { getLatentScenes } from "./getLatentScenes"
-import { ClapProject, getEmptyClap, newClap, serializeClap } from "@aitube/clap"
+import { ClapImageRatio, ClapProject, getEmptyClap, newClap, serializeClap } from "@aitube/clap"
 
 /**
  * Generate a Clap file from scratch using a prompt
@@ -31,14 +31,16 @@ export async function generateClap({
       title: "Latent content", // TODO "
       description: "",
       licence: "non commercial",
-      orientation: "landscape",
+      imageRatio: ClapImageRatio.LANDSCAPE,
       width: 1024,
       height: 576,
-      defaultVideoModel: "SDXL",
-      extraPositivePrompt: [],
-      screenplay: "",
+      imagePrompt: "",
+      storyPrompt: "",
+      systemPrompt: "",
       isLoop: true,
       isInteractive: true,
+      bpm: 120,
+      frameRate: 24,
     } 
   })
 

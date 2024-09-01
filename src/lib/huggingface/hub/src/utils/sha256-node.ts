@@ -12,7 +12,7 @@ export async function* sha256Node(
 	const size = buffer instanceof Blob ? buffer.size : buffer.byteLength;
 	let done = 0;
 	const readable =
-		buffer instanceof Blob ? Readable.fromWeb(buffer.stream() as ReadableStream) : Readable.from(Buffer.from(buffer));
+		buffer instanceof Blob ? Readable.fromWeb(buffer.stream() as unknown as ReadableStream) : Readable.from(Buffer.from(buffer));
 
 	for await (const buffer of readable) {
 		sha256Stream.update(buffer);

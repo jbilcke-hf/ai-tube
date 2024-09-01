@@ -37,19 +37,19 @@ export async function processShot({
   )
 
   const shotStoryboardSegments: ClapSegment[] = shotSegments.filter(s =>
-    s.category === ClapSegmentCategory.STORYBOARD
+    s.category === ClapSegmentCategory.IMAGE
   )
 
   let shotStoryboardSegment: ClapSegment | undefined = shotStoryboardSegments.at(0)
 
-  // TASK 1: GENERATE MISSING STORYBOARD SEGMENT
+  // TASK 1: GENERATE MISSING IMAGE SEGMENT
   if (!shotStoryboardSegment) {
     shotStoryboardSegment = newSegment({
       track: 1,
       startTimeInMs: shotSegment.startTimeInMs,
       endTimeInMs: shotSegment.endTimeInMs,
       assetDurationInMs: shotSegment.assetDurationInMs,
-      category: ClapSegmentCategory.STORYBOARD,
+      category: ClapSegmentCategory.IMAGE,
       prompt: "",
       assetUrl: "",
       outputType: ClapOutputType.IMAGE,
@@ -65,7 +65,7 @@ export async function processShot({
 
   if (!shotStoryboardSegment) { throw new Error(`failed to generate a newSegment`) }
 
-  // TASK 2: GENERATE MISSING STORYBOARD PROMPT
+  // TASK 2: GENERATE MISSING IMAGE PROMPT
   if (!shotStoryboardSegment?.prompt) {
     // storyboard is missing, let's generate it
     shotStoryboardSegment.prompt = getVideoPrompt(
@@ -76,7 +76,7 @@ export async function processShot({
     // console.log(`[api/v1/edit/storyboards] processShot: generating storyboard prompt: ${shotStoryboardSegment.prompt}`)
   }
 
-  // TASK 3: GENERATE MISSING STORYBOARD BITMAP
+  // TASK 3: GENERATE MISSING IMAGE BITMAP
   if (!shotStoryboardSegment.assetUrl) {
     // console.log(`[api/v1/edit/storyboards] generating image..`)
 

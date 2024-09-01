@@ -1,4 +1,4 @@
-import type { ClapMediaOrientation } from "@aitube/clap"
+import type { ClapImageRatio } from "@aitube/clap"
 
 export type ProjectionMode = 'cartesian' | 'spherical'
 
@@ -246,7 +246,7 @@ export type ChannelInfo = {
   /**
    * Default video orientation
    */
-  orientation: ClapMediaOrientation
+  orientation: ClapImageRatio
 }
 
 export type VideoStatus =
@@ -339,7 +339,7 @@ export type VideoRequest = {
   /**
    * Video orientation
    */
-  orientation: ClapMediaOrientation
+  orientation: ClapImageRatio
 
   /**
    * Video duration
@@ -487,7 +487,7 @@ export type MediaInfo = {
   /**
    * General media aspect ratio
    */
-  orientation: ClapMediaOrientation
+  orientation: ClapImageRatio
 
   /**
    * Media projection (cartesian by default)
@@ -660,7 +660,7 @@ export type ParsedDatasetReadme = {
   hf_tags: string[]
   description: string
   prompt: string
-  orientation: ClapMediaOrientation
+  orientation: ClapImageRatio
 }
 
 export type ParsedMetadataAndContent = {
@@ -683,7 +683,7 @@ export type ParsedDatasetPrompt = {
   thumbnail: string
   voice: string
   music: string
-  orientation: ClapMediaOrientation
+  orientation: ClapImageRatio
 }
 
 export type UpdateQueueRequest = {

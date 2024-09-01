@@ -41,6 +41,7 @@ export async function predict({
         instructions.includes("# Guidelines") || 
         instructions.includes("</s>") || 
         instructions.includes("<s>") ||
+        instructions.includes("<unk>") ||
         instructions.includes("/s>") ||
         instructions.includes("[INST]") ||
         instructions.includes("[/INST]") ||
@@ -72,6 +73,7 @@ export async function predict({
     .replaceAll("# Guidelines", "")
     .replaceAll("<|end|>", "")
     .replaceAll("<s>", "")
+    .replaceAll("<unk>", "")
     .replaceAll("</s>", "")
     .replaceAll("/s>", "")
     .replaceAll("[INST]", "")

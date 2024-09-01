@@ -1,7 +1,7 @@
 import { MediaProjection } from "@/types/general"
 
 import { parseProjectionFromLoRA } from "../parsers/parseProjectionFromLoRA"
-import { ClapMediaOrientation, parseMediaOrientation } from "@aitube/clap"
+import { ClapImageRatio, parseImageRatio } from "@aitube/clap"
 
 export function computeOrientationProjectionWidthHeight({
   lora: maybeLora,
@@ -12,23 +12,23 @@ export function computeOrientationProjectionWidthHeight({
   projection?: any
   orientation?: any
 }): {
-  orientation: ClapMediaOrientation
+  orientation: ClapImageRatio
   projection: MediaProjection
   width: number
   height: number
 } {
 
   const lora = `${maybeLora || ""}`
-  const orientation = parseMediaOrientation(maybeOrientation)
+  const imageRatio = parseImageRatio(maybeOrientation)
   const projection = maybeProjection ? maybeProjection : parseProjectionFromLoRA(lora)
 
   let width = 1024
   let height = 576
 
-  if (orientation === "portrait") {
+  if (imageRatio === ClapImageRatio.PORTRAIT) {
     height = 1024
     width = 576
-  } else if (orientation === "square") {
+  } else if (imageRatio === ClapImageRatio.SQUARE) {
     height = 512
     width = 512
   } else {
@@ -43,7 +43,7 @@ export function computeOrientationProjectionWidthHeight({
   }
 
   return {
-    orientation,
+    orientation: imageRatio,
     projection,
     width,
     height,

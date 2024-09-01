@@ -14,7 +14,7 @@ export async function resolveSegment(segment: ClapSegment, clap: ClapProject): P
     latentComponentResolver = interfaceResolver
   } else if (segment.category === ClapSegmentCategory.VIDEO) {
     latentComponentResolver = videoResolver
-  } else if (segment.category === ClapSegmentCategory.STORYBOARD) {
+  } else if (segment.category === ClapSegmentCategory.IMAGE) {
     latentComponentResolver = imageResolver
   }
 

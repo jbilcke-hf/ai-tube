@@ -20,7 +20,7 @@ export async function clapToLatentStory(clap: ClapProject): Promise<LatentStory[
       ClapSegmentFilteringMode.START,
       shot,
       clap.segments,
-      ClapSegmentCategory.STORYBOARD
+      ClapSegmentCategory.IMAGE
     ).at(0)
 
     // note: the comment might be missing, that's on purpose

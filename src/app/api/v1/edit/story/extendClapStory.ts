@@ -105,7 +105,7 @@ export async function extendClapStory({
       startTimeInMs: currentElapsedTimeInMs,
       endTimeInMs: currentElapsedTimeInMs + defaultSegmentDurationInMs,
       assetDurationInMs: defaultSegmentDurationInMs,
-      category: ClapSegmentCategory.STORYBOARD,
+      category: ClapSegmentCategory.IMAGE,
       prompt: image,
       outputType: ClapOutputType.IMAGE,
       status: ClapSegmentStatus.TO_GENERATE,

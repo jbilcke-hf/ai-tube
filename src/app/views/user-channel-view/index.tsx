@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useTransition } from "react"
 
-import { defaultMediaOrientation, parseMediaOrientation } from "@aitube/clap"
+import { defaultImageRatio, parseImageRatio } from "@aitube/clap"
 import { useLocalStorage } from "usehooks-ts"
 
 import { useStore } from "@/app/state/useStore"
@@ -37,7 +37,7 @@ export function UserChannelView() {
   const [voice, setVoice] = useState(defaultVoice)
   const [music, setMusic] = useState("")
   const [duration, setDuration] = useState(0)
-  const [orientation, setOrientation] = useState(defaultMediaOrientation)
+  const [orientation, setOrientation] = useState(defaultImageRatio)
 
   // we do not include the tags in the list of required fields
   const missingFields = !title || !description || !prompt
@@ -243,9 +243,9 @@ export function UserChannelView() {
           <div className="flex flex-col space-y-2 flex-grow">
             <Select
               onValueChange={(value: string) => {
-                setOrientation(parseMediaOrientation(value, defaultMediaOrientation))
+                setOrientation(parseImageRatio(value, defaultImageRatio))
               }}
-              defaultValue={defaultMediaOrientation}>
+              defaultValue={defaultImageRatio}>
               <SelectTrigger className="">
                 <SelectValue placeholder="Video orientation" />
               </SelectTrigger>

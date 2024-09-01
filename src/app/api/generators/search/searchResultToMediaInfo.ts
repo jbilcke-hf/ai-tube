@@ -8,7 +8,7 @@ import {
 import { newRender } from "../../providers/videochain/renderWithVideoChain"
 
 import { LatentSearchResult } from "./types"
-import { defaultMediaOrientation } from "@aitube/clap"
+import { defaultImageRatio } from "@aitube/clap"
 
 const channel: ChannelInfo = {
  /**
@@ -76,7 +76,7 @@ const channel: ChannelInfo = {
  /**
   * Default video orientation
   */
- orientation: defaultMediaOrientation
+ orientation: defaultImageRatio
 }
 
 export async function searchResultToMediaInfo(searchResult: LatentSearchResult): Promise<MediaInfo> {
@@ -218,7 +218,7 @@ export async function searchResultToMediaInfo(searchResult: LatentSearchResult):
     /**
      * General media aspect ratio
      */
-    orientation: defaultMediaOrientation,
+    orientation: defaultImageRatio,
 
     /**
      * Media projection (cartesian by default)

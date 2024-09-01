@@ -1,6 +1,6 @@
 "use server"
 
-import { ClapProject, newSegment } from "@aitube/clap"
+import { ClapOutputType, ClapProject, ClapSegmentCategory, newSegment } from "@aitube/clap"
 
 import { LatentScenes } from "./types"
 import { defaultSegmentDurationInMs } from "./constants"
@@ -33,10 +33,10 @@ export async function addLatentScenesToClap({
     track: 0,
     startTimeInMs,
     endTimeInMs,
-    category: "interface",
+    category: ClapSegmentCategory.INTERFACE,
     prompt: "<BUILTIN:DISCLAIMER>",
     label: "fish",
-    outputType: "interface",
+    outputType: ClapOutputType.INTERFACE
   }))
 
   for (const { characters, locations, actions } of scenes) {
@@ -50,10 +50,10 @@ export async function addLatentScenesToClap({
         track: track++,
         startTimeInMs,
         endTimeInMs,
-        category: "characters",
+        category: ClapSegmentCategory.CHARACTER,
         prompt: character,
         label: character,
-        outputType: "text",
+        outputType: ClapOutputType.TEXT,
       }))
     }
   
@@ -62,10 +62,10 @@ export async function addLatentScenesToClap({
         track: track++,
         startTimeInMs,
         endTimeInMs,
-        category: "location",
+        category: ClapSegmentCategory.LOCATION,
         prompt: location,
         label: location,
-        outputType: "text",
+        outputType: ClapOutputType.TEXT,
       }))
     }
   
@@ -74,10 +74,10 @@ export async function addLatentScenesToClap({
         track: track++,
         startTimeInMs,
         endTimeInMs,
-        category: "action",
+        category: ClapSegmentCategory.ACTION,
         prompt: action,
         label: action,
-        outputType: "text",
+        outputType: ClapOutputType.TEXT,
       }))
     }
         
@@ -85,10 +85,10 @@ export async function addLatentScenesToClap({
       track: track++,
       startTimeInMs,
       endTimeInMs,
-      category: "video",
+      category: ClapSegmentCategory.VIDEO,
       prompt: "video",
       label: "video",
-      outputType: "video",
+      outputType: ClapOutputType.VIDEO,
     }))
   }
 

@@ -21,8 +21,12 @@ export function generateClapFromPrompt({
       title: "Interactive Demo",
       isInteractive: true,
       isLoop: true,
-      description: story,
-      synopsis: story,
+      storyPrompt: story.join('. '),
+      imagePrompt: "",
+      systemPrompt: "",
+      synopsis: story.join('. '),
+      bpm: 120,
+      frameRate: 24,
     }
   })
 
@@ -100,7 +104,7 @@ export function generateClapFromPrompt({
       track: 0,
       startTimeInMs,
       endTimeInMs,
-      category: ClapSegmentCategory.STORYBOARD,
+      category: ClapSegmentCategory.IMAGE,
       prompt: "",
       label: "movie screencap",
       outputType: ClapOutputType.IMAGE,
