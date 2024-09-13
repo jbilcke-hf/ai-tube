@@ -91,7 +91,7 @@ export default async function Page({ searchParams: { v: videoId } }: AppQueryPro
       style={{
         background: `
           repeating-radial-gradient(#0c0a09 0 0.0001%,#393534 0 0.0002%) 50% 0/2500px 2500px,
-          repeating-conic-gradient(#0c0a09 0 0.0001%,#393534 0 0.0002%) 60% 60%/2500px 2500px;
+          repeating-conic-gradient(#0c0a09 0 0.0001%,#393534 0 0.0002%) 60% 60%/2500px 2500px
         `,
         backgroundBlendMode: 'difference',
         animation: 'staticnoise .2s infinite alternate',
